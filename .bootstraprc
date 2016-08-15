@@ -1,0 +1,15 @@
+useFlexbox: true
+
+bootstrapVersion: 3
+
+styleLoaders:
+  - style
+  - css
+  - sass
+
+styles: true
+
+scripts: false
+
+preBootstrapCustomizations: ./client/theme/variables.scss
+appStyles: ./client/theme/general.scss
