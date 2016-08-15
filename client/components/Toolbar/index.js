@@ -5,8 +5,6 @@ import './toolbar.scss';
 export default () => (
   <nav className="navbar" role="navigation">
     <Link to="/">Home</Link>
-    <Link to="/blog">Blog</Link>
-    <Link to="/about">About</Link>
     <Link to="/at">API Tester</Link>
   </nav>
 );

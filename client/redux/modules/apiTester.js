@@ -38,7 +38,9 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 export function request(data) {
-  const authHeaders = {};
+  const authHeaders = {
+    'content-type': 'application/json'
+  };
 
   if (!isAuthUrl(data)) {
     authHeaders.Authorization = 'A10 ' + localStorage.getItem('token');

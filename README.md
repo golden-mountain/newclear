@@ -1,35 +1,26 @@
-# React Router Dynamic Route Loading w/ Webpack 2 Chunks
+# A example using Webpack 2.0 , we use System.import in place of require.ensure in CMD
+# Tech points
 
-Webpack 2 automatically splits routes in chunks (small bundles) and loads them on demand. 
+## Webpack
+  - Webpack dev server config
 
-[See the demo](https://burning-heat-4609.firebaseapp.com/)
+## Redux Form V6
+   
+## Bootstrap.loader
+  - .bootstraprc can support YAML or JSON config
+  - Customized the bootstrap theme
+  	If we don't config bootstrap.loader, we have to install jQuery
+  	```
+	styles: true
 
-## Contains
+	scripts: false
 
-- [x] [Webpack 2](https://webpack.github.io)
-- [x] [React 0.15](https://facebook.github.io/react/)
-- [x] [Babel 6.5](https://babeljs.io/)
+	preBootstrapCustomizations: ./client/theme/variables.scss
+	appStyles: ./client/theme/general.scss
+  	```
 
-##System Requirements
-Before installing the dependencies, make sure your system has the correct Node and Npm versions, otherwise you will get errors.
+## React Router
+  Webpack System.import can't import module by expression, if if you fill a variable inside System.import, will cause a issue
 
-- Node 5.x.x
-- Npm 3.x.x
-
-## Setup
-
-```
-$ npm install
-```
-
-## Running
-
-```
-$ npm start
-```
-
-## Build
-
-```
-$ npm run build
-```
+## Redux Research
+  - Create a middleware 

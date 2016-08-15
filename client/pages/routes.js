@@ -19,22 +19,22 @@ export default {
           .catch(errorLoading);
       }
     },
-    {
-      path: 'blog',
-      getComponent: (location, cb) => {
-        System.import('pages/Blog')
-          .then(loadRoute(cb))
-          .catch(errorLoading);
-      }
-    },
-    {
-      path: 'about',
-      getComponent: (location, cb) => {
-        System.import('pages/About')
-          .then(loadRoute(cb))
-          .catch(errorLoading);
-      }
-    },
+    // {
+    //   path: 'blog',
+    //   getComponent: (location, cb) => {
+    //     System.import('pages/Blog')
+    //       .then(loadRoute(cb))
+    //       .catch(errorLoading);
+    //   }
+    // },
+    // {
+    //   path: 'about',
+    //   getComponent: (location, cb) => {
+    //     System.import('pages/About')
+    //       .then(loadRoute(cb))
+    //       .catch(errorLoading);
+    //   }
+    // },
     {
       path: 'at',
       getComponent: (location, cb) => {

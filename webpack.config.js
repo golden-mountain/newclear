@@ -34,6 +34,10 @@ module.exports = {
         loaders: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader!sass-loader' })
       },
       {
+        test: /\.css$/,
+        loaders: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader' })
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loaders: [
