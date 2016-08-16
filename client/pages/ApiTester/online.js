@@ -7,16 +7,14 @@ import {connect} from 'react-redux';
 // import JSONTree from 'react-json-tree'
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
+import JSONEditor from 'components/JSONEditor';
 
 import * as apiTesterActions from '../../redux/modules/apiTester';
 
 class MyForm extends Component {
   render() {
 
-    const { handleSubmit, submitting, resetForm, request, response } = this.props;
-
-    // const func = values => {console.log(values);return values;};
-    // console.log(this.props);
+    const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
 
     return (
       <div className="container-fluid">
@@ -29,8 +27,10 @@ class MyForm extends Component {
 				        Session
 				      </Col>
 				      <Col sm={10}>
-				        <FormControl type="text" placeholder="Email" />
-				      </Col>
+						<FormControl.Static>
+						{sessionStorage.getItem('token') || 'Need get authentication session first'}
+						</FormControl.Static>				      
+      				  </Col>
 				    </FormGroup>	
 				    			
 					<FormGroup>
@@ -53,10 +53,11 @@ class MyForm extends Component {
 					  <FormControl.Feedback />
 					</FormGroup>
 
+	
 					<FormGroup>
 					  <Col componentClass={ControlLabel} sm={2}>Body</Col>
 					  <Col sm={10}>
-					  	<Field component="textarea" className="form-control" name="body" rows={10} cols="40" />
+					  	<Field component={JSONEditor} className="form-control" name="body" />
 					  </Col>
 					  <FormControl.Feedback />
 					</FormGroup>
@@ -68,7 +69,7 @@ class MyForm extends Component {
 						      <Button type="submit" disabled={submitting} bsStyle="success">
 						        {submitting ? <i/> : <i/>} Request
 						      </Button>
-						      <Button type="button" disabled={submitting} onClick={resetForm}>
+						      <Button type="button" disabled={pristine || submitting} onClick={reset}>
 						        Reset
 						      </Button>
 						    </ButtonGroup>
@@ -78,7 +79,7 @@ class MyForm extends Component {
 				</Form>
             </Col>
             <Col xs={6}>
-            	<Inspector data={response} />              
+            	<Inspector data={response || {}} />              
             </Col>
           </Row>
       </div>      
@@ -97,7 +98,7 @@ let InitializeFromStateForm = reduxForm({
     initialValues: {
       path: '/axapi/v3/auth',
       method: 'POST',
-      body: JSON.stringify({credentials: {username: 'admin', password: 'a10'}}, '\n', '   ')
+      body: {credentials: {username: 'admin', password: 'a10'}}
     }
   }),
   dispatch => bindActionCreators(apiTesterActions, dispatch)

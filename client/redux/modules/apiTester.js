@@ -16,7 +16,7 @@ export default function reducer(state = initialState, action = {}) {
 
     case SAVE_SUCCESS:
       if (isAuthUrl(action.data)) {
-        localStorage.setItem('token', action.result.authresponse.signature);
+        sessionStorage.setItem('token', action.result.authresponse.signature);
       }
       return {
         ...state,
@@ -25,7 +25,7 @@ export default function reducer(state = initialState, action = {}) {
 
     case SAVE_FAIL:
       console.log('response action', action);
-      // localStorage.removeItem('token');
+      // sessionStorage.removeItem('token');
       return {
         ...state,
         error: true,
@@ -43,7 +43,7 @@ export function request(data) {
   };
 
   if (!isAuthUrl(data)) {
-    authHeaders.Authorization = 'A10 ' + localStorage.getItem('token');
+    authHeaders.Authorization = 'A10 ' + sessionStorage.getItem('token');
   }
 
   return {

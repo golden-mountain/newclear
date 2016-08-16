@@ -37,6 +37,10 @@ module.exports = {
         test: /\.css$/,
         loaders: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader' })
       },
+       {
+        test: /\.json$/,
+        loader: 'json'
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
