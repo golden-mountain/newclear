@@ -2,7 +2,7 @@ import { render } from 'react-dom';
 import React from 'react';
 import {Provider} from 'react-redux';
 import { Router, browserHistory } from 'react-router/es6';
-import rootRoute from 'pages/routes';
+import rootRoute from 'routes';
 // import createStore from './redux/create';
 
 import 'index.html';
