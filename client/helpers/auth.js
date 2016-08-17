@@ -1,4 +1,4 @@
-module.exports = {
+class Auth  {
   login(email, pass, cb) {
     cb = arguments[arguments.length - 1]
     if (sessionStorage.token) {
@@ -6,7 +6,7 @@ module.exports = {
       this.onChange(true)
       return
     }
-    pretendRequest(email, pass, (res) => {
+    this.pretendRequest(email, pass, (res) => {
       if (res.authenticated) {
         sessionStorage.token = res.token
         if (cb) cb(true)
@@ -16,34 +16,36 @@ module.exports = {
         this.onChange(false)
       }
     })
-  },
+  }
 
-  getToken: function () {
+  getToken() {
     return sessionStorage.token
-  },
+  }
 
-  logout: function (cb) {
+  logout (cb) {
     delete sessionStorage.token
     if (cb) cb()
     this.onChange(false)
-  },
+  }
 
-  loggedIn: function () {
+  loggedIn() {
     return !!sessionStorage.token
-  },
+  }
 
-  onChange: function () {}
+  onChange() {}
+
+  pretendRequest(email, pass, cb) {
+    setTimeout(() => {
+      if (email === 'joe@example.com' && pass === 'password1') {
+        cb({
+          authenticated: true,
+          token: Math.random().toString(36).substring(7)
+        })
+      } else {
+        cb({ authenticated: false })
+      }
+    }, 0)
+  }
 }
 
-function pretendRequest(email, pass, cb) {
-  setTimeout(() => {
-    if (email === 'joe@example.com' && pass === 'password1') {
-      cb({
-        authenticated: true,
-        token: Math.random().toString(36).substring(7)
-      })
-    } else {
-      cb({ authenticated: false })
-    }
-  }, 0)
-}
+export default new Auth();

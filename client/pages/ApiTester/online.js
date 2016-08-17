@@ -9,7 +9,7 @@ import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
 
-import * as apiTesterActions from '../../redux/modules/apiTester';
+import * as axapiActions from 'redux/modules/axapi';
 
 class MyForm extends Component {
   render() {
@@ -94,14 +94,14 @@ let InitializeFromStateForm = reduxForm({
 
  InitializeFromStateForm = connect(
   state => ({
-  	response: state.apiTester.response,
+  	response: state.axapi.response,
     initialValues: {
       path: '/axapi/v3/auth',
       method: 'POST',
       body: {credentials: {username: 'admin', password: 'a10'}}
     }
   }),
-  dispatch => bindActionCreators(apiTesterActions, dispatch)
+  dispatch => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);
 
 export default InitializeFromStateForm;

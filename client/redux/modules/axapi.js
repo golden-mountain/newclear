@@ -1,3 +1,5 @@
+import { SubmissionError } from 'redux-form';
+
 const SAVE_SUCCESS = 'SAVE_SUCCESS';
 const SAVE_FAIL = 'SAVE_FAIL';
 const SAVE = 'SAVE';
@@ -24,7 +26,8 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case SAVE_FAIL:
-      console.log('response action', action);
+      // throw new SubmissionError(action.error);
+      // console.log('response action', action);
       // sessionStorage.removeItem('token');
       return {
         ...state,
