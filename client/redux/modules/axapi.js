@@ -1,4 +1,5 @@
 import { SubmissionError } from 'redux-form';
+import moment from 'moment';
 
 const SAVE_SUCCESS = 'SAVE_SUCCESS';
 const SAVE_FAIL = 'SAVE_FAIL';
@@ -7,6 +8,27 @@ const SAVE = 'SAVE';
 const initialState = {};
 
 const isAuthUrl = (data) => data.path.toLowerCase().indexOf('/axapi/v3/auth') > -1;
+
+function pushAxapiReqs(item) {
+  let latestItems = localStorage.getItem('axapi');
+  if (!latestItems) {
+    latestItems = [];
+  } else {
+    latestItems = JSON.parse(latestItems);
+    localStorage.removeItem('axapi');
+  }
+  if (latestItems.length >= 20) {
+    latestItems.shift();
+  }
+
+  let hisAction = {
+    at: moment().format('YYYY-MM-DD HH:mm:ss'),
+    body: item
+  }
+  latestItems.push(hisAction);
+  let itemStr = JSON.stringify(latestItems);
+  localStorage.setItem('axapi', itemStr);
+}
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -17,6 +39,7 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case SAVE_SUCCESS:
+      pushAxapiReqs(action);
       if (isAuthUrl(action.data)) {
         sessionStorage.setItem('token', action.result.authresponse.signature);
       }
@@ -26,9 +49,7 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case SAVE_FAIL:
-      // throw new SubmissionError(action.error);
-      // console.log('response action', action);
-      // sessionStorage.removeItem('token');
+      pushAxapiReqs(action);
       return {
         ...state,
         error: true,

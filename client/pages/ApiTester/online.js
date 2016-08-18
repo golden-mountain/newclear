@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form' // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -11,74 +11,121 @@ import JSONEditor from 'components/JSONEditor';
 
 import * as axapiActions from 'redux/modules/axapi';
 
-class MyForm extends Component {
-  render() {
+const initialValues = {
+  path: '/axapi/v3/auth',
+  method: 'POST',
+  body: {credentials: {username: 'admin', password: 'a10'}}
+};
 
+class MyForm extends Component {
+
+	setHistoryQuery(historyData) {
+		const dateReg = /^\d{4}.*:\d{2}$/;
+		if (dateReg.test(historyData['key'])) {
+			this.props.initialize(historyData.value.data);
+		}
+		return false;
+	}
+
+	clearHistoryQuery() {
+		localStorage.removeItem('axapi');
+		this.props.initialize(initialValues);
+	}
+
+	initSession() {
+		this.props.request(initialValues);
+	}
+
+	fetchHistory() {
+    const historyData = JSON.parse(localStorage.getItem('axapi')) || [];
+    let result = {};
+    historyData.forEach((value, index) => {
+    	const path = value.body.data.path.replace('/axapi/v3/', '');
+    	if (!result[path]) {
+    		result[path] = [] ;
+    	}
+    	result[path][value['at']] = value['body'];
+    });
+    return result;
+	}
+
+  render() {
     const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
+    const historyData = this.fetchHistory();
 
     return (
       <div className="container-fluid">
         <Helmet title="API TESTER"/>
           <Row>
-            <Col xs={6}>    	
-				<Form onSubmit={handleSubmit(request)} horizontal>
-				    <FormGroup controlId="formHorizontalEmail">
-				      <Col componentClass={ControlLabel} sm={2}>
-				        Session
-				      </Col>
-				      <Col sm={10}>
-						<FormControl.Static>
-						{sessionStorage.getItem('token') || 'Need get authentication session first'}
-						</FormControl.Static>				      
-      				  </Col>
-				    </FormGroup>	
-				    			
-					<FormGroup>
-					  <Col componentClass={ControlLabel} sm={2}>Path</Col>
-					  <Col sm={10}>
-					  	<Field name="path" component="input" type="text" placeholder="path without prefix" className="form-control"/>
-					  </Col>
-					</FormGroup>
+          	<Col xs={2}>
+          		<h4>Request History </h4>
+          		<Inspector data={historyData || {}} onClick={::this.setHistoryQuery} /> 
+          		<Button onClick={::this.clearHistoryQuery} >Clear</Button>
+          	</Col>
+            <Col xs={5}>   
+            	<h4>Request </h4> 	
+            	<Panel>
+								<Form onSubmit={handleSubmit(request)} horizontal>
+								    <FormGroup controlId="formHorizontalEmail">
+								      <Col componentClass={ControlLabel} sm={2}>
+								        Session
+								      </Col>
+								      <Col sm={10}>
+										<FormControl.Static>
+										{sessionStorage.getItem('token') } 
+										<Button onClick={::this.initSession} bsSize="small" >Init Session</Button> 
+										</FormControl.Static>				      
+				      				  </Col>
+								    </FormGroup>	
+								    			
+									<FormGroup>
+									  <Col componentClass={ControlLabel} sm={2}>Path</Col>
+									  <Col sm={10}>
+									  	<Field name="path" component="input" type="text" placeholder="path without prefix" className="form-control"/>
+									  </Col>
+									</FormGroup>
 
-					<FormGroup>
-					  <Col componentClass={ControlLabel} sm={2}>Method</Col>
-					  <Col sm={10}>
-						  <Field component="select" name="method" className="form-control">
-						    <option value="GET">GET</option>
-						    <option value="POST">POST</option>
-						    <option value="DELETE">DELETE</option>
-						    <option value="PUT">PUT</option>
-						  </Field>
-					  </Col>
-					  <FormControl.Feedback />
-					</FormGroup>
+									<FormGroup>
+									  <Col componentClass={ControlLabel} sm={2}>Method</Col>
+									  <Col sm={10}>
+										  <Field component="select" name="method" className="form-control">
+										    <option value="GET">GET</option>
+										    <option value="POST">POST</option>
+										    <option value="DELETE">DELETE</option>
+										    <option value="PUT">PUT</option>
+										  </Field>
+									  </Col>
+									  <FormControl.Feedback />
+									</FormGroup>
 
-	
-					<FormGroup>
-					  <Col componentClass={ControlLabel} sm={2}>Body</Col>
-					  <Col sm={10}>
-					  	<Field component={JSONEditor} className="form-control" name="body" />
-					  </Col>
-					  <FormControl.Feedback />
-					</FormGroup>
+					
+									<FormGroup>
+									  <Col componentClass={ControlLabel} sm={2}>Body</Col>
+									  <Col sm={10}>
+									  	<Field component={JSONEditor} className="form-control" name="body"  />
+									  </Col>
+									  <FormControl.Feedback />
+									</FormGroup>
 
-					<FormGroup>
-						<Col smOffset={2} sm={10}>
-						  <ButtonToolbar>
-						    <ButtonGroup bsSize="large">
-						      <Button type="submit" disabled={submitting} bsStyle="success">
-						        {submitting ? <i/> : <i/>} Request
-						      </Button>
-						      <Button type="button" disabled={pristine || submitting} onClick={reset}>
-						        Reset
-						      </Button>
-						    </ButtonGroup>
-						  </ButtonToolbar>
-					  	</Col>
-					</FormGroup>
-				</Form>
+									<FormGroup>
+										<Col smOffset={2} sm={10}>
+										  <ButtonToolbar>
+										    <ButtonGroup bsSize="large">
+										      <Button type="submit" disabled={submitting} bsStyle="success">
+										        {submitting ? <i/> : <i/>} Request
+										      </Button>
+										      <Button type="button" disabled={pristine || submitting} onClick={reset}>
+										        Reset
+										      </Button>
+										    </ButtonGroup>
+										  </ButtonToolbar>
+									  	</Col>
+									</FormGroup>
+								</Form>
+							</Panel>
             </Col>
-            <Col xs={6}>
+            <Col xs={5}>
+            	<h4>Current Result </h4>
             	<Inspector data={response || {}} />              
             </Col>
           </Row>
@@ -92,16 +139,30 @@ let InitializeFromStateForm = reduxForm({
   }
  )(MyForm);
 
- InitializeFromStateForm = connect(
-  state => ({
+function mapStateToProps(state) {
+  // return Object.assign(
+  //     {},
+  //     state.pto.toJS(),
+  //     state.app.toJS()
+  // );
+  return {
   	response: state.axapi.response,
-    initialValues: {
-      path: '/axapi/v3/auth',
-      method: 'POST',
-      body: {credentials: {username: 'admin', password: 'a10'}}
-    }
-  }),
-  dispatch => bindActionCreators(axapiActions, dispatch)
+    initialValues: initialValues
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+    return Object.assign(
+        {},
+        bindActionCreators(axapiActions, dispatch),
+        // bindActionCreators(mainActions, dispatch),
+        // bindActionCreators(appActions, dispatch)
+    );
+}
+
+InitializeFromStateForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(InitializeFromStateForm);
 
 export default InitializeFromStateForm;

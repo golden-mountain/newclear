@@ -12,16 +12,7 @@ class LoginPage extends Component {
     children: PropTypes.node
   }
 
-  // onSubmitSuccess(result, dispatch) {
-  //   console.log(result, 'success');
-  // }
-
-  // onSubmitFail(error, dispatch) {
-  //   console.log(error, 'error');
-  // }
-
-  componentWillUpdate(nextProps) {
-    // console.log('will update', nextProps);
+  shouldComponentUpdate(nextProps) {
     if (nextProps.response && nextProps.response.authresponse.signature) {
       const { location } = this.props
       if (location.state && location.state.nextPathname) {
@@ -29,8 +20,9 @@ class LoginPage extends Component {
       } else {
         this.props.router.replace('/')
       }
-      // console.log('updated');
+      return false;
     }
+    return true;
   }
 
   handleSubmit(values) {
