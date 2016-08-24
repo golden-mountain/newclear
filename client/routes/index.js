@@ -1,6 +1,7 @@
 import App from 'containers/App';
 import demoRoutes from './demo';
 import apiRoutes from './api';
+import adcRoutes from './adc';
 import {loadRoute, errorLoading, redirectToDashboard, redirectToLogin} from './routeUtil';
 import auth from 'helpers/auth';
 
@@ -55,7 +56,16 @@ const appRoutes = [
     childRoutes: demoRoutes
   },
 
-  ...apiRoutes
+  ...apiRoutes,
+  ...adcRoutes,
+  
+  { path: '*',
+    getComponent: (nextState, cb) => {
+     System.import('pages/StatusPage')
+        .then(loadRoute(cb))
+        .catch(errorLoading);
+    }
+  }  
 ];
 
 export default {

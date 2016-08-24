@@ -5,7 +5,7 @@ import { Router, browserHistory } from 'react-router/es6';
 import rootRoute from 'routes';
 // import createStore from './redux/create';
 
-import 'index.html';
+import 'index.ejs';
 
 import ApiClient from './helpers/ApiClient';
 const client = new ApiClient();

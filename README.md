@@ -31,6 +31,15 @@
     options.onChange = () => onChange(self.editor.get());
   '''
 
+  - Custom Field to update values to native js component
+  '''
+    componentWillReceiveProps(nextProps) {
+    // console.log(nextProps);
+    this.editor.set(nextProps.input.value);
+    // this.setState({value});
+  }
+  '''
+
 
 ## Bootstrap.loader
   - .bootstraprc can support YAML or JSON config

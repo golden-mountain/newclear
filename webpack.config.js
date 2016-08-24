@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd = nodeEnv === 'production';
@@ -17,13 +19,14 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(__dirname, './static'),
-    filename: 'bundle.js'
+    path: 'builds',
+    filename: 'bundle.js',
+    publicPath: '/builds/'
   },
   module: {
     loaders: [
       {
-        test: /\.html$/,
+        test: /\.(html|ejs)$/,
         loader: 'file',
         query: {
           name: '[name].[ext]'
@@ -67,6 +70,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanPlugin('builds'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -89,11 +93,17 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: JSON.stringify(nodeEnv) }
     }),
+    new HtmlWebpackPlugin({  // Also generate a test.html
+      // filename: 'index.html',
+      title: 'A10 TPS GUI',
+      template: 'index.ejs'
+    }),    
     new ExtractTextPlugin({ filename: 'style.css',  allChunks: true })    
     // new ExtractTextPlugin('style.css', {
     //   allChunks: true
     // })
   ],
+  devtool:'eval-source-map',
   devServer: {
     contentBase: './client',
     noInfo: true,
@@ -101,7 +111,7 @@ module.exports = {
     inline: true,    
     proxy: {
       '/axapi/*': {
-        target: 'https://192.168.105.72',
+        target: 'https://192.168.105.196',
         secure: false,
         rewrite: function(req, res) {
           console.log(req, 'this is request');

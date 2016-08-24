@@ -16,6 +16,7 @@ class Logout extends Component {
   }
 
   componentDidMount() {
+    // need call axapi before auth.logout
     auth.logout();
     this.redirectToLogin();
   }
@@ -25,7 +26,7 @@ class Logout extends Component {
   }
 
   render() {
-    return <p>You are now logged out</p>
+    return false;
   }
 }
 
