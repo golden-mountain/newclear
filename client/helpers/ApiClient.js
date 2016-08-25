@@ -1,5 +1,6 @@
 import superagent from 'superagent';
 import config from '../../config';
+import Immutable from 'immutable';
 
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
@@ -14,19 +15,19 @@ export default class ApiClient {
     methods.forEach((method) =>
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](formatUrl(path));
-
+        // console.log();
         if (params) {
           request.query(params);
         }
 
         if (headers) {
-          for (const [k, v] of Object.entries(headers)) {
+          for (const [k, v] of Object.entries(headers.toJS())) {
             request.set(k, v);
           }
         }
 
         if (data) {
-          request.send(data);
+          request.send(data.toJS());
         }
 
         request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));

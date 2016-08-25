@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import moment from 'moment';
+import Immutable from 'immutable';
 
 const SAVE_SUCCESS = 'SAVE_SUCCESS';
 const SAVE_FAIL = 'SAVE_FAIL';
@@ -31,33 +32,34 @@ function pushAxapiReqs(item) {
 }
 
 export default function reducer(state = initialState, action = {}) {
+  // console.log(action);
   switch (action.type) {
     case SAVE:
-      return {
+      return Immutable.Map({
         ...state,
         isLoading: true
-      };
+      });
 
     case SAVE_SUCCESS:
       pushAxapiReqs(action);
       if (isAuthUrl(action.data)) {
         sessionStorage.setItem('token', action.result.authresponse.signature);
       }
-      return {
+      return Immutable.Map({
         ...state,
         response: action.result
-      };
+      });
 
     case SAVE_FAIL:
       pushAxapiReqs(action);
-      return {
+      return Immutable.Map({
         ...state,
         error: true,
         response: action.error ? action.error : initialState
-      };
+      });
     default:
       // console.log('default reducer');
-      return state;
+      return Immutable.Map(state);
   }
 }
 
@@ -74,8 +76,8 @@ export function request(data) {
     types: [SAVE, SAVE_SUCCESS, SAVE_FAIL],
     data: data,
     promise: (client) => client[data.method.toLowerCase()](data.path, {
-      data: data.body,
-      headers: authHeaders
+      data: Immutable.Map(data.body),
+      headers: Immutable.Map(authHeaders)
     })
   };
 }

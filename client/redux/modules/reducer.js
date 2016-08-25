@@ -1,11 +1,13 @@
-import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
-import {reducer as form} from 'redux-form';
+import { combineReducers } from 'redux-immutable';
+import routerReducer from './rootReducer';
+import { reducer as form } from 'redux-form';
 
 import axapi from './axapi';
 
-export default combineReducers({
+const rootReducers = combineReducers({
   routing: routerReducer,
   form,
   axapi
 });
+
+export default rootReducers;
