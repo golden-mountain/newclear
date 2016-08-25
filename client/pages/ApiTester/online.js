@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form' // imported Field
+import { reduxForm, Field } from 'redux-form/immutable' // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import {bindActionCreators} from 'redux';
@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
+import Immutable from 'immutable';
 
 import * as axapiActions from 'redux/modules/axapi';
 
@@ -16,6 +17,17 @@ const initialValues = {
   method: 'POST',
   body: {credentials: {username: 'admin', password: 'a10'}}
 };
+
+const renderField = ({ input, label, type, meta: { touched, error } }) => {
+  // console.log(input);
+  return <div>
+    <label>{label}</label>
+    <div>
+      <input {...input} type={type} placeholder={label}/>
+      {touched && error && <span>{error}</span>}
+    </div>
+  </div>
+}
 
 class MyForm extends Component {
 
@@ -52,7 +64,7 @@ class MyForm extends Component {
   render() {
     const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
     const historyData = this.fetchHistory();
-
+    // console.log(this.props);
     return (
       <div className="container-fluid">
         <Helmet title="API TESTER"/>
@@ -81,7 +93,7 @@ class MyForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Path</Col>
                     <Col sm={10}>
-                      <Field name="path" component="input" type="text" placeholder="path without prefix" className="form-control"/>
+                      <Field name="path" component={renderField} type="text" placeholder="path without prefix" className="form-control"/>
                     </Col>
                   </FormGroup>
 

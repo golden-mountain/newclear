@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form' // imported Field
+import { reduxForm, Field } from 'redux-form/immutable' // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Checkbox, Radio } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import {bindActionCreators} from 'redux';
@@ -124,7 +124,7 @@ function mapStateToProps(state) {
   //     state.app.toJS()
   // );
   return {
-    response: state.axapi.response,
+    response: state.getIn(['axapi','response']),
     initialValues: initialValues
   };
 }

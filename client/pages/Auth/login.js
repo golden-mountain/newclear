@@ -4,8 +4,9 @@ import auth from 'helpers/auth';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm, Field } from 'redux-form' // imported Field
+import { reduxForm, Field } from 'redux-form/immutable' // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+// import Immutable from 'immutable';
 
 class LoginPage extends Component {
   static propTypes = {
@@ -13,7 +14,9 @@ class LoginPage extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.response && nextProps.response.authresponse.signature) {
+    // console.log(nextProps);
+    // return true; 
+    if (nextProps.response && nextProps.response.authresponse &&  nextProps.response.authresponse.signature) {
       const { location } = this.props
       if (location.state && location.state.nextPathname) {
         this.props.router.replace(location.state.nextPathname)
@@ -85,7 +88,7 @@ let InitializeFromStateForm = reduxForm({
 
 InitializeFromStateForm = connect(
   (state) => ({
-    response: state.axapi.response,
+    response: state.getIn(['axapi', 'response'], {}),
   }),
   (dispatch) => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);
