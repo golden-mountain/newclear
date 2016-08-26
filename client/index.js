@@ -12,11 +12,12 @@ const client = new ApiClient();
 
 import { createStore, applyMiddleware } from 'redux'
 import createMiddleware from './redux/middleware/clientMiddleware';
+import switchMiddleware from './redux/middleware/switchMiddleware';
 
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 import reducer from './redux/modules/reducer';
-const middleware = [ thunk, logger(), createMiddleware(client) ];
+const middleware = [ thunk, logger(), createMiddleware(client), switchMiddleware ];
 
 // Immutable js
 import Immutable from 'immutable';

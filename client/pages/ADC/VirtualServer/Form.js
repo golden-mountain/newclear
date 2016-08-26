@@ -1,14 +1,63 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form/immutable' // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Checkbox, Radio } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Checkbox, Radio, HelpBlock } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as axapiActions from 'redux/modules/axapi';
 // import _ from 'lodash';
 import Immutable from 'immutable';
+import { SubmissionError } from 'redux-form'
+
+
+const validate = values => {
+
+  const errors = {
+    'virtual-server': {}
+  };
+
+  const nameVal = values.getIn(['virtual-server', 'name'], '');
+  if (!nameVal) {
+    errors['virtual-server']['name'] = 'Required';
+  } else if (nameVal.length < 2) {
+    errors['virtual-server']['name'] = 'Less than 2 characters';
+  }
+
+  return errors;
+}
+
+const renderField = (field) => {
+  const {label} = field.input;
+  let status = {}, error = '';
+  if (field.touched && field.error) {
+    error = <HelpBlock className="error">{field.error}</HelpBlock>;
+    status.validationState = 'error';
+  }
+
+  return (
+    <FormGroup {...status}>
+      <Col componentClass={ControlLabel} sm={2}>{label}</Col>
+      <Col sm={10}>
+        <FormControl type="text" {...field.input}/>
+        <FormControl.Feedback />
+        { error }
+      </Col>
+    </FormGroup>
+  );
+
+}
+
 
 class VirtualServerForm extends Component {
+
+  // validate(values) {
+  //   // console.log(values);
+  //   throw new SubmissionError({ 'name': 'Wrong Name', _error: 'submit failed!' });
+  // }
+
+  filterFields() {
+
+  }
 
   handleSubmit(v) {
     let values = Immutable.Map(v);
@@ -37,8 +86,8 @@ class VirtualServerForm extends Component {
 
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
-
+    const { handleSubmit, submitting, reset, pristine, request, response, error, switcher } = this.props;
+    console.log(switcher);
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -52,13 +101,9 @@ class VirtualServerForm extends Component {
               <Panel>
                 <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
 
-                          
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>Name</Col>
-                    <Col sm={10}>
-                      <Field name="virtual-server.name" component="input" type="text" placeholder="" className="form-control"/>
-                    </Col>
-                  </FormGroup>
+
+                  <Field name="virtual-server.name" component={renderField} type="text" placeholder="" className="form-control" label="Name" />
+
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Wildcard</Col>
@@ -118,12 +163,17 @@ class VirtualServerForm extends Component {
 }
 
 let InitializeFromStateForm = reduxForm({
-    form: 'virtualServerForm'
+    form: 'virtualServerForm',
+    validate
   }
  )(VirtualServerForm);
 
 
-const initialValues = {};
+const initialValues = {
+  'virtual-server': {
+    'name': 'vs1'
+  }
+};
 
 function mapStateToProps(state) {
   // return Object.assign(
@@ -133,6 +183,7 @@ function mapStateToProps(state) {
   // );
   return {
     response: state.getIn(['axapi','response']),
+    switcher: state.getIn(['switcher']),
     initialValues: initialValues
   };
 }
