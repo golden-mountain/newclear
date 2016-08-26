@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import moment from 'moment';
+import _ from 'lodash';
 import Immutable from 'immutable';
 
 const SAVE_SUCCESS = 'SAVE_SUCCESS';
@@ -32,7 +33,7 @@ function pushAxapiReqs(item) {
 }
 
 export default function reducer(state = initialState, action = {}) {
-  // console.log(action);
+  // console.log(action, state, '===========');
   switch (action.type) {
     case SAVE:
       return Immutable.Map({
@@ -52,10 +53,13 @@ export default function reducer(state = initialState, action = {}) {
 
     case SAVE_FAIL:
       pushAxapiReqs(action);
+      if (_.get(action, 'error.authorizationschema.code', 500) === 401) {
+        sessionStorage.removeItem('token');
+      }
       return Immutable.Map({
         ...state,
         error: true,
-        response: action.error ? action.error : initialState
+        response: action.error ? action.error : {}
       });
     default:
       // console.log('default reducer');

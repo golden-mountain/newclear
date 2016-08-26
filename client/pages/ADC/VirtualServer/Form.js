@@ -5,18 +5,25 @@ import Helmet from 'react-helmet';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as axapiActions from 'redux/modules/axapi';
-import _ from 'lodash';
-// import Immutable from 'immutable';
+// import _ from 'lodash';
+import Immutable from 'immutable';
 
 class VirtualServerForm extends Component {
 
-  handleSubmit(values) {
-    // console.log(values);
-    _.unset(values, 'x');
-    if (_.has(values, 'virtual-server.wildcard')) {
-      _.unset(values, 'virtual-server.wildcard');
-      values['virtual-server']['ip-address'] = '0.0.0.0';
-      values['virtual-server']['netmask'] = '/0';
+  handleSubmit(v) {
+    let values = Immutable.Map(v);
+    values = values.delete('x');
+    const pathWildcard = ['virtual-server','wildcard'];
+    if (values.hasIn(pathWildcard)) {
+      values = values.deleteIn(pathWildcard);
+      let ip = Immutable.fromJS({
+        'virtual-server': {
+          'ip-address': '0.0.0.0',
+          'netmask': '/24'
+        }
+      });
+      values = values.mergeDeep(ip);
+      // values = values.setIn(['virtual-server', 'netmask'], '/0');
     }
 
     const fullAuthData = {
@@ -24,6 +31,7 @@ class VirtualServerForm extends Component {
       method: "POST", 
       body: values
     }
+
     return this.props.request(fullAuthData);
   }
 

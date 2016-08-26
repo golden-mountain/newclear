@@ -45,20 +45,19 @@ const appRoutes = [
     indexRoute: {
       getComponent: (nextState, cb) => {
         // Only load if we're logged in
-        if (auth.loggedIn()) {
-		       System.import('pages/Dashboard')
-		          .then(loadRoute(cb))
-		          .catch(errorLoading);
-        }
-        return cb()
+        // if (auth.loggedIn()) {
+        System.import('pages/About')
+          .then(loadRoute(cb))
+          .catch(errorLoading);
+        // }
+        // return cb()
       }
     },
-    childRoutes: demoRoutes
+    childRoutes: [...demoRoutes, ...adcRoutes]
   },
 
   ...apiRoutes,
-  ...adcRoutes,
-  
+
   { path: '*',
     getComponent: (nextState, cb) => {
      System.import('pages/StatusPage')

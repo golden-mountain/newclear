@@ -18,14 +18,12 @@ const initialValues = {
   body: {credentials: {username: 'admin', password: 'a10'}}
 };
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  // console.log(input);
-  return <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} type={type} placeholder={label}/>
-      {touched && error && <span>{error}</span>}
-    </div>
+const renderField = (field) => {
+  // console.log(field);
+  return <div className="input-row">
+    <input {...field.input} type="text"/>
+    {field.touched && field.error && 
+     <span className="error">{field.error}</span>}
   </div>
 }
 
@@ -152,12 +150,6 @@ let InitializeFromStateForm = reduxForm({
  )(MyForm);
 
 function mapStateToProps(state) {
-  // return Object.assign(
-  //     {},
-  //     state.pto.toJS(),
-  //     state.app.toJS()
-  // );
-  // console.log(state.getIn(['axapi']), 'axapi response' );
   return {
     response: state.getIn(['axapi', 'response']),
     initialValues: initialValues
