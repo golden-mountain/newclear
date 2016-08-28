@@ -3,21 +3,40 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { Field, Form, actions } from 'react-redux-form';
 
+import Immutable from 'immutable';
+import * as axapiActions from 'redux/modules/axapi';
+import {bindActionCreators} from 'redux';
+
+
 // TODO: react-redux-form don't support immutable
 class AdcForm extends React.Component {
 
   handleSubmit(adc) {
-    let { dispatch } = this.props;
-    console.log(adc);
-    // Do whatever you like in here.
-    // You can use actions such as:
-    // dispatch(actions.submit('adc', somePromise));
-    // etc.
+    let { request, adcForm: {fields} } = this.props;
+    // let list = Object.keys(fields);
+    let adcMap = Immutable.fromJS(adc);
+    // console.log(fields);
+    for (let [name, field] of Object.entries(fields)) {
+      if (field.viewValue === true) {
+        adcMap = adcMap.deleteIn(name.split('.'));
+      }
+    }
+  
+    console.log(adcMap.toJS());
+    const fullAuthData = {
+      path: '/axapi/v3/slb/virtual-server/',
+      method: "POST", 
+      body: adcMap
+    }
+
+    return request(fullAuthData);
+
   }
 
   render() {
-    let { adc, dispatch, adcForm: { fields  } } = this.props;
-    console.log(fields);
+    let { adc, adcForm: { fields  }, setViewValue } = this.props;
+    // console.log(this.props);
+
     return (
       <Form model="adc"
         onSubmit={(adc) => this.handleSubmit(adc)}>
@@ -27,13 +46,16 @@ class AdcForm extends React.Component {
           <input type="text" />
         </Field>
 
-        <Field model="adc.virtual-server.wildcard">
+        <Field model="adc.virtual-server.wildcard" >
           <label>Wildcard</label>
-          <input type="checkbox" onChange={(e) => dispatch(actions.setViewValue('adc.virtual-server.ip-address', e.target.checked))}  />
+          <input type="checkbox" onChange={(e) => {
+            setViewValue('adc.virtual-server.ip-address', e.target.checked)
+            }
+          }  />
         </Field>
 
         { fields['virtual-server.ip-address'].viewValue && 
-          <Field model="adc.virtual-server.ip-address">
+          <Field model="adc.virtual-server.ip-address" >
             <label>IP Address</label>
             <input type="text" />
           </Field>
@@ -59,5 +81,14 @@ function mapStateToProps(state) {
   return { adc: state.adc, adcForm: state.adcForm };
 }
 
+function mapDispatchToProps(dispatch, ownProps) {
+    return Object.assign(
+        {},
+        // ownProps,
+        bindActionCreators(axapiActions, dispatch),
+        bindActionCreators(actions, dispatch),
+        // bindActionCreators(appActions, dispatch)
+    );
+}
 
-export default connect(mapStateToProps)(AdcForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AdcForm);

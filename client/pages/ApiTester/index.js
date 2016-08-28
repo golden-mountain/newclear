@@ -105,7 +105,7 @@ class AXAPIForm extends Component {
                     <Col componentClass={ControlLabel} sm={2}>Method</Col>
                     <Col sm={10}>
                       <Field model="api.method">
-                        <select >
+                        <select className="form-control">
                           <option value="GET">GET</option>
                           <option value="POST">POST</option>
                           <option value="DELETE">DELETE</option>

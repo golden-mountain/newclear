@@ -4,8 +4,9 @@ import auth from 'helpers/auth';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm, Field } from 'redux-form/immutable' // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Field, Form, actions } from 'react-redux-form';
+// import { reduxForm, Field } from 'redux-form/immutable' // imported Field
+import { FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import Immutable from 'immutable';
 
 class LoginPage extends Component {
@@ -43,18 +44,24 @@ class LoginPage extends Component {
     // console.log(this.props);
     return (
       <div className="container-fluid">    
-        <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
+        
+        <Form className="form-horizontal" model="api" onSubmit={(values) => this.handleSubmit(values)}>
+                         
           <FormGroup>
             <Col componentClass={ControlLabel} sm={2}>Username</Col>
             <Col sm={10}>
-              <Field name="credentials.username" component="input" type="text" placeholder="User name" className="form-control"/>
+              <Field model="api.credentials.username">
+                <input type="text"  className="form-control"  />
+              </Field>                   
             </Col>
-          </FormGroup>
-                     
+          </FormGroup>          
+
           <FormGroup>
             <Col componentClass={ControlLabel} sm={2}>Password</Col>
             <Col sm={10}>
-              <Field name="credentials.password" component="input" type="text" placeholder="Password" className="form-control"/>
+              <Field model="api.credentials.password">
+                <input type="text" className="form-control" />
+              </Field>                   
             </Col>
           </FormGroup>
 
@@ -80,17 +87,29 @@ class LoginPage extends Component {
 
 }
 
+function mapStateToProps(state) {
+  // console.log(state);
+  return {
+    response: state.axapi.get('response'),
+    api: state.api
+    // initialValues: initialValues
+  };
+}
 
-let InitializeFromStateForm = reduxForm({
-    form: 'login'
-  }
- )(LoginPage);
+function mapDispatchToProps(dispatch, ownProps) {
+    return Object.assign(
+        {},
+        // ownProps,
+        bindActionCreators(axapiActions, dispatch),
+        bindActionCreators(actions, dispatch),
+        // bindActionCreators(appActions, dispatch)
+    );
+}
 
-InitializeFromStateForm = connect(
-  (state) => ({
-    response: state.getIn(['axapi', 'response'], {}),
-  }),
-  (dispatch) => bindActionCreators(axapiActions, dispatch)
-)(InitializeFromStateForm);
+
+let InitializeFromStateForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginPage);
 
 export default withRouter(InitializeFromStateForm);
