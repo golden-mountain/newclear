@@ -150,8 +150,9 @@ let InitializeFromStateForm = reduxForm({
  )(MyForm);
 
 function mapStateToProps(state) {
+  console.log(state);
   return {
-    response: state.getIn(['axapi', 'response']),
+    response: state.axapi.get('response'),
     initialValues: initialValues
   };
 }

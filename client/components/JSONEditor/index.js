@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import OrgJsonEditor from 'jsoneditor/dist/jsoneditor';
 //https://github.com/josdejong/jsoneditor/blob/master/docs/api.md
 import 'jsoneditor/dist/jsoneditor.css';
-
+import { connect } from 'react-redux';
+import { actions } from 'react-redux-form';
 
 class JSONEditor extends Component {
   constructor(props) {
@@ -17,17 +18,16 @@ class JSONEditor extends Component {
       mode: 'code',
       modes: ['code', 'tree']
     };
-    // see how to custom field http://redux-form.com/6.0.0-rc.3/docs/api/Field.md/
-    const { input: { value, onChange } } = this.props;
-    // this.setState({content: value});
-    // console.log(value, this.state, 'new props');
-    options.onChange = () => onChange(self.editor.get());
-    this.editor = new OrgJsonEditor(this.refs.jsonEditor, options, value || {});    
+    let { model, dispatch, values } = this.props;
+    // console.log(this.props);
+    options.onChange = () => dispatch(actions.change(model, self.editor.get()));    
+    this.editor = new OrgJsonEditor(this.refs.jsonEditor, options, {});
+    this.editor.set(values);
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
-    this.editor.set(nextProps.input.value);
+    console.log(nextProps, 'debug good');
+    // this.editor.set(nextProps.input.value);
   }
 
   render() {
@@ -37,5 +37,6 @@ class JSONEditor extends Component {
   }
 }
 
+export default connect(s => s)(JSONEditor);
 
-export default JSONEditor;
+// export default JSONEditor;
