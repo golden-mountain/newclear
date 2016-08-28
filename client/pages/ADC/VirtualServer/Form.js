@@ -27,7 +27,8 @@ const validate = values => {
 }
 
 const renderField = (field) => {
-  const {label} = field.input;
+  // console.log(field, 'this is a field');
+  const {label} = field;
   let status = {}, error = '';
   if (field.touched && field.error) {
     error = <HelpBlock className="error">{field.error}</HelpBlock>;
@@ -45,6 +46,27 @@ const renderField = (field) => {
     </FormGroup>
   );
 
+}
+
+class A10Checkbox extends Component {
+  // handleChange() {
+  //   console.log('changing');
+  //   return true;
+  // }
+
+  render() {
+    const {label, name} = this.props;
+    return (
+      <FormGroup>
+        <Col componentClass={ControlLabel} sm={2}>{label}</Col>
+        <Col sm={10}>
+          <Field component="input" type="checkbox" name={name}  />
+        </Col>
+        <FormControl.Feedback />
+      </FormGroup>
+    );
+
+  }
 }
 
 
@@ -87,7 +109,7 @@ class VirtualServerForm extends Component {
 
   render() {
     const { handleSubmit, submitting, reset, pristine, request, response, error, switcher } = this.props;
-    console.log(switcher);
+    console.log(switcher.toJS());
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -102,17 +124,9 @@ class VirtualServerForm extends Component {
                 <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
 
 
-                  <Field name="virtual-server.name" component={renderField} type="text" placeholder="" className="form-control" label="Name" />
+                  <Field name="virtual-server.name" component={renderField} type="text" placeholder="" className="form-control" label="Name"  />
 
-
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>Wildcard</Col>
-                    <Col sm={10}>
-                      <Field component="input" type="checkbox" name="virtual-server.wildcard" />
-                    </Col>
-                    <FormControl.Feedback />
-                  </FormGroup>
-
+                  <A10Checkbox name="virtual-server.wildcard" label="Wildcard" />
           
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Address Type</Col>

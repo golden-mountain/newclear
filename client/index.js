@@ -28,12 +28,17 @@ const store = createStore(
   applyMiddleware(...middleware)
 )
 
+// function handleChange() {
+//   const currentValue = store.getState();
+//   console.log('Some deep nested property changed from', currentValue.toJS());
+// }
+// store.subscribe(handleChange)
+
 const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState (state) {
     return state.get('routing').toJS();
   }
 });
-
 
 
 render(
