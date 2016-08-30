@@ -4,6 +4,7 @@ import OrgJsonEditor from 'jsoneditor/dist/jsoneditor';
 import 'jsoneditor/dist/jsoneditor.css';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
+import _ from 'lodash';
 
 class JSONEditor extends Component {
   constructor(props) {
@@ -18,16 +19,16 @@ class JSONEditor extends Component {
       mode: 'code',
       modes: ['code', 'tree']
     };
-    let { model, dispatch, values } = this.props;
+    let { model, dispatch } = this.props;
     // console.log(this.props);
     options.onChange = () => dispatch(actions.change(model, self.editor.get()));    
-    this.editor = new OrgJsonEditor(this.refs.jsonEditor, options, {});
-    this.editor.set(values);
+    this.editor = new OrgJsonEditor(this.refs.jsonEditor, options, _.get(this.props, this.props.model, {}));
+    // this.editor.set(values);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps, 'debug good');
-    // this.editor.set(nextProps.input.value);
+    // console.log(nextProps, 'debug good');
+    this.editor.set(_.get(nextProps, nextProps.model));
   }
 
   render() {

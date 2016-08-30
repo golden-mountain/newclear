@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 // import routerReducer from './rootReducer';
-// import switcherReducer from './switcherReducer';
+import fieldViewReducer from './fieldViewReducer';
 import { reducer as form } from 'redux-form';
 import { modelReducer, formReducer } from 'react-redux-form';
 // import Immutable from 'immutable';
@@ -29,6 +29,7 @@ const initialAPIValues = {
 const rootReducers = combineReducers({
   // routing: routerReducer,
   axapi,
+  fieldView: fieldViewReducer,
   adc: modelReducer('adc', initialAdcState),
   adcForm: formReducer('adc', initialAdcState),
   api: modelReducer('api', initialAPIValues),

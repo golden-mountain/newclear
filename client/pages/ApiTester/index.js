@@ -120,7 +120,7 @@ class AXAPIForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Body</Col>
                     <Col sm={10} >
-                      <JSONEditor model="api.body" values={initialValues.body} ></JSONEditor>
+                      <JSONEditor model="api.body" ></JSONEditor>
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
