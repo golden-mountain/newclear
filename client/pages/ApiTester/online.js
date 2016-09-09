@@ -18,14 +18,13 @@ const initialValues = {
   body: {credentials: {username: 'admin', password: 'a10'}}
 };
 
-const renderField = (field) => {
-  // console.log(field);
-  return <div className="input-row">
-    <input {...field.input} type="text"/>
-    {field.touched && field.error && 
-     <span className="error">{field.error}</span>}
-  </div>
-}
+// const renderField = (field) => {
+//   return <div className="input-row">
+//     <input {...field.input} type="text"/>
+//     {field.touched && field.error && 
+//      <span className="error">{field.error}</span>}
+//   </div>
+// }
 
 class MyForm extends Component {
 
@@ -91,7 +90,7 @@ class MyForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Path</Col>
                     <Col sm={10}>
-                      <Field name="path" component={renderField} type="text" placeholder="path without prefix" className="form-control"/>
+                      <Field name="path" component='input' type="text" placeholder="path without prefix" className="form-control"/>
                     </Col>
                   </FormGroup>
 

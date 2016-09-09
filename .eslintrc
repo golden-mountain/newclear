@@ -1,4 +1,6 @@
-{ "extends": "eslint-config-airbnb",
+{ 
+  "extends": "eslint-config-airbnb",
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "node": true,
@@ -25,7 +27,7 @@
   "settings": {
     "import/parser": "babel-eslint",
     "import/resolve": {
-      "moduleDirectory": ["node_modules", "src"]
+      "moduleDirectory": ["node_modules", "client"]
     }
   },
   "globals": {

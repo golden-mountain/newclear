@@ -1,0 +1,45 @@
+app: {
+	layout: 'basic',
+	modules: {
+		'adc': {
+			'virtual-server': {
+				edit: {			
+
+					panel: {
+						'adc.virtual-server.panel1': {}
+					},
+					fields: {
+						'form': {
+							'slb.virtual-server.ip-address':  {
+								conditional: { 
+									'internal-fields': {
+										'x.slb.virtual-server.wildcard': false
+									},
+									'license-modules':  ['adc', 'waf'],
+									'rba': [''],
+									'vcs': [''],
+									'partition': [],
+									'oem': ['']
+								},
+								value: '255.255.255.0', 
+								validation: {
+									required: true, 
+									minLength: 10,
+								},
+								error: ['Field Required']
+							}
+						}, 
+						'model': {
+
+						}
+					}
+	
+				},
+
+				list: {
+
+				}
+			}
+		}
+	}
+}

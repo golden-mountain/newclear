@@ -108,8 +108,8 @@ class VirtualServerForm extends Component {
 
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, request, response, error, switcher } = this.props;
-    console.log(switcher.toJS());
+    const { handleSubmit, submitting, reset, pristine, request, response, error } = this.props;
+    // console.log(switcher.toJS());
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -131,8 +131,8 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Address Type</Col>
                     <Col sm={10}>
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="0" /> IPv4
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="1" /> IPv6
+                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="0"  conditional={{'virtual-server.wildcard': false }}  /> IPv4
+                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="1"  conditional={{'virtual-server.wildcard': false }}  /> IPv6
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -140,7 +140,7 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Address</Col>
                     <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.ip-address" className="form-control" />
+                      <Field component="input" type="text" name="virtual-server.ip-address" className="form-control"  conditional={{'virtual-server.wildcard': false }}  />
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -148,7 +148,7 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Netmask</Col>
                     <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.netmask" className="form-control" />
+                      <Field component="input" type="text" name="virtual-server.netmask" className="form-control" conditional={{'virtual-server.wildcard': false }} />
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -185,7 +185,8 @@ let InitializeFromStateForm = reduxForm({
 
 const initialValues = {
   'virtual-server': {
-    'name': 'vs1'
+    'name': 'vs1',
+    'wildcard': false
   }
 };
 
@@ -197,7 +198,6 @@ function mapStateToProps(state) {
   // );
   return {
     response: state.getIn(['axapi','response']),
-    switcher: state.getIn(['switcher']),
     initialValues: initialValues
   };
 }

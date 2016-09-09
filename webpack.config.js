@@ -45,14 +45,21 @@ module.exports = {
         loader: 'json'
       },
       {
+        test: /\.md/,
+        loaders: [ "html-loader", "markdown-loader" ]
+      },      
+      {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        include: path.join(__dirname, 'client'),
         loaders: [
           {
             loader: 'babel',
             query: {
               cacheDirectory: true
             }
+          },
+          {
+            loader: 'eslint'
           }
         ]
       },

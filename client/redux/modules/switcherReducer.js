@@ -12,7 +12,7 @@ const initialState = Immutable.fromJS({
 });
 
 export default (state = initialState, action) => {
-	console.log(action);
+	// console.log(action);
 	let newState = state;
   if (action.type === actionTypes.BLUR) {
   	// console.log('catched blur state', action);    
