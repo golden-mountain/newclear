@@ -12,14 +12,14 @@ import rootRoute from './routes';
 // import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import createMiddleware from './redux/middleware/clientMiddleware';
-import switchMiddleware from './redux/middleware/switchMiddleware';
+// import switchMiddleware from './redux/middleware/switchMiddleware';
 import reducer from './redux/modules/reducer';
 // Immutable js
 import './index.ejs';
 
 const client = new ApiClient();
 
-const middleware = [ thunk, logger(), createMiddleware(client), switchMiddleware ];
+const middleware = [ thunk, logger(), createMiddleware(client) ];
 
 const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(
