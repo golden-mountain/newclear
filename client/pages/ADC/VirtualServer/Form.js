@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import * as axapiActions from 'redux/modules/axapi';
 // import _ from 'lodash';
 import Immutable from 'immutable';
 // import { SubmissionError } from 'redux-form';
-
+import { A10Field } from 'components/Form/A10Field';
 
 const validate = values => {
 
@@ -26,49 +26,6 @@ const validate = values => {
   return errors;
 };
 
-const renderField = (field) => {
-  // console.log(field, 'this is a field');
-  const { label } = field;
-  let status = {}, error = '';
-  if (field.touched && field.error) {
-    error = <HelpBlock className="error">{field.error}</HelpBlock>;
-    status.validationState = 'error';
-  }
-
-  return (
-    <FormGroup {...status}>
-      <Col componentClass={ControlLabel} sm={2}>{label}</Col>
-      <Col sm={10}>
-        <FormControl type="text" {...field.input}/>
-        <FormControl.Feedback />
-        { error }
-      </Col>
-    </FormGroup>
-  );
-
-};
-
-class A10Checkbox extends Component {
-  // handleChange() {
-  //   console.log('changing');
-  //   return true;
-  // }
-
-  render() {
-    const { label, name } = this.props;
-    return (
-      <FormGroup>
-        <Col componentClass={ControlLabel} sm={2}>{label}</Col>
-        <Col sm={10}>
-          <Field component="input" type="checkbox" name={name}  />
-        </Col>
-        <FormControl.Feedback />
-      </FormGroup>
-    );
-
-  }
-}
-
 
 class VirtualServerForm extends Component {
 
@@ -83,9 +40,8 @@ class VirtualServerForm extends Component {
 
   handleSubmit(v) {
     let values = Immutable.Map(v);
-    values = values.delete('x');
-    const pathWildcard = [ 'virtual-server','wildcard' ];
-    if (values.hasIn(pathWildcard)) {
+    const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
+    if (values.hasIn(pathWildcard) && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
       values = values.deleteIn(pathWildcard);
       let ip = Immutable.fromJS({
         'virtual-server': {
@@ -93,10 +49,12 @@ class VirtualServerForm extends Component {
           'netmask': '/24'
         }
       });
+
       values = values.mergeDeep(ip);
       // values = values.setIn(['virtual-server', 'netmask'], '/0');
     }
 
+    values = values.delete('x');
     const fullAuthData = {
       path: '/axapi/v3/slb/virtual-server/',
       method: 'POST', 
@@ -109,7 +67,6 @@ class VirtualServerForm extends Component {
 
   render() {
     const { handleSubmit, submitting, reset, pristine } = this.props;
-    // console.log(switcher.toJS());
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -123,35 +80,30 @@ class VirtualServerForm extends Component {
               <Panel>
                 <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
 
+                  <Field name="virtual-server.name" component={A10Field} label="Name">
+                    <FormControl type="text" className="form-control"/>
+                  </Field>
 
-                  <Field name="virtual-server.name" component={renderField} type="text" placeholder="" className="form-control" label="Name"  />
+                  <Field name="x.virtual-server.wildcard" component={A10Field} label="Wildcard">
+                    <Checkbox value={true} />
+                  </Field>
+                  
+                  <Field name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+                    <Radio value="0" inline> IPv4 </Radio>
+                    <Radio value="1" inline> IPv6 </Radio>
+                  </Field>
 
-                  <A10Checkbox name="virtual-server.wildcard" label="Wildcard" />
-          
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>Address Type</Col>
-                    <Col sm={10}>
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="0"  conditional={{ 'virtual-server.wildcard': false }}  /> IPv4
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="1"  conditional={{ 'virtual-server.wildcard': false }}  /> IPv6
-                    </Col>
-                    <FormControl.Feedback />
-                  </FormGroup>
+                  <Field name="virtual-server.ip-address" component={A10Field} label="IPv4 Address" conditional={{ 'x.virtual-server.address-type': '0' }}>
+                    <FormControl type="text" className="form-control"/>
+                  </Field>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>Address</Col>
-                    <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.ip-address" className="form-control"  conditional={{ 'virtual-server.wildcard': false }}  />
-                    </Col>
-                    <FormControl.Feedback />
-                  </FormGroup>
+                  <Field name="virtual-server.netmask" component={A10Field} label="Netmask" conditional={{ 'x.virtual-server.address-type': '0' }}>
+                    <FormControl type="text" className="form-control"/>
+                  </Field>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={2}>Netmask</Col>
-                    <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.netmask" className="form-control" conditional={{ 'virtual-server.wildcard': false }} />
-                    </Col>
-                    <FormControl.Feedback />
-                  </FormGroup>
+                  <Field name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address" conditional={{ 'x.virtual-server.address-type': '1' }}>
+                    <FormControl type="text" className="form-control"/>
+                  </Field>
 
                   <FormGroup>
                     <Col smOffset={2} sm={10}>
@@ -186,7 +138,13 @@ let InitializeFromStateForm = reduxForm({
 const initialValues = {
   'virtual-server': {
     'name': 'vs1',
-    'wildcard': false
+    'netmask': '/24'
+  },
+  'x': {
+    'virtual-server': {
+      'address-type': '0',
+      'wildcard': true
+    }
   }
 };
 

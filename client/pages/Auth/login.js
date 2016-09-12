@@ -54,7 +54,7 @@ class LoginPage extends Component {
           <FormGroup>
             <Col componentClass={ControlLabel} sm={2}>Password</Col>
             <Col sm={10}>
-              <Field name="credentials.password" component="input" type="text" placeholder="Password" className="form-control"/>
+              <Field name="credentials.password" component="input" type="password" placeholder="Password" className="form-control"/>
             </Col>
           </FormGroup>
 
