@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form/immutable' // imported Field
+import React, { Component } from 'react';
+import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 // import JSONTree from 'react-json-tree'
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
-import Immutable from 'immutable';
+// import Immutable from 'immutable';
 
 import * as axapiActions from 'redux/modules/axapi';
 
 const initialValues = {
   path: '/axapi/v3/auth',
   method: 'POST',
-  body: {credentials: {username: 'admin', password: 'a10'}}
+  body: { credentials: { username: 'admin', password: 'a10' } }
 };
 
 // const renderField = (field) => {
@@ -48,7 +48,7 @@ class MyForm extends Component {
   fetchHistory() {
     const historyData = JSON.parse(localStorage.getItem('axapi')) || [];
     let result = {};
-    historyData.forEach((value, index) => {
+    historyData.forEach((value) => {
       const path = value.body.data.path.replace('/axapi/v3/', '');
       if (!result[path]) {
         result[path] = [] ;
@@ -139,24 +139,24 @@ class MyForm extends Component {
             </Col>
           </Row>
       </div>      
-    )
+    );
   }
 }
 
 let InitializeFromStateForm = reduxForm({
-    form: 'apiTester'
-  }
+  form: 'apiTester'
+}
  )(MyForm);
 
 function mapStateToProps(state) {
   return {
-    response: state.getIn(['axapi', 'response']),
+    response: state.getIn([ 'axapi', 'response' ]),
     initialValues: initialValues
   };
 }
 
 function mapDispatchToProps(dispatch) {
-    return Object.assign(
+  return Object.assign(
         {},
         bindActionCreators(axapiActions, dispatch),
         // bindActionCreators(mainActions, dispatch),

@@ -1,41 +1,40 @@
-import React, {Component, PropTypes} from 'react';
-import { Link } from 'react-router'
-import auth from 'helpers/auth'
+import React, { Component, PropTypes } from 'react';
+import auth from 'helpers/auth';
 
 import Toolbar from 'components/Toolbar';
 import './style.scss';
 
 class App extends Component {
-	static propTypes = {
-		children: PropTypes.node
-	}
+  static propTypes = {
+    children: PropTypes.node
+  }
 
-	constructor(props) {
-		super(props);
-		this.state = {
-		  loggedIn: auth.loggedIn()
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: auth.loggedIn()
+    };
+  }
 
-	updateAuth(loggedIn) {
-		this.setState({
-		  loggedIn: !!loggedIn
-		});
-	}
+  updateAuth(loggedIn) {
+    this.setState({
+      loggedIn: !!loggedIn
+    });
+  }
 
-	componentWillMount() {
-		auth.onChange = this.updateAuth.bind(this);
-		auth.login();
-	}
+  componentWillMount() {
+    auth.onChange = this.updateAuth.bind(this);
+    auth.login();
+  }
 
-	render() {
-		return (
-			<main className="main-app">
-				<Toolbar />
-				{this.props.children}
-			</main>
-		);
-	}
+  render() {
+    return (
+      <main className="main-app">
+        <Toolbar />
+        {this.props.children}
+      </main>
+    );
+  }
 }
 
 

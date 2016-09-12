@@ -8,7 +8,7 @@ export default class PageNotFound extends React.Component {
         <h1>Page Not Found.</h1>
         <p>Go to <Link to="/">Home Page</Link></p>
       </div>
-    )
+    );
   }
 }
 // class InternalServerError extends React.Component {

@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react';
-import auth from 'helpers/auth'
+import { Component, PropTypes } from 'react';
+import auth from 'helpers/auth';
 import { withRouter } from 'react-router';
 
 class Logout extends Component {

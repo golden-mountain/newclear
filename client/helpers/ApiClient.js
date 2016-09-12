@@ -1,8 +1,6 @@
 import superagent from 'superagent';
-import config from '../../config';
-import Immutable from 'immutable';
 
-const methods = ['get', 'post', 'put', 'patch', 'del'];
+const methods = [ 'get', 'post', 'put', 'patch', 'del' ];
 
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
@@ -10,10 +8,12 @@ function formatUrl(path) {
 }
 
 export default class ApiClient {
-  constructor(req) {
+  constructor() {
     // console.log(methods, req, 'hi ApiClient');
-    methods.forEach((method) =>
+    methods.forEach((method) =>      
+      /* eslint-disable */
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
+      /* eslint-enable */
         const request = superagent[method](formatUrl(path));
         // console.log(data, headers);
         if (params) {
@@ -21,7 +21,7 @@ export default class ApiClient {
         }
 
         if (headers) {
-          for (const [k, v] of Object.entries(headers.toJS())) {
+          for (const [ k, v ] of Object.entries(headers.toJS())) {
             request.set(k, v);
           }
         }

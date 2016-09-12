@@ -1,26 +1,26 @@
-import {loadRoute, errorLoading} from './routeUtil';
+import { loadRoute, errorLoading } from './routeUtil';
 
 export default 
-[
-  { 
-    path: 'adc',
-    getComponent: (nextState, cb) => {
-      System.import('pages/ADC')
+  [
+    { 
+      path: 'adc',
+      getComponent: (nextState, cb) => {
+        System.import('pages/ADC')
         .then(loadRoute(cb))
         .catch(errorLoading);
-    },
-    indexRoute: 
-    {
-      getComponent: (nextState, cb) => {
-        System.import('pages/ADC/VirtualServer/Form')
+      },
+      indexRoute: 
+      {
+        getComponent: (nextState, cb) => {
+          System.import('pages/ADC/VirtualServer/Form')
           .then(loadRoute(cb))
           .catch(errorLoading);
-      }
-    },
-    childRoutes: 
-    [
-      {
-        path: 'virtual-server',
+        }
+      },
+      childRoutes: 
+      [
+        {
+          path: 'virtual-server',
         // getComponent: (nextState, cb) => {
         //   System.import('pages/ADC/VirtualServer/Form')
         //     .then(loadRoute(cb))
@@ -33,14 +33,14 @@ export default
         //       .catch(errorLoading);
         //   }
         // },
-        childRoutes: [
-          {
-            path: 'edit',
-            getComponent: (nextState, cb) => {
-              System.import('pages/ADC/VirtualServer/Form')
+          childRoutes: [
+            {
+              path: 'edit',
+              getComponent: (nextState, cb) => {
+                System.import('pages/ADC/VirtualServer/Form')
                 .then(loadRoute(cb))
                 .catch(errorLoading);
-            },
+              }
             // indexRoute: {
             //   getComponent: (nextState, cb) => {
             //     System.import('pages/ADC/VirtualServer/Form')
@@ -48,10 +48,10 @@ export default
             //       .catch(errorLoading);
             //   }
             // }       
-          }
-        ]
-      }
-    ]
-  }
+            }
+          ]
+        }
+      ]
+    }
   
-];
+  ];

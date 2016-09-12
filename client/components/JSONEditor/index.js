@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import OrgJsonEditor from 'jsoneditor/dist/jsoneditor';
 //https://github.com/josdejong/jsoneditor/blob/master/docs/api.md
 import 'jsoneditor/dist/jsoneditor.css';
@@ -15,7 +15,7 @@ class JSONEditor extends Component {
     let self = this;
     let options = {
       mode: 'code',
-      modes: ['code', 'tree']
+      modes: [ 'code', 'tree' ]
     };
     // see how to custom field http://redux-form.com/6.0.0-rc.3/docs/api/Field.md/
     const { input: { value, onChange } } = this.props;

@@ -13,12 +13,12 @@ export function redirectToLogin(nextState, replace) {
     replace({
       pathname: '/login',
       state: { nextPathname: nextState.location.pathname }
-    })
+    });
   }
 }
 
 export function redirectToDashboard(nextState, replace) {
   if (auth.loggedIn()) {
-    replace('/')
+    replace('/');
   }
 }

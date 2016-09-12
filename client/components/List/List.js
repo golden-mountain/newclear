@@ -28,9 +28,9 @@ class List extends Component {
         ...expanded.slice(expandedIndex + 1)
       ];
     } else if (singleExpand) {
-      expanded = [index];
+      expanded = [ index ];
     } else {
-      expanded = [...expanded, index];
+      expanded = [ ...expanded, index ];
     }
 
     this.setState({ expanded });

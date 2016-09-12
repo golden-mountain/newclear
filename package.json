@@ -8,7 +8,7 @@
   "scripts": {
     "start": "concurrent --kill-others \"npm run start-client\" \"npm run start-proxy\"",
     "start-proxy": "node dev",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc client",
+    "lint": "./node_modules/.bin/eslint --fix -c .eslintrc client",
     "start-client": "./node_modules/.bin/webpack-dev-server --history-api-fallback --inline --hot --progress --port 3000",
     "build": "node build.js production"
   },
@@ -36,7 +36,6 @@
     "concurrently": "^2.2.0",
     "css-loader": "^0.23.1",
     "eslint": "^3.4.0",
-    "eslint-config-airbnb": "^11.0.0",
     "eslint-loader": "^1.5.0",
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",

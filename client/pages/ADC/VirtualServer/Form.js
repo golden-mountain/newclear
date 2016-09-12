@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form/immutable' // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Checkbox, Radio, HelpBlock } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
+import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, HelpBlock } from 'react-bootstrap';
 import Helmet from 'react-helmet';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import * as axapiActions from 'redux/modules/axapi';
 // import _ from 'lodash';
 import Immutable from 'immutable';
-import { SubmissionError } from 'redux-form'
+// import { SubmissionError } from 'redux-form';
 
 
 const validate = values => {
@@ -16,7 +16,7 @@ const validate = values => {
     'virtual-server': {}
   };
 
-  const nameVal = values.getIn(['virtual-server', 'name'], '');
+  const nameVal = values.getIn([ 'virtual-server', 'name' ], '');
   if (!nameVal) {
     errors['virtual-server']['name'] = 'Required';
   } else if (nameVal.length < 2) {
@@ -24,11 +24,11 @@ const validate = values => {
   }
 
   return errors;
-}
+};
 
 const renderField = (field) => {
   // console.log(field, 'this is a field');
-  const {label} = field;
+  const { label } = field;
   let status = {}, error = '';
   if (field.touched && field.error) {
     error = <HelpBlock className="error">{field.error}</HelpBlock>;
@@ -46,7 +46,7 @@ const renderField = (field) => {
     </FormGroup>
   );
 
-}
+};
 
 class A10Checkbox extends Component {
   // handleChange() {
@@ -55,7 +55,7 @@ class A10Checkbox extends Component {
   // }
 
   render() {
-    const {label, name} = this.props;
+    const { label, name } = this.props;
     return (
       <FormGroup>
         <Col componentClass={ControlLabel} sm={2}>{label}</Col>
@@ -84,7 +84,7 @@ class VirtualServerForm extends Component {
   handleSubmit(v) {
     let values = Immutable.Map(v);
     values = values.delete('x');
-    const pathWildcard = ['virtual-server','wildcard'];
+    const pathWildcard = [ 'virtual-server','wildcard' ];
     if (values.hasIn(pathWildcard)) {
       values = values.deleteIn(pathWildcard);
       let ip = Immutable.fromJS({
@@ -99,16 +99,16 @@ class VirtualServerForm extends Component {
 
     const fullAuthData = {
       path: '/axapi/v3/slb/virtual-server/',
-      method: "POST", 
+      method: 'POST', 
       body: values
-    }
+    };
 
     return this.props.request(fullAuthData);
   }
 
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, request, response, error } = this.props;
+    const { handleSubmit, submitting, reset, pristine } = this.props;
     // console.log(switcher.toJS());
     return (
       <div className="container-fluid">
@@ -131,8 +131,8 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Address Type</Col>
                     <Col sm={10}>
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="0"  conditional={{'virtual-server.wildcard': false }}  /> IPv4
-                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="1"  conditional={{'virtual-server.wildcard': false }}  /> IPv6
+                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="0"  conditional={{ 'virtual-server.wildcard': false }}  /> IPv4
+                      <Field name="x.virtual-server.address-type" component="input" type="radio" value="1"  conditional={{ 'virtual-server.wildcard': false }}  /> IPv6
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -140,7 +140,7 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Address</Col>
                     <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.ip-address" className="form-control"  conditional={{'virtual-server.wildcard': false }}  />
+                      <Field component="input" type="text" name="virtual-server.ip-address" className="form-control"  conditional={{ 'virtual-server.wildcard': false }}  />
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -148,7 +148,7 @@ class VirtualServerForm extends Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Netmask</Col>
                     <Col sm={10}>
-                      <Field component="input" type="text" name="virtual-server.netmask" className="form-control" conditional={{'virtual-server.wildcard': false }} />
+                      <Field component="input" type="text" name="virtual-server.netmask" className="form-control" conditional={{ 'virtual-server.wildcard': false }} />
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -160,7 +160,7 @@ class VirtualServerForm extends Component {
                           <Button type="submit" disabled={submitting} bsStyle="success">
                             {submitting ? <i/> : <i/>} Create
                           </Button>
-                          <Button type="button" disabled={pristine || submitting} >
+                          <Button type="button" disabled={pristine || submitting} onClick={reset} >
                             Cancel
                           </Button>
                         </ButtonGroup>
@@ -172,14 +172,14 @@ class VirtualServerForm extends Component {
             </Col>
           </Row>
       </div>      
-    )
+    );
   }
 }
 
 let InitializeFromStateForm = reduxForm({
-    form: 'virtualServerForm',
-    validate
-  }
+  form: 'virtualServerForm',
+  validate
+}
  )(VirtualServerForm);
 
 
@@ -197,13 +197,13 @@ function mapStateToProps(state) {
   //     state.app.toJS()
   // );
   return {
-    response: state.getIn(['axapi','response']),
+    response: state.getIn([ 'axapi','response' ]),
     initialValues: initialValues
   };
 }
 
 function mapDispatchToProps(dispatch) {
-    return Object.assign(
+  return Object.assign(
         {},
         bindActionCreators(axapiActions, dispatch),
         // bindActionCreators(mainActions, dispatch),

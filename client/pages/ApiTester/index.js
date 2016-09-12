@@ -1,22 +1,22 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 // import {connect} from 'react-redux';
 import Helmet from 'react-helmet';
-import {reduxForm} from 'redux-form';
-import {bindActionCreators} from 'redux';
+import { reduxForm } from 'redux-form';
+import { bindActionCreators } from 'redux';
 import * as apiTesterActions from 'redux/modules/apiTester';
 import { FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 
 @reduxForm(
   {
     form: 'apiTester',
-    fields: ['path', 'body', 'method'],
+    fields: [ 'path', 'body', 'method' ],
     initialValues: {
       path: '/axapi/v3/auth',
       method: 'POST',
-      body: JSON.stringify({credentials: {username: 'admin', password: 'a10'}}, '\n', '   ')
+      body: JSON.stringify({ credentials: { username: 'admin', password: 'a10' } }, '\n', '   ')
     }
   },
-  (state) => ({response: state.apiTester.response}),
+  (state) => ({ response: state.apiTester.response }),
   dispatch => bindActionCreators(apiTesterActions, dispatch)
 )
 export default class ApiTester extends Component {
@@ -32,7 +32,7 @@ export default class ApiTester extends Component {
 
   render() {
     const {
-      fields: {path, body, method},
+      fields: { path, body, method },
       handleSubmit,
       resetForm,
       submitting,

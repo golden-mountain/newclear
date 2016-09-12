@@ -1,11 +1,11 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import auth from 'helpers/auth';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+// import auth from 'helpers/auth';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm, Field } from 'redux-form/immutable' // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
+import { Form, FormGroup, ControlLabel, Button, Col, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import Immutable from 'immutable';
 
 class LoginPage extends Component {
@@ -17,11 +17,11 @@ class LoginPage extends Component {
     // console.log(nextProps);
     // return true; 
     if (nextProps.response && nextProps.response.authresponse &&  nextProps.response.authresponse.signature) {
-      const { location } = this.props
+      const { location } = this.props;
       if (location.state && location.state.nextPathname) {
-        this.props.router.replace(location.state.nextPathname)
+        this.props.router.replace(location.state.nextPathname);
       } else {
-        this.props.router.replace('/')
+        this.props.router.replace('/');
       }
       return false;
     }
@@ -32,14 +32,14 @@ class LoginPage extends Component {
     // console.log(values);
     const fullAuthData = {
       path: '/axapi/v3/auth',
-      method: "POST", 
+      method: 'POST', 
       body: values
-    }
+    };
     return this.props.request(fullAuthData);
   }
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
+    const { handleSubmit, submitting, reset, pristine } = this.props;
     // console.log(this.props);
     return (
       <div className="container-fluid">    
@@ -75,20 +75,20 @@ class LoginPage extends Component {
         </Form>
 
       </div> 
-    )
+    );
   }
 
 }
 
 
 let InitializeFromStateForm = reduxForm({
-    form: 'login'
-  }
+  form: 'login'
+}
  )(LoginPage);
 
 InitializeFromStateForm = connect(
   (state) => ({
-    response: state.getIn(['axapi', 'response'], {}),
+    response: state.getIn([ 'axapi', 'response' ], {})
   }),
   (dispatch) => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);

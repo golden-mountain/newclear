@@ -1,32 +1,32 @@
 import { render } from 'react-dom';
 import React from 'react';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router/es6';
-import rootRoute from 'routes';
-// import createStore from './redux/create';
 import { syncHistoryWithStore } from 'react-router-redux';
-import 'index.ejs';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
+import Immutable from 'immutable';
+import { createStore, applyMiddleware } from 'redux';
 
+import rootRoute from './routes';
+// import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
-const client = new ApiClient();
-
-import { createStore, applyMiddleware } from 'redux'
 import createMiddleware from './redux/middleware/clientMiddleware';
 import switchMiddleware from './redux/middleware/switchMiddleware';
-
-import logger from 'redux-logger'
-import thunk from 'redux-thunk'
 import reducer from './redux/modules/reducer';
+// Immutable js
+import './index.ejs';
+
+const client = new ApiClient();
+
 const middleware = [ thunk, logger(), createMiddleware(client), switchMiddleware ];
 
-// Immutable js
-import Immutable from 'immutable';
-const initialState = Immutable.Map();
+const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(
   reducer,
   initialState,
   applyMiddleware(...middleware)
-)
+);
 
 // function handleChange() {
 //   const currentValue = store.getState();
@@ -35,7 +35,7 @@ const store = createStore(
 // store.subscribe(handleChange)
 
 const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState (state) {
+  selectLocationState(state) {
     return state.get('routing').toJS();
   }
 });
@@ -43,7 +43,7 @@ const history = syncHistoryWithStore(browserHistory, store, {
 
 render(
   <Provider store={store} key="provider">
-  	<Router history={history} routes={rootRoute} />
+    <Router history={history} routes={rootRoute} />
   </Provider>,
   document.getElementById('root')
 );

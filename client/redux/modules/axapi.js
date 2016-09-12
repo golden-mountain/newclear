@@ -26,7 +26,7 @@ function pushAxapiReqs(item) {
   let hisAction = {
     at: moment().format('YYYY-MM-DD HH:mm:ss'),
     body: item
-  }
+  };
   latestItems.push(hisAction);
   let itemStr = JSON.stringify(latestItems);
   localStorage.setItem('axapi', itemStr);
@@ -77,7 +77,7 @@ export function request(data) {
   }
 
   return {
-    types: [SAVE, SAVE_SUCCESS, SAVE_FAIL],
+    types: [ SAVE, SAVE_SUCCESS, SAVE_FAIL ],
     data: data,
     promise: (client) => client[data.method.toLowerCase()](data.path, {
       data: Immutable.Map(data.body),
