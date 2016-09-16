@@ -3,9 +3,10 @@ import { FormGroup, FormControl, ControlLabel, Col, HelpBlock } from 'react-boot
 
 class A10FieldLayout extends Component {
   render() {
-    const { label, touched, error, children } = this.props;
+    const { label, meta: { touched, error }, children } = this.props;
     let status = {}, errorMsg = '';
-    if (touched && errorMsg) {
+
+    if (touched && error) {
       errorMsg = <HelpBlock className="error">{error}</HelpBlock>;
       status.validationState = 'error';
     }

@@ -17,6 +17,7 @@ const validate = values => {
   };
 
   const nameVal = values.getIn([ 'virtual-server', 'name' ], '');
+
   if (!nameVal) {
     errors['virtual-server']['name'] = 'Required';
   } else if (nameVal.length < 2) {
@@ -25,6 +26,25 @@ const validate = values => {
 
   return errors;
 };
+
+const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
+
+const ipv4 = (value) => {
+  if (value) {
+    const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
+    return makeError(reg.test(value), 'IPv4 Required');
+  }
+  return makeError();
+};
+
+// const netmask = (field, values) => {
+//   if (values[field]) {
+//     const longReg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
+//     const shortReg = /^\/\d{1,2}$/;
+//     return makeError(longReg.test(values[field]) || shortReg.test(values[field]), 'Netmask Could Be Long Format Or Short Format');
+//   }
+//   return makeError();
+// };
 
 
 class VirtualServerForm extends Component {
@@ -93,15 +113,15 @@ class VirtualServerForm extends Component {
                     <Radio value="1" inline> IPv6 </Radio>
                   </Field>
 
-                  <Field name="virtual-server.ip-address" component={A10Field} label="IPv4 Address" conditional={{ 'x.virtual-server.address-type': '0' }}>
+                  <Field name="virtual-server.ip-address" component={A10Field} label="IPv4 Address" validation={[ { func: 'required', msg: 'Required' }, { func: ipv4, msg: 'Must IPv4' } ] } conditional={{ 'x.virtual-server.address-type': '0' }}>
                     <FormControl type="text" className="form-control"/>
                   </Field>
 
-                  <Field name="virtual-server.netmask" component={A10Field} label="Netmask" conditional={{ 'x.virtual-server.address-type': '0' }}>
+                  <Field name="virtual-server.netmask" component={A10Field} label="Netmask" validation={[ 'required', { func: 'netmask', msg: 'Could be /24 or 255.255.x.x' } ] }  conditional={{ 'x.virtual-server.address-type': '0' }}>
                     <FormControl type="text" className="form-control"/>
                   </Field>
 
-                  <Field name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address" conditional={{ 'x.virtual-server.address-type': '1' }}>
+                  <Field name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address" validation={[ 'required', 'ipv6' ] } conditional={{ 'x.virtual-server.address-type': '1' }}>
                     <FormControl type="text" className="form-control"/>
                   </Field>
 
