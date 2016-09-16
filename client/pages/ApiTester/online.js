@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
+import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import { bindActionCreators } from 'redux';

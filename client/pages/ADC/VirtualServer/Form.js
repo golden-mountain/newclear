@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
+import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 import { bindActionCreators } from 'redux';
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import * as axapiActions from 'redux/modules/axapi';
 // import _ from 'lodash';
 import Immutable from 'immutable';
-// import { SubmissionError } from 'redux-form';
+// import { SubmissionError } from 'a10-redux-form';
 import { A10Field } from 'components/Form/A10Field';
 
 const validate = values => {

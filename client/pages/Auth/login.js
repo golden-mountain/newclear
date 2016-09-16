@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm, Field } from 'redux-form/immutable'; // imported Field
+import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
 import { Form, FormGroup, ControlLabel, Button, Col, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import Immutable from 'immutable';
 

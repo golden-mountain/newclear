@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 // import {connect} from 'react-redux';
 import Helmet from 'react-helmet';
-import { reduxForm } from 'redux-form';
+import { reduxForm } from 'a10-redux-form';
 import { bindActionCreators } from 'redux';
 import * as apiTesterActions from 'redux/modules/apiTester';
 import { FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup } from 'react-bootstrap';

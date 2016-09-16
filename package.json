@@ -75,7 +75,7 @@
     "react-transform-catch-errors": "^1.0.2",
     "redbox-react": "^1.3.0",
     "redux": "^3.5.2",
-    "redux-form": "^6.0.0-rc.3",
+    "a10-redux-form": "../redux-form",
     "redux-immutable": "^3.0.8",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
