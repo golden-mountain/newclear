@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-// import auth from 'helpers/auth';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
-import { Form, FormGroup, ControlLabel, Button, Col, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
-// import Immutable from 'immutable';
+import { reduxForm } from 'a10-redux-form/immutable'; // imported Field
+import LoginForm from '../../components/Form/Login';
+import { Form } from 'react-bootstrap';
 
 class LoginPage extends Component {
   static propTypes = {
@@ -14,9 +13,8 @@ class LoginPage extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    // console.log(nextProps);
-    // return true; 
-    if (nextProps.response && nextProps.response.authresponse &&  nextProps.response.authresponse.signature) {
+    if (nextProps.response && nextProps.response.authresponse &&  nextProps.response.authresponse.signature
+    ) {
       const { location } = this.props;
       if (location.state && location.state.nextPathname) {
         this.props.router.replace(location.state.nextPathname);
@@ -28,8 +26,7 @@ class LoginPage extends Component {
     return true;
   }
 
-  handleSubmit(values) {
-    // console.log(values);
+  onSubmit(values) {
     const fullAuthData = {
       path: '/axapi/v3/auth',
       method: 'POST', 
@@ -39,42 +36,14 @@ class LoginPage extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting, reset, pristine } = this.props;
-    // console.log(this.props);
-    return (
-      <div className="container-fluid">    
-        <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
-          <FormGroup>
-            <Col componentClass={ControlLabel} sm={2}>Username</Col>
-            <Col sm={10}>
-              <Field name="credentials.username" component="input" type="text" placeholder="User name" className="form-control"/>
-            </Col>
-          </FormGroup>
-                     
-          <FormGroup>
-            <Col componentClass={ControlLabel} sm={2}>Password</Col>
-            <Col sm={10}>
-              <Field name="credentials.password" component="input" type="password" placeholder="Password" className="form-control"/>
-            </Col>
-          </FormGroup>
-
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <ButtonToolbar>
-                <ButtonGroup bsSize="large">
-                  <Button type="submit" disabled={submitting} bsStyle="success">
-                    {submitting ? <i/> : <i/>} Login
-                  </Button>
-                  <Button type="button" disabled={pristine || submitting} onClick={reset}>
-                    Reset
-                  </Button>
-                </ButtonGroup>
-              </ButtonToolbar>
-              </Col>
-          </FormGroup>
+    const { handleSubmit, pristine, submitting, reset } = this.props;
+    const subProps = { pristine, submitting, reset };
+    return ( 
+      <div className="fluid-container">
+        <Form onSubmit={handleSubmit(::this.onSubmit)} horizontal>
+          <LoginForm { ...subProps } />
         </Form>
-
-      </div> 
+      </div>
     );
   }
 

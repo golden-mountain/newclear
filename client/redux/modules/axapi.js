@@ -33,7 +33,7 @@ function pushAxapiReqs(item) {
 }
 
 export default function reducer(state = initialState, action = {}) {
-  // console.log(action, state, '===========');
+  let body = {};
   switch (action.type) {
     case SAVE:
       return Immutable.Map({
@@ -42,24 +42,32 @@ export default function reducer(state = initialState, action = {}) {
       });
 
     case SAVE_SUCCESS:
-      pushAxapiReqs(action);
+      // console.log(action, state, '===========');
+      body = JSON.parse(action.resp.text);
+      pushAxapiReqs({ data: action.data, result: body });
       if (isAuthUrl(action.data)) {
-        sessionStorage.setItem('token', action.result.authresponse.signature);
+        sessionStorage.setItem('token', body.authresponse.signature);
       }
       return Immutable.Map({
         ...state,
-        response: action.result
+        error: action.resp.error,
+        statusCode: action.resp.status,
+        response: body
       });
 
     case SAVE_FAIL:
-      pushAxapiReqs(action);
-      if (_.get(action, 'error.authorizationschema.code', 500) === 401) {
+      // console.log(action, '===========');
+      body = JSON.parse(action.resp.text);
+      pushAxapiReqs({ data: action.data, result: body });
+      if (_.get(action.resp, 'unauthorized', false) === true) {
         sessionStorage.removeItem('token');
       }
+
       return Immutable.Map({
         ...state,
-        error: true,
-        response: action.error ? action.error : {}
+        error: action.resp.error,
+        statusCode: action.resp.status,
+        response: body || {}
       });
     default:
       // console.log('default reducer');

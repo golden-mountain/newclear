@@ -37,22 +37,8 @@ const ipv4 = (value) => {
   return makeError();
 };
 
-// const netmask = (field, values) => {
-//   if (values[field]) {
-//     const longReg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
-//     const shortReg = /^\/\d{1,2}$/;
-//     return makeError(longReg.test(values[field]) || shortReg.test(values[field]), 'Netmask Could Be Long Format Or Short Format');
-//   }
-//   return makeError();
-// };
-
 
 class VirtualServerForm extends Component {
-
-  // validate(values) {
-  //   // console.log(values);
-  //   throw new SubmissionError({ 'name': 'Wrong Name', _error: 'submit failed!' });
-  // }
 
   filterFields() {
 
@@ -60,8 +46,11 @@ class VirtualServerForm extends Component {
 
   handleSubmit(v) {
     let values = Immutable.Map(v);
+    // console.log(values.toJS());
     const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
-    if (values.hasIn(pathWildcard) && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
+    if (values.hasIn(pathWildcard) 
+       && values.getIn(pathWildcard) === true
+       && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
       values = values.deleteIn(pathWildcard);
       let ip = Immutable.fromJS({
         'virtual-server': {
@@ -163,7 +152,7 @@ const initialValues = {
   'x': {
     'virtual-server': {
       'address-type': '0',
-      'wildcard': true
+      'wildcard': false
     }
   }
 };

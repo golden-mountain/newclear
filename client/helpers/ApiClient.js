@@ -30,7 +30,10 @@ export default class ApiClient {
           request.send(data.toJS());
         }
 
-        request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));
+        request.end((err, resp) => {
+          // console.log('error:', err, 'response:', resp);
+          return  err ? reject(resp) : resolve(resp);
+        });
       }));
   }
   /*
