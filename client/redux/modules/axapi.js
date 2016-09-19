@@ -52,7 +52,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         error: action.resp.error,
         statusCode: action.resp.status,
-        response: body
+        response: Immutable.fromJS(body.response)
       });
 
     case SAVE_FAIL:
@@ -67,7 +67,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         error: action.resp.error,
         statusCode: action.resp.status,
-        response: body || {}
+        response: Immutable.fromJS(body.response)
       });
     default:
       // console.log('default reducer');
