@@ -9,7 +9,6 @@ export default function clientMiddleware(client) {
       if (!promise) {
         return next(action);
       }
-
       const [ REQUEST, SUCCESS, FAILURE ] = types;
       next({ ...rest, type: REQUEST });
 

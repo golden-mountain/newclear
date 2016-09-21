@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as axapiActions from 'redux/modules/axapi';
-import { reduxForm } from 'a10-redux-form/immutable'; // imported Field
-import LoginForm from '../../components/Form/Login';
+import AppManager from 'helpers/AppManager';
+import LoginForm from 'components/Form/Login';
 import { Form } from 'react-bootstrap';
 
 class LoginPage extends Component {
@@ -13,10 +10,9 @@ class LoginPage extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.response && nextProps.response.authresponse &&  nextProps.response.authresponse.signature
-    ) {
+    if (nextProps.axapiResponse && nextProps.axapiResponse.getIn([ 'response', 'signature' ])) {
       const { location } = this.props;
-      if (location.state && location.state.nextPathname) {
+      if (location.state && location.state.nextPathname ) {
         this.props.router.replace(location.state.nextPathname);
       } else {
         this.props.router.replace('/');
@@ -24,6 +20,7 @@ class LoginPage extends Component {
       return false;
     }
     return true;
+
   }
 
   onSubmit(values) {
@@ -32,7 +29,8 @@ class LoginPage extends Component {
       method: 'POST', 
       body: values
     };
-    return this.props.request(fullAuthData);
+    this.props.setPageTitle('testaaaaaaaaaaaaaa');
+    return this.props.axapiRequest(fullAuthData);
   }
 
   render() {
@@ -49,17 +47,18 @@ class LoginPage extends Component {
 
 }
 
+const initialValues = {
+  credentials: {
+    username: 'admin', 
+    password: 'a10'
+  }
+};
 
-let InitializeFromStateForm = reduxForm({
-  form: 'login'
-}
- )(LoginPage);
+const InitializeFromStateForm = AppManager({
+  page: 'login',
+  form: 'loginForm', 
+  initialValues: initialValues
+})(LoginPage);
 
-InitializeFromStateForm = connect(
-  (state) => ({
-    response: state.getIn([ 'axapi', 'response' ], {})
-  }),
-  (dispatch) => bindActionCreators(axapiActions, dispatch)
-)(InitializeFromStateForm);
 
 export default withRouter(InitializeFromStateForm);

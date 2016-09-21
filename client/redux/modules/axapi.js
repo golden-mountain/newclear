@@ -1,7 +1,7 @@
 // import { SubmissionError } from 'a10-redux-form';
 import moment from 'moment';
 import _ from 'lodash';
-import Immutable from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 const SAVE_SUCCESS = 'SAVE_SUCCESS';
 const SAVE_FAIL = 'SAVE_FAIL';
@@ -36,7 +36,7 @@ export default function reducer(state = initialState, action = {}) {
   let body = {};
   switch (action.type) {
     case SAVE:
-      return Immutable.Map({
+      return Map({
         ...state,
         isLoading: true
       });
@@ -48,11 +48,11 @@ export default function reducer(state = initialState, action = {}) {
       if (isAuthUrl(action.data)) {
         sessionStorage.setItem('token', body.authresponse.signature);
       }
-      return Immutable.Map({
+      return Map({
         ...state,
         error: action.resp.error,
         statusCode: action.resp.status,
-        response: Immutable.fromJS(body.response)
+        response: fromJS(body.response || body.authresponse)
       });
 
     case SAVE_FAIL:
@@ -63,15 +63,15 @@ export default function reducer(state = initialState, action = {}) {
         sessionStorage.removeItem('token');
       }
 
-      return Immutable.Map({
+      return Map({
         ...state,
         error: action.resp.error,
         statusCode: action.resp.status,
-        response: Immutable.fromJS(body.response)
+        response: fromJS(body.response || body.authresponse)
       });
     default:
       // console.log('default reducer');
-      return Immutable.Map(state);
+      return Map(state);
   }
 }
 
@@ -88,8 +88,8 @@ export function request(data) {
     types: [ SAVE, SAVE_SUCCESS, SAVE_FAIL ],
     data: data,
     promise: (client) => client[data.method.toLowerCase()](data.path, {
-      data: Immutable.Map(data.body),
-      headers: Immutable.Map(authHeaders)
+      data: Map(data.body),
+      headers: Map(authHeaders)
     })
   };
 }

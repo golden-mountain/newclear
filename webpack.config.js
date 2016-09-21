@@ -118,7 +118,7 @@ module.exports = {
     inline: true,    
     proxy: {
       '/axapi/*': {
-        target: 'https://192.168.105.197',
+        target: 'https://192.168.105.72',
         secure: false,
         rewrite: function(req, res) {
           console.log(req, 'this is request');

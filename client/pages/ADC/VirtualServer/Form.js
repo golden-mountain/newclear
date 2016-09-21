@@ -10,22 +10,22 @@ import Immutable from 'immutable';
 // import { SubmissionError } from 'a10-redux-form';
 import { A10Field } from 'components/Form/A10Field';
 
-const validate = values => {
+// const validate = values => {
 
-  const errors = {
-    'virtual-server': {}
-  };
+//   const errors = {
+//     'virtual-server': {}
+//   };
 
-  const nameVal = values.getIn([ 'virtual-server', 'name' ], '');
+//   const nameVal = values.getIn([ 'virtual-server', 'name' ], '');
 
-  if (!nameVal) {
-    errors['virtual-server']['name'] = 'Required';
-  } else if (nameVal.length < 2) {
-    errors['virtual-server']['name'] = 'Less than 2 characters';
-  }
+//   if (!nameVal) {
+//     errors['virtual-server']['name'] = 'Required';
+//   } else if (nameVal.length < 2) {
+//     errors['virtual-server']['name'] = 'Less than 2 characters';
+//   }
 
-  return errors;
-};
+//   return errors;
+// };
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
@@ -138,15 +138,15 @@ class VirtualServerForm extends Component {
 }
 
 let InitializeFromStateForm = reduxForm({
-  form: 'virtualServerForm',
-  validate
+  form: 'virtualServerForm'
+  // validate
 }
  )(VirtualServerForm);
 
 
 const initialValues = {
   'virtual-server': {
-    'name': 'vs1',
+    'name': 'vs',
     'netmask': '/24'
   },
   'x': {
@@ -158,11 +158,6 @@ const initialValues = {
 };
 
 function mapStateToProps(state) {
-  // return Object.assign(
-  //     {},
-  //     state.pto.toJS(),
-  //     state.app.toJS()
-  // );
   return {
     response: state.getIn([ 'axapi','response' ]),
     initialValues: initialValues

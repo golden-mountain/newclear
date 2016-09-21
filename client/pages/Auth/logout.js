@@ -18,12 +18,14 @@ class Logout extends Component {
   componentDidMount() {
     // need call axapi before auth.logout
     auth.logout();
-    this.redirectToLogin();
+    // this.redirectToLogin();
+    // have a chance to release memory
+    location.href = '/login';
   }
 
-  redirectToLogin() {
-    this.props.router.replace('/login');
-  }
+  // redirectToLogin() {
+  //   this.props.router.replace('/login');
+  // }
 
   render() {
     return false;

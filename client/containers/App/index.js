@@ -1,16 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { reduxForm } from 'a10-redux-form/immutable'; // imported Field
+import * as axapiActions from 'redux/modules/app/axapi';
 
 // import auth from 'helpers/auth';
 import { Modal, Button, Form, Fade, Alert } from 'react-bootstrap';
-import { reduxForm } from 'a10-redux-form/immutable'; // imported Field
 
 import Toolbar from 'components/Toolbar';
 import './style.scss';
 
 import LoginForm from 'components/Form/Login';
-import * as axapiActions from 'redux/modules/axapi';
+// import AppManager from 'helpers/AppManager';
 
 class App extends Component {
   static propTypes = {
@@ -27,13 +28,25 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { statusCode, errMsg } = nextProps;
+    const self = this;
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
       showError: !!errMsg
     });
+
+    if (this.errorTimeout) {
+      clearTimeout(this.errorTimeout);
+    }
+
+    this.errorTimeout = setTimeout(() => {
+      self.setState({ showError: false });
+    }, 5000);
   }
 
+  componenWillUnmount() {
+    this.props.destroyPage();
+  }
 
   onSubmit(values) {
     const fullAuthData = {
@@ -41,7 +54,8 @@ class App extends Component {
       method: 'POST', 
       body: values
     };
-    return this.props.request(fullAuthData);
+    // console.log(this.props.axapiRequest);
+    return this.props.axapiRequest('app', fullAuthData);
   }
 
   submit() {
@@ -63,9 +77,9 @@ class App extends Component {
     return (
       <main className="main-app">
         <Toolbar />
-        <Fade in={this.state.showError}>
+        <Fade in={this.state.showError} transitionAppear={true} unmountOnExit={true}>
           <Alert bsStyle={statusCode === 200 ? 'success' : 'danger'} onDismiss={::this.handleAlertDismiss}> {errMsg} </Alert>
-        </Fade>         
+        </Fade>
         {this.props.children}
         <Modal show={this.state.showLogin} onHide={this.close}>
             <Modal.Header>
@@ -92,14 +106,22 @@ class App extends Component {
 let InitializeFromStateForm = reduxForm({
   form: 'app'
 }
- )(App);
+)(App);
 
 InitializeFromStateForm = connect(
   (state) => ({
-    statusCode: state.getIn([ 'axapi', 'statusCode' ]),
-    errMsg: state.getIn([ 'axapi', 'response', 'err', 'msg' ], 'Success')
+    statusCode: state.getIn([ 'app', 'axapi', '__last__', 'statusCode' ]),
+    errMsg: state.getIn([ 'app', 'axapi', '__last__', 'response', 'err', 'msg' ])
   }),
   (dispatch) => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);
+
+// TO Fix: if add those, why app reducers can't be triggered????
+// const InitializeFromStateForm = AppManager({
+//   page: '__app__',
+//   form: '__appLoginForm', 
+//   initialValues: {}
+// })(App);
+
 
 export default InitializeFromStateForm;

@@ -37,7 +37,7 @@ export default
             {
               path: 'edit',
               getComponent: (nextState, cb) => {
-                System.import('pages/ADC/VirtualServer/Form')
+                System.import('pages/ADC/')
                 .then(loadRoute(cb))
                 .catch(errorLoading);
               }
