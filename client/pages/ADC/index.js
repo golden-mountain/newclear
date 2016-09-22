@@ -35,6 +35,7 @@ class VirtualServerForm extends Component {
     //     foo: 'bar'
     //   }
     // });
+    // this.props.setPageTitle('Virtual Server Form');
   }
 
   filterFields() {

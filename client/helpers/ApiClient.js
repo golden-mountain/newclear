@@ -9,13 +9,11 @@ function formatUrl(path) {
 
 export default class ApiClient {
   constructor() {
-    // console.log(methods, req, 'hi ApiClient');
     methods.forEach((method) =>      
       /* eslint-disable */
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
       /* eslint-enable */
         const request = superagent[method](formatUrl(path));
-        // console.log(data, headers);
         if (params) {
           request.query(params);
         }

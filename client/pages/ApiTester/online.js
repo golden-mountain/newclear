@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
+import { Field } from 'a10-redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+// import { bindActionCreators } from 'redux';
+// import { connect } from 'react-redux';
 // import JSONTree from 'react-json-tree'
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
 // import Immutable from 'immutable';
 
-import * as axapiActions from 'redux/modules/axapi';
+// import * as axapiActions from 'redux/modules/axapi';
+import AppManager from 'helpers/AppManager';
 
 const initialValues = {
   path: '/axapi/v3/auth',
@@ -26,7 +27,7 @@ const initialValues = {
 //   </div>
 // }
 
-class MyForm extends Component {
+class AxapiForm extends Component {
 
   setHistoryQuery(historyData) {
     const dateReg = /^\d{4}.*:\d{2}$/;
@@ -39,10 +40,11 @@ class MyForm extends Component {
   clearHistoryQuery() {
     localStorage.removeItem('axapi');
     this.props.initialize(initialValues);
+    this.forceUpdate();
   }
 
   initSession() {
-    this.props.request(initialValues);
+    this.props.axapiRequest(initialValues);
   }
 
   fetchHistory() {
@@ -59,9 +61,9 @@ class MyForm extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, request, response } = this.props;
+    const { handleSubmit, submitting, reset, pristine, axapiRequest, axapiResponse } = this.props;
     const historyData = this.fetchHistory();
-    // console.log(this.props);
+    // console.log(axapiResponse);
     return (
       <div className="container-fluid">
         <Helmet title="API TESTER"/>
@@ -74,7 +76,7 @@ class MyForm extends Component {
             <Col xs={5}>   
               <h4>Request </h4>   
               <Panel>
-                <Form onSubmit={handleSubmit(request)} horizontal>
+                <Form onSubmit={handleSubmit(axapiRequest)} horizontal>
                   <FormGroup controlId="formHorizontalEmail">
                     <Col componentClass={ControlLabel} sm={2}>
                       Session
@@ -135,7 +137,7 @@ class MyForm extends Component {
             </Col>
             <Col xs={5}>
               <h4>Current Result </h4>
-              <Inspector data={response || {}} />              
+              <Inspector data={axapiResponse && axapiResponse.toJS() || {}} />              
             </Col>
           </Row>
       </div>      
@@ -143,30 +145,36 @@ class MyForm extends Component {
   }
 }
 
-let InitializeFromStateForm = reduxForm({
-  form: 'apiTester'
-}
- )(MyForm);
+// let InitializeFromStateForm = reduxForm({
+//   form: 'apiTester'
+// }
+//  )(AxapiForm);
 
-function mapStateToProps(state) {
-  return {
-    response: state.getIn([ 'axapi', 'response' ]),
-    initialValues: initialValues
-  };
-}
+// function mapStateToProps(state) {
+//   return {
+//     response: state.getIn([ 'axapi', 'response' ]),
+//     initialValues: initialValues
+//   };
+// }
 
-function mapDispatchToProps(dispatch) {
-  return Object.assign(
-        {},
-        bindActionCreators(axapiActions, dispatch),
-        // bindActionCreators(mainActions, dispatch),
-        // bindActionCreators(appActions, dispatch)
-    );
-}
+// function mapDispatchToProps(dispatch) {
+//   return Object.assign(
+//         {},
+//         bindActionCreators(axapiActions, dispatch),
+//         // bindActionCreators(mainActions, dispatch),
+//         // bindActionCreators(appActions, dispatch)
+//     );
+// }
 
-InitializeFromStateForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(InitializeFromStateForm);
+// InitializeFromStateForm = connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(InitializeFromStateForm);
+
+const InitializeFromStateForm = AppManager({
+  page: 'apiTester',
+  form: 'apiTesterForm', 
+  initialValues: initialValues
+})(AxapiForm);
 
 export default InitializeFromStateForm;

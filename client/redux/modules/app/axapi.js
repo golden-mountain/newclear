@@ -1,13 +1,16 @@
 import { Map, fromJS } from 'immutable';
+import { Iterable } from 'immutable';
 
 // axapi request import
 import moment from 'moment';
 import _ from 'lodash';
+import * as logger from 'helpers/logger';
 
 // api action
 const AXAPI_SAVE_SUCCESS = 'page/api/AXAPI_SAVE_SUCCESS';
 const AXAPI_SAVE_FAIL = 'page/api/AXAPI_SAVE_FAIL';
 const AXAPI_SAVE = 'page/api/AXAPI_SAVE';
+const AXAPI_CLEAR_LAST_ERROR = 'page/api/AXAPI_CLEAR_LAST_ERROR';
 
 const isAuthUrl = (data) => data.path.toLowerCase().indexOf('/axapi/v3/auth') > -1;
 
@@ -38,7 +41,7 @@ const apiReducers = {
   [ AXAPI_SAVE ](state, { page }) {
     let result = state.setIn([ 'axapi', lastPage, 'isLoading' ], true);
     result = result.setIn([ 'axapi', page , 'isLoading' ], true);
-    // console.log('loading......................................');
+    console.log('loading......................................');
     return result;
   },
   [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page }) {
@@ -74,6 +77,10 @@ const apiReducers = {
     
     let result = state.setIn([ 'axapi', lastPage ], responseData);
     return result.setIn([ 'axapi', page ], responseData);
+  },
+  [ AXAPI_CLEAR_LAST_ERROR ](state) {
+    console.log('deleting last error.............');
+    return state.deleteIn([ 'axapi', lastPage ]);    
   }
 };
 
@@ -81,16 +88,19 @@ export default apiReducers;
 
 // ----------------- AXAPI ------------------------
 export function axapiRequest(page, data) {
-  // console.log('page........', page, 'data', data);
   const authHeaders = {
     'content-type': 'application/json'
   };
+
+  if (Iterable.isIterable(data)) {
+    data = data.toJS();
+  }
 
   if (!isAuthUrl(data)) {
     authHeaders.Authorization = 'A10 ' + sessionStorage.getItem('token');
   }
 
-  return {
+  let request = {
     data, 
     page, 
     types: [ AXAPI_SAVE, AXAPI_SAVE_SUCCESS, AXAPI_SAVE_FAIL ],    
@@ -99,4 +109,15 @@ export function axapiRequest(page, data) {
       headers: Map(authHeaders)
     })
   };
+
+  logger.group('before sending request', request);
+  return request;
+}
+
+
+export function clearAxapiLastError() {
+  console.log('clear last error');
+  return {
+    type: AXAPI_CLEAR_LAST_ERROR
+  };  
 }

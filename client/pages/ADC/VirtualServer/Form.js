@@ -1,31 +1,13 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'a10-redux-form/immutable'; // imported Field
+import { Field } from 'a10-redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox } from 'react-bootstrap';
 import Helmet from 'react-helmet';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as axapiActions from 'redux/modules/axapi';
-// import _ from 'lodash';
+
 import Immutable from 'immutable';
 // import { SubmissionError } from 'a10-redux-form';
 import { A10Field } from 'components/Form/A10Field';
 
-// const validate = values => {
-
-//   const errors = {
-//     'virtual-server': {}
-//   };
-
-//   const nameVal = values.getIn([ 'virtual-server', 'name' ], '');
-
-//   if (!nameVal) {
-//     errors['virtual-server']['name'] = 'Required';
-//   } else if (nameVal.length < 2) {
-//     errors['virtual-server']['name'] = 'Less than 2 characters';
-//   }
-
-//   return errors;
-// };
+import AppManager from 'helpers/AppManager';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
@@ -40,9 +22,15 @@ const ipv4 = (value) => {
 
 class VirtualServerForm extends Component {
 
-  filterFields() {
+  // // not excuted???
+  // componentWillUnmount() {
+  //   // console.log('unmounting.......................');
+  //   this.props.clearAxapiLastError();
+  // }
 
-  }
+  // filterFields() {
+
+  // }
 
   handleSubmit(v) {
     let values = Immutable.Map(v);
@@ -70,12 +58,13 @@ class VirtualServerForm extends Component {
       body: values
     };
 
-    return this.props.request(fullAuthData);
+    return this.props.axapiRequest(fullAuthData);
   }
 
 
   render() {
     const { handleSubmit, submitting, reset, pristine } = this.props;
+    // console.log('........................', page.toJS(), '................................');
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -137,12 +126,6 @@ class VirtualServerForm extends Component {
   }
 }
 
-let InitializeFromStateForm = reduxForm({
-  form: 'virtualServerForm'
-  // validate
-}
- )(VirtualServerForm);
-
 
 const initialValues = {
   'virtual-server': {
@@ -157,25 +140,10 @@ const initialValues = {
   }
 };
 
-function mapStateToProps(state) {
-  return {
-    response: state.getIn([ 'axapi','response' ]),
-    initialValues: initialValues
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return Object.assign(
-        {},
-        bindActionCreators(axapiActions, dispatch),
-        // bindActionCreators(mainActions, dispatch),
-        // bindActionCreators(appActions, dispatch)
-    );
-}
-
-InitializeFromStateForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(InitializeFromStateForm);
+const InitializeFromStateForm = AppManager({
+  page: 'virtualServer',
+  form: 'virtualServerForm', 
+  initialValues: initialValues
+})(VirtualServerForm);
 
 export default InitializeFromStateForm;

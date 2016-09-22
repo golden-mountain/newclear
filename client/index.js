@@ -3,7 +3,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router/es6';
 import { syncHistoryWithStore } from 'react-router-redux';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import Immutable from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
@@ -19,7 +19,8 @@ import './index.ejs';
 
 const client = new ApiClient();
 
-const middleware = [ thunk, logger(), createMiddleware(client) ];
+// removed logger() because it's nonesense
+const middleware = [ thunk,  createMiddleware(client) ];
 
 const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(

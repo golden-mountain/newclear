@@ -28,24 +28,21 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { statusCode, errMsg } = nextProps;
-    const self = this;
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
       showError: !!errMsg
     });
 
-    if (this.errorTimeout) {
-      clearTimeout(this.errorTimeout);
+    if (errMsg) {
+      if (this.errorTimeout) {
+        clearTimeout(this.errorTimeout);
+      }
+
+      this.errorTimeout = setTimeout(() => {
+        this.props.clearAxapiLastError();
+      }, 5000);
     }
-
-    this.errorTimeout = setTimeout(() => {
-      self.setState({ showError: false });
-    }, 5000);
-  }
-
-  componenWillUnmount() {
-    this.props.destroyPage();
   }
 
   onSubmit(values) {
