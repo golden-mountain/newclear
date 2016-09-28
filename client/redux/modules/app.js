@@ -16,12 +16,14 @@ import axapiReducers from './app/axapi';
 import pageReducers from './app/page';
 import themeReducers from './app/theme';
 import featureReducers from './app/feature';
+import formReducers from './app/form';
 
 const behaviors = {
   ...pageReducers,
   ...themeReducers,
   ...axapiReducers,
-  ...featureReducers
+  ...featureReducers,
+  ...formReducers
 };
 
 const empty = Map({});

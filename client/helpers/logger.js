@@ -5,7 +5,7 @@ const parseData = (data) => {
   for (var i in data) {
     let v = data[i];
     if (typeof v == 'string') {
-      console.log('........................... print title:', v, '.............................');
+      console.log('...........................', v, '.............................');
     } else {
       if (Iterable.isIterable(v)) {
         console.log('........... print immutable object ...........');

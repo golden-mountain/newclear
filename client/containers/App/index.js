@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { reduxForm } from 'a10-redux-form/immutable'; // imported Field
+import { reduxForm } from 'redux-form/immutable'; // imported Field
 import * as axapiActions from 'redux/modules/app/axapi';
 
 // import auth from 'helpers/auth';
@@ -12,6 +12,7 @@ import './style.scss';
 
 import LoginForm from 'components/Form/Login';
 // import AppManager from 'helpers/AppManager';
+import { LAST_PAGE_KEY, APP_LAYOUT_PAGE_KEY } from 'configs/appKeys';
 
 class App extends Component {
   static propTypes = {
@@ -27,11 +28,11 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { statusCode, errMsg } = nextProps;
+    const { statusCode, errMsg, error } = nextProps;
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
-      showError: !!errMsg
+      showError: !!error || !!errMsg
     });
 
     if (errMsg) {
@@ -52,7 +53,7 @@ class App extends Component {
       body: values
     };
     // console.log(this.props.axapiRequest);
-    return this.props.axapiRequest('app', fullAuthData);
+    return this.props.axapiRequest(APP_LAYOUT_PAGE_KEY, fullAuthData);
   }
 
   submit() {
@@ -69,13 +70,13 @@ class App extends Component {
   }
 
   render() {
-    const { handleSubmit, statusCode, errMsg } = this.props;
+    const { handleSubmit, statusCode, errMsg, error } = this.props;
 
     return (
       <main className="main-app">
         <Toolbar />
         <Fade in={this.state.showError} transitionAppear={true} unmountOnExit={true}>
-          <Alert bsStyle={statusCode === 200 ? 'success' : 'danger'} onDismiss={::this.handleAlertDismiss}> {errMsg} </Alert>
+          <Alert bsStyle={statusCode === 200 ? 'success' : 'danger'} onDismiss={::this.handleAlertDismiss}> { error || errMsg } </Alert>
         </Fade>
         {this.props.children}
         <Modal show={this.state.showLogin} onHide={this.close}>
@@ -107,8 +108,8 @@ let InitializeFromStateForm = reduxForm({
 
 InitializeFromStateForm = connect(
   (state) => ({
-    statusCode: state.getIn([ 'app', 'axapi', '__last__', 'statusCode' ]),
-    errMsg: state.getIn([ 'app', 'axapi', '__last__', 'response', 'err', 'msg' ])
+    statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
+    errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ])
   }),
   (dispatch) => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);

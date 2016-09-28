@@ -17,7 +17,7 @@ class JSONEditor extends Component {
       mode: 'code',
       modes: [ 'code', 'tree' ]
     };
-    // see how to custom field http://a10-redux-form.com/6.0.0-rc.3/docs/api/Field.md/
+    // see how to custom field http://redux-form.com/6.0.0-rc.3/docs/api/Field.md/
     const { input: { value, onChange } } = this.props;
     // this.setState({content: value});
     // console.log(value, this.state, 'new props');

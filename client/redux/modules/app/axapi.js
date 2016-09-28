@@ -6,6 +6,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import * as logger from 'helpers/logger';
 
+import { LAST_PAGE_KEY } from 'configs/appKeys';
+
 // api action
 const AXAPI_SAVE_SUCCESS = 'page/api/AXAPI_SAVE_SUCCESS';
 const AXAPI_SAVE_FAIL = 'page/api/AXAPI_SAVE_FAIL';
@@ -35,13 +37,11 @@ const pushAxapiReqs = (item) => {
   localStorage.setItem('axapi', itemStr);
 };
 
-const lastPage = '__last__';
-
 const apiReducers = {
   [ AXAPI_SAVE ](state, { page }) {
-    let result = state.setIn([ 'axapi', lastPage, 'isLoading' ], true);
-    result = result.setIn([ 'axapi', page , 'isLoading' ], true);
-    console.log('loading......................................');
+    let result = state.setIn([ LAST_PAGE_KEY, 'axapi', 'isLoading' ], true);
+    result = result.setIn([ page, 'axapi', 'isLoading' ], true);
+    // console.log('loading......................................');
     return result;
   },
   [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page }) {
@@ -59,10 +59,11 @@ const apiReducers = {
       response: fromJS(body.response || body.authresponse)
     });
 
-    let result = state.setIn([ 'axapi', lastPage ], responseData);
-    return result.setIn([ 'axapi', page ], responseData);
+    let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
+    return result.setIn([ page, 'axapi' ], responseData);
   },
   [ AXAPI_SAVE_FAIL ](state, { resp, data, page }) {
+    // console.log('failed  axapi request ......................................');
     const body = JSON.parse(resp.text);
     pushAxapiReqs({ data, result: body });
     if (_.get(resp, 'unauthorized', false) === true) {
@@ -75,12 +76,12 @@ const apiReducers = {
       response: fromJS(body.response || body.authresponse)
     });
     
-    let result = state.setIn([ 'axapi', lastPage ], responseData);
-    return result.setIn([ 'axapi', page ], responseData);
+    let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
+    return result.setIn([ page, 'axapi' ], responseData);
   },
   [ AXAPI_CLEAR_LAST_ERROR ](state) {
     console.log('deleting last error.............');
-    return state.deleteIn([ 'axapi', lastPage ]);    
+    return state.deleteIn([ LAST_PAGE_KEY, 'axapi' ]);    
   }
 };
 

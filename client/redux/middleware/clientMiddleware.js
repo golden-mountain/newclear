@@ -11,7 +11,7 @@ export default function clientMiddleware(client) {
       }
       const [ REQUEST, SUCCESS, FAILURE ] = types;
       next({ ...rest, type: REQUEST });
-
+      // console.log('callback', callback);
       const actionPromise = promise(client);
       actionPromise.then(
         (resp) => next({ ...rest, resp, type: SUCCESS }),

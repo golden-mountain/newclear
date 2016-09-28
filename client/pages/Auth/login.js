@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import AppManager from 'helpers/AppManager';
 import LoginForm from 'components/Form/Login';
 import { Form } from 'react-bootstrap';
+import BaseForm from 'pages/BaseForm';
 
-class LoginPage extends Component {
+class LoginPage extends BaseForm {
   static propTypes = {
     children: PropTypes.node
   }

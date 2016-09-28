@@ -4,15 +4,15 @@ export default
   [
     { 
       path: 'adc',
-      getComponent: (nextState, cb) => {
-        System.import('pages/ADC')
-        .then(loadRoute(cb))
-        .catch(errorLoading);
-      },
+      // getComponent: (nextState, cb) => {
+      //   System.import('pages/ADC')
+      //   .then(loadRoute(cb))
+      //   .catch(errorLoading);
+      // },
       indexRoute: 
       {
         getComponent: (nextState, cb) => {
-          System.import('pages/ADC/VirtualServer/Form')
+          System.import('pages/ADC')
           .then(loadRoute(cb))
           .catch(errorLoading);
         }

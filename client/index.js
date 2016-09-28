@@ -12,7 +12,7 @@ import rootRoute from './routes';
 // import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import createMiddleware from './redux/middleware/clientMiddleware';
-// import switchMiddleware from './redux/middleware/switchMiddleware';
+import formMiddleware from './redux/middleware/formMiddleware';
 import reducer from './redux/modules/reducer';
 // Immutable js
 import './index.ejs';
@@ -20,7 +20,7 @@ import './index.ejs';
 const client = new ApiClient();
 
 // removed logger() because it's nonesense
-const middleware = [ thunk,  createMiddleware(client) ];
+const middleware = [ thunk,  createMiddleware(client), formMiddleware ];
 
 const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(

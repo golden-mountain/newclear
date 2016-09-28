@@ -1,4 +1,4 @@
-// import { SubmissionError } from 'a10-redux-form';
+// import { SubmissionError } from 'redux-form';
 import moment from 'moment';
 import _ from 'lodash';
 import { Map, fromJS } from 'immutable';

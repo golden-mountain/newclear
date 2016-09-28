@@ -2,7 +2,7 @@
 import Immutable from 'immutable';
 import {
   actionTypes
-} from 'a10-redux-form';
+} from 'redux-form';
 
 const initialState = Immutable.fromJS({});
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'a10-redux-form/immutable';
+import { Field } from 'redux-form/immutable';
 import { FormGroup, Button, Col, ButtonToolbar, ButtonGroup, FormControl } from 'react-bootstrap';
 import { A10Field } from 'components/Form/A10Field';
 

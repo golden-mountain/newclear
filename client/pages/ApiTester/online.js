@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Field } from 'a10-redux-form/immutable'; // imported Field
+import React from 'react';
+import { Field } from 'redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { bindActionCreators } from 'redux';
@@ -9,6 +9,7 @@ import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
 // import Immutable from 'immutable';
+import BaseForm from 'pages/BaseForm';
 
 // import * as axapiActions from 'redux/modules/axapi';
 import AppManager from 'helpers/AppManager';
@@ -27,7 +28,7 @@ const initialValues = {
 //   </div>
 // }
 
-class AxapiForm extends Component {
+class AxapiForm extends BaseForm {
 
   setHistoryQuery(historyData) {
     const dateReg = /^\d{4}.*:\d{2}$/;
