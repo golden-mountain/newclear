@@ -5,11 +5,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 
-import * as axapiActions from 'redux/modules/app/axapi';
-import * as pageActions from 'redux/modules/app/page';
-import * as themeActions from 'redux/modules/app/theme';
-import * as featureActions from 'redux/modules/app/feature';
-import * as formActions from 'redux/modules/app/form';
+// import * as axapiActions from 'redux/modules/app/axapi';
+// import * as pageActions from 'redux/modules/app/page';
+// import * as themeActions from 'redux/modules/app/theme';
+// import * as featureActions from 'redux/modules/app/feature';
+// import * as formActions from 'redux/modules/app/form';
+import appActions from 'redux/modules/app/index';
 
 // import * as logger from 'helpers/logger';
 import { getAxapiResponse, getPageVar } from 'helpers/stateHelper';
@@ -30,18 +31,18 @@ const AppManager = config => warppedElement => {
   } )(warppedElement);
 
   const bindPage = actionCreator => actionCreator.bind(null, config.page);
-  delete axapiActions.default;
-  delete pageActions.default;
-  delete themeActions.default;
-  delete featureActions.default;
-  delete formActions.default;
-  const appActions = {
-    ...axapiActions,
-    ...pageActions,
-    ...themeActions,
-    ...featureActions,
-    ...formActions
-  };
+  // delete axapiActions.default;
+  // delete pageActions.default;
+  // delete themeActions.default;
+  // delete featureActions.default;
+  // delete formActions.default;
+  // const appActions = {
+  //   ...axapiActions,
+  //   ...pageActions,
+  //   ...themeActions,
+  //   ...featureActions,
+  //   ...formActions
+  // };
   const boundAppAcs = mapValues(appActions, bindPage);
   form = connect(
     (state) => {

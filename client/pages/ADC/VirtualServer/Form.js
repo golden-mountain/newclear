@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 import { Field, FieldArray } from 'redux-form/immutable'; // imported Field
-import { Form, FormGroup, FormControl, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
+import { FormGroup, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { Map, fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
+import A10Form from 'components/Form/A10Form';
 
 import AppManager from 'helpers/AppManager';
 import BaseForm from 'pages/BaseForm';
 
 // import * as logger from 'helpers/logger';
+import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
 const ipv4 = (value) => {
-  if (value) {
-    const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
-    return makeError(reg.test(value), 'IPv4 Required');
-  }
-  return makeError();
+  const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
+  return makeError(reg.test(value), 'IPv4 Required');
 };
 
 
@@ -99,6 +98,9 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
 
 
 class VirtualServerForm extends BaseForm {
+  // constructor(props) {
+  //   super(props);
+  // }
 
   handleSubmit(v) {
     // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -144,18 +146,18 @@ class VirtualServerForm extends BaseForm {
 
   render() {
     const { handleSubmit,  ...rest } = this.props;
-    
-    const schema = {
-      'type': 'number',
-      'minimum': '1',
-      'maximum': '31',
-      'minimum-partition': '1',
-      'maximum-partition': '7',
-      'example-default': '1',
-      'description': 'Join a vrrp group (Specify ha VRRP-A vrid)',
-      'format': 'number',
-      'src-name': 'vrid'
-    };
+    const elements = slbVirtualServerSchema.properties;
+    // const schema = {
+    //   'type': 'number',
+    //   'minimum': '1',
+    //   'maximum': '31',
+    //   'minimum-partition': '1',
+    //   'maximum-partition': '7',
+    //   'example-default': '1',
+    //   'description': 'Join a vrrp group (Specify ha VRRP-A vrid)',
+    //   'format': 'number',
+    //   'src-name': 'vrid'
+    // };
 
     return (
       <div className="container-fluid">
@@ -166,37 +168,30 @@ class VirtualServerForm extends BaseForm {
 
             </Col>
             <Col xs={10}>                   
-                <Form onSubmit={handleSubmit(::this.handleSubmit)} horizontal>
+                <A10Form onSubmit={handleSubmit(::this.handleSubmit)} schema={[ slbVirtualServerSchema ]} horizontal>
                   <Row>
                     <Col xs={6}>
                       <Panel header={<h4>Basic Field</h4>}>
-                        {}
-                        <Field name="virtual-server.name" component={A10Field} label="Name">
-                          <FormControl type="text" className="form-control"/>
-                        </Field>
+                        <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs1" /> 
+     
 
-                        <Field name="x.virtual-server.wildcard" component={A10Field} label="Wildcard">
+                        <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard">
                           <Checkbox value={true} />
-                        </Field>
+                        </A10SchemaField>
                         
-                        <Field name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+                        <A10SchemaField name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
                           <Radio value="0" inline> IPv4 </Radio>
                           <Radio value="1" inline> IPv6 </Radio>
-                        </Field>
+                        </A10SchemaField>
 
-                        <A10SchemaField schema={schema} name="virtual-server.vrid" label="VRRP-A" />                       
+                        <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
 
-                        <Field name="virtual-server.ip-address" component={A10Field} label="IPv4 Address" validation={[ { func: 'required', msg: 'Required' }, { func: ipv4, msg: 'Must IPv4' } ] } conditional={{ 'x.virtual-server.address-type': '0' }}>
-                          <FormControl type="text" className="form-control"/>
-                        </Field>
+                        <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                        <Field name="virtual-server.netmask" component={A10Field} label="Netmask" validation={[ 'required', { func: 'netmask', msg: 'Could be /24 or 255.255.x.x' } ] }  conditional={{ 'x.virtual-server.address-type': '0' }}>
-                          <FormControl type="text" className="form-control"/>
-                        </Field>
+                        <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" component={A10Field} label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                        <Field name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address" validation={[ 'required', 'ipv6' ] } conditional={{ 'x.virtual-server.address-type': '1' }}>
-                          <FormControl type="text" className="form-control"/>
-                        </Field>
+                        <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
+                        <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" component={A10Field} label="IPv6 ACL" />
                       </Panel> 
                     </Col>
 
@@ -209,7 +204,7 @@ class VirtualServerForm extends BaseForm {
 
                   <A10FieldSubmit {...rest}/>
 
-                </Form>              
+                </A10Form>              
             </Col>
           </Row>
       </div>      
@@ -219,32 +214,32 @@ class VirtualServerForm extends BaseForm {
 
 
 const initialValues = {
-  'virtual-server': {
-    'name': 'vs',
-    'netmask': '/24'
-  },
-  'x': {
-    'virtual-server': {
-      'address-type': '0',
-      'wildcard': false
-    }
-  },
-  'virtual-ports': [
-    { 
-      'virtual-port': {
-        'number': 80,
-        'range': '80-100',
-        'protocol': 'HTTP'
-      }
-    },
-    { 
-      'virtual-port': {
-        'number': 81,
-        'range': '80-101',
-        'protocol': 'HTTPS'
-      }
-    }
-  ]
+  // 'virtual-server': {
+  //   'name': 'vs',
+  //   'netmask': '/24'
+  // },
+  // 'x': {
+  //   'virtual-server': {
+  //     'address-type': '0',
+  //     'wildcard': false
+  //   }
+  // },
+  // 'virtual-ports': [
+  //   { 
+  //     'virtual-port': {
+  //       'number': 80,
+  //       'range': '80-100',
+  //       'protocol': 'HTTP'
+  //     }
+  //   },
+  //   { 
+  //     'virtual-port': {
+  //       'number': 81,
+  //       'range': '80-101',
+  //       'protocol': 'HTTPS'
+  //     }
+  //   }
+  // ]
 };
 
 const InitializeFromStateForm = AppManager({

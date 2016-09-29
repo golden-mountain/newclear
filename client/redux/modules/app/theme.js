@@ -1,6 +1,5 @@
 // theme action
-const REGISTER_THEME_LAYOUT = 'page/theme/REGISTER_THEME_LAYOUT';
-const REGISTER_THEME_STYLE = 'page/theme/REGISTER_THEME_STYLE';
+import { REGISTER_THEME_LAYOUT, REGISTER_THEME_STYLE } from 'redux/modules/actionTypes';
 
 const themeReducers = {
   [ REGISTER_THEME_LAYOUT ](state, { layout }) {

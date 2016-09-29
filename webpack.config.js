@@ -8,7 +8,7 @@ const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd = nodeEnv === 'production';
 
 module.exports = {
-  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
+  // devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
   context: path.join(__dirname, './client'),
   entry: {
     js: [
@@ -110,7 +110,7 @@ module.exports = {
     //   allChunks: true
     // })
   ],
-  devtool:'eval-source-map',
+  devtool:'source-map',
   devServer: {
     contentBase: './client',
     noInfo: true,

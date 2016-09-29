@@ -1,8 +1,6 @@
 import { actionTypes } from 'redux-form/immutable'; 
 
-// field action
-const REGISTER_PAGE_FIELD = 'page/fields/REGISTER_PAGE_FIELD';
-// const UPDATE_SYNC_ERRORS = 'page/fields/REGISTER_PAGE_FIELD';
+import { REGISTER_PAGE_FIELD } from 'redux/modules/actionTypes';
 
 const fieldReducers = {
   [ REGISTER_PAGE_FIELD ](state, { page, field, payload }) {

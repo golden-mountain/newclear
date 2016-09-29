@@ -7,12 +7,10 @@ import _ from 'lodash';
 import * as logger from 'helpers/logger';
 
 import { LAST_PAGE_KEY } from 'configs/appKeys';
-
-// api action
-const AXAPI_SAVE_SUCCESS = 'page/api/AXAPI_SAVE_SUCCESS';
-const AXAPI_SAVE_FAIL = 'page/api/AXAPI_SAVE_FAIL';
-const AXAPI_SAVE = 'page/api/AXAPI_SAVE';
-const AXAPI_CLEAR_LAST_ERROR = 'page/api/AXAPI_CLEAR_LAST_ERROR';
+import { 
+  AXAPI_SAVE_SUCCESS, AXAPI_SAVE_FAIL, 
+  AXAPI_SAVE, AXAPI_CLEAR_LAST_ERROR 
+} from 'redux/modules/actionTypes';
 
 const isAuthUrl = (data) => data.path.toLowerCase().indexOf('/axapi/v3/auth') > -1;
 
