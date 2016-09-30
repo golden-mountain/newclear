@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ControlLabel, Col, HelpBlock } from 'react-boot
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
-// import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 // import { isEqual } from 'lodash';
 
 // import * as logger from 'helpers/logger';
@@ -120,7 +120,7 @@ class SchemaField extends Component {
       validations: validation,
       conditionals: this.parseConditional(conditional, defaultValue)
     };
-    this._parentProps.registerPageField(name, fieldOptions);     
+    this._parentProps.registerPageField(name, fromJS(fieldOptions));     
     // }
   }
 
@@ -205,10 +205,10 @@ class SchemaField extends Component {
 
   render() {
     let { label, name, schema, children, app } = this.props;
-    const fieldProp = app.getIn([ this._parentProps.env.page, 'form', name ]);
+    const visible = app.getIn([ this._parentProps.env.page, 'form', name, 'conditionals', 'visible' ]);
     // console.log(fieldProp, '......................................');
     return (    
-      fieldProp && fieldProp.conditionals && fieldProp.conditionals.visible ?
+      visible ?
         <Field name={ name } component={A10Field} label={label}>
           { children || this.createElement(schema) }
         </Field>  

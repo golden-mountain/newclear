@@ -10,7 +10,7 @@ export const REGISTER_CURRENT_PAGE = 'page/REGISTER_CURRENT_PAGE';
 
 // field action
 export const REGISTER_PAGE_FIELD = 'page/fields/REGISTER_PAGE_FIELD';
-// const UPDATE_SYNC_ERRORS = 'page/fields/REGISTER_PAGE_FIELD';
+export const SYNC_PAGE_FIELD = 'page/fields/SYNC_PAGE_FIELD';
 
 // api action
 export const AXAPI_SAVE_SUCCESS = 'page/api/AXAPI_SAVE_SUCCESS';

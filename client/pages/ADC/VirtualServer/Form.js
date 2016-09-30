@@ -175,7 +175,7 @@ class VirtualServerForm extends BaseForm {
                         <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs1" /> 
      
 
-                        <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard">
+                        <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard" value={true}>
                           <Checkbox value={true} />
                         </A10SchemaField>
                         
@@ -184,14 +184,13 @@ class VirtualServerForm extends BaseForm {
                           <Radio value="1" inline> IPv6 </Radio>
                         </A10SchemaField>
 
-                        <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
-
                         <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
                         <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" component={A10Field} label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
                         <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
                         <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" component={A10Field} label="IPv6 ACL" />
+                        <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
                       </Panel> 
                     </Col>
 
