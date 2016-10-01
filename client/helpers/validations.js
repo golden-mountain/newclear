@@ -1,11 +1,19 @@
-const minimum = (param) => (value) => parseInt(value) >= parseInt(param) ? '' : `Minimum value greater than ${param}`; 
-const maximum = (param) => (value) => parseInt(value) <= parseInt(param) ? '' : `Maximum value less than ${param}`;
+export const minimum = (value, defaultValue) => parseInt(value) >= parseInt(defaultValue) ? '' : `Minimum value greater than ${defaultValue}`; 
+export const maximum = (value, defaultValue) => parseInt(value) <= parseInt(defaultValue) ? '' : `Maximum value less than ${defaultValue}`;
+export const isInt = (value) => { 
+  const y = parseInt(value, 10);
+  const result = !isNaN(y) && value == y && value.toString() == y.toString();
+  return result ? '' : 'Not a integer';
+};
+
+const createValidFunc = (defaultValue, func) => (value) => func.call(null, value, defaultValue);
+
 const createValidationFuncs = (schema) => {
   const validationFuncs = { 
-    'minimum': minimum(schema['minimum']),
-    'maximum': maximum(schema['maximum']),
-    'minimum-partition': minimum(schema['minimum-partition']),
-    'maximum-partition': maximum(schema['maximum-partition'])
+    'minimum': createValidFunc(schema['minimum'], minimum),
+    'maximum': createValidFunc(schema['maximum'], maximum),
+    'minimum-partition': createValidFunc(schema['minimum-partition'], minimum),
+    'maximum-partition': createValidFunc(schema['maximum-partition'], maximum)
   };
   return validationFuncs;
 };

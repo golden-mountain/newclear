@@ -11,7 +11,7 @@ import createValidationFuncs from 'helpers/validations';
 
 class A10FieldLayout extends Component {
   render() {
-    const { label, meta: { touched, error }, children } = this.props;
+    const { label, layout, meta: { touched, error }, children } = this.props;
     let status = {}, errorMsg = '';
 
     if (touched && error) {
@@ -20,6 +20,7 @@ class A10FieldLayout extends Component {
     }
 
     return (
+      layout === undefined || layout ?
       <FormGroup {...status}>
         <Col componentClass={ControlLabel} sm={2}>{label}</Col>
         <Col sm={10}>
@@ -27,6 +28,12 @@ class A10FieldLayout extends Component {
           <FormControl.Feedback />
           { errorMsg }
         </Col>
+      </FormGroup>
+      :
+      <FormGroup bsClass="no-layout" {...status}>
+        {children}
+        <FormControl.Feedback />
+        { errorMsg }      
       </FormGroup>
     );
   }  
@@ -39,27 +46,25 @@ export class A10Field extends Component {
 
   render() {
     const { children, input, ...fieldOptions } = this.props;
+    const newChild = React.Children.map(children, (child) => {
+      let inputOptions = {
+
+      };
+
+      const { value, ...restInput } = input;
+      // only support React Bootstrap
+      // to set value and checked for inputs
+      if (~registeredMVInputs.indexOf(child.type.name)) {
+        inputOptions['checked'] = child.props.value === value;
+      } else {
+        inputOptions['value'] = value;
+      }
+
+      return  React.cloneElement(child, { ...inputOptions, ...restInput });
+    });
+    // console.log('new child', newChild);
     return (
-      <A10FieldLayout {...fieldOptions}>
-        {
-          React.Children.map(children, (child) => {
-            let inputOptions = {
-
-            };
-
-            const { value, ...restInput } = input;
-            // only support React Bootstrap
-            // to set value and checked for inputs
-            if (~registeredMVInputs.indexOf(child.type.name)) {              
-              inputOptions['checked'] = child.props.value === value;
-            } else {
-              inputOptions['value'] = value;
-            }
-
-            return  React.cloneElement(child, { ...inputOptions, ...restInput });
-          })
-        }
-      </A10FieldLayout>
+      <A10FieldLayout {...fieldOptions}> { newChild } </A10FieldLayout> 
     );
   }
 }
@@ -185,7 +190,7 @@ class SchemaField extends Component {
   }
 
   createElement(schema) {
-    const { type } = schema;
+    let type = schema && schema.type ? schema.type : 'string';
     const elementsMap = {
       'string': {
         'component': FormControl,
@@ -204,12 +209,12 @@ class SchemaField extends Component {
   }
 
   render() {
-    let { label, name, schema, children, app } = this.props;
+    let { label, name, schema, children, app, ...rest } = this.props;
     const visible = app.getIn([ this._parentProps.env.page, 'form', name, 'conditionals', 'visible' ]);
     // console.log(fieldProp, '......................................');
     return (    
       visible ?
-        <Field name={ name } component={A10Field} label={label}>
+        <Field name={ name } component={A10Field} label={label} {...rest}>
           { children || this.createElement(schema) }
         </Field>  
       : null

@@ -1,6 +1,6 @@
 import { actionTypes } from 'redux-form/immutable'; 
 import { Map, Iterable } from 'immutable';
-// import { isEqual } from 'lodash';
+import { toPath } from 'lodash';
 import { getFormVar, getPageVar } from 'helpers/stateHelper';
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
 
@@ -43,6 +43,7 @@ class FormHacker {
     if (pageVar && reduxFormVar) {
       const syncErrors = this.validate(pageVar, reduxFormVar);      
       const errors = syncErrors.isEmpty() ? false : syncErrors.toJS();
+      // console.log('new errors:', errors);
       this.next({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form: pageEnv.form }, payload: { syncErrors: errors, error: false } });
     }
     return this.action;
@@ -51,20 +52,20 @@ class FormHacker {
   validate(pageVar, reduxFormVar) {
     let result = Map({});
     const pageValidators = pageVar.getIn([ 'form' ]);
-    // console.log(pageValidators, '=======================pageValidators');
+    // console.log(pageValidators.toJS(), '=======================pageValidators');
 
     pageValidators.forEach((field, name) => {
       if (Iterable.isIterable(field)) {
         const validations = field.getIn([ 'validations' ], empty);
         if (validations && Iterable.isIterable(validations)) {
           const thisValues = reduxFormVar.getIn([ 'values' ]) || reduxFormVar.getIn([ 'initial' ]);
-          const elementValue = thisValues.getIn( name.split('.') );
+          const elementValue = thisValues.getIn( toPath(name) );
           // console.log('validations is Iterable..............', validations, Iterable.isIterable(validations));        
           validations.forEach((func, k) => { // eslint-disable-line
             const msg = func(elementValue, name, reduxFormVar, pageVar);
-            // console.log(msg, elementValue, name);
+            console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
             if (msg) {
-              result = result.setIn(name.split('.'), msg);
+              result = result.setIn(toPath(name), msg);
               return msg;
             }
           });
@@ -76,7 +77,7 @@ class FormHacker {
 
   _isElementVisible(depValue, conditionalObjValue) {
     return depValue === true ? !!conditionalObjValue :
-             ( depValue === false ? !conditionalObjValue : depValue === conditionalObjValue);
+             ( depValue === false ? !conditionalObjValue : depValue == conditionalObjValue);
   }
 
   reinitialConditional() {
@@ -94,9 +95,10 @@ class FormHacker {
         const depName = conditional.getIn([ 'dependOn' ], '');
         const depValue = conditional.getIn([ 'dependValue' ], null); 
         const depOnObjVisible = pageVar.getIn([ 'form', depName, 'conditionals', 'visible' ], true);
-        // console.log(name, 'depend on visible ', depName, depOnObjVisible);
+
         if (depOnObjVisible && depName) {
           const conditionalObjValue = getElementValue(depName);
+
           if (typeof depValue == 'function') {
             isVisible = depValue.call(null, conditionalObjValue, reduxFormVar);
           } else {

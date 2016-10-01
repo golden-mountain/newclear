@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Field, FieldArray } from 'redux-form/immutable'; // imported Field
-import { FormGroup, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
+import { FieldArray } from 'redux-form/immutable'; // imported Field
+import { FormControl, FormGroup, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { Map, fromJS } from 'immutable';
@@ -12,6 +12,7 @@ import AppManager from 'helpers/AppManager';
 import BaseForm from 'pages/BaseForm';
 
 // import * as logger from 'helpers/logger';
+import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
@@ -76,18 +77,20 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
       {fields.map((port, index) =>
         <tr key={index}>
           <td>
-            <Field name={`${port}.virtual-port.number`} component="input" type="text" />          
+            <A10SchemaField layout={false} name={`${port}.virtual-port.number`} validation={{ isInt: isInt }}   />
           </td>
 
           <td>
-            <Field name={`${port}.virtual-port.range`} component="input"  type="text"/>
+            <A10SchemaField layout={false} name={`${port}.virtual-port.range`}  conditional={{ [ `${port}.virtual-port.number` ]: 91 }}/>
           </td>
 
-          <td>          
-            <Field name={`${port}.virtual-port.protocol`}  component="select" value="0" >
-              <option value="0" > TCP </option>
-              <option value="1" > UDP </option>
-            </Field>
+          <td>     
+            <A10SchemaField layout={false} name={`${port}.virtual-port.protocol`} >  
+              <FormControl componentClass="select">
+                <option value="tcp">tcp</option>
+                <option value="udp">udp</option>
+              </FormControl>
+            </A10SchemaField>
           </td>
         </tr>
       )}
@@ -172,7 +175,7 @@ class VirtualServerForm extends BaseForm {
                   <Row>
                     <Col xs={6}>
                       <Panel header={<h4>Basic Field</h4>}>
-                        <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs1" /> 
+                        <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
      
 
                         <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard" value={true}>
@@ -213,32 +216,32 @@ class VirtualServerForm extends BaseForm {
 
 
 const initialValues = {
-  // 'virtual-server': {
-  //   'name': 'vs',
-  //   'netmask': '/24'
-  // },
-  // 'x': {
-  //   'virtual-server': {
-  //     'address-type': '0',
-  //     'wildcard': false
-  //   }
-  // },
-  // 'virtual-ports': [
-  //   { 
-  //     'virtual-port': {
-  //       'number': 80,
-  //       'range': '80-100',
-  //       'protocol': 'HTTP'
-  //     }
-  //   },
-  //   { 
-  //     'virtual-port': {
-  //       'number': 81,
-  //       'range': '80-101',
-  //       'protocol': 'HTTPS'
-  //     }
-  //   }
-  // ]
+  'virtual-server': {
+    'name': 'vs',
+    'netmask': '/24'
+  },
+  'x': {
+    'virtual-server': {
+      'address-type': '0',
+      'wildcard': false
+    }
+  },
+  'virtual-ports': [
+    { 
+      'virtual-port': {
+        'number': 80,
+        'range': '80-100',
+        'protocol': 'HTTP'
+      }
+    },
+    { 
+      'virtual-port': {
+        'number': 81,
+        'range': '80-101',
+        'protocol': 'HTTPS'
+      }
+    }
+  ]
 };
 
 const InitializeFromStateForm = AppManager({
