@@ -7,9 +7,12 @@ const CleanPlugin = require('clean-webpack-plugin');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd = nodeEnv === 'production';
 
+// const autoprefixer = require('autoprefixer');
+// const precss       = require('precss');
+
 module.exports = {
   // devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
-  context: path.join(__dirname, './client'),
+  context: path.join(__dirname, 'client'),
   entry: {
     js: [
       'index', 'pages/Home'
@@ -19,7 +22,7 @@ module.exports = {
     ]
   },
   output: {
-    path: 'builds',
+    path: path.join(__dirname, 'builds'),
     filename: 'bundle.js',
     publicPath: '/builds/'
   },
@@ -70,7 +73,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: [ '.js', '.jsx'],
     modules: [
       path.resolve('./client'),
       'node_modules'
@@ -86,7 +89,12 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
-      debug: true
+      debug: true, 
+      // options: {
+      //   postcss: [ autoprefixer ],
+      //   // cleaner:  [autoprefixer({ browsers: [] })],
+      //   context: path.join(__dirname, 'client')
+      // }
     }),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
@@ -125,7 +133,5 @@ module.exports = {
         }
       }
     }, 
-  },
-
-  postcss: ['autoprefixer']
+  }
 }

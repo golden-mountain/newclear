@@ -40,16 +40,19 @@
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.0",
-    "extract-text-webpack-plugin": "^2.0.0-beta.3",
+    "extract-text-webpack-plugin": "^2.0.0-beta",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.22.0",
     "node-sass": "^3.5.0-beta.1",
+    "postcss-loader": "^0.13.0",
+    "precss": "^1.4.0",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
+    "underscore-template-loader": "^0.7.3",
     "url-loader": "^0.5.7",
-    "webpack": "^2.1.0-beta.4",
-    "webpack-dev-server": "^2.0.0-beta"
+    "webpack": "^2.1.0-beta",
+    "webpack-dev-server": "^2.1.0-beta"
   },
   "dependencies": {
     "compression": "^1.6.2",
