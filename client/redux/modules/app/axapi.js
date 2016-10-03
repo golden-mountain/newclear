@@ -1,9 +1,8 @@
-import { Map, fromJS } from 'immutable';
-import { Iterable } from 'immutable';
+import { Iterable, List, Map, fromJS } from 'immutable';
 
 // axapi request import
 import moment from 'moment';
-import _ from 'lodash';
+import { get, isArray } from 'lodash';
 import * as logger from 'helpers/logger';
 
 import { LAST_PAGE_KEY } from 'configs/appKeys';
@@ -43,34 +42,39 @@ const apiReducers = {
     return result;
   },
   [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page }) {
-    // console.log('success  axapi request ......................................');
+    console.log('success  axapi request ......................................', resp);
+    if (resp.length == 1) {
+      const newResp = resp[0];
+      const body = JSON.parse(newResp.text);
+      pushAxapiReqs({ data, result: body });
+      if (isAuthUrl(data)) {
+        sessionStorage.setItem('token', body.authresponse.signature);
+      }    
 
-    const body = JSON.parse(resp.text);
-    pushAxapiReqs({ data, result: body });
-    if (isAuthUrl(data)) {
-      sessionStorage.setItem('token', body.authresponse.signature);
-    }    
+      const responseData = fromJS({
+        error: newResp.error,
+        statusCode: newResp.status,
+        response: fromJS(body.response || body.authresponse)
+      });
 
-    const responseData = fromJS({
-      error: resp.error,
-      statusCode: resp.status,
-      response: fromJS(body.response || body.authresponse)
-    });
-
-    let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
-    return result.setIn([ page, 'axapi' ], responseData);
+      let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
+      return result.setIn([ page, 'axapi' ], responseData);
+    } else {
+      console.log('More than one request', resp);
+    }
   },
   [ AXAPI_SAVE_FAIL ](state, { resp, data, page }) {
-    // console.log('failed  axapi request ......................................');
-    const body = JSON.parse(resp.text);
+    console.log('failed  axapi request ......................................', resp);
+    const newResp = resp;
+    const body = JSON.parse(newResp.text);
     pushAxapiReqs({ data, result: body });
-    if (_.get(resp, 'unauthorized', false) === true) {
+    if (get(newResp, 'unauthorized', false) === true) {
       sessionStorage.removeItem('token');
     }
 
     const responseData = fromJS({
-      error: resp.error,
-      statusCode: resp.status,
+      error: newResp.error,
+      statusCode: newResp.status,
       response: fromJS(body.response || body.authresponse)
     });
     
@@ -91,22 +95,45 @@ export function axapiRequest(page, data) {
     'content-type': 'application/json'
   };
 
+  let primaryData = {}, jsData = data;
   if (Iterable.isIterable(data)) {
-    data = data.toJS();
+    jsData = data.toJS();    
   }
 
-  if (!isAuthUrl(data)) {
+  if (isArray(jsData)) {
+    primaryData = jsData[0];
+  } else {
+    primaryData = jsData;
+  }
+
+  if (!isAuthUrl(primaryData)) {
     authHeaders.Authorization = 'A10 ' + sessionStorage.getItem('token');
   }
 
+  let list = List();
+  if (!isArray(jsData)) {
+    list = list.push(jsData);
+  } else {
+    list = data;
+  }
+
+  const promiseFuncs = (client) => {
+    let promises = [];
+    list.forEach((element) => {
+      promises.push(client[element.method.toLowerCase()](element.path, {
+        data: Map(element.body),
+        headers: Map(authHeaders)
+      }));
+    });
+    return promises;
+  };
+
+
   let request = {
-    data, 
+    data:primaryData, 
     page, 
     types: [ AXAPI_SAVE, AXAPI_SAVE_SUCCESS, AXAPI_SAVE_FAIL ],    
-    promise: (client) => client[data.method.toLowerCase()](data.path, {
-      data: Map(data.body),
-      headers: Map(authHeaders)
-    })
+    promises: promiseFuncs
   };
 
   logger.group('before sending request', request);

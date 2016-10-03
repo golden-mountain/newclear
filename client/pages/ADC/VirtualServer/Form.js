@@ -106,18 +106,6 @@ class VirtualServerForm extends BaseForm {
   // }
 
   handleSubmit(v) {
-    // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-    // const submitFailCallback = (data) => {
-    //   console.log(data, 'error............');
-    //   throw new SubmissionError({
-    //     'virtual-server': {
-    //       'ip-address': 'Error IP'
-    //     },
-    //     '_error': 'loginFailed'
-    //   });
-    // };
-
-
     let values = Map(v);
     // console.log(values.toJS());
     const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
@@ -136,79 +124,60 @@ class VirtualServerForm extends BaseForm {
       // values = values.setIn(['virtual-server', 'netmask'], '/0');
     }
 
-    values = values.delete('x');
-    const fullAuthData = {
-      path: '/axapi/v3/slb/virtual-server/',
-      method: 'POST', 
-      body: values
-    };   
-
-    return this.props.axapiRequest(fullAuthData);
+    return values;
   }
 
 
   render() {
-    const { handleSubmit,  ...rest } = this.props;
+    const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
-    // const schema = {
-    //   'type': 'number',
-    //   'minimum': '1',
-    //   'maximum': '31',
-    //   'minimum-partition': '1',
-    //   'maximum-partition': '7',
-    //   'example-default': '1',
-    //   'description': 'Join a vrrp group (Specify ha VRRP-A vrid)',
-    //   'format': 'number',
-    //   'src-name': 'vrid'
-    // };
-
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
-          <Row>
-            <Col xs={2}>
-              <h4>Help  </h4>
+        <Row>
+          <Col xs={2}>
+            <h4>Help  </h4>
 
-            </Col>
-            <Col xs={10}>                   
-                <A10Form onSubmit={handleSubmit(::this.handleSubmit)} schema={[ slbVirtualServerSchema ]} horizontal>
-                  <Row>
-                    <Col xs={6}>
-                      <Panel header={<h4>Basic Field</h4>}>
-                        <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
-     
+          </Col>
+          <Col xs={10}>                   
+              <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
+                <Row>
+                  <Col xs={6}>
+                    <Panel header={<h4>Basic Field</h4>}>
+                      <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
+   
 
-                        <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard" value={true}>
-                          <Checkbox value={true} />
-                        </A10SchemaField>
-                        
-                        <A10SchemaField name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
-                          <Radio value="0" inline> IPv4 </Radio>
-                          <Radio value="1" inline> IPv6 </Radio>
-                        </A10SchemaField>
+                      <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard" value={true}>
+                        <Checkbox value={true} />
+                      </A10SchemaField>
+                      
+                      <A10SchemaField name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+                        <Radio value="0" inline> IPv4 </Radio>
+                        <Radio value="1" inline> IPv6 </Radio>
+                      </A10SchemaField>
 
-                        <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
+                      <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                        <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" component={A10Field} label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
+                      <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" component={A10Field} label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                        <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
-                        <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" component={A10Field} label="IPv6 ACL" />
-                        <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
-                      </Panel> 
-                    </Col>
+                      <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
+                      <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" component={A10Field} label="IPv6 ACL" />
+                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
+                    </Panel> 
+                  </Col>
 
-                    <Col xs={6}>
-                      <Panel header={<h4>Virtual Ports</h4>}>
-                        <FieldArray name="virtual-ports" component={renderTable}/>
-                      </Panel>
-                    </Col>
-                  </Row>
+                  <Col xs={6}>
+                    <Panel header={<h4>Virtual Ports</h4>}>
+                      <FieldArray name="virtual-ports" component={renderTable}/>
+                    </Panel>
+                  </Col>
+                </Row>
 
-                  <A10FieldSubmit {...rest}/>
+                <A10FieldSubmit {...rest}/>
 
-                </A10Form>              
-            </Col>
-          </Row>
+              </A10Form>              
+          </Col>
+        </Row>
       </div>      
     );
   }

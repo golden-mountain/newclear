@@ -5,15 +5,15 @@ export default function clientMiddleware(client) {
         return action(dispatch, getState);
       }
 
-      const { promise, types, ...rest } = action; // eslint-disable-line no-redeclare
-      if (!promise) {
+      const { promises, types, ...rest } = action; // eslint-disable-line no-redeclare
+      if (!promises) {
         return next(action);
       }
       const [ REQUEST, SUCCESS, FAILURE ] = types;
       next({ ...rest, type: REQUEST });
       // console.log('callback', callback);
-      const actionPromise = promise(client);
-      actionPromise.then(
+      const p = Promise.all(promises(client));
+      p.then(
         (resp) => next({ ...rest, resp, type: SUCCESS }),
         (resp) => next({ ...rest, resp, type: FAILURE })
       ).catch((error)=> {
@@ -21,7 +21,7 @@ export default function clientMiddleware(client) {
         next({ ...rest, error, type: FAILURE });
       });
 
-      return actionPromise;
+      return p;
     };
   };
 }

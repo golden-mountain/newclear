@@ -51,7 +51,7 @@ class FormHacker {
 
   validate(pageVar, reduxFormVar) {
     let result = Map({});
-    const pageValidators = pageVar.getIn([ 'form' ]);
+    const pageValidators = pageVar.getIn([ 'form' ], Map());
     // console.log(pageValidators.toJS(), '=======================pageValidators');
 
     pageValidators.forEach((field, name) => {
