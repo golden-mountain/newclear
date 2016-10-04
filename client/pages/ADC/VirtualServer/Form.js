@@ -31,7 +31,7 @@ class A10FieldSubmit extends Component {
       <Row>
         <Col xs={12}>
           <FormGroup>
-            <Col smOffset={10} sm={2}>
+            <Col className="pull-right">
               <ButtonToolbar>
                 <ButtonGroup bsSize="large">
                   <Button type="submit" disabled={submitting} bsStyle="success">

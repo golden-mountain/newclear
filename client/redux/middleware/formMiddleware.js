@@ -62,8 +62,12 @@ class FormHacker {
           const elementValue = thisValues.getIn( toPath(name) );
           // console.log('validations is Iterable..............', validations, Iterable.isIterable(validations));        
           validations.forEach((func, k) => { // eslint-disable-line
-            const msg = func(elementValue, name, reduxFormVar, pageVar);
-            console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
+            let msg = ''; 
+            if (elementValue !== undefined && k !== 'required') {
+              msg = func(elementValue, name, reduxFormVar, pageVar);
+            }
+            
+            // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
             if (msg) {
               result = result.setIn(toPath(name), msg);
               return msg;

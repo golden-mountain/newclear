@@ -152,6 +152,8 @@ class SchemaField extends Component {
     Object.keys(schema).forEach((key) => {
       if (validationFuncs[key] !== undefined ) {
         validations[key] = validationFuncs[key];
+      } else if (key === 'format' && validationFuncs[schema[key]] !== undefined) {
+        validations[schema[key]] = validationFuncs[schema[key]];
       }
     });
     return validations;
