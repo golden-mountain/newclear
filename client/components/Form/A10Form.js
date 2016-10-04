@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import invariant from 'invariant';
 import { Map, List, fromJS } from 'immutable';
-// import { toPath } from 'lodash';
+import { toPath } from 'lodash';
+// import { getPageVar } from 'helpers/stateHelper';
 
 class SchemaForm {
   constructor(schemas, edit) {
@@ -82,7 +83,7 @@ class SchemaForm {
 
 }
 
-class A10Form extends Component {
+class A10SchemaForm extends Component {
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -91,22 +92,44 @@ class A10Form extends Component {
     }
 
     this._context = context;
+    this._parentProps = context.props;
   }
 
   defaultHandleSubmit(values) {
+    // let visible data hidden
+    let parsedValues = this.dataFinalize(values);
+    // console.log(parsedValues, '.......................... after finalize');
+
     const schemaFormHandler = new SchemaForm(this.props.schemas, this.props.edit);
     // console.log('build schema handler success');
-    const parsedValues = schemaFormHandler.parseValues(values);
+    parsedValues = schemaFormHandler.parseValues(parsedValues);
     // console.log(parsedValues, 'submitted values');
+
     return this._context.props.axapiRequest(parsedValues);
   }
 
+  dataFinalize(values) {
+    let newValues = values;
+    const formFields = this.props.app.getIn([ this._parentProps.env.page, 'form' ]);
+    formFields.forEach((fieldProps, fieldName) => {
+      const visible = fieldProps.getIn([ 'conditionals', 'visible' ]);
+      // console.log(visible, ' is field visible, and field name is ', fieldName);
+
+      if (!visible) {
+        newValues = newValues.deleteIn(toPath(fieldName));
+      }
+    });
+
+    // console.log('field values', newValues.toJS());
+    return newValues;
+  }
+
   render() {
-    const { schemas, edit, children, onBeforeSubmit, onAfterSubmit, onSubmit, ...rest } = this.props; //eslint-disable-line
+    const { dispatch, app, schemas, edit, children, onBeforeSubmit, onAfterSubmit, onSubmit, ...rest } = this.props; //eslint-disable-line
     const handleSubmit = this._context.props.handleSubmit;
 
     let submit = (values) => {
-      let newValues = values, submitFunc = ::this.defaultHandleSubmit;
+      let newValues = values, submitFunc = this.defaultHandleSubmit;
       if (onBeforeSubmit) {
         newValues = onBeforeSubmit(newValues);
       } 
@@ -133,17 +156,16 @@ class A10Form extends Component {
   }
 }
 
-A10Form.contextTypes = {
+A10SchemaForm.contextTypes = {
   props: PropTypes.object
 };
 
-// const A10Form = connect(
-//   // (state) => {
-//   //   return {
-//   //     app: state.getIn([ 'app' ]),
-//   //     pageForm: state.getIn([ 'form' ])
-//   //   };
-//   // },
-// )(MyForm);
+const A10Form = connect(
+  (state) => {
+    return {
+      app: state.getIn([ 'app' ])
+    };
+  }
+)(A10SchemaForm);
 
 export default A10Form;
