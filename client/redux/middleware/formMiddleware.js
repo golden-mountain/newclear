@@ -36,7 +36,7 @@ class FormHacker {
   }
 
   dispatchValidation() {
-    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]);
+    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]).toJS();
     const pageVar = getPageVar(this.state, pageEnv.page);
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
 
@@ -85,10 +85,10 @@ class FormHacker {
   }
 
   reinitialConditional() {
-    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]);
+    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]).toJS();
     const pageVar = getPageVar(this.state, pageEnv.page);
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
-
+    // console.log(pageEnv, 'page env.........');
     if (pageVar && reduxFormVar) {
       const name = this.action.field;
       let conditional = this.action.payload.getIn([ 'conditionals' ]);
@@ -124,7 +124,7 @@ class FormHacker {
   }
 
   changeConditional() {
-    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]);
+    const pageEnv = this.state.getIn([ 'app', APP_CURRENT_PAGE ]).toJS();
     const pageVar = getPageVar(this.state, pageEnv.page);
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
     const fields = pageVar.getIn([ 'form' ]);

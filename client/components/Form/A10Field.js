@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
 import { fromJS } from 'immutable';
 // import { isEqual } from 'lodash';
+import { Map } from 'immutable';
 
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
@@ -109,7 +110,7 @@ class SchemaField extends Component {
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ]);    
+    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
     values = values.setIn(name.split('.'), defaultValue);    
     this._parentProps.initialize(values.toJS());
 

@@ -47,11 +47,11 @@ const AppManager = config => warppedElement => {
   form = connect(
     (state) => {
       return {
-        pageForm: state.getIn([ 'form', config.form ]),
-        axapiResponse: getAxapiResponse(state, config.page),
-        initialValues: config.initialValues,
-        page: getPageVar(state, config.page),
-        env: config
+        pageForm: state.getIn([ 'form', config.form ]), // invalid on context
+        axapiResponse: getAxapiResponse(state, config.page), // invalid on context
+        initialValues: config.initialValues, // invalid on context
+        page: getPageVar(state, config.page), // invalid on context
+        env: config // valid on context
       };
     },
     (dispatch) => ( bindActionCreators(boundAppAcs, dispatch) )

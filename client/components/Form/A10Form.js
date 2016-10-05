@@ -1,17 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Form } from 'react-bootstrap';
-import invariant from 'invariant';
+// import invariant from 'invariant';
 import { Map, List, fromJS } from 'immutable';
 import { toPath } from 'lodash';
 // import { getPageVar } from 'helpers/stateHelper';
 
 class SchemaForm {
-  constructor(schemas, edit) {
-    invariant(schemas, 'Form schemas referred from your pages');
-
+  constructor(context) {
+    // invariant(schemas, 'Form schemas referred from your pages');
+    const { schemas, edit, urlKeys } = context;
+    this.context = context;
     this.schemas = schemas;
     this.isEdit = edit;
+    this.urlKeys = urlKeys;
     this.state = {
       invalidProps: {}
     };
@@ -21,12 +23,18 @@ class SchemaForm {
   _parseAxapiURL(axapi, value) {
     let axapiOrg = axapi;
     if (this.isEdit !== true ) {
-      axapiOrg = axapiOrg.replace(/\{.*?\}\/?/, '');
+      axapiOrg = axapiOrg.replace(/\/[^\/]+?$/, '');
     }
 
-    const path = axapiOrg.replace(/(\{.*?\})/g, function(matches, words) { // eslint-disable-line
-      return value.getIn(words, '');
+    const path = axapiOrg.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
+      // console.log(words, ' are mached words', this.urlKeys[words], ' keys from urlKeys');
+      if (this.urlKeys && this.urlKeys[words]) {
+        return this.urlKeys[words];
+      } else {
+        return value.getIn(words, '');
+      }
     });
+    // console.log(path, 'are submiting parth');
     return path;
   }
 
@@ -52,7 +60,7 @@ class SchemaForm {
 
     newValues.forEach((fieldGroup, fieldGroupName) => {
       // console.log(fieldGroupName, ' field group name');
-      let fullAuthData = null;
+      let fullRequestData = null;
       if (prefixes[fieldGroupName]) {
         const { properties, axapi } = prefixes[fieldGroupName];
         // check each properties
@@ -64,15 +72,16 @@ class SchemaForm {
             invalidProps = invalidProps.setIn([ fieldGroupName, fieldName ], fieldValue);
           }
         });
-        fullAuthData = {
+        fullRequestData = {
           path: this._parseAxapiURL(axapi, fieldGroup),
           method: 'POST', 
           body: parsedValues
-        };        
+        };    
+        console.log('full auth data', fullRequestData);  
       }
 
-      if (fullAuthData) {
-        result = result.push(fullAuthData);  
+      if (fullRequestData) {
+        result = result.push(fullRequestData);  
       }      
 
     });
@@ -100,7 +109,8 @@ class A10SchemaForm extends Component {
     let parsedValues = this.dataFinalize(values);
     // console.log(parsedValues, '.......................... after finalize');
 
-    const schemaFormHandler = new SchemaForm(this.props.schemas, this.props.edit);
+
+    const schemaFormHandler = new SchemaForm(this.props);
     // console.log('build schema handler success');
     parsedValues = schemaFormHandler.parseValues(parsedValues);
     // console.log(parsedValues, 'submitted values');
@@ -125,7 +135,21 @@ class A10SchemaForm extends Component {
   }
 
   render() {
-    const { dispatch, app, schemas, edit, children, onBeforeSubmit, onAfterSubmit, onSubmit, ...rest } = this.props; //eslint-disable-line
+    /* eslint-disable no-unused-vars */
+    const { 
+      urlKeys, 
+      dispatch, 
+      app, 
+      schemas, 
+      edit, 
+      children, 
+      onBeforeSubmit, 
+      onAfterSubmit, 
+      onSubmit, 
+      ...rest 
+    } = this.props; 
+    /* eslint-enable no-unused-vars */
+    // console.log(urlKeys, 'is url keys...............');
     const handleSubmit = this._context.props.handleSubmit;
 
     let submit = (values) => {

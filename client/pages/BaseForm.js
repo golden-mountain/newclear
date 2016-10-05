@@ -53,6 +53,11 @@ export default class BaseForm extends Component {
   componentWillMount() {
     invariant(this.props.registerCurrentPage, 'BaseForm not a single page component, depends on child page component');
     this.props.registerCurrentPage(this.props.env);
+    if (this.props.visible === undefined || this.props.visible) {
+      this.props.setPageVisible(this.props.env.page, true);
+    } else {
+      this.props.setPageVisible(this.props.env.page, false);
+    }
   }
 
   componentWillUnmount() {

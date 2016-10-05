@@ -28,14 +28,14 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { statusCode, errMsg, error } = nextProps;
+    const { statusCode } = nextProps;
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
-      showError: !!error || !!errMsg
+      showError: !!statusCode
     });
 
-    if (errMsg) {
+    if (statusCode) {
       if (this.errorTimeout) {
         clearTimeout(this.errorTimeout);
       }
@@ -71,12 +71,18 @@ class App extends Component {
 
   render() {
     const { handleSubmit, statusCode, errMsg, error } = this.props;
+    // console.log('this.props', this.props, error, errMsg, ' error and errMsg');
+    let bsClass = 'success', info = 'Success';
+    if (statusCode != 200) {
+      info = error || errMsg;
+      bsClass = 'danger';
+    }
 
     return (
       <main className="main-app">
         <Toolbar />
         <Fade in={this.state.showError} transitionAppear={true} unmountOnExit={true}>
-          <Alert bsStyle={statusCode === 200 ? 'success' : 'danger'} onDismiss={::this.handleAlertDismiss}> { error || errMsg } </Alert>
+          <Alert bsStyle={ bsClass } onDismiss={::this.handleAlertDismiss}> { info } </Alert>
         </Fade>
         {this.props.children}
         <Modal show={this.state.showLogin} onHide={this.close}>

@@ -9,7 +9,7 @@ const fieldReducers = {
   },
   [ SYNC_PAGE_FIELD ](state, { page, payload }) {
     const result = state.mergeDeepIn([ page, 'form' ], payload);
-    console.log('mergedresult', result);
+    // console.log('mergedresult', result);
     return result;
   }
 };

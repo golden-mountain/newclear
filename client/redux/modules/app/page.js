@@ -1,11 +1,13 @@
 import { 
     REGISTER_PAGE_VAR, REGISTER_PAGE_TITLE , 
-    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE
+    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE,
+    REGISTER_PAGE_VISIBLE
 } from 'redux/modules/actionTypes';
 
 const DESTROY_PAGE = 'page/REGISTER_PAGE';
 
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { fromJS, Map } from 'immutable';
 
 const pageReducers = {
   [ REGISTER_PAGE_VAR ](state, { page, node, payload }) {
@@ -17,8 +19,18 @@ const pageReducers = {
   [ REGISTER_PAGE_BREADCRUMB ](state, { page, breadcrumb }) {
     return state.setIn([ page, 'page', 'breadcrumb' ], breadcrumb);
   },
+  [ REGISTER_PAGE_VISIBLE ](state, { currentPage, visible }) {
+    let result = state.getIn([ APP_CURRENT_PAGE ]);
+    result = result.setIn([ 'pages', currentPage, 'visible' ], visible);
+    return state.setIn([ APP_CURRENT_PAGE ], result);
+  },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
-    return state.setIn([ APP_CURRENT_PAGE ], env);
+    let result = state.getIn([ APP_CURRENT_PAGE ], Map());
+    fromJS(env).forEach((value, key) => {
+      result = result.setIn([ key ], value);
+    });
+    
+    return state.setIn([ APP_CURRENT_PAGE ], result);
   },
   [ DESTROY_PAGE ](state, { page }) {
     // let result = state.deleteIn([ page, 'page' ]);
@@ -44,6 +56,10 @@ export const setPageTitle = (page, title) => {
 
 export const setPageBreadcrumb = (page, breadcrumb) => {
   return { type: REGISTER_PAGE_BREADCRUMB, page, breadcrumb };
+};
+
+export const setPageVisible = (page, currentPage, visible) => {
+  return { type: REGISTER_PAGE_VISIBLE, page, currentPage, visible };
 };
 
 export const destroyPage = (page) => {

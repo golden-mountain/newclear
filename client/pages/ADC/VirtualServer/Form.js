@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { FormControl, FormGroup, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
+import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { Map, fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
+import { A10Button, A10FieldSubmit } from 'components/Form/A10Button';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 
@@ -15,6 +16,8 @@ import BaseForm from 'pages/BaseForm';
 import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
+import VirtualPortForm from 'pages/ADC/VirtualPort/Form';
+
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
 const ipv4 = (value) => {
@@ -22,33 +25,6 @@ const ipv4 = (value) => {
   return makeError(reg.test(value), 'IPv4 Required');
 };
 
-
-class A10FieldSubmit extends Component {
-
-  render() {
-    const { submitting, reset, pristine } = this.props;
-    return (
-      <Row>
-        <Col xs={12}>
-          <FormGroup>
-            <Col className="pull-right">
-              <ButtonToolbar>
-                <ButtonGroup bsSize="large">
-                  <Button type="submit" disabled={submitting} bsStyle="success">
-                    {submitting ? <i/> : <i/>} Create
-                  </Button>
-                  <Button type="button" disabled={pristine || submitting} onClick={reset} >
-                    Cancel
-                  </Button>
-                </ButtonGroup>
-              </ButtonToolbar>
-              </Col>
-          </FormGroup>
-        </Col>
-      </Row>
-    );
-  }
-}
 
 const renderTable = ({ fields, meta: { touched, error } }) => {
   // fields.map((port) => {
@@ -58,19 +34,25 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
     <Table responsive>
       <thead>
         <tr>
-          <th cols="3"><button type="button" onClick={() => fields.push({ 
-            'virtual-port': {
-              'number': 81,
-              'range': '80-100',
-              'protocol': 'HTTP'
-            }
-          })} className="btn btn-primary">Add Member</button>
-        {touched && error && <span>{error}</span>}</th>
+          <td cols="3">
+            <div className="pull-right">
+              <Button onClick={() => fields.push({ 
+                'virtual-port': {
+                  'number': 81,
+                  'range': '80-100',
+                  'protocol': 'HTTP'
+                }
+              })} bsStyle="primary">Add Member</Button>
+              <A10Button bsStyle="default" title="Create Virtual Port" popup={VirtualPortForm} pageName="VirtualPort">Create...</A10Button>
+
+              {touched && error && <span>{error}</span>}
+            </div>
+          </td>
         </tr>
         <tr>
-          <th>Number</th>
-          <th>Range</th>
-          <th>Protocol</th>
+          <td>Number</td>
+          <td>Range</td>
+          <td>Protocol</td>
         </tr>
       </thead>  
       <tbody>
