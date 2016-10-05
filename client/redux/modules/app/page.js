@@ -7,7 +7,7 @@ import {
 const DESTROY_PAGE = 'page/REGISTER_PAGE';
 
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
-import { fromJS, Map } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 const pageReducers = {
   [ REGISTER_PAGE_VAR ](state, { page, node, payload }) {
@@ -25,17 +25,17 @@ const pageReducers = {
     return state.setIn([ APP_CURRENT_PAGE ], result);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
-    let result = state.getIn([ APP_CURRENT_PAGE ], Map());
-    fromJS(env).forEach((value, key) => {
-      result = result.setIn([ key ], value);
-    });
-    
-    return state.setIn([ APP_CURRENT_PAGE ], result);
+    let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
+    result = result.push(fromJS(env));
+    return state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
   },
   [ DESTROY_PAGE ](state, { page }) {
     // let result = state.deleteIn([ page, 'page' ]);
     // result = state.deleteIn([ page ]);
-    return state.deleteIn([ page ]);
+    let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ]);
+    result = result.pop();
+    result = state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
+    return result.deleteIn([ page ]);
   }
 };
 
