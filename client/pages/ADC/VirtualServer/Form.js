@@ -43,7 +43,7 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
                   'protocol': 'HTTP'
                 }
               })} bsStyle="primary">Add Member</Button>
-              <A10Button bsStyle="default" title="Create Virtual Port" popup={VirtualPortForm} pageName="VirtualPort">Create...</A10Button>
+              <A10Button bsStyle="default" popup={{ pageClass: VirtualPortForm, title: 'Create Virtual Port', pageName: 'VirtualPort', bsSize:'lg' }} >Create...</A10Button>
 
               {touched && error && <span>{error}</span>}
             </div>

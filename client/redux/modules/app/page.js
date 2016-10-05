@@ -20,9 +20,8 @@ const pageReducers = {
     return state.setIn([ page, 'page', 'breadcrumb' ], breadcrumb);
   },
   [ REGISTER_PAGE_VISIBLE ](state, { currentPage, visible }) {
-    let result = state.getIn([ APP_CURRENT_PAGE ]);
-    result = result.setIn([ 'pages', currentPage, 'visible' ], visible);
-    return state.setIn([ APP_CURRENT_PAGE ], result);
+    console.log('currentPage:', currentPage, 'visible:', visible);
+    return state.setIn([ APP_CURRENT_PAGE, 'pages', currentPage, 'visible' ], visible);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());

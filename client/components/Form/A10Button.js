@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup, Modal } from 'react-bootstrap';
-import { APP_CURRENT_PAGE } from 'configs/appKeys';
+// import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { getAppPageVar } from 'helpers/stateHelper';
 
 export class A10FieldSubmit extends Component {
 
@@ -35,6 +36,7 @@ class A10SuperButton extends Component {
   constructor(props, context) {
     super(props, context);
     this.parentProps = context.props;
+    this.modelVisible = false;
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -42,26 +44,27 @@ class A10SuperButton extends Component {
   // }
 
   close() {
-    this.parentProps.setPageVisible(this.props.pageName, false);
+    this.parentProps.setPageVisible(this.props.popup.pageName, false);
   }
 
   render() {
-    const { children, popup, onClick, title, pageName } = this.props;
-    this.modelVisible = this.props.app.getIn([ APP_CURRENT_PAGE, 'pages', this.props.pageName, 'visible' ], false);
+    const { children,  onClick, popup: { pageClass, title, pageName, ...modalProps }, ...rest } = this.props; 
 
     let popupContent = null, click = onClick;
-    // console.log(popup);
-    if (popup) {
-      popupContent = React.createElement(popup, { visible: false });
+    if (pageClass) {
+      popupContent = React.createElement(pageClass, { visible: false });
+      this.modelVisible = getAppPageVar(this.props.app, 'visible', pageName);
+      // console.log(this.modelVisible, '..........................visible');
+
       click = () => {
         // this.setState({ showPopup: true });
-        this.parentProps.setPageVisible(pageName, true);
+        this.parentProps.setPageVisible(this.props.popup.pageName, true);
       };
     }
 
     return (
-      <Button bsStyle="default" onClick={click}>{ children }
-        <Modal show={this.modelVisible} onHide={::this.close}>
+      <Button onClick={click} {...rest}>{ children }
+        <Modal show={this.modelVisible} onHide={::this.close} {...modalProps}>
             <Modal.Header>
               <Modal.Title>{ title || children }</Modal.Title>
             </Modal.Header>
