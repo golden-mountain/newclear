@@ -3,7 +3,7 @@ import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 import { A10Button, A10FieldSubmit } from 'components/Form/A10Button';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
@@ -43,7 +43,27 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
                   'protocol': 'HTTP'
                 }
               })} bsStyle="primary">Add Member</Button>
-              <A10Button bsStyle="default" popup={{ pageClass: VirtualPortForm, title: 'Create Virtual Port', pageName: 'VirtualPort', bsSize:'lg' }} >Create...</A10Button>
+              <A10Button 
+                bsStyle="default" 
+                popup={
+                  { pageClass: VirtualPortForm, 
+                    title: 'Create Virtual Port', 
+                    pageName: 'virtualPort', 
+                    bsSize:'lg', 
+                    connectOptions: {
+                      field: 'virtual-ports' ,
+                      map: {
+                        'virtual-port': {
+                          'number': 'number',
+                          'range': 'range',
+                          'protocol': 'protocol'
+                        }
+                      }
+                    }
+                  }
+                }>
+                Create...
+              </A10Button>
 
               {touched && error && <span>{error}</span>}
             </div>
@@ -88,25 +108,19 @@ class VirtualServerForm extends BaseForm {
   // }
 
   handleSubmit(v) {
-    let values = Map(v);
-    // console.log(values.toJS());
+    let values = fromJS(v);
     const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
-    if (values.hasIn(pathWildcard) 
-       && values.getIn(pathWildcard) === true
+    if (values.hasIn(pathWildcard) && values.getIn(pathWildcard) === true
        && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
-      values = values.deleteIn(pathWildcard);
-      let ip = fromJS({
+      return {
         'virtual-server': {
           'ip-address': '0.0.0.0',
           'netmask': '/24'
         }
-      });
-
-      values = values.mergeDeep(ip);
-      // values = values.setIn(['virtual-server', 'netmask'], '/0');
+      };
     }
 
-    return values;
+    return {};
   }
 
 

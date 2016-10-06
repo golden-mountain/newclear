@@ -5,9 +5,20 @@ import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup, Modal } from '
 import { getAppPageVar } from 'helpers/stateHelper';
 
 export class A10FieldSubmit extends Component {
+  // context defined at page
+  constructor(props, context) {
+    super(props, context);
+    this._parentProps = context.props;
+  }
 
   render() {
     const { submitting, reset, pristine } = this.props;
+
+    const close = () => {
+      reset();
+      this._parentProps.setLastPageVisible(false);
+    };
+
     return (
       <Row>
         <Col xs={12}>
@@ -18,7 +29,7 @@ export class A10FieldSubmit extends Component {
                   <Button type="submit" disabled={submitting} bsStyle="success">
                     {submitting ? <i/> : <i/>} Create
                   </Button>
-                  <Button type="button" disabled={pristine || submitting} onClick={reset} >
+                  <Button type="button" disabled={pristine || submitting} onClick={close} >
                     Cancel
                   </Button>
                 </ButtonGroup>
@@ -31,40 +42,57 @@ export class A10FieldSubmit extends Component {
   }
 }
 
+A10FieldSubmit.contextTypes = {
+  props: PropTypes.object
+};
+
+
+class FieldConnector {
+  constructor(options) {
+    this.options = options;
+  }
+
+  connect(result) {
+    console.log(result, ' result connected from Form');
+  }
+}
+
+
 class A10SuperButton extends Component {
   // context defined at page
   constructor(props, context) {
     super(props, context);
-    this.parentProps = context.props;
+    this._parentProps = context.props;
     this.modelVisible = false;
   }
 
   // componentWillReceiveProps(nextProps) {
-  //   console.log(this.modelVisible, 'modelVisible.............................');
+  //   // const pageVisible = getAppPageVar(nextProps.app, 'visible');
+  //   console.log(pageVisible, 'modelVisible.............................');
   // }
 
-  close() {
-    this.parentProps.setPageVisible(this.props.popup.pageName, false);
-  }
+  // close() {
+  //   this._parentProps.setPageVisible(this.props.popup.pageName, false);
+  // }
 
   render() {
-    const { children,  onClick, popup: { pageClass, title, pageName, ...modalProps }, ...rest } = this.props; 
+    const { app, dispatch, children,  onClick, popup: { pageClass, title, pageName, connectOptions, ...modalProps }, ...rest } = this.props;  //eslint-disable-line
 
     let popupContent = null, click = onClick;
     if (pageClass) {
-      popupContent = React.createElement(pageClass, { visible: false });
+      popupContent = React.createElement(pageClass, { visible: true , fieldConnector: new FieldConnector(connectOptions) });
       this.modelVisible = getAppPageVar(this.props.app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
 
       click = () => {
         // this.setState({ showPopup: true });
-        this.parentProps.setPageVisible(this.props.popup.pageName, true);
+        this._parentProps.setPageVisible(pageName, true);
       };
     }
 
     return (
       <Button onClick={click} {...rest}>{ children }
-        <Modal show={this.modelVisible} onHide={::this.close} {...modalProps}>
+        <Modal show={this.modelVisible}  {...modalProps}>
             <Modal.Header>
               <Modal.Title>{ title || children }</Modal.Title>
             </Modal.Header>

@@ -48,6 +48,7 @@ class SchemaForm {
     return prefixes;
   }
 
+  // remove invalid values by schema
   parseValues(values) {
     const newValues = fromJS(values);
     const prefixes = this._getObjectPrefixes();    
@@ -77,7 +78,7 @@ class SchemaForm {
           method: 'POST', 
           body: parsedValues
         };    
-        console.log('full auth data', fullRequestData);  
+        // console.log('full auth data', fullRequestData);  
       }
 
       if (fullRequestData) {
@@ -105,11 +106,7 @@ class A10SchemaForm extends Component {
   }
 
   defaultHandleSubmit(values) {
-    // let visible data hidden
-    let parsedValues = this.dataFinalize(values);
-    // console.log(parsedValues, '.......................... after finalize');
-
-
+    let parsedValues = values;
     const schemaFormHandler = new SchemaForm(this.props);
     // console.log('build schema handler success');
     parsedValues = schemaFormHandler.parseValues(parsedValues);
@@ -150,19 +147,38 @@ class A10SchemaForm extends Component {
     } = this.props; 
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
-    const handleSubmit = this._context.props.handleSubmit;
+    const { handleSubmit, fieldConnector } = this._parentProps;
 
     let submit = (values) => {
-      let newValues = values, submitFunc = this.defaultHandleSubmit;
+      let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
       if (onBeforeSubmit) {
-        newValues = onBeforeSubmit(newValues);
+        patchedValues = onBeforeSubmit(newValues);
       } 
+
+      // let visible data hidden
+      newValues = this.dataFinalize(newValues);
+      // patch values need keep outside newValues, otherwise, data finalizer could be remove it by visible
+      newValues = newValues.mergeDeep(fromJS(patchedValues));
 
       if (onSubmit) {
         submitFunc = onSubmit;
       }
 
       let result = submitFunc.call(this, newValues);
+      // console.log('returned result by submitting....', result);
+
+      if (fieldConnector) {
+        fieldConnector.connect(result);
+      }
+
+      // close win
+      // TODO: decide how to close this form page
+      const closeCurrent = () => {
+        // if popup, close win
+        // else return to some page
+        this._parentProps.setLastPageVisible(false);
+      };
+      result.then(closeCurrent);
 
       if (onAfterSubmit) {
         return onAfterSubmit.call(this, result);

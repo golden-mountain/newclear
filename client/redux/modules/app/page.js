@@ -20,8 +20,16 @@ const pageReducers = {
     return state.setIn([ page, 'page', 'breadcrumb' ], breadcrumb);
   },
   [ REGISTER_PAGE_VISIBLE ](state, { currentPage, visible }) {
-    console.log('currentPage:', currentPage, 'visible:', visible);
-    return state.setIn([ APP_CURRENT_PAGE, 'pages', currentPage, 'visible' ], visible);
+    // debugger;
+    // console.log(state.toJS());
+    let affectPage = currentPage;
+    if (!affectPage) {
+      affectPage = state.getIn([ APP_CURRENT_PAGE, 'envs' ]).last().getIn([ 'page' ]);
+      // console.log('last page::::::::', affectPage);
+    }
+    // console.log('register page visible, currentPage:', affectPage, 'visible:', visible);
+
+    return state.setIn([ APP_CURRENT_PAGE, 'pages', affectPage, 'visible' ], visible);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
@@ -59,6 +67,10 @@ export const setPageBreadcrumb = (page, breadcrumb) => {
 
 export const setPageVisible = (page, currentPage, visible) => {
   return { type: REGISTER_PAGE_VISIBLE, page, currentPage, visible };
+};
+
+export const setLastPageVisible = (page, visible) => {
+  return { type: REGISTER_PAGE_VISIBLE, page, visible };
 };
 
 export const destroyPage = (page) => {
