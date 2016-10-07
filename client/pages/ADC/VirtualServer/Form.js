@@ -3,7 +3,7 @@ import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 import { A10Button, A10FieldSubmit } from 'components/Form/A10Button';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
@@ -30,6 +30,26 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
   // fields.map((port) => {
   //   logger.debug(port);
   // });
+  let popupInfo = { pageClass: VirtualPortForm, 
+    urlKeysConnect: [ 'virtual-server.name' ],
+    title: 'Create Virtual Port', 
+    pageName: 'virtualPort', 
+    bsSize:'lg', 
+    connectOptions: {
+      connectToValue: {
+        'virtual-server.port-list': {
+          'port.port-number': 'port.port-number',
+          'port.range': 'port.range',
+          'port.protocol': 'port.protocol'
+        }
+      },
+      connectToApiStore: {
+        targetIsArray: true,
+        target: 'virtual-server.port-list',
+        source: 'port'
+      }
+    }
+  };
   return (
     <Table responsive>
       <thead>
@@ -37,39 +57,13 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
           <td cols="3">
             <div className="pull-right">
               <Button onClick={() => fields.push({ 
-                'virtual-port': {
-                  'number': 81,
+                'port': {
+                  'port-number': 81,
                   'range': '80-100',
                   'protocol': 'HTTP'
                 }
               })} bsStyle="primary">Add Member</Button>
-              <A10Button 
-                bsStyle="default" 
-                popup={
-                  { pageClass: VirtualPortForm, 
-                    urlKeysConnect: [ 'virtual-server.name' ],
-                    title: 'Create Virtual Port', 
-                    pageName: 'virtualPort', 
-                    bsSize:'lg', 
-                    connectOptions: {
-                      field: 'virtual-ports' ,
-                      connectToValue: {
-                        'virtual-port': {
-                          'number': 'number',
-                          'range': 'range',
-                          'protocol': 'protocol'
-                        }
-                      },
-                      connectToApiStore: {
-                        targetIsArray: true,
-                        target: 'virtual-server.port-list',
-                        source: 'port'
-                      }
-                    }
-                  }
-                }>
-                Create...
-              </A10Button>
+              <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button>
 
               {touched && error && <span>{error}</span>}
             </div>
@@ -85,15 +79,15 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
       {fields.map((port, index) =>
         <tr key={index}>
           <td>
-            <A10SchemaField layout={false} name={`${port}.virtual-port.number`} validation={{ isInt: isInt }}   />
+            <A10SchemaField layout={false} name={`${port}.port.port-number`} validation={{ isInt: isInt }}   />
           </td>
 
           <td>
-            <A10SchemaField layout={false} name={`${port}.virtual-port.range`}  conditional={{ [ `${port}.virtual-port.number` ]: 91 }}/>
+            <A10SchemaField layout={false} name={`${port}.port.range`}  conditional={{ [ `${port}.port.port-number` ]: 91 }}/>
           </td>
 
           <td>     
-            <A10SchemaField layout={false} name={`${port}.virtual-port.protocol`} >  
+            <A10SchemaField layout={false} name={`${port}.port.protocol`} >  
               <FormControl componentClass="select">
                 <option value="tcp">tcp</option>
                 <option value="udp">udp</option>
@@ -109,9 +103,18 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
 
 
 class VirtualServerForm extends BaseForm {
-  // constructor(props) {
-  //   super(props);
-  // }
+  addLine() {
+    const valuePath = [ 'values', 'virtual-server', 'port-list' ];
+    let list = this.props.pageForm.getIn(valuePath, Map()).toJS();
+    list.push({ 
+      'port': {
+        'port-number': 91,
+        'range': '92',
+        'protocol': 'tcp'
+      }
+    });
+    this.props.change('virtual-server.port-list', list);
+  }
 
   handleSubmit(v) {
     let values = fromJS(v);
@@ -139,7 +142,7 @@ class VirtualServerForm extends BaseForm {
         <Row>
           <Col xs={2}>
             <h4>Help  </h4>
-
+            <Button onClick={::this.addLine} > Add a Line </Button>
           </Col>
           <Col xs={10}>                   
               <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
@@ -170,7 +173,7 @@ class VirtualServerForm extends BaseForm {
 
                   <Col xs={6}>
                     <Panel header={<h4>Virtual Ports</h4>}>
-                      <FieldArray name="virtual-ports" component={renderTable}/>
+                      <FieldArray name="virtual-server.port-list" component={renderTable}/>
                     </Panel>
                   </Col>
                 </Row>
@@ -189,30 +192,30 @@ class VirtualServerForm extends BaseForm {
 const initialValues = {
   'virtual-server': {
     'name': 'vs',
-    'netmask': '/24'
+    'netmask': '/24',
+    'port-list': [
+      { 
+        'port': {
+          'port-number': 80,
+          'range': '80-100',
+          'protocol': 'HTTP'
+        }
+      },
+      { 
+        'port': {
+          'port-number': 81,
+          'range': '80-101',
+          'protocol': 'HTTPS'
+        }
+      }
+    ]
   },
   'x': {
     'virtual-server': {
       'address-type': '0',
       'wildcard': false
     }
-  },
-  'virtual-ports': [
-    { 
-      'virtual-port': {
-        'number': 80,
-        'range': '80-100',
-        'protocol': 'HTTP'
-      }
-    },
-    { 
-      'virtual-port': {
-        'number': 81,
-        'range': '80-101',
-        'protocol': 'HTTPS'
-      }
-    }
-  ]
+  }
 };
 
 const InitializeFromStateForm = AppManager({

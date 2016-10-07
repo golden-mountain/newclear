@@ -113,7 +113,7 @@ class A10SchemaForm extends Component {
       if (apiRequestData.connectOptions) {
         const { connectToApiStore: { source, target, targetIsArray } } = apiRequestData.connectOptions;
         const value = source ? apiRequestData.body.getIn([ source ]) : apiRequestData.body;
-        if (targetIsArray) {
+        if (targetIsArray || storeData.length > 1) {
           let l = mergingObj.getIn(toPath(target), List());
           l = l.push(value);
           mergingObj = mergingObj.setIn( toPath(target), l);

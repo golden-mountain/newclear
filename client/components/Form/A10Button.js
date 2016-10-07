@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup, Modal } from 'react-bootstrap';
 // import { APP_CURRENT_PAGE } from 'configs/appKeys';
 import { getAppPageVar } from 'helpers/stateHelper';
+import { toPath, set } from 'lodash';
+import { fromJS, List } from 'immutable';
 
 export class A10FieldSubmit extends Component {
   // context defined at page
@@ -47,8 +49,10 @@ A10FieldSubmit.contextTypes = {
 };
 
 class FieldConnector {
-  constructor(options) {
+  constructor(options, formData, contextProps) {
     this.options = options;
+    this._formData = formData;
+    this._contextProps = contextProps;
   }
 
   getOptions() {
@@ -56,8 +60,39 @@ class FieldConnector {
   }
 
   connectToValues(values) {
-    const { field, map } = this.options;
-    console.log('field:', field, 'map:', map, 'values:', values);
+    let { connectToValue } = this.options;
+    if (connectToValue) {
+      let valuePath = [ this._contextProps.form, 'values' ];
+      connectToValue = fromJS(connectToValue);
+      connectToValue.forEach((map, prefix) => {
+        const formValue = this._formData.getIn(valuePath.concat(toPath(prefix)));
+        let obj = formValue.toJS();
+        
+        if (List.isList(formValue)) {
+          let newObj = {};
+
+          // formValue.forEach((value) => {
+          map.forEach((source, target) => {
+            let v = values.getIn(toPath(source));
+            if (v) {
+              set(newObj, target, v);
+            } 
+          });             
+          // });
+          obj.push(newObj);
+        } else {
+          map.forEach((source, target) => {
+            let v = values.getIn(toPath(source));
+            if (v) {
+              set(obj, target, v);
+            }
+          });
+        }          
+        // console.log('object value is...............', obj);
+        this._contextProps.change(prefix, obj);
+      });
+      
+    }
     return values;
   }
 
@@ -100,12 +135,15 @@ class A10SuperButton extends Component {
   // }
 
   render() {
-    const { app, dispatch, children,  onClick, popup: { pageClass, title, pageName, connectOptions, urlKeysConnect,  ...modalProps }, ...rest } = this.props;  //eslint-disable-line
+    const { app, form, children, dispatch, onClick,  //eslint-disable-line
+      popup: { pageClass, title, pageName, connectOptions, 
+      urlKeysConnect,  ...modalProps }, ...rest } = this.props; 
 
     let popupContent = null, click = onClick;
     if (pageClass) {
-      popupContent = React.createElement(pageClass, { visible: true , fieldConnector: new FieldConnector(connectOptions), urlKeysConnect });
-      this.modelVisible = getAppPageVar(this.props.app, 'visible', pageName);
+      popupContent = React.createElement(pageClass, { visible: true , 
+        fieldConnector: new FieldConnector(connectOptions, form, this._parentProps), urlKeysConnect });
+      this.modelVisible = getAppPageVar(app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
 
       click = () => {
@@ -138,7 +176,8 @@ A10SuperButton.contextTypes = {
 export const A10Button = connect(
   (state) => {
     return {
-      app: state.getIn([ 'app' ])
+      app: state.getIn([ 'app' ]),
+      form: state.getIn( [ 'form' ])
     };
   }
 )(A10SuperButton);
