@@ -35,10 +35,16 @@ class FormHacker {
     return action;
   }
 
-  dispatchValidation() {
+  _getVarsByEnv() {
     const pageEnv = getAppEnvVar(this.state);
+    // console.log(pageEnv, 'page env.....');
     const pageVar = getPageVar(this.state, pageEnv.page);
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
+    return { pageEnv, pageVar, reduxFormVar };
+  }
+
+  dispatchValidation() {
+    const { pageEnv, pageVar, reduxFormVar } = this._getVarsByEnv();
 
     if (pageVar && reduxFormVar) {
       const syncErrors = this.validate(pageVar, reduxFormVar);      
@@ -85,10 +91,8 @@ class FormHacker {
   }
 
   reinitialConditional() {
-    const pageEnv = getAppEnvVar(this.state);
-    const pageVar = getPageVar(this.state, pageEnv.page);
-    const reduxFormVar = getFormVar(this.state, pageEnv.form);
-    // console.log(pageEnv, 'page env.........');
+    const { pageVar, reduxFormVar } = this._getVarsByEnv();
+
     if (pageVar && reduxFormVar) {
       const name = this.action.field;
       let conditional = this.action.payload.getIn([ 'conditionals' ]);
@@ -124,9 +128,7 @@ class FormHacker {
   }
 
   changeConditional() {
-    const pageEnv = getAppEnvVar(this.state);
-    const pageVar = getPageVar(this.state, pageEnv.page);
-    const reduxFormVar = getFormVar(this.state, pageEnv.form);
+    const { pageEnv, pageVar, reduxFormVar } = this._getVarsByEnv();
     const fields = pageVar.getIn([ 'form' ]);
     let storedBackFields = Map({});
 

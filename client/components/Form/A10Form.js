@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Form } from 'react-bootstrap';
 // import invariant from 'invariant';
 import { Map, List, fromJS } from 'immutable';
-import { toPath } from 'lodash';
-// import { getPageVar } from 'helpers/stateHelper';
+import { toPath, has } from 'lodash';
+import { getAppValueStore } from 'helpers/stateHelper';
 
 class SchemaForm {
   constructor(context) {
@@ -105,14 +105,63 @@ class A10SchemaForm extends Component {
     this._parentProps = context.props;
   }
 
-  defaultHandleSubmit(values) {
+  // connect 
+  connectValues(storeData, parsedValues) {
+    // const { fieldConnector: { options: { connectToApiStore } } } = this._parentProps;
+    let primaryObj = parsedValues.first(), mergingObj = Map(), copyStoreData = [];
+    storeData.forEach((apiRequestData) => {
+      if (apiRequestData.connectOptions) {
+        const { connectToApiStore: { source, target, targetIsArray } } = apiRequestData.connectOptions;
+        const value = source ? apiRequestData.body.getIn([ source ]) : apiRequestData.body;
+        if (targetIsArray) {
+          let l = mergingObj.getIn(toPath(target), List());
+          l = l.push(value);
+          mergingObj = mergingObj.setIn( toPath(target), l);
+        } else {
+          mergingObj =  mergingObj.setIn( toPath(target), value);
+        }
+      } else {
+        copyStoreData.push(apiRequestData);
+      }
+    });
+
+    if (mergingObj.size) {
+      primaryObj.body = primaryObj.body.mergeDeep(mergingObj);
+      parsedValues = parsedValues.set(0, primaryObj);
+    }
+
+    if (copyStoreData.length) {
+      return parsedValues.concat(copyStoreData);
+    } else {
+      return parsedValues;
+    }
+    
+  }
+
+  defaultHandleSubmit(values, form, save=true) {
     let parsedValues = values;
     const schemaFormHandler = new SchemaForm(this.props);
-    // console.log('build schema handler success');
     parsedValues = schemaFormHandler.parseValues(parsedValues);
-    // console.log(parsedValues, 'submitted values');
 
-    return this._context.props.axapiRequest(parsedValues);
+    if (save) {
+      let storeData = getAppValueStore(this.props.app);
+      if (storeData.length) {
+        parsedValues = this.connectValues(storeData, parsedValues);
+      }
+      // console.log('saving data:::::::::::::::', savingData);
+      const promise = this._context.props.axapiRequest(parsedValues);
+      if (promise) {
+        promise.finally(() => {
+          this._context.props.storeApiInfo(form, false);
+        });
+      }
+      return promise;
+    } else {
+      this._context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
+      return new Promise((resolve, reject) => { // eslint-disable-line
+        resolve(parsedValues);
+      });
+    }
   }
 
   dataFinalize(values) {
@@ -147,7 +196,7 @@ class A10SchemaForm extends Component {
     } = this.props; 
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
-    const { handleSubmit, fieldConnector } = this._parentProps;
+    const { handleSubmit, fieldConnector, env } = this._parentProps;
 
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
@@ -164,13 +213,7 @@ class A10SchemaForm extends Component {
         submitFunc = onSubmit;
       }
 
-      let result = submitFunc.call(this, newValues);
-      // console.log('returned result by submitting....', result);
-
-      if (fieldConnector) {
-        fieldConnector.connect(result);
-      }
-
+      let result = null;
       // close win
       // TODO: decide how to close this form page
       const closeCurrent = () => {
@@ -178,13 +221,21 @@ class A10SchemaForm extends Component {
         // else return to some page
         this._parentProps.setLastPageVisible(false);
       };
-      result.then(closeCurrent);
-
-      if (onAfterSubmit) {
-        return onAfterSubmit.call(this, result);
+      // update values
+      if (has(fieldConnector , 'options.connectToValue')) {
+        fieldConnector.connectToValues(newValues);
+        result = submitFunc.call(this, newValues, env.form, false);        
       } else {
-        return result;
+        result = submitFunc.call(this, newValues, env.form, true);
+        fieldConnector.connectToResult(result);
+
+        if (onAfterSubmit) {
+          result = onAfterSubmit.call(this, result);
+        } 
       }
+  
+      result.then(closeCurrent);
+      return result;
     };
 
     // console.log(onSubmit, '..............');

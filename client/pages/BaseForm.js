@@ -58,6 +58,10 @@ export default class BaseForm extends Component {
     } else {
       this.props.setPageVisible(this.props.env.page, false);
     }
+    // get connected url keys
+    if (this.props.urlKeysConnect) {
+      console.log('url keys connect:', this.props.urlKeysConnect);
+    }
   }
 
   componentWillUnmount() {

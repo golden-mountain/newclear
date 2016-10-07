@@ -47,17 +47,23 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
                 bsStyle="default" 
                 popup={
                   { pageClass: VirtualPortForm, 
+                    urlKeysConnect: [ 'virtual-server.name' ],
                     title: 'Create Virtual Port', 
                     pageName: 'virtualPort', 
                     bsSize:'lg', 
                     connectOptions: {
                       field: 'virtual-ports' ,
-                      map: {
+                      connectToValue: {
                         'virtual-port': {
                           'number': 'number',
                           'range': 'range',
                           'protocol': 'protocol'
                         }
+                      },
+                      connectToApiStore: {
+                        targetIsArray: true,
+                        target: 'virtual-server.port-list',
+                        source: 'port'
                       }
                     }
                   }

@@ -46,14 +46,38 @@ A10FieldSubmit.contextTypes = {
   props: PropTypes.object
 };
 
-
 class FieldConnector {
   constructor(options) {
     this.options = options;
   }
 
-  connect(result) {
-    console.log(result, ' result connected from Form');
+  getOptions() {
+    return this.options || {};
+  }
+
+  connectToValues(values) {
+    const { field, map } = this.options;
+    console.log('field:', field, 'map:', map, 'values:', values);
+    return values;
+  }
+
+  connectToResult(promise) {
+    // if (!this.options.connectToValue) {
+
+    // }
+    console.log(promise, ' result connected from Form');
+    return promise;
+  }
+
+  connectToApiStore(apiData) {
+    let result = [];
+    apiData.forEach((data) => {
+      data.forEach((req) => {
+        result.push(req.toJS());
+      });
+    });
+
+    return result;
   }
 }
 
@@ -76,11 +100,11 @@ class A10SuperButton extends Component {
   // }
 
   render() {
-    const { app, dispatch, children,  onClick, popup: { pageClass, title, pageName, connectOptions, ...modalProps }, ...rest } = this.props;  //eslint-disable-line
+    const { app, dispatch, children,  onClick, popup: { pageClass, title, pageName, connectOptions, urlKeysConnect,  ...modalProps }, ...rest } = this.props;  //eslint-disable-line
 
     let popupContent = null, click = onClick;
     if (pageClass) {
-      popupContent = React.createElement(pageClass, { visible: true , fieldConnector: new FieldConnector(connectOptions) });
+      popupContent = React.createElement(pageClass, { visible: true , fieldConnector: new FieldConnector(connectOptions), urlKeysConnect });
       this.modelVisible = getAppPageVar(this.props.app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
 

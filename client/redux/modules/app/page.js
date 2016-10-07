@@ -37,8 +37,6 @@ const pageReducers = {
     return state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
   },
   [ DESTROY_PAGE ](state, { page }) {
-    // let result = state.deleteIn([ page, 'page' ]);
-    // result = state.deleteIn([ page ]);
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ]);
     result = result.pop();
     result = state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);

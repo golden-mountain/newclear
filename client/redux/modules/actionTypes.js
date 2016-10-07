@@ -12,6 +12,7 @@ export const REGISTER_PAGE_VISIBLE = 'page/REGISTER_PAGE_VISIBLE';
 // field action
 export const REGISTER_PAGE_FIELD = 'page/fields/REGISTER_PAGE_FIELD';
 export const SYNC_PAGE_FIELD = 'page/fields/SYNC_PAGE_FIELD';
+export const STORE_API_INFO = 'page/form/STORE_API_INFO';
 
 // api action
 export const AXAPI_SAVE_SUCCESS = 'page/api/AXAPI_SAVE_SUCCESS';
