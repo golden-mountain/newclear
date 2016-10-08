@@ -1,12 +1,12 @@
 import React from 'react';
 import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
+import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table, InputGroup } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { fromJS, Map } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 import { A10Button, A10FieldSubmit } from 'components/Form/A10Button';
-import { A10Field, A10SchemaField } from 'components/Form/A10Field';
+import { A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 
 import AppManager from 'helpers/AppManager';
@@ -17,6 +17,7 @@ import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/Form';
+import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/Form';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
@@ -30,7 +31,8 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
   // fields.map((port) => {
   //   logger.debug(port);
   // });
-  let popupInfo = { pageClass: VirtualPortForm, 
+  let popupInfo = { 
+    pageClass: VirtualPortForm, 
     urlKeysConnect: [ 'virtual-server.name' ],
     title: 'Create Virtual Port', 
     pageName: 'virtualPort', 
@@ -136,6 +138,19 @@ class VirtualServerForm extends BaseForm {
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
+    let tplVirtualServerPopupInfo = { 
+      pageClass: TemplateVirtualServerForm, 
+      title: 'Create Virtual Server Template', 
+      pageName: 'templateVirtualServer', 
+      bsSize:'lg', 
+      connectOptions: {
+        connectToValue: {
+          'virtual-server': {
+            'template-virtual-server': 'virtual-server.name'
+          }
+        }
+      }
+    };    
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -152,22 +167,34 @@ class VirtualServerForm extends BaseForm {
                       <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
    
 
-                      <A10SchemaField  name="x.virtual-server.wildcard" component={A10Field} label="Wildcard" value={true}>
+                      <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
                         <Checkbox value={true} />
                       </A10SchemaField>
                       
-                      <A10SchemaField name="x.virtual-server.address-type" component={A10Field} label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
-                        <Radio value="0" inline> IPv4 </Radio>
-                        <Radio value="1" inline> IPv6 </Radio>
+                      <A10SchemaField name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+                        <div>
+                          <Radio value="0" inline> IPv4 </Radio>
+                          <Radio value="1" inline> IPv6 </Radio>
+                        </div>
                       </A10SchemaField>
 
                       <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                      <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" component={A10Field} label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
+                      <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                      <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" component={A10Field} label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
-                      <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" component={A10Field} label="IPv6 ACL" />
+                      <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
+                      <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
                       <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
+                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} >                       
+                        <InputGroup>
+                          <FormControl componentClass="select">
+                            <option value="">--select--</option>
+                          </FormControl>
+                          <InputGroup.Addon>
+                            <A10Button bsStyle="default" popup={ tplVirtualServerPopupInfo } componentClass="a">+</A10Button>
+                          </InputGroup.Addon>
+                        </InputGroup>
+                      </A10SchemaField>
                     </Panel> 
                   </Col>
 

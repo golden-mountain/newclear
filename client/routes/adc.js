@@ -51,6 +51,27 @@ export default
               }     
             }
           ]
+        },
+        {
+          path: 'templates',
+          childRoutes: [
+            {
+              path: 'virtual-server/edit',
+              getComponent: (nextState, cb) => {
+                System.import('pages/ADC/Templates/VirtualServer/Form')
+                          .then(loadRoute(cb))
+                          .catch(errorLoading);
+              }
+            }
+            // {
+            //   path: 'port/edit',
+            //   getComponent: (nextState, cb) => {
+            //     System.import('pages/ADC/VirtualPort/Form')
+            //     .then(loadRoute(cb))
+            //     .catch(errorLoading);
+            //   }     
+            // }
+          ]          
         }
       ]
     }

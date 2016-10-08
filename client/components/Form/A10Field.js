@@ -3,9 +3,9 @@ import { FormGroup, FormControl, ControlLabel, Col, HelpBlock } from 'react-boot
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
-import { fromJS } from 'immutable';
-// import { isEqual } from 'lodash';
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
+import { has } from 'lodash';
+// import ReactTestUtils from 'react-addons-test-utils';
 
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
@@ -42,28 +42,44 @@ class A10FieldLayout extends Component {
 
 // multiple options input
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];
+const registeredInputs = registeredMVInputs.concat([ 'FormControl' ]);
 
 export class A10Field extends Component {
+  findInputElements(children, allowedTypes, callback) {
+    return React.Children.map(children, child => {
+      if (has(child, 'type.name') && allowedTypes.indexOf(child.type.name) > -1) {
+        return callback(child);
+      } else if (has(child, 'props.children')) {
+        let newChild = this.findInputElements(child.props.children, allowedTypes, callback);
+        return React.cloneElement(child, {}, newChild);
+      } else {
+        return child;
+      }
+    });
+  }
 
   render() {
     const { children, input, ...fieldOptions } = this.props;
-    const newChild = React.Children.map(children, (child) => {
-      let inputOptions = {
-
-      };
+    const callback = (child) => {      
+      let inputOptions = {};     
 
       const { value, ...restInput } = input;
       // only support React Bootstrap
       // to set value and checked for inputs
-      if (~registeredMVInputs.indexOf(child.type.name)) {
+      if (registeredMVInputs.indexOf(child.type.name) > -1) {
+        // console.log('mv element is:', restInput.name);
         inputOptions['checked'] = child.props.value === value;
       } else {
+        // console.log('text element is:', restInput.name);
         inputOptions['value'] = value;
       }
 
+      // console.log('input options:', { ...inputOptions, ...restInput });
       return  React.cloneElement(child, { ...inputOptions, ...restInput });
-    });
-    // console.log('new child', newChild);
+    };
+
+    let newChild = this.findInputElements(children, registeredInputs, callback);
+    // newChild = React.Children.map(newChild, callback);
     return (
       <A10FieldLayout {...fieldOptions}> { newChild } </A10FieldLayout> 
     );
@@ -91,18 +107,7 @@ class SchemaField extends Component {
     
     this._context = context;
     this._parentProps = this._context.props;
-    // this._parentForm = this.props.pageForm.getIn([ context.props.env.form ]);    
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   // const fieldName = this.props.schema['src-name'];
-  //   const currentFormValues = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ] );
-  //   const nextFormValues = nextProps.pageForm.getIn([ this._parentProps.env.form, 'values' ]);
-  //   if (!currentFormValues || !isEqual(currentFormValues, nextFormValues)) {
-  //     const errors = this.validate();
-  //     this._parentProps.updateReduxFormSyncErrors(this._parentProps.env.form, errors, {} );    
-  //   }
-  // }
 
   componentWillMount() {
     // if (this.props.schema) {
@@ -127,25 +132,19 @@ class SchemaField extends Component {
       conditionals: this.parseConditional(conditional, defaultValue)
     };
     this._parentProps.registerPageField(name, fromJS(fieldOptions));     
-    // }
   }
 
-  // validate() {
-  //   let result = Map({});
-  //   const pageValidators = this.props.app.getIn([ this._parentProps.env.page, 'form', this.props.name ]);
-  //   console.log(this.props.pageForm.toJS(), this.props.name);
-  //   const elementValue = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ].concat(this.props.name.split('.')));
-  //   if (pageValidators.validations) {
-  //     Object.entries(pageValidators.validations).forEach(([ name, func ]) => {
-  //       const msg = func(elementValue, name);
-  //       if (msg) {
-  //         result = result.setIn(this.props.name.split('.'), msg);
-  //         return msg;
-  //       }
-  //     });
-  //   }
-  //   return result.toJS();
-  // }
+  parseSchemaConditional(name, schema) {
+    let result = {};
+
+    if (schema && schema['condition']) {
+      const prefixs = name.split('.');
+      prefixs.pop();
+      let prefix = prefixs.join('.');
+      result[[ prefix, schema['condition'] ].join('.')] = true;
+    }
+    return result;
+  }
 
   parseValidation(schema) {
     let validations = {};
@@ -177,18 +176,6 @@ class SchemaField extends Component {
       }
     }
 
-    return result;
-  }
-
-  parseSchemaConditional(name, schema) {
-    let result = {};
-
-    if (schema && schema['condition']) {
-      const prefixs = name.split('.');
-      prefixs.pop();
-      let prefix = prefixs.join('.');
-      result[[ prefix, schema['condition'] ].join('.')] = true;
-    }
     return result;
   }
 

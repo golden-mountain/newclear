@@ -135,7 +135,7 @@ class A10SuperButton extends Component {
   // }
 
   render() {
-    const { app, form, children, dispatch, onClick,  //eslint-disable-line
+    const { app, form, children, dispatch, onClick, componentClass,  //eslint-disable-line
       popup: { pageClass, title, pageName, connectOptions, 
       urlKeysConnect,  ...modalProps }, ...rest } = this.props; 
 
@@ -152,8 +152,8 @@ class A10SuperButton extends Component {
       };
     }
 
-    return (
-      <Button onClick={click} {...rest}>{ children }
+    const modal = (
+      <span>{children}
         <Modal show={this.modelVisible}  {...modalProps}>
             <Modal.Header>
               <Modal.Title>{ title || children }</Modal.Title>
@@ -163,9 +163,11 @@ class A10SuperButton extends Component {
               {popupContent}
             </Modal.Body>
 
-        </Modal>  
-      </Button>      
+        </Modal>        
+      </span>
     );
+
+    return React.createElement( componentClass || Button, { onClick: click, ...rest }, modal);
   }
 }
 
