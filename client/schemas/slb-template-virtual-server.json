@@ -1,0 +1,159 @@
+{
+    "obj-name": "virtual-server",
+    "obj-help": "Virtual server template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "vserver",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.virtual-server",
+    "axapi": "/axapi/v3/slb/template/virtual-server/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Virtual server template name",
+            "src-name": "name"
+        },
+        "conn-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "8000000",
+            "default": "8000000",
+            "description": "Connection limit (Connection limit)",
+            "format": "number",
+            "src-name": "conn-limit"
+        },
+        "conn-limit-reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "link-next-fwd": "conn-limit-no-logging",
+            "alias": "conn-limit-reset",
+            "description": "Send client reset when connection over limit",
+            "src-name": "reset"
+        },
+        "conn-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "conn-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Connection rate limit (Connection rate limit)",
+            "format": "number",
+            "src-name": "conn-rate-limit"
+        },
+        "rate-interval": {
+            "type": "string",
+            "alias": "rate-interval",
+            "condition": "conn-rate-limit",
+            "description": "'100ms': \"Use 100 ms as sampling interval;'second': \"Use 1 second as sampling interval;",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Use 100 ms as sampling interval"
+                },
+                {
+                    "second": "\"Use 1 second as sampling interval"
+                }
+            ],
+            "link-next-fwd": "conn-rate-limit-reset",
+            "default": "second",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "conn-rate-limit-reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "link-next-fwd": "conn-rate-limit-no-logging",
+            "description": "Send client reset when connection rate over limit",
+            "alias": "conn-rate-limit-reset",
+            "src-name": "reset"
+        },
+        "conn-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-rate-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "icmp-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "description": "ICMP rate limit (Normal rate limit. If exceeds this limit, drop the ICMP packet that goes over the limit)",
+            "format": "number",
+            "src-name": "icmp-rate-limit"
+        },
+        "icmp-lockup": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "condition": "icmp-rate-limit",
+            "description": "Enter lockup state when ICMP rate exceeds lockup rate limit (Maximum rate limit. If exceeds this limit, drop all ICMP packet for a time period)",
+            "alias": "icmp-lockup",
+            "format": "number",
+            "src-name": "lockup"
+        },
+        "icmp-lockup-period": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16383",
+            "condition": "icmp-lockup",
+            "description": "Lockup period (second)",
+            "alias": "icmp-lockup-period",
+            "format": "number",
+            "src-name": "lockup-period"
+        },
+        "icmpv6-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "description": "ICMPv6 rate limit (Normal rate limit. If exceeds this limit, drop the ICMP packet that goes over the limit)",
+            "format": "number",
+            "src-name": "icmpv6-rate-limit"
+        },
+        "icmpv6-lockup": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "condition": "icmpv6-rate-limit",
+            "description": "Enter lockup state when ICMP rate exceeds lockup rate limit (Maximum rate limit. If exceeds this limit, drop all ICMP packet for a time period)",
+            "alias": "icmpv6-lockup",
+            "format": "number",
+            "src-name": "lockup"
+        },
+        "icmpv6-lockup-period": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16383",
+            "condition": "icmpv6-lockup",
+            "description": "Lockup period (second)",
+            "alias": "icmpv6-lockup-period",
+            "format": "number",
+            "src-name": "lockup-period"
+        },
+        "subnet-gratuitous-arp": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send gratuitous ARP for every IP in the subnet virtual server",
+            "src-name": "subnet-gratuitous-arp"
+        }
+    }
+}
