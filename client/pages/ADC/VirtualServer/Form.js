@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table, InputGroup } from 'react-bootstrap';
+import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { fromJS, Map } from 'immutable';
@@ -138,7 +138,7 @@ class VirtualServerForm extends BaseForm {
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
-    let tplVirtualServerPopupInfo = { 
+    const tplVirtualServerPopupInfo = { 
       pageClass: TemplateVirtualServerForm, 
       title: 'Create Virtual Server Template', 
       pageName: 'templateVirtualServer', 
@@ -150,7 +150,8 @@ class VirtualServerForm extends BaseForm {
           }
         }
       }
-    };    
+    }; 
+
     return (
       <div className="container-fluid">
         <Helmet title="Edit Virtual Server"/>
@@ -185,16 +186,8 @@ class VirtualServerForm extends BaseForm {
                       <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
                       <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
                       <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
-                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} >                       
-                        <InputGroup>
-                          <FormControl componentClass="select">
-                            <option value="">--select--</option>
-                          </FormControl>
-                          <InputGroup.Addon>
-                            <A10Button bsStyle="default" popup={ tplVirtualServerPopupInfo } componentClass="a">+</A10Button>
-                          </InputGroup.Addon>
-                        </InputGroup>
-                      </A10SchemaField>
+                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+                        
                     </Panel> 
                   </Col>
 

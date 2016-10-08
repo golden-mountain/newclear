@@ -6,6 +6,7 @@ import { Field } from 'redux-form/immutable'; // imported Field
 import { fromJS, Map } from 'immutable';
 import { has } from 'lodash';
 // import ReactTestUtils from 'react-addons-test-utils';
+import A10Select from 'components/Form/A10Select';
 
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
@@ -58,8 +59,51 @@ export class A10Field extends Component {
     });
   }
 
+  createElement() {
+    let { input, schema, widgetProps } = this.props;
+    // console.log(widgetOptions, 'widgetOptions......................');
+    let type = schema && schema.type ? schema.type : 'string';
+    const Rules = Map({
+      selector: (schema) => {
+        if (schema && schema['$ref']) {
+          return {
+            'component': A10Select,
+            'className': 'form-control'
+          };
+        } else {
+          return false;
+        }     
+      }
+    });
+
+    const elementsMap = {
+      'string': {
+        'component': FormControl,
+        'type': 'text',
+        'className': 'form-control'
+      },
+      'number': {
+        'component': FormControl,
+        'type': 'number',
+        'className': 'form-control'       
+      }
+    };
+
+    let element = null;
+    Rules.forEach((rule) => {
+      element = rule(schema);
+      if (element) {
+        return element;
+      } 
+    });
+
+    element = element || elementsMap[type] || elementsMap['string'];
+    const { component, ...props } = element;
+    return React.createElement(component, Object.assign(input, props, widgetProps));
+  }
+
   render() {
-    const { children, input, ...fieldOptions } = this.props;
+    let { children, input, ...fieldOptions } = this.props;
     const callback = (child) => {      
       let inputOptions = {};     
 
@@ -78,6 +122,9 @@ export class A10Field extends Component {
       return  React.cloneElement(child, { ...inputOptions, ...restInput });
     };
 
+    if (!children) {
+      children = this.createElement() ;
+    }
     let newChild = this.findInputElements(children, registeredInputs, callback);
     // newChild = React.Children.map(newChild, callback);
     return (
@@ -179,33 +226,14 @@ class SchemaField extends Component {
     return result;
   }
 
-  createElement(schema) {
-    let type = schema && schema.type ? schema.type : 'string';
-    const elementsMap = {
-      'string': {
-        'component': FormControl,
-        'type': 'text',
-        'className': 'form-control'
-      },
-      'number': {
-        'component': FormControl,
-        'type': 'number',
-        'className': 'form-control'       
-      }
-    };
-    const element = elementsMap[type] || elementsMap['string'];
-    const { component, ...props } = element;
-    return React.createElement(component, props);
-  }
-
   render() {
-    let { label, name, schema, children, app, ...rest } = this.props;
+    let { name, children, app, ...rest } = this.props; // eslint-disable-line
     const visible = app.getIn([ this._parentProps.env.page, 'form', name, 'conditionals', 'visible' ]);
     // console.log(fieldProp, '......................................');
     return (    
       visible ?
-        <Field name={ name } component={A10Field} label={label} {...rest}>
-          { children || this.createElement(schema) }
+        <Field name={name} component={A10Field} {...rest}>
+          { children }
         </Field>  
       : null
     );
