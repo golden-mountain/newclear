@@ -5,7 +5,7 @@ import { reduxForm } from 'redux-form/immutable'; // imported Field
 import * as axapiActions from 'redux/modules/app/axapi';
 
 // import auth from 'helpers/auth';
-import { Modal, Button, Form, Fade, Alert } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 import Toolbar from 'components/Toolbar';
 import './style.scss';
@@ -13,6 +13,7 @@ import './style.scss';
 import LoginForm from 'components/Form/Login';
 // import AppManager from 'helpers/AppManager';
 import { LAST_PAGE_KEY, APP_LAYOUT_PAGE_KEY } from 'configs/appKeys';
+import NotificationSystem from 'react-notification-system';
 
 class App extends Component {
   static propTypes = {
@@ -27,23 +28,52 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    this._notificationSystem = this.refs.notificationSystem;
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { statusCode } = nextProps;
+    const { statusCode, errMsg, error, notifiable } = nextProps;
+    console.log('this.props', statusCode, error, errMsg, ' error and errMsg');
+
+    if (notifiable) {
+      let bsClass = 'success', info = 'Success';
+      if (statusCode >= 400) {
+        // console.log('notification 400....................');
+
+        info = error || errMsg;
+        bsClass = 'error';
+        const _notify = {
+          title: 'Hi, Something Wrong!!',
+          message: info,
+          autoDismiss: 10,
+          level: bsClass,
+          position: 'tl',
+          dismissible: true
+        };
+        this._notificationSystem.addNotification(_notify);
+      } else if (statusCode >= 200 && statusCode < 300) {
+        // console.log('notification. 200 ...................');
+
+        info = 'Operation Success!';
+        const _notify = {
+          title: 'Awesome',
+          message: info,
+          autoDismiss: 10,
+          level: bsClass,
+          position: 'tl',
+          dismissible: true
+        };
+        this._notificationSystem.addNotification(_notify);
+      }
+    }
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
       showError: statusCode >= 400
     });
 
-    if (statusCode) {
-      if (this.errorTimeout) {
-        clearTimeout(this.errorTimeout);
-      }
-
-      this.errorTimeout = setTimeout(() => {
-        this.props.clearAxapiLastError();
-      }, 5000);
-    }
+    
   }
 
   onSubmit(values) {
@@ -70,20 +100,20 @@ class App extends Component {
   }
 
   render() {
-    const { handleSubmit, statusCode, errMsg, error } = this.props;
+    const { handleSubmit } = this.props;
     // console.log('this.props', this.props, error, errMsg, ' error and errMsg');
-    let bsClass = 'success', info = '';
-    if (statusCode != 200) {
-      info = error || errMsg;
-      bsClass = 'danger';
-    }
+    // let bsClass = 'success', info = 'Success';
+    // if (statusCode != 200) {
+    //   info = error || errMsg;
+    //   bsClass = 'error';
+    //   this._notificationSystem.addNotification();
+    // } 
 
     return (
       <main className="main-app">
         <Toolbar />
-        <Fade in={this.state.showError} transitionAppear={true} unmountOnExit={true}>
-          <Alert bsStyle={ bsClass } onDismiss={::this.handleAlertDismiss}> { info } </Alert>
-        </Fade>
+        
+        <NotificationSystem ref="notificationSystem" />
         {this.props.children}
         <Modal show={this.state.showLogin} onHide={this.close}>
             <Modal.Header>
@@ -115,7 +145,8 @@ let InitializeFromStateForm = reduxForm({
 InitializeFromStateForm = connect(
   (state) => ({
     statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
-    errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ])
+    errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
+    notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ])
   }),
   (dispatch) => bindActionCreators(axapiActions, dispatch)
 )(InitializeFromStateForm);

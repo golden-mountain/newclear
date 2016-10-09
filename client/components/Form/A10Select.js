@@ -21,7 +21,7 @@ class A10Select extends Component {
   }
 
   setOptions(json, values) {
-    console.log(values, '...............values at A10Select');
+    // console.log(values, '...............values at A10Select');
     let { map: { name, label, reform } } = this.props.loadOptions;
 
     if (!name) {
@@ -97,7 +97,7 @@ class A10Select extends Component {
     let { value, onChange, popupInfo } = this.props;
 
     // const asyncNeeded = loadOptions && loadOptions.url && true;   
-    const loadAttr = { value, onChange, options: this.state.options };
+    const loadAttr = { value, onChange, options: this.state.options, simpleValue: true };
 
     set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
     

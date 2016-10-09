@@ -41,7 +41,8 @@ const apiReducers = {
     // console.log('loading......................................');
     return result;
   },
-  [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page }) {
+  [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page, notifiable }) {
+    // console.log('notifiable::::::', notifiable);
     console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
       let newResp = resp[0];
@@ -59,12 +60,14 @@ const apiReducers = {
       });
 
       let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
+      result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
       return result.setIn([ page, 'axapi' ], responseData);
     } else {
       console.log('More than one request', resp);
     }
   },
-  [ AXAPI_SAVE_FAIL ](state, { resp, data, page }) {
+  [ AXAPI_SAVE_FAIL ](state, { resp, data, page, notifiable }) {
+    // console.log('notifiable::::::', notifiable);
     console.log('failed  axapi request ......................................', resp);
     let newResp = resp;
     newResp = newResp ? newResp : {};
@@ -81,6 +84,7 @@ const apiReducers = {
     });
     
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
+    result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
     return result.setIn([ page, 'axapi' ], responseData);
   },
   [ AXAPI_CLEAR_LAST_ERROR ](state) {
@@ -92,7 +96,7 @@ const apiReducers = {
 export default apiReducers;
 
 // ----------------- AXAPI ------------------------
-export function axapiRequest(page, data) {
+export function axapiRequest(page, data, notifiable=false) {
   const authHeaders = {
     'content-type': 'application/json'
   };
@@ -133,7 +137,8 @@ export function axapiRequest(page, data) {
 
   let request = {
     data:primaryData, 
-    page, 
+    page,
+    notifiable,
     types: [ AXAPI_SAVE, AXAPI_SAVE_SUCCESS, AXAPI_SAVE_FAIL ],    
     promises: promiseFuncs
   };

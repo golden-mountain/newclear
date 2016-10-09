@@ -126,6 +126,7 @@ class A10SchemaForm extends Component {
     });
 
     if (mergingObj.size) {
+      // console.log('parsed values on default submitter', mergingObj.toJS());
       primaryObj.body = primaryObj.body.mergeDeep(mergingObj);
       parsedValues = parsedValues.set(0, primaryObj);
     }
@@ -148,8 +149,7 @@ class A10SchemaForm extends Component {
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
       }
-      // console.log('saving data:::::::::::::::', values);
-      const promise = this._context.props.axapiRequest(parsedValues);
+      const promise = this._context.props.axapiRequest(parsedValues, true);
       // console.log(' returned promise ', promise);
       if (promise) {
         // TODO: release the store

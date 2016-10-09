@@ -40,9 +40,9 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
     connectOptions: {
       connectToValue: {
         'virtual-server.port-list': {
-          'port.port-number': 'port.port-number',
-          'port.range': 'port.range',
-          'port.protocol': 'port.protocol'
+          'port-number': 'port.port-number',
+          'range': 'port.range',
+          'protocol': 'port.protocol'
         }
       },
       connectToApiStore: {
@@ -58,13 +58,13 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
         <tr>
           <td cols="3">
             <div className="pull-right">
-              <Button onClick={() => fields.push({ 
-                'port': {
+              <Button onClick={() => fields.push(
+                { 
                   'port-number': 81,
                   'range': '80-100',
                   'protocol': 'HTTP'
                 }
-              })} bsStyle="primary">Add Member</Button>
+              )} bsStyle="primary">Add Member</Button>
               <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button>
 
               {touched && error && <span>{error}</span>}
@@ -81,15 +81,15 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
       {fields.map((port, index) =>
         <tr key={index}>
           <td>
-            <A10SchemaField layout={false} name={`${port}.port.port-number`} validation={{ isInt: isInt }}   />
+            <A10SchemaField layout={false} name={`${port}.port-number`} validation={{ isInt: isInt }}   />
           </td>
 
           <td>
-            <A10SchemaField layout={false} name={`${port}.port.range`}  conditional={{ [ `${port}.port.port-number` ]: 91 }}/>
+            <A10SchemaField layout={false} name={`${port}.range`}  conditional={{ [ `${port}.port-number` ]: 91 }}/>
           </td>
 
           <td>     
-            <A10SchemaField layout={false} name={`${port}.port.protocol`} >  
+            <A10SchemaField layout={false} name={`${port}.protocol`} >  
               <FormControl componentClass="select">
                 <option value="tcp">tcp</option>
                 <option value="udp">udp</option>
@@ -109,11 +109,9 @@ class VirtualServerForm extends BaseForm {
     const valuePath = [ 'values', 'virtual-server', 'port-list' ];
     let list = this.props.pageForm.getIn(valuePath, Map()).toJS();
     list.push({ 
-      'port': {
-        'port-number': 91,
-        'range': '92',
-        'protocol': 'tcp'
-      }
+      'port-number': 91,
+      'range': '92',
+      'protocol': 'tcp'
     });
     this.props.change('virtual-server.port-list', list);
   }
@@ -208,10 +206,10 @@ class VirtualServerForm extends BaseForm {
                         <Checkbox value={true} />
                       </A10SchemaField>
                       
-                      <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="0">
+                      <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
                         <div>
-                          <Radio value="0" inline> Enable </Radio>
-                          <Radio value="1" inline> Disable </Radio>
+                          <Radio value="stats-data-enable" inline> Enable </Radio>
+                          <Radio value="stats-data-disable" inline> Disable </Radio>
                         </div>
                       </A10SchemaField>
 
@@ -256,18 +254,14 @@ const initialValues = {
     'netmask': '/24',
     'port-list': [
       { 
-        'port': {
-          'port-number': 80,
-          'range': '80-100',
-          'protocol': 'HTTP'
-        }
+        'port-number': 80,
+        'range': '80-100',
+        'protocol': 'HTTP'        
       },
       { 
-        'port': {
-          'port-number': 81,
-          'range': '80-101',
-          'protocol': 'HTTPS'
-        }
+        'port-number': 81,
+        'range': '80-101',
+        'protocol': 'HTTPS'
       }
     ]
   },
