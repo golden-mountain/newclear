@@ -44,8 +44,9 @@ const apiReducers = {
   [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page }) {
     console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
-      const newResp = resp[0];
-      const body = JSON.parse(newResp.text);
+      let newResp = resp[0];
+      newResp = newResp ? newResp : {};
+      const body = newResp.text ? JSON.parse(newResp.text) : {};
       pushAxapiReqs({ data, result: body });
       if (isAuthUrl(data)) {
         sessionStorage.setItem('token', body.authresponse.signature);
@@ -65,8 +66,9 @@ const apiReducers = {
   },
   [ AXAPI_SAVE_FAIL ](state, { resp, data, page }) {
     console.log('failed  axapi request ......................................', resp);
-    const newResp = resp;
-    const body = JSON.parse(newResp.text);
+    let newResp = resp;
+    newResp = newResp ? newResp : {};
+    const body = newResp.text ? JSON.parse(newResp.text) : {};
     pushAxapiReqs({ data, result: body });
     if (get(newResp, 'unauthorized', false) === true) {
       sessionStorage.removeItem('token');

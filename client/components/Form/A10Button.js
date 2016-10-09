@@ -164,10 +164,10 @@ class A10SuperButton extends Component {
       // console.log(this.modelVisible, '..........................visible');
       popupContent = this.modelVisible
         ? React.createElement(pageClass, {
-            visible: true,
-            fieldConnector: new FieldConnector(connectOptions, form, this._parentProps),
-            urlKeysConnect 
-          })
+          visible: true,
+          fieldConnector: new FieldConnector(connectOptions, form, this._parentProps),
+          urlKeysConnect 
+        })
         : null;
       click = () => {
         // this.setState({ showPopup: true });
