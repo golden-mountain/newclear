@@ -144,13 +144,23 @@ class VirtualServerForm extends BaseForm {
       pageName: 'templateVirtualServer', 
       bsSize:'lg', 
       connectOptions: {
-        connectToValue: {
+        connectToResult: {
           'virtual-server': {
             'template-virtual-server': 'virtual-server.name'
           }
         }
       }
     }; 
+
+    const tplVirtualServerLoadOptions = {
+      url: elements['template-virtual-server']['$ref'],
+      loadOnMount: true,      
+      map: {
+        name: 'name',
+        label: 'name',
+        reform: label => label
+      }
+    };
 
     return (
       <div className="container-fluid">
@@ -186,7 +196,9 @@ class VirtualServerForm extends BaseForm {
                       <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
                       <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
                       <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
-                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" 
+                        label="Virtual Server Template" conditional={true} 
+                        widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
                         
                     </Panel> 
                   </Col>

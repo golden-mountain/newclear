@@ -1,4 +1,4 @@
-import { actionTypes } from 'redux-form/immutable'; 
+// import { actionTypes } from 'redux-form/immutable'; 
 import { List } from 'immutable';
 import { REGISTER_PAGE_FIELD, SYNC_PAGE_FIELD, STORE_API_INFO } from 'redux/modules/actionTypes';
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
@@ -14,7 +14,6 @@ const fieldReducers = {
     return result;
   },
   [ STORE_API_INFO ](state, { form, apiInfo, connectOptions }) {
-    // debugger;
     if (!apiInfo) {
       return state.deleteIn([ APP_CURRENT_PAGE, 'store' ]);
     } else {
@@ -48,7 +47,7 @@ export const storeApiInfo = (page, form, apiInfo, connectOptions) =>
   return { type: STORE_API_INFO, page, form, apiInfo, connectOptions };
 };
 
-/* eslint-disable no-unused-vars */
-export const updateReduxFormSyncErrors = (page, form, syncErrors = {}, error) =>
-  ({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form }, payload: { syncErrors, error } });
-/* eslint-enable no-unused-vars */
+// /* eslint-disable no-unused-vars */
+// export const updateReduxFormSyncErrors = (page, form, syncErrors = {}, error) =>
+//   ({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form }, payload: { syncErrors, error } });
+// /* eslint-enable no-unused-vars */

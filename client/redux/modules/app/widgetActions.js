@@ -15,20 +15,11 @@ import * as axapiActions from './axapi';
 import * as pageActions from './page';
 import * as themeActions from './theme';
 import * as featureActions from './feature';
-import * as formActions from './form';
 
 delete axapiActions.default;
 delete pageActions.default;
 delete themeActions.default;
 delete featureActions.default;
-delete formActions.default;
-const appActions = {
-  ...axapiActions,
-  ...pageActions,
-  ...themeActions,
-  ...featureActions,
-  ...formActions
-};
 
 export const widgetActions = {
   ...axapiActions,
@@ -37,4 +28,4 @@ export const widgetActions = {
   ...featureActions
 };
 
-export default appActions;
+export default widgetActions;

@@ -32,7 +32,7 @@ class App extends Component {
 
     this.setState({
       showLogin: statusCode === 401 || statusCode === 403, 
-      showError: !!statusCode
+      showError: statusCode >= 400
     });
 
     if (statusCode) {
@@ -72,7 +72,7 @@ class App extends Component {
   render() {
     const { handleSubmit, statusCode, errMsg, error } = this.props;
     // console.log('this.props', this.props, error, errMsg, ' error and errMsg');
-    let bsClass = 'success', info = 'Success';
+    let bsClass = 'success', info = '';
     if (statusCode != 200) {
       info = error || errMsg;
       bsClass = 'danger';

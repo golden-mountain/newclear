@@ -148,13 +148,17 @@ class A10SchemaForm extends Component {
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
       }
-      // console.log('saving data:::::::::::::::', savingData);
+      // console.log('saving data:::::::::::::::', values);
       const promise = this._context.props.axapiRequest(parsedValues);
+      // console.log(' returned promise ', promise);
       if (promise) {
-        promise.finally(() => {
-          this._context.props.storeApiInfo(form, false);
-        });
+        // TODO: release the store
+        // promise.finally(() => {
+        //   this._context.props.storeApiInfo(form, false);
+        // });
+        // console.log('returned from propmise');
       }
+
       return promise;
     } else {
       this._context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
@@ -217,23 +221,27 @@ class A10SchemaForm extends Component {
       // close win
       // TODO: decide how to close this form page
       const closeCurrent = () => {
+        // console.log('on closing...........at A10Form');
         // if popup, close win
         // else return to some page
         this._parentProps.setLastPageVisible(false);
       };
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
+        // console.log('connect to value.................');
         fieldConnector.connectToValues(newValues);
         result = submitFunc.call(this, newValues, env.form, false);        
       } else {
+        // console.log('connect to result.................');
         result = submitFunc.call(this, newValues, env.form, true);
+        // console.log('connect to result at A10Form:', result);        
         fieldConnector.connectToResult(result);
 
         if (onAfterSubmit) {
           result = onAfterSubmit.call(this, result);
         } 
-      }
-  
+      }      
+
       result.then(closeCurrent);
       return result;
     };
