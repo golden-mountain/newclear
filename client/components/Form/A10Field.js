@@ -24,8 +24,8 @@ class A10FieldLayout extends Component {
     return (
       layout === undefined || layout ?
       <FormGroup {...status}>
-        <Col componentClass={ControlLabel} sm={2}>{label}</Col>
-        <Col sm={10}>
+        <Col componentClass={ControlLabel} sm={4}>{label}</Col>
+        <Col sm={8}>
           {children}
           <FormControl.Feedback />
           { errorMsg }
@@ -65,6 +65,7 @@ export class A10Field extends Component {
     let type = schema && schema.type ? schema.type : 'string';
     const Rules = Map({
       selector: (schema) => {
+        // In Virtual server VIRD, there isn't `$ref`, but need add button.
         if (schema && schema['$ref']) {
           return {
             'component': A10Select,

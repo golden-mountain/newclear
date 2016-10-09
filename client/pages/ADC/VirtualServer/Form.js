@@ -173,8 +173,8 @@ class VirtualServerForm extends BaseForm {
           <Col xs={10}>                   
               <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
                 <Row>
-                  <Col xs={6}>
-                    <Panel header={<h4>Basic Field</h4>}>
+                  <Col xs={12}>
+                    <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
                       <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
    
 
@@ -200,11 +200,40 @@ class VirtualServerForm extends BaseForm {
                         label="Virtual Server Template" conditional={true} 
                         widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
                         
-                    </Panel> 
-                  </Col>
+                    </Panel>
 
-                  <Col xs={6}>
-                    <Panel header={<h4>Virtual Ports</h4>}>
+                    <Panel header={<h4>Advanced Fields</h4>} collapsible defaultExpanded>
+
+                      <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
+                        <Checkbox value={true} />
+                      </A10SchemaField>
+                      
+                      <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="0">
+                        <div>
+                          <Radio value="0" inline> Enable </Radio>
+                          <Radio value="1" inline> Disable </Radio>
+                        </div>
+                      </A10SchemaField>
+
+                      <A10SchemaField schema={elements['extended-stats']} name="virtual-server.extended-stats" label="Extended Stats" value={false}>
+                        <Checkbox value={true} />
+                      </A10SchemaField>
+
+                      <A10SchemaField schema={elements['redistribution-flagged']} name="virtual-server.redistribution-flagged" label="Redistribution Flagged" value={false}>
+                        <Checkbox value={true} />
+                      </A10SchemaField>
+
+                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo } } />                       
+
+                      <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
+                    </Panel> 
+                  {/*</Col>
+
+                  <Col xs={6}>*/}
+                    <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
                       <FieldArray name="virtual-server.port-list" component={renderTable}/>
                     </Panel>
                   </Col>
