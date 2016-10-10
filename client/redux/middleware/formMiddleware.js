@@ -21,11 +21,11 @@ class FormHacker {
     switch(this.action.type) {      
       case REGISTER_PAGE_FIELD:
         //initial visible
-        this.dispatchValidation();
+        this.dispatchValidation(true);
         action = this.reinitialConditional();
         break;
       case actionTypes.CHANGE:   
-        this.changeConditional();
+        this.changeConditional(false);
         break;
       case actionTypes.BLUR:         
       case actionTypes.START_SUBMIT: //eslint-disable-line
@@ -43,14 +43,20 @@ class FormHacker {
     return { pageEnv, pageVar, reduxFormVar };
   }
 
-  dispatchValidation() {
+  dispatchValidation(register=false) {
     const { pageEnv, pageVar, reduxFormVar } = this._getVarsByEnv();
 
     if (pageVar && reduxFormVar) {
       const syncErrors = this.validate(pageVar, reduxFormVar);      
       const errors = syncErrors.isEmpty() ? false : syncErrors.toJS();
       // console.log('new errors:', errors);
-      this.next({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form: pageEnv.form }, payload: { syncErrors: errors, error: false } });
+      if (register) {
+        if (!syncErrors.isEmpty()) {
+          this.next({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form: pageEnv.form }, payload: { syncErrors: errors, error: false } });
+        }
+      } else {
+        this.next({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form: pageEnv.form }, payload: { syncErrors: errors, error: false } });
+      }
     }
     return this.action;
   }

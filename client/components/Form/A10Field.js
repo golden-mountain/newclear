@@ -164,9 +164,11 @@ class SchemaField extends Component {
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
-    values = values.setIn(name.split('.'), defaultValue);    
-    this._parentProps.initialize(values.toJS());
+    if (value) {
+      let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
+      values = values.setIn(name.split('.'), value);    
+      this._parentProps.initialize(values.toJS());
+    }
 
     if (!validation && schema) {
       validation = this.parseValidation(schema);

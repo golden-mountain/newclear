@@ -1,6 +1,6 @@
 import { Component, PropTypes } from 'react';
 import invariant from 'invariant';
-import { isEqual } from 'lodash';
+// import { isEqual } from 'lodash';
 
 export default class BaseForm extends Component {
 
@@ -9,26 +9,26 @@ export default class BaseForm extends Component {
   }
 
   // this is important to stop dead loop by updateing page information
-  shouldComponentUpdate(nextProps) {
-    const shouldUpdate = (propsToNotUpdateFor, nextProps, currentProps) => {
-      // if you update some page vars not need update the page, then you must
-      // specific propsToNotUpdateFor
-      // 
-      return Object.keys(nextProps).some(prop => {    
-        const compare = !~propsToNotUpdateFor.indexOf(prop) && !isEqual(currentProps && currentProps[ prop ], nextProps && nextProps[ prop ]);
-        return compare;
-      });
-    };
+  // shouldComponentUpdate(nextProps) {
+  //   const shouldUpdate = (propsToNotUpdateFor, nextProps, currentProps) => {
+  //     // if you update some page vars not need update the page, then you must
+  //     // specific propsToNotUpdateFor
+  //     // 
+  //     return Object.keys(nextProps).some(prop => {    
+  //       const compare = !~propsToNotUpdateFor.indexOf(prop) && !isEqual(currentProps && currentProps[ prop ], nextProps && nextProps[ prop ]);
+  //       return compare;
+  //     });
+  //   };
 
-    let result = true;
-    if (nextProps.page) {
-      const propsToNotUpdateForPage = [ 'form' ];
-      result = shouldUpdate(propsToNotUpdateForPage, nextProps.page.toJS(), this.props.page && this.props.page.toJS());
-    }
+  //   let result = true;
+  //   if (nextProps.page) {
+  //     const propsToNotUpdateForPage = [ 'form' ];
+  //     result = shouldUpdate(propsToNotUpdateForPage, nextProps.page.toJS(), this.props.page && this.props.page.toJS());
+  //   }
 
-    // console.log('should update, ', result);
-    return result;
-  }
+  //   // console.log('should update, ', result);
+  //   return result;
+  // }
 
   // if place here, will update form first
   // componentWillReceiveProps(nextProps) {

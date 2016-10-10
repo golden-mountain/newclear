@@ -193,10 +193,6 @@ class VirtualServerForm extends BaseForm {
 
                       <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
                       <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
-                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRRP-A" />                       
-                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" 
-                        label="Virtual Server Template" conditional={true} 
-                        widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
                         
                     </Panel>
 
@@ -221,10 +217,10 @@ class VirtualServerForm extends BaseForm {
                         <Checkbox value={true} />
                       </A10SchemaField>
 
-                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />                       
+                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true}  />                       
                       <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />                       
-                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />                       
-                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />                       
+                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />                       
+                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />                       
 
                       <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
                     </Panel> 

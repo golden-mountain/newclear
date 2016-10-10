@@ -88,8 +88,8 @@ class A10Select extends Component {
   }
 
   componentWillMount() {
-    const { loadOptions: { loadOnMount } } = this.props;
-    if ( loadOnMount ) {
+    // const { loadOptions: { loadOnMount } } = this.props;
+    if ( this.props.loadOptions && this.props.loadOptions.loadOnMount ) {
       this.getOptions();
     }
   }

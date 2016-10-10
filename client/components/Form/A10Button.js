@@ -158,8 +158,7 @@ class A10SuperButton extends Component {
       urlKeysConnect,  ...modalProps }, ...rest } = this.props; 
 
     let popupContent = null, click = onClick;
-    if (pageClass) {
-      
+    if (pageClass) {      
       this.modelVisible = getAppPageVar(app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
       popupContent = this.modelVisible
