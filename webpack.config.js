@@ -113,10 +113,10 @@ module.exports = {
       title: 'A10 TPS GUI',
       template: 'index.ejs'
     }),    
-    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true })    
-    // new ExtractTextPlugin('style.css', {
-    //   allChunks: true
-    // })
+    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }), 
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
+    })
   ],
   devtool:'source-map',
   devServer: {
@@ -126,7 +126,7 @@ module.exports = {
     inline: true,    
     proxy: {
       '/axapi/*': {
-        target: 'https://192.168.105.72',
+        target: 'https://' + process.env.AXAPI_HOST,
         secure: false,
         rewrite: function(req, res) {
           console.log(req, 'this is request');

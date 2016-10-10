@@ -89,9 +89,9 @@ class A10Select extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log(nextProps);
+  // }
 
   render() {
     let { value, onChange, popupInfo } = this.props;

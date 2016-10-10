@@ -3,10 +3,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router/es6';
 import { syncHistoryWithStore } from 'react-router-redux';
-import logger from 'redux-logger';
+import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-import Immutable from 'immutable';
+import Immutable, { Iterable } from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
+import installDevTools from 'immutable-devtools';
 
 import rootRoute from './routes';
 // import createStore from './redux/create';
@@ -17,16 +18,38 @@ import reducer from './redux/modules/reducer';
 // Immutable js
 import './index.ejs';
 
+// api client middleware
 const client = new ApiClient();
 
 // removed logger() because it's nonesense
-const middleware = [ logger(), thunk,  createMiddleware(client), formMiddleware ];
+let middlewares = [ thunk,  createMiddleware(client), formMiddleware ];
+
+//webpack define plugin defined env
+if (__DEV__) { // eslint-disable-line
+  // logger middleware
+  const transformer = (state) => {
+    if (Iterable.isIterable(state)) return state.toJS();
+    else return state;
+  };
+  const logger = createLogger({
+    stateTransformer: transformer,
+    actionTransformer: transformer,
+    collapsed: true,
+    diff: true,
+    duration : true
+  });
+
+  middlewares.push(logger);
+
+  installDevTools(Immutable);
+}
+
 
 const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(
   reducer,
   initialState,
-  applyMiddleware(...middleware)
+  applyMiddleware(...middlewares)
 );
 
 // function handleChange() {

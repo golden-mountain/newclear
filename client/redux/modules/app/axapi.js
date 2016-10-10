@@ -71,7 +71,12 @@ const apiReducers = {
     console.log('failed  axapi request ......................................', resp);
     let newResp = resp;
     newResp = newResp ? newResp : {};
-    const body = newResp.text ? JSON.parse(newResp.text) : {};
+    let body = newResp.text;
+    try {
+      body = newResp.text ? JSON.parse(newResp.text) : {};
+    } catch(e) {
+      console.log(e);
+    }
     pushAxapiReqs({ data, result: body });
     if (get(newResp, 'unauthorized', false) === true) {
       sessionStorage.removeItem('token');

@@ -2,17 +2,46 @@
   "name": "react-router-dynamic-routes-webpack2",
   "version": "1.0.0",
   "private": true,
-  "description": "React Router Dynamic Chunk Loading",
-  "author": "Grgur Grisogono",
+  "description": "A10 GUI",
+  "author": "Zuoping Li",
   "main": "index.js",
   "scripts": {
-    "start": "concurrent --kill-others \"npm run start-client\" \"npm run start-proxy\"",
+    "start": "concurrent --kill-others \"npm run start-dev\" \"npm run start-proxy\"",
     "start-proxy": "node dev",
-    "lint": "./node_modules/.bin/eslint --fix -c .eslintrc client",
-    "start-client": "./node_modules/.bin/webpack-dev-server --history-api-fallback --inline --hot --progress --port 3000",
-    "build": "node build.js production"
+    "start-dev": "better-npm-run start-dev",    
+    "lint": "eslint --fix -c .eslintrc client",
+    "build": "better-npm-run build",
+    "test": "better-npm-run test"
   },
   "license": "MIT",
+  "betterScripts": {
+    "start-dev": {
+      "command": "webpack-dev-server --history-api-fallback --inline --hot --progress --port 3000",
+      "env": {
+        "NODE_ENV": "development",
+        "AXAPI_HOST": "192.168.105.72"
+      }
+    },
+    "start-dev-api": {
+      "command": "node ./bin/api.js",
+      "env": {
+        "NODE_ENV": "development",        
+        "APIPORT": 3030
+      }
+    },
+    "build": {
+      "command": "node build.js production",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "test": {
+      "command": "karma start",
+      "env": {
+        "NODE_ENV": "development"
+      }      
+    }
+  },  
   "devDependencies": {
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.6.5",
@@ -30,6 +59,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.6.1",
+    "better-npm-run": "0.0.11",
     "bootstrap-loader": "^1.2.0-beta.1",
     "bootstrap-sass": "^3.3.7",
     "clean-webpack-plugin": "^0.1.10",
@@ -43,6 +73,7 @@
     "extract-text-webpack-plugin": "^2.0.0-beta",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.22.0",
+    "immutable-devtools": "0.0.7",
     "node-sass": "^3.5.0-beta.1",
     "postcss-loader": "^0.13.0",
     "precss": "^1.4.0",
