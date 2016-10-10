@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import Immutable, { Iterable } from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
 import installDevTools from 'immutable-devtools';
+import Perf from 'react-addons-perf';
 
 import rootRoute from './routes';
 // import createStore from './redux/create';
@@ -42,6 +43,8 @@ if (__DEV__) { // eslint-disable-line
   middlewares.push(logger);
 
   installDevTools(Immutable);
+
+  window.Perf = Perf;
 }
 
 

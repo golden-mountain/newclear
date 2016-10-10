@@ -8,7 +8,7 @@
   "scripts": {
     "start": "concurrent --kill-others \"npm run start-dev\" \"npm run start-proxy\"",
     "start-proxy": "node dev",
-    "start-dev": "better-npm-run start-dev",    
+    "start-dev": "better-npm-run start-dev",
     "lint": "eslint --fix -c .eslintrc client",
     "build": "better-npm-run build",
     "test": "better-npm-run test"
@@ -25,7 +25,7 @@
     "start-dev-api": {
       "command": "node ./bin/api.js",
       "env": {
-        "NODE_ENV": "development",        
+        "NODE_ENV": "development",
         "APIPORT": 3030
       }
     },
@@ -39,9 +39,9 @@
       "command": "karma start",
       "env": {
         "NODE_ENV": "development"
-      }      
+      }
     }
-  },  
+  },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.6.5",
@@ -70,6 +70,7 @@
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.0",
+    "expose-loader": "^0.7.1",
     "extract-text-webpack-plugin": "^2.0.0-beta",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.22.0",
@@ -77,6 +78,7 @@
     "node-sass": "^3.5.0-beta.1",
     "postcss-loader": "^0.13.0",
     "precss": "^1.4.0",
+    "react-addons-perf": "^15.3.2",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",

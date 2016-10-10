@@ -12,12 +12,17 @@ import { A10Button } from 'components/Form/A10Button';
 import { widgetWrapper } from 'helpers/stateHelper';
 import { axapiGet } from 'helpers/axapiHelper';
 // import { axapiRequest } from 'redux/modules/app/axapi';
-import { values, get, set, isArray } from 'lodash';
+import { values, get, set, isArray, isEqual } from 'lodash';
 
 class A10Select extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { options: [] };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // console.log('next props:', nextProps, 'next state:', nextState);
+    return !isEqual(nextState.options, this.state.options) || !isEqual(nextProps.value, this.props.value);
   }
 
   setOptions(json, values) {
@@ -74,7 +79,7 @@ class A10Select extends Component {
     let onLoad = get(popupInfo, 'connectOptions.onLoad');
     if (!onLoad) {
       onLoad = (value) => {
-        console.log('A10Select default onLoad');
+        // console.log('A10Select default onLoad');
         let json = this.state.options;
         return this.setOptions(json, values(value));
       };
