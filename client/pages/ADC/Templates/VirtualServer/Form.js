@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 // import { Map, fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
-import { A10FieldSubmit } from 'components/Form/A10Button';
+import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 
@@ -152,7 +152,7 @@ class TemplateVirtualServerForm extends BaseForm {
 
                 </Row>
 
-                <A10FieldSubmit {...rest}/>
+                <A10SubmitButtons {...rest}/>
 
               </A10Form>              
           </Col>

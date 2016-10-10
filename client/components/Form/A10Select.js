@@ -8,8 +8,8 @@ import 'react-virtualized-select/styles.css';
 // Then import the virtualized Select HOC
 import VirtualizedSelect from 'react-virtualized-select';
 
-import { A10Button } from 'components/Form/A10Button';
-import { widgetWrapper } from 'helpers/stateHelper';
+import A10Button from 'components/Form/A10Button';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 import { axapiGet } from 'helpers/axapiHelper';
 // import { axapiRequest } from 'redux/modules/app/axapi';
 import { values, get, set, isArray, isEqual } from 'lodash';

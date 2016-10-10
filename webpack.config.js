@@ -126,7 +126,7 @@ module.exports = {
     inline: true,    
     proxy: {
       '/axapi/*': {
-        target: 'https://' + process.env.AXAPI_HOST,
+        target: 'https://' + ( process.env.AXAPI_HOST || '192.168.105.72' ),
         secure: false,
         rewrite: function(req, res) {
           console.log(req, 'this is request');

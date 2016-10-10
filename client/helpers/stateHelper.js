@@ -1,11 +1,9 @@
-import React, { Component } from 'react'; //PropTypes
-import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 // import { mapValues } from 'lodash';
 
 import { Iterable, Map } from 'immutable';
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
-import hoistStatics from 'hoist-non-react-statics';
+
 // import widgetActions from 'redux/modules/app/widgetActions';
 
 
@@ -80,46 +78,3 @@ export const getAppValueStore = (state, form='') => {
   return result;
 };
 
-
-// wrapper for widgets, add a wrapper to get state
-export function widgetWrapper(WrappedComponent, ...widgetProps) {
-
-  class Widget extends Component {
-    constructor(props, context) {
-      super(props, context);
-      this.widgetProps = widgetProps;     
-      // this.actions = this.createActions(); 
-    }
-
-    // createActions() {
-    //   const { env: { page }, dispatch } = this.props;
-    //   const bindPage = actionCreator => actionCreator.bind(null, page);
-    //   const bindActions = mapValues(widgetActions, bindPage);   
-    //   return bindActionCreators(bindActions, dispatch);
-    // }
-
-    // getChildContext() {
-    //   return { actions: this.actions };
-    // }
-
-    render() {
-      this.renderedElement = React.createElement(WrappedComponent, Object.assign(this.props, this.widgetProps));
-      return this.renderedElement; 
-    }
-  }
-
-  // Widget.childContextTypes = {
-  //   actions: PropTypes.object
-  // };
-
-  const stateMapper = (state) => {
-    return {
-      env: getAppEnvVar(state),
-      page: getAppPageVar(state)
-    };
-  };
-
-
-  let newComponent = connect(stateMapper)(Widget);
-  return hoistStatics(newComponent, WrappedComponent);
-}

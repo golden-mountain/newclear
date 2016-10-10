@@ -18,8 +18,7 @@
     "start-dev": {
       "command": "webpack-dev-server --history-api-fallback --inline --hot --progress --port 3000",
       "env": {
-        "NODE_ENV": "development",
-        "AXAPI_HOST": "192.168.105.72"
+        "NODE_ENV": "development"
       }
     },
     "start-dev-api": {
