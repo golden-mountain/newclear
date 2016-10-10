@@ -46,17 +46,22 @@ const apiReducers = {
     console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
       let newResp = resp[0];
-      newResp = newResp ? newResp : {};
-      const body = newResp.text ? JSON.parse(newResp.text) : {};
+      let body = null;
+      if (newResp.req.method === 'GET') {
+        body = newResp.body;
+      } else {
+        body = newResp.body.response || newResp.body.authresponse;
+      }
+
       pushAxapiReqs({ data, result: body });
       if (isAuthUrl(data)) {
-        sessionStorage.setItem('token', body.authresponse.signature);
+        sessionStorage.setItem('token', body.signature);
       }    
 
       const responseData = fromJS({
         error: newResp.error,
         statusCode: newResp.status,
-        response: fromJS(body.response || body.authresponse)
+        response: fromJS(body)
       });
 
       let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);

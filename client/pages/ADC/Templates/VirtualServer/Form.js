@@ -26,19 +26,19 @@ class TemplateVirtualServerForm extends BaseForm {
       <Panel header={<h4>Basic Field</h4>}>
         <A10SchemaField
           schema={elements['name']}
-          name="template-virtual-server.name"
+          name="virtual-server.name"
           component={A10Field}
           label="Name"
         />    
         <A10SchemaField
           schema={elements['conn-limit']}
-          name="template-virtual-server.conn-limit"
+          name="virtual-server.conn-limit"
           component={A10Field}
           label="Connection Limit"
         />
         <A10SchemaField
           schema={elements['conn-limit-reset']}
-          name="template-virtual-server.conn-limit-reset"
+          name="virtual-server.conn-limit-reset"
           label="Connection Limit Reset"
           value={false}
         >
@@ -46,7 +46,7 @@ class TemplateVirtualServerForm extends BaseForm {
         </A10SchemaField>
         <A10SchemaField
           schema={elements['conn-limit-no-logging']}
-          name="template-virtual-server.conn-limit-no-logging"
+          name="virtual-server.conn-limit-no-logging"
           label="Connection Limit No Logging"
           value={false}
         >
@@ -55,7 +55,7 @@ class TemplateVirtualServerForm extends BaseForm {
 
         <A10SchemaField
           schema={elements['conn-rate-limit']}
-          name="template-virtual-server.conn-rate-limit"
+          name="virtual-server.conn-rate-limit"
           component={A10Field}
           label="Connection Rate Limit"
         />
@@ -74,7 +74,7 @@ class TemplateVirtualServerForm extends BaseForm {
 
         <A10SchemaField
           schema={elements['conn-rate-limit-reset']}
-          name="template-virtual-server.conn-rate-limit-reset"
+          name="virtual-server.conn-rate-limit-reset"
           label="Connection Rate Limit Reset"
           value={false}
         >
@@ -83,7 +83,7 @@ class TemplateVirtualServerForm extends BaseForm {
 
         <A10SchemaField
           schema={elements['conn-rate-limit-no-logging']}
-          name="template-virtual-server.conn-rate-limit-no-logging"
+          name="virtual-server.conn-rate-limit-no-logging"
           label="Connection Rate Limit No Logging"
           value={false}
         >
@@ -92,44 +92,44 @@ class TemplateVirtualServerForm extends BaseForm {
 
         <A10SchemaField
           schema={elements['icmp-rate-limit']}
-          name="template-virtual-server.icmp-rate-limit"
+          name="virtual-server.icmp-rate-limit"
           component={A10Field}
           label="ICMP Rate Limit"
         />
         <A10SchemaField
           schema={elements['icmp-lockup']}
-          name="template-virtual-server.icmp-lockup"
+          name="virtual-server.icmp-lockup"
           component={A10Field}
           label="ICMP Lockup"
         />
         <A10SchemaField
           schema={elements['icmp-lockup-period']}
-          name="template-virtual-server.icmp-lockup-period"
+          name="virtual-server.icmp-lockup-period"
           component={A10Field}
           label="ICMP Lockup Period (seconds)"
         />
         <A10SchemaField
           schema={elements['icmpv6-rate-limit']}
-          name="template-virtual-server.icmpv6-rate-limit"
+          name="virtual-server.icmpv6-rate-limit"
           component={A10Field}
           label="ICMPv6 Rate Limit"
         />
         <A10SchemaField
           schema={elements['icmpv6-lockup']}
-          name="template-virtual-server.icmpv6-lockup"
+          name="virtual-server.icmpv6-lockup"
           component={A10Field}
           label="ICMPv6 Lockup"
         />
         <A10SchemaField
           schema={elements['icmpv6-lockup-period']}
-          name="template-virtual-server.icmpv6-lockup-period"
+          name="virtual-server.icmpv6-lockup-period"
           component={A10Field}
           label="ICMPv6 Lockup Period (seconds)"
         />
 
         <A10SchemaField
           schema={elements['subnet-gratuitous-arp']}
-          name="template-virtual-server.subnet-gratuitous-arp"
+          name="virtual-server.subnet-gratuitous-arp"
           label="Subnet Gratuitous ARP"
           value={false}
         >
