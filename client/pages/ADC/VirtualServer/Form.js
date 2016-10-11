@@ -29,9 +29,30 @@ const ipv4 = (value) => {
 
 
 const renderTable = ({ fields, meta: { touched, error } }) => {
-  // fields.map((port) => {
-  //   logger.debug(port);
-  // });
+  let newChildren = [];
+  fields.forEach((port, index) => {
+    newChildren.push(
+      <tr key={index}>
+        <td>
+          <A10SchemaField layout={false} name={`${port}.port-number`} validation={{ isInt: isInt }}   />
+        </td>
+
+        <td>
+          <A10SchemaField layout={false} name={`${port}.range`}  conditional={{ [ `${port}.port-number` ]: 91 }}/>
+        </td>
+
+        <td>     
+          <A10SchemaField layout={false} name={`${port}.protocol`} >  
+            <FormControl componentClass="select">
+              <option value="tcp">tcp</option>
+              <option value="udp">udp</option>
+            </FormControl>
+          </A10SchemaField>
+        </td>
+      </tr>
+    );
+  });
+
   let popupInfo = { 
     pageClass: VirtualPortForm, 
     urlKeysConnect: [ 'virtual-server.name' ],
@@ -79,26 +100,7 @@ const renderTable = ({ fields, meta: { touched, error } }) => {
         </tr>
       </thead>  
       <tbody>
-      {fields.map((port, index) =>
-        <tr key={index}>
-          <td>
-            <A10SchemaField layout={false} name={`${port}.port-number`} validation={{ isInt: isInt }}   />
-          </td>
-
-          <td>
-            <A10SchemaField layout={false} name={`${port}.range`}  conditional={{ [ `${port}.port-number` ]: 91 }}/>
-          </td>
-
-          <td>     
-            <A10SchemaField layout={false} name={`${port}.protocol`} >  
-              <FormControl componentClass="select">
-                <option value="tcp">tcp</option>
-                <option value="udp">udp</option>
-              </FormControl>
-            </A10SchemaField>
-          </td>
-        </tr>
-      )}
+      {newChildren}
       </tbody>
     </Table>
   );

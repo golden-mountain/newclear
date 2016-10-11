@@ -4,8 +4,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 
-const nodeEnv = process.env.NODE_ENV || 'development';
-const isProd = nodeEnv === 'production';
+// const nodeEnv = process.env.NODE_ENV || 'development';
+// const isProd = nodeEnv === 'production';
 
 // const autoprefixer = require('autoprefixer');
 // const precss       = require('precss');
@@ -15,6 +15,7 @@ module.exports = {
   context: path.join(__dirname, 'client'),
   entry: {
     js: [
+      'babel-polyfill', 
       'index', 'pages/Home'
     ],
     vendor: [
@@ -106,7 +107,7 @@ module.exports = {
     //   sourceMap: false
     // }),
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify(nodeEnv) }
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')      
     }),
     new HtmlWebpackPlugin({  // Also generate a test.html
       // filename: 'index.html',
@@ -114,9 +115,10 @@ module.exports = {
       template: 'index.ejs'
     }),    
     new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }), 
-    new webpack.DefinePlugin({
-      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
-    })
+
+    new webpack.ProvidePlugin({
+        Promise: 'es6-promise-promise', // works as expected
+    })    
   ],
   devtool:'source-map',
   devServer: {

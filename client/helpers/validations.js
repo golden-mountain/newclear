@@ -3,6 +3,8 @@ const makeError = (value, status=true, errMsg='') => (status ? '' : errMsg);
 export const required = (value) => value !== undefined && value !== '' ? '' : 'This field is required'; 
 export const minimum = (value, defaultValue) => parseInt(value) >= parseInt(defaultValue) ? '' : `Minimum value greater than ${defaultValue}`; 
 export const maximum = (value, defaultValue) => parseInt(value) <= parseInt(defaultValue) ? '' : `Maximum value less than ${defaultValue}`;
+export const minLength = (value, defaultValue) => value.length >= defaultValue ? '' : `Min length should larger than ${defaultValue}`;
+export const maxLength = (value, defaultValue) => value.length <= defaultValue ? '' : `Max length should less than ${defaultValue}`;
 export const isInt = (value) => { 
   const y = parseInt(value, 10);
   const result = !isNaN(y) && value == y && value.toString() == y.toString();
@@ -37,6 +39,8 @@ const createValidationFuncs = (schema) => {
     'ipv4-netmask-brief': createValidFunc(null, netmask),
     'minimum': createValidFunc(schema['minimum'], minimum),
     'maximum': createValidFunc(schema['maximum'], maximum),
+    'minLength': createValidFunc(schema['minLength'], minLength),
+    'maxLength': createValidFunc(schema['maxLength'], maxLength),
     'number': createValidFunc(null, isInt)
   };
   return validationFuncs;
