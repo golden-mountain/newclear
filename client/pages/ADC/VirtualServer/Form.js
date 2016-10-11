@@ -1,15 +1,15 @@
 import React from 'react';
-import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { FormControl, Button, Col, Row, Panel, Radio, Checkbox, Table } from 'react-bootstrap';
+// import { FieldArray } from 'redux-form/immutable'; // imported Field
+import { Button, Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 import { fromJS, Map } from 'immutable';
 // import { SubmissionError } from 'redux-form';
-import A10Button from 'components/Form/A10Button';
+// import A10Button from 'components/Form/A10Button';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
-
+import A10MultiField from 'components/Form/A10MultiField';
 import AppManager from 'helpers/AppManager';
 import BaseForm from 'pages/BaseForm';
 
@@ -26,86 +26,6 @@ const ipv4 = (value) => {
   const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
   return makeError(reg.test(value), 'IPv4 Required');
 };
-
-
-const renderTable = ({ fields, meta: { touched, error } }) => {
-  let newChildren = [];
-  fields.forEach((port, index) => {
-    newChildren.push(
-      <tr key={index}>
-        <td>
-          <A10SchemaField layout={false} name={`${port}.port-number`} validation={{ isInt: isInt }}   />
-        </td>
-
-        <td>
-          <A10SchemaField layout={false} name={`${port}.range`}  conditional={{ [ `${port}.port-number` ]: 91 }}/>
-        </td>
-
-        <td>     
-          <A10SchemaField layout={false} name={`${port}.protocol`} >  
-            <FormControl componentClass="select">
-              <option value="tcp">tcp</option>
-              <option value="udp">udp</option>
-            </FormControl>
-          </A10SchemaField>
-        </td>
-      </tr>
-    );
-  });
-
-  let popupInfo = { 
-    pageClass: VirtualPortForm, 
-    urlKeysConnect: [ 'virtual-server.name' ],
-    title: 'Create Virtual Port', 
-    pageName: 'virtualPort', 
-    bsSize:'lg', 
-    connectOptions: {
-      connectToValue: {
-        'virtual-server.port-list': {
-          'port-number': 'port.port-number',
-          'range': 'port.range',
-          'protocol': 'port.protocol'
-        }
-      },
-      connectToApiStore: {
-        targetIsArray: true,
-        target: 'virtual-server.port-list',
-        source: 'port'
-      }
-    }
-  };
-  return (
-    <Table responsive>
-      <thead>
-        <tr>
-          <td cols="3">
-            <div className="pull-right">
-              <Button onClick={() => fields.push(
-                { 
-                  'port-number': 81,
-                  'range': '80-100',
-                  'protocol': 'HTTP'
-                }
-              )} bsStyle="primary">Add Member</Button>
-              <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button>
-
-              {touched && error && <span>{error}</span>}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Number</td>
-          <td>Range</td>
-          <td>Protocol</td>
-        </tr>
-      </thead>  
-      <tbody>
-      {newChildren}
-      </tbody>
-    </Table>
-  );
-};
-
 
 class VirtualServerForm extends BaseForm {
   addLine() {
@@ -160,6 +80,28 @@ class VirtualServerForm extends BaseForm {
         name: 'name',
         label: 'name',
         reform: label => label
+      }
+    };
+
+    let popupInfo = { 
+      pageClass: VirtualPortForm, 
+      urlKeysConnect: [ 'virtual-server.name' ],
+      title: 'Create Virtual Port', 
+      pageName: 'virtualPort', 
+      bsSize:'lg', 
+      connectOptions: {
+        connectToValue: {
+          'virtual-server.port-list': {
+            'port-number': 'port.port-number',
+            'range': 'port.range',
+            'protocol': 'port.protocol'
+          }
+        },
+        connectToApiStore: {
+          targetIsArray: true,
+          target: 'virtual-server.port-list',
+          source: 'port'
+        }
       }
     };
 
@@ -231,7 +173,18 @@ class VirtualServerForm extends BaseForm {
 
                   <Col xs={6}>*/}
                     <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
-                      <FieldArray name="virtual-server.port-list" component={renderTable}/>
+                      <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
+                        <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
+                        <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
+     
+                        <A10SchemaField layout={false} name="protocol" title="Protocol" >  
+                          <FormControl componentClass="select">
+                            <option value="tcp">tcp</option>
+                            <option value="udp">udp</option>
+                          </FormControl>
+                        </A10SchemaField>
+
+                      </A10MultiField>
                     </Panel>
                   </Col>
                 </Row>

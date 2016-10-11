@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reduxForm } from 'redux-form/immutable'; // imported Field
 import * as axapiActions from 'redux/modules/app/axapi';
+import { withRouter } from 'react-router';
 
 // import auth from 'helpers/auth';
 import { Modal, Button, Form } from 'react-bootstrap';
@@ -82,7 +83,12 @@ class App extends Component {
       body: values
     };
     // console.log(this.props.axapiRequest);
-    return this.props.axapiRequest(APP_LAYOUT_PAGE_KEY, fullAuthData);
+    let promise = this.props.axapiRequest(APP_LAYOUT_PAGE_KEY, fullAuthData);
+    promise = promise.then(() => {
+      // how to reload the page statically????
+      location.reload();
+    });
+    return promise;
   }
 
   submit() {
@@ -115,26 +121,27 @@ class App extends Component {
         <NotificationSystem ref="notificationSystem" />
         {this.props.children}
         <Modal show={this.state.showLogin} onHide={this.close}>
-            <Modal.Header>
-              <Modal.Title>Login</Modal.Title>
-            </Modal.Header>
+          <Modal.Header>
+            <Modal.Title>Login</Modal.Title>
+          </Modal.Header>
 
-            <Modal.Body>
-              <Form onSubmit={handleSubmit(::this.onSubmit)} ref="form" horizontal>
-                <LoginForm dialogMode={true} />
-              </Form>
-            </Modal.Body>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit(::this.onSubmit)} ref="form" horizontal>
+              <LoginForm dialogMode={true} />
+            </Form>
+          </Modal.Body>
 
-            <Modal.Footer>
-              <Button onClick={::this.close}>Close</Button>
-              <Button bsStyle="primary" onClick={::this.submit}>Login</Button>
-            </Modal.Footer>
+          <Modal.Footer>
+            <Button onClick={::this.close}>Close</Button>
+            <Button bsStyle="primary" onClick={::this.submit}>Login</Button>
+          </Modal.Footer>
         </Modal>
       
       </main>
     );
   }
 }
+
 
 let InitializeFromStateForm = reduxForm({
   form: 'app'
@@ -158,4 +165,4 @@ InitializeFromStateForm = connect(
 // })(App);
 
 
-export default InitializeFromStateForm;
+export default withRouter(InitializeFromStateForm);
