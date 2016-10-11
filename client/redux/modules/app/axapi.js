@@ -34,6 +34,8 @@ const pushAxapiReqs = (item) => {
   localStorage.setItem('axapi', itemStr);
 };
 
+const getUid = () => new Date().getTime +'-' + parseInt(Math.random()*1000);
+
 const apiReducers = {
   [ AXAPI_SAVE ](state, { page }) {
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi', 'isLoading' ], true);
@@ -66,6 +68,7 @@ const apiReducers = {
 
       let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
       result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
+      result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
       return result.setIn([ page, 'axapi' ], responseData);
     } else {
       console.log('More than one request', resp);
@@ -74,15 +77,10 @@ const apiReducers = {
   [ AXAPI_SAVE_FAIL ](state, { resp, data, page, notifiable }) {
     // console.log('notifiable::::::', notifiable);
     console.log('failed  axapi request ......................................', resp);
-    let newResp = resp;
-    newResp = newResp ? newResp : {};
-    let body = newResp.text;
-    try {
-      body = newResp.text ? JSON.parse(newResp.text) : {};
-    } catch(e) {
-      console.log(e);
-    }
-    pushAxapiReqs({ data, result: body });
+    // let newResp = resp;
+    let newResp = resp ? resp : { body: '' };
+    
+    pushAxapiReqs({ data, result: newResp.body });
     if (get(newResp, 'unauthorized', false) === true) {
       sessionStorage.removeItem('token');
     }
@@ -90,11 +88,12 @@ const apiReducers = {
     const responseData = fromJS({
       error: newResp.error,
       statusCode: newResp.status,
-      response: fromJS(body.response || body.authresponse)
+      response: fromJS(newResp.body.response || newResp.body.authresponse)
     });
     
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
     result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
+    result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
     return result.setIn([ page, 'axapi' ], responseData);
   },
   [ AXAPI_CLEAR_LAST_ERROR ](state) {

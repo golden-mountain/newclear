@@ -35,37 +35,54 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { statusCode, errMsg, error, notifiable } = nextProps;
-    console.log(error, errMsg, '.....................................error message');
+    // console.log(error, errMsg, '.....................................error message');
+
     if (notifiable) {
       let bsClass = 'success', info = 'Success';
+      let _notify = {
+        title: 'Hi, Something Wrong!!',
+        message: '',
+        autoDismiss: 10,
+        level: bsClass,
+        position: 'tr',
+        dismissible: true,
+        uid: nextProps.axapiUid
+      };
+
       if (statusCode >= 400) {
-        // console.log('notification 400....................');
+        console.log('notification 400....................');
 
         info = error || errMsg;
         bsClass = 'error';
-        const _notify = {
-          title: 'Hi, Something Wrong!!',
-          message: info,
-          autoDismiss: 10,
-          level: bsClass,
-          position: 'tr',
-          dismissible: true
-        };
-        this._notificationSystem.addNotification(_notify);
+        _notify.level = bsClass;
+        _notify.message = info;
+        // _notify = {
+        //   title: 'Hi, Something Wrong!!',
+        //   message: info,
+        //   autoDismiss: 10,
+        //   level: bsClass,
+        //   position: 'tr',
+        //   dismissible: true,
+        //   uid: parseInt(Math.random()*1000000)
+        // };
+        // uidObj = this._notificationSystem.addNotification(_notify);
       } else if (statusCode >= 200 && statusCode < 300) {
-        // console.log('notification. 200 ...................');
-
+        console.log('notification. 200 ...................');
+        bsClass = 'success';
         info = 'Operation Success!';
-        const _notify = {
-          title: 'Awesome',
-          message: info,
-          autoDismiss: 10,
-          level: bsClass,
-          position: 'tr',
-          dismissible: true
-        };
-        this._notificationSystem.addNotification(_notify);
+        _notify.level = bsClass;
+        _notify.message = info;
+        // _notify = {
+        //   title: 'Awesome',
+        //   message: info,
+        //   autoDismiss: 10,
+        //   level: bsClass,
+        //   position: 'tr',
+        //   dismissible: true,
+        //   uid: parseInt(Math.random()*1000000)
+        // };
       }
+      this._notificationSystem.addNotification(_notify);
     }
 
     this.setState({
@@ -150,6 +167,7 @@ let InitializeFromStateForm = reduxForm({
 
 InitializeFromStateForm = connect(
   (state) => ({
+    axapiUid: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiUid' ]),
     statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
     errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
     notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ])

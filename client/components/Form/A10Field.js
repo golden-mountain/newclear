@@ -4,7 +4,7 @@ import { FormGroup, FormControl, ControlLabel, Col, HelpBlock } from 'react-boot
 import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
 import { fromJS, Map } from 'immutable';
-import { has, toPath, isEqual } from 'lodash';
+import { has } from 'lodash';
 // import ReactTestUtils from 'react-addons-test-utils';
 import A10Select from 'components/Form/A10Select';
 
@@ -46,7 +46,6 @@ const registeredMVInputs = [ 'Checkbox', 'Radio' ];
 const registeredInputs = registeredMVInputs.concat([ 'FormControl' ]);
 
 export class A10Field extends Component {
-
   findInputElements(children, allowedTypes, callback) {
     return React.Children.map(children, child => {
       if (has(child, 'type.name') && allowedTypes.indexOf(child.type.name) > -1) {
@@ -164,11 +163,9 @@ class SchemaField extends Component {
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    if (value) {
-      let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
-      values = values.setIn(name.split('.'), value);    
-      this._parentProps.initialize(values.toJS());
-    }
+    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
+    values = values.setIn(name.split('.'), defaultValue);    
+    this._parentProps.initialize(values.toJS());
 
     if (!validation && schema) {
       validation = this.parseValidation(schema);
@@ -183,15 +180,6 @@ class SchemaField extends Component {
       conditionals: this.parseConditional(conditional, defaultValue)
     };
     this._parentProps.registerPageField(name, fromJS(fieldOptions));     
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const { name } = this.props; 
-    const fieldNext = nextProps.app.getIn([ this._parentProps.env.page, 'form', name ]);
-    const fieldThis = this.props.app.getIn([ this._parentProps.env.page, 'form', name ]);
-    const fieldNextValue = nextProps.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);    
-    const fieldThisValue = this.props.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
-    return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
   }
 
   parseSchemaConditional(name, schema) {
