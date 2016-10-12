@@ -1,15 +1,15 @@
 import { loadRoute, errorLoading } from './routeUtil';
 
-export default 
+export default
   [
-    { 
+    {
       path: 'adc',
       // getComponent: (nextState, cb) => {
       //   System.import('pages/ADC')
       //   .then(loadRoute(cb))
       //   .catch(errorLoading);
       // },
-      indexRoute: 
+      indexRoute:
       {
         getComponent: (nextState, cb) => {
           System.import('pages/ADC')
@@ -17,7 +17,7 @@ export default
           .catch(errorLoading);
         }
       },
-      childRoutes: 
+      childRoutes:
       [
         {
           path: 'virtual-server',
@@ -37,7 +37,7 @@ export default
             {
               path: 'edit',
               getComponent: (nextState, cb) => {
-                System.import('pages/ADC/VirtualServer/Form')
+                System.import('pages/ADC/VirtualServer/Edit')
                 .then(loadRoute(cb))
                 .catch(errorLoading);
               }
@@ -45,10 +45,10 @@ export default
             {
               path: 'port/edit',
               getComponent: (nextState, cb) => {
-                System.import('pages/ADC/VirtualPort/Form')
+                System.import('pages/ADC/VirtualPort/Edit')
                 .then(loadRoute(cb))
                 .catch(errorLoading);
-              }     
+              }
             }
           ]
         },
@@ -58,7 +58,7 @@ export default
             {
               path: 'virtual-server/edit',
               getComponent: (nextState, cb) => {
-                System.import('pages/ADC/Templates/VirtualServer/Form')
+                System.import('pages/ADC/Templates/VirtualServer/Edit')
                           .then(loadRoute(cb))
                           .catch(errorLoading);
               }
@@ -69,11 +69,11 @@ export default
             //     System.import('pages/ADC/VirtualPort/Form')
             //     .then(loadRoute(cb))
             //     .catch(errorLoading);
-            //   }     
+            //   }
             // }
-          ]          
+          ]
         }
       ]
     }
-  
+
   ];

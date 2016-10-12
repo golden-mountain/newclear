@@ -21,7 +21,7 @@ class TableFields extends Component {
   //     if (value && value.size) {
   //       fieldList.push(value.toJS());
   //     }
-  //   });    
+  //   });
 
   //   console.log('field list:', fieldList);
   //   return fieldList;
@@ -40,14 +40,14 @@ class TableFields extends Component {
       const fullName = `${prefix}.${child.props.name}`;
       const conditional = this._changeKidsConditional(prefix, child.props.conditional);
       const newKids = React.cloneElement(child, { name: fullName, conditional });
-      return (<td key={index}> {newKids} </td>); 
+      return (<td key={index}> {newKids} </td>);
     };
   }
 
   _extractTitles(kids) {
     return kids.map((child, index) => {
       return (<td key={index}> {child.props.title || upperFirst(child.props.name) } </td>);
-    });     
+    });
   }
 
   _inlineCreate(fields, kids) {
@@ -57,7 +57,7 @@ class TableFields extends Component {
       forEach(kids, (kid, name) => {
         proto[name] = '';
       });
-      newFields.push(proto);    
+      newFields.push(proto);
       return newFields;
     };
   }
@@ -69,20 +69,20 @@ class TableFields extends Component {
       <div>
         <div className="pull-right">
           <Button onClick={this._inlineCreate(fields, kids)} bsStyle="primary">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New
+            <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> New
           </Button>
 
           { popupInfo && <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button> }
 
           {touched && error && <span>{error}</span>}
-        </div>    
+        </div>
 
         <Table responsive>
           <thead>
             <tr>
               { this._extractTitles(kids) }
             </tr>
-          </thead>  
+          </thead>
           <tbody>
           {
             fields.map((port, index) => {
@@ -97,7 +97,7 @@ class TableFields extends Component {
         </Table>
         {touched && error && <span>{error}</span>}
       </div>
-      
+
     );
   }
 }
@@ -105,7 +105,7 @@ class TableFields extends Component {
 
 class A10MultiField extends Component {
   constructor(props, context) {
-    super(props, context);    
+    super(props, context);
   }
 
   render() {

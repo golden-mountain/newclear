@@ -51,7 +51,7 @@ class SchemaForm {
   // remove invalid values by schema
   parseValues(values) {
     const newValues = fromJS(values);
-    const prefixes = this._getObjectPrefixes();    
+    const prefixes = this._getObjectPrefixes();
 
     let parsedValues = Map({});
     let invalidProps = Map({});
@@ -75,15 +75,15 @@ class SchemaForm {
         });
         fullRequestData = {
           path: this._parseAxapiURL(axapi, fieldGroup),
-          method: 'POST', 
+          method: 'POST',
           body: parsedValues
-        };    
-        // console.log('full auth data', fullRequestData);  
+        };
+        // console.log('full auth data', fullRequestData);
       }
 
       if (fullRequestData) {
-        result = result.push(fullRequestData);  
-      }      
+        result = result.push(fullRequestData);
+      }
 
     });
 
@@ -105,7 +105,7 @@ class A10SchemaForm extends Component {
     this._parentProps = context.props;
   }
 
-  // connect 
+  // connect
   connectValues(storeData, parsedValues) {
     // const { fieldConnector: { options: { connectToApiStore } } } = this._parentProps;
     let primaryObj = parsedValues.first(), mergingObj = Map(), copyStoreData = [];
@@ -136,7 +136,7 @@ class A10SchemaForm extends Component {
     } else {
       return parsedValues;
     }
-    
+
   }
 
   defaultHandleSubmit(values, form, save=true) {
@@ -186,27 +186,28 @@ class A10SchemaForm extends Component {
 
   render() {
     /* eslint-disable no-unused-vars */
-    const { 
-      urlKeys, 
-      dispatch, 
-      app, 
-      schemas, 
-      edit, 
-      children, 
-      onBeforeSubmit, 
-      onAfterSubmit, 
-      onSubmit, 
-      ...rest 
-    } = this.props; 
+    const {
+      urlKeys,
+      dispatch,
+      app,
+      schemas,
+      edit,
+      children,
+      onBeforeSubmit,
+      onAfterSubmit,
+      onSubmit,
+      ...rest
+    } = this.props;
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
+    console.log(this._parentProps);
     const { handleSubmit, fieldConnector, env } = this._parentProps;
 
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
       if (onBeforeSubmit) {
         patchedValues = onBeforeSubmit(newValues);
-      } 
+      }
 
       // let visible data hidden
       newValues = this.dataFinalize(newValues);
@@ -230,17 +231,17 @@ class A10SchemaForm extends Component {
       if (has(fieldConnector , 'options.connectToValue')) {
         // console.log('connect to value.................');
         fieldConnector.connectToValues(newValues);
-        result = submitFunc.call(this, newValues, env.form, false);        
+        result = submitFunc.call(this, newValues, env.form, false);
       } else {
         // console.log('connect to result.................');
         result = submitFunc.call(this, newValues, env.form, true);
-        // console.log('connect to result at A10Form:', result);        
+        // console.log('connect to result at A10Form:', result);
         fieldConnector.connectToResult(result);
 
         if (onAfterSubmit) {
           result = onAfterSubmit.call(this, result);
-        } 
-      }      
+        }
+      }
 
       result.then(closeCurrent);
       return result;
@@ -250,7 +251,7 @@ class A10SchemaForm extends Component {
     return (
       <Form onSubmit={ handleSubmit(submit) } { ...rest }>
         { children }
-      </Form>      
+      </Form>
     );
   }
 }

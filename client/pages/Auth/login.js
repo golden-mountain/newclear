@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import AppManager from 'helpers/AppManager';
+import FormManager from 'helpers/FormManager';
 import LoginForm from 'components/Form/Login';
 import { Form } from 'react-bootstrap';
 import BaseForm from 'pages/BaseForm';
@@ -27,7 +27,7 @@ class LoginPage extends BaseForm {
   onSubmit(values) {
     const fullAuthData = {
       path: '/axapi/v3/auth',
-      method: 'POST', 
+      method: 'POST',
       body: values
     };
     this.props.setPageTitle('testaaaaaaaaaaaaaa');
@@ -37,7 +37,7 @@ class LoginPage extends BaseForm {
   render() {
     const { handleSubmit, pristine, submitting, reset } = this.props;
     const subProps = { pristine, submitting, reset };
-    return ( 
+    return (
       <div className="fluid-container">
         <Form onSubmit={handleSubmit(::this.onSubmit)} horizontal>
           <LoginForm { ...subProps } />
@@ -50,14 +50,14 @@ class LoginPage extends BaseForm {
 
 const initialValues = {
   credentials: {
-    username: 'admin', 
+    username: 'admin',
     password: 'a10'
   }
 };
 
-const InitializeFromStateForm = AppManager({
+const InitializeFromStateForm = FormManager({
   page: 'login',
-  form: 'loginForm', 
+  form: 'loginForm',
   initialValues: initialValues
 })(LoginPage);
 

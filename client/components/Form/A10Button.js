@@ -9,7 +9,8 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 // import { axapiGet } from 'helpers/axapiHelper';
 import FieldConnector from 'helpers/FieldConnector';
 import { setPageVisible } from 'redux/modules/app/page';
-import { change } from 'redux-form/immutable'; 
+import { change } from 'redux-form/immutable';
+import PageLayout from 'layouts/a10/PageLayout';
 
 class A10Button extends Component {
   // context defined at page
@@ -21,11 +22,11 @@ class A10Button extends Component {
 
   render() {
     const { page, env, app, form, children, dispatch, onClick, componentClass,  //eslint-disable-line
-      popup: { pageClass, title,  connectOptions, pageName, 
-      urlKeysConnect,  ...modalProps }, ...rest } = this.props; 
+      popup: { pageClass, title,  connectOptions, pageName,
+      urlKeysConnect,  ...modalProps }, ...rest } = this.props;
 
     let popupContent = null, click = onClick, modal = null;
-    if (pageClass) {      
+    if (pageClass) {
       this.modelVisible = getAppPageVar(app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
       const changeFormField = (name, value) => {
@@ -36,7 +37,7 @@ class A10Button extends Component {
         ? React.createElement(pageClass, {
           visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
-          urlKeysConnect 
+          urlKeysConnect
         })
         : null;
       click = () => {
@@ -52,12 +53,12 @@ class A10Button extends Component {
               </Modal.Header>
 
               <Modal.Body>
-                {popupContent}
+                <PageLayout>{popupContent}</PageLayout>
               </Modal.Body>
 
-          </Modal>        
+          </Modal>
         </span>
-      );      
+      );
     } else {
       modal = children;
     }

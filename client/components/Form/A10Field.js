@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { FormGroup, FormControl, ControlLabel, Col, HelpBlock } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
@@ -7,39 +7,10 @@ import { fromJS, Map } from 'immutable';
 import { has } from 'lodash';
 // import ReactTestUtils from 'react-addons-test-utils';
 import A10Select from 'components/Form/A10Select';
-
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
 
-class A10FieldLayout extends Component {
-  render() {
-    const { label, layout, meta: { touched, error }, children } = this.props;
-    let status = {}, errorMsg = '';
-
-    if (touched && error) {
-      errorMsg = <HelpBlock className="error">{error}</HelpBlock>;
-      status.validationState = 'error';
-    }
-
-    return (
-      layout === undefined || layout ?
-      <FormGroup {...status}>
-        <Col componentClass={ControlLabel} sm={4}>{label}</Col>
-        <Col sm={8}>
-          {children}
-          <FormControl.Feedback />
-          { errorMsg }
-        </Col>
-      </FormGroup>
-      :
-      <FormGroup bsClass="no-layout" {...status}>
-        {children}
-        <FormControl.Feedback />
-        { errorMsg }      
-      </FormGroup>
-    );
-  }  
-}
+import FieldLayout from 'layouts/a10/FieldLayout';
 
 // multiple options input
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];
@@ -73,7 +44,7 @@ export class A10Field extends Component {
           };
         } else {
           return false;
-        }     
+        }
       }
     });
 
@@ -86,7 +57,7 @@ export class A10Field extends Component {
       'number': {
         'component': FormControl,
         'type': 'number',
-        'className': 'form-control'       
+        'className': 'form-control'
       }
     };
 
@@ -95,7 +66,7 @@ export class A10Field extends Component {
       element = rule(schema);
       if (element) {
         return element;
-      } 
+      }
     });
 
     element = element || elementsMap[type] || elementsMap['string'];
@@ -105,8 +76,8 @@ export class A10Field extends Component {
 
   render() {
     let { children, input, ...fieldOptions } = this.props;
-    const callback = (child) => {      
-      let inputOptions = {};     
+    const callback = (child) => {
+      let inputOptions = {};
 
       const { value, ...restInput } = input;
       // only support React Bootstrap
@@ -129,7 +100,7 @@ export class A10Field extends Component {
     let newChild = this.findInputElements(children, registeredInputs, callback);
     // newChild = React.Children.map(newChild, callback);
     return (
-      <A10FieldLayout {...fieldOptions}> { newChild } </A10FieldLayout> 
+      <FieldLayout {...fieldOptions}> { newChild } </FieldLayout>
     );
   }
 }
@@ -152,19 +123,19 @@ class SchemaField extends Component {
     if (!context.props) {
       throw new Error('Config should passed from parent');
     }
-    
+
     this._context = context;
     this._parentProps = this._context.props;
   }
 
   componentWillMount() {
     // if (this.props.schema) {
-    const { schema, value, name } = this.props;  
+    const { schema, value, name } = this.props;
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());    
-    values = values.setIn(name.split('.'), defaultValue);    
+    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());
+    values = values.setIn(name.split('.'), defaultValue);
     this._parentProps.initialize(values.toJS());
 
     if (!validation && schema) {
@@ -179,9 +150,21 @@ class SchemaField extends Component {
       validations: validation,
       conditionals: this.parseConditional(conditional, defaultValue)
     };
-    this._parentProps.registerPageField(name, fromJS(fieldOptions));     
+    this._parentProps.registerPageField(name, fromJS(fieldOptions));
   }
 
+// <<<<<<< Updated upstream
+// =======
+//   shouldComponentUpdate(nextProps) {
+//     const { name } = this.props;
+//     const fieldNext = nextProps.app.getIn([ this._parentProps.env.page, 'form', name ]);
+//     const fieldThis = this.props.app.getIn([ this._parentProps.env.page, 'form', name ]);
+//     const fieldNextValue = nextProps.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
+//     const fieldThisValue = this.props.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
+//     return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
+//   }
+//
+// >>>>>>> Stashed changes
   parseSchemaConditional(name, schema) {
     let result = {};
 
@@ -231,11 +214,11 @@ class SchemaField extends Component {
     let { name, children, app, ...rest } = this.props; // eslint-disable-line
     const visible = app.getIn([ this._parentProps.env.page, 'form', name, 'conditionals', 'visible' ]);
     // console.log(fieldProp, '......................................');
-    return (    
+    return (
       visible ?
         <Field name={name} component={A10Field} {...rest}>
           { children }
-        </Field>  
+        </Field>
       : null
     );
   }

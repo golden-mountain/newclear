@@ -1,7 +1,7 @@
 import React from 'react';
 // import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Checkbox, Radio, Col, Row, Panel } from 'react-bootstrap';
-import Helmet from 'react-helmet';
+// import Helmet from 'react-helmet';
 // import { isEqual } from 'lodash';
 // import { Map, fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
@@ -9,7 +9,8 @@ import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 
-import AppManager from 'helpers/AppManager';
+import FormManager from 'helpers/FormManager';
+
 import BaseForm from 'pages/BaseForm';
 
 // import * as logger from 'helpers/logger';
@@ -17,7 +18,7 @@ import BaseForm from 'pages/BaseForm';
 import slbTemplateVirtualServerSchema from 'schemas/slb-template-virtual-server.json';
 
 class TemplateVirtualServerForm extends BaseForm {
- 
+
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbTemplateVirtualServerSchema.properties;
@@ -29,7 +30,7 @@ class TemplateVirtualServerForm extends BaseForm {
           name="virtual-server.name"
           component={A10Field}
           label="Name"
-        />    
+        />
         <A10SchemaField
           schema={elements['conn-limit']}
           name="virtual-server.conn-limit"
@@ -135,40 +136,28 @@ class TemplateVirtualServerForm extends BaseForm {
         >
           <Checkbox value={true} />
         </A10SchemaField>
-      </Panel> 
+      </Panel>
     );
 
     return (
-      <div className="container-fluid">
-        <Helmet title="Edit Template Virtual Server"/>
+      <A10Form schemas={[ slbTemplateVirtualServerSchema ]} edit={false}  horizontal>
         <Row>
-         
-          <Col xs={12}>                   
-              <A10Form schemas={[ slbTemplateVirtualServerSchema ]} edit={false}  horizontal>
-                <Row>
-                  <Col xs={12}>
-                    {panelFields}
-                  </Col>
-
-                </Row>
-
-                <A10SubmitButtons {...rest}/>
-
-              </A10Form>              
+          <Col xs={12}>
+            {panelFields}
           </Col>
         </Row>
-      </div>      
+        <A10SubmitButtons {...rest}/>
+      </A10Form>
     );
   }
 }
 
-
 const initialValues = {
 };
 
-const InitializeFromStateForm = AppManager({
+const InitializeFromStateForm = FormManager({
   page: 'templateVirtualServer',
-  form: 'templateVirtualServerForm', 
+  form: 'templateVirtualServerForm',
   initialValues: initialValues
 })(TemplateVirtualServerForm);
 

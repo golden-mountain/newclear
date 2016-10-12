@@ -1,7 +1,6 @@
 import React from 'react';
 // import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { Button, Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
-import Helmet from 'react-helmet';
+import { Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
 // import { isEqual } from 'lodash';
 import { fromJS, Map } from 'immutable';
 // import { SubmissionError } from 'redux-form';
@@ -10,15 +9,15 @@ import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 import A10MultiField from 'components/Form/A10MultiField';
-import AppManager from 'helpers/AppManager';
+import FormManager from 'helpers/FormManager';
 import BaseForm from 'pages/BaseForm';
 
 // import * as logger from 'helpers/logger';
 import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
-import VirtualPortForm from 'pages/ADC/VirtualPort/Form';
-import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/Form';
+import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
+import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/components/Form';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
@@ -31,7 +30,7 @@ class VirtualServerForm extends BaseForm {
   addLine() {
     const valuePath = [ 'values', 'virtual-server', 'port-list' ];
     let list = this.props.pageForm.getIn(valuePath, Map()).toJS();
-    list.push({ 
+    list.push({
       'port-number': 91,
       'range': '92',
       'protocol': 'tcp'
@@ -59,11 +58,11 @@ class VirtualServerForm extends BaseForm {
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
-    const tplVirtualServerPopupInfo = { 
-      pageClass: TemplateVirtualServerForm, 
-      title: 'Create Virtual Server Template', 
-      pageName: 'templateVirtualServer', 
-      bsSize:'lg', 
+    const tplVirtualServerPopupInfo = {
+      pageClass: TemplateVirtualServerForm,
+      title: 'Create Virtual Server Template',
+      pageName: 'templateVirtualServer',
+      bsSize:'lg',
       connectOptions: {
         connectToResult: {
           'virtual-server': {
@@ -71,11 +70,11 @@ class VirtualServerForm extends BaseForm {
           }
         }
       }
-    }; 
+    };
 
     const tplVirtualServerLoadOptions = {
       url: elements['template-virtual-server']['$ref'],
-      loadOnMount: true,      
+      loadOnMount: true,
       map: {
         name: 'name',
         label: 'name',
@@ -83,12 +82,12 @@ class VirtualServerForm extends BaseForm {
       }
     };
 
-    let popupInfo = { 
-      pageClass: VirtualPortForm, 
+    let popupInfo = {
+      pageClass: VirtualPortForm,
       urlKeysConnect: [ 'virtual-server.name' ],
-      title: 'Create Virtual Port', 
-      pageName: 'virtualPort', 
-      bsSize:'lg', 
+      title: 'Create Virtual Port',
+      pageName: 'virtualPort',
+      bsSize:'lg',
       connectOptions: {
         connectToValue: {
           'virtual-server.port-list': {
@@ -106,25 +105,19 @@ class VirtualServerForm extends BaseForm {
     };
 
     return (
-      <div className="container-fluid">
-        <Helmet title="Edit Virtual Server"/>
         <Row>
-          <Col xs={2}>
-            <h4>Help  </h4>
-            <Button onClick={::this.addLine} > Add a Line </Button>
-          </Col>
-          <Col xs={10}>                   
+          <Col xs={10}>
               <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
                 <Row>
                   <Col xs={12}>
                     <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-                      <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" /> 
-   
+                      <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" />
+
 
                       <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
                         <Checkbox value={true} />
                       </A10SchemaField>
-                      
+
                       <A10SchemaField name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
                         <div>
                           <Radio value="0" inline> IPv4 </Radio>
@@ -138,7 +131,7 @@ class VirtualServerForm extends BaseForm {
 
                       <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
                       <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
-                        
+
                     </Panel>
 
                     <Panel header={<h4>Advanced Fields</h4>} collapsible defaultExpanded>
@@ -146,7 +139,7 @@ class VirtualServerForm extends BaseForm {
                       <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
                         <Checkbox value={true} />
                       </A10SchemaField>
-                      
+
                       <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
                         <div>
                           <Radio value="stats-data-enable" inline> Enable </Radio>
@@ -162,13 +155,13 @@ class VirtualServerForm extends BaseForm {
                         <Checkbox value={true} />
                       </A10SchemaField>
 
-                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true}  />                       
-                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />                       
-                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />                       
-                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />                       
+                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true}  />
+                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
+                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
+                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />
 
                       <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
-                    </Panel> 
+                    </Panel>
                   {/*</Col>
 
                   <Col xs={6}>*/}
@@ -176,8 +169,8 @@ class VirtualServerForm extends BaseForm {
                       <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
                         <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
                         <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
-     
-                        <A10SchemaField layout={false} name="protocol" title="Protocol" >  
+
+                        <A10SchemaField layout={false} name="protocol" title="Protocol" >
                           <FormControl componentClass="select">
                             <option value="tcp">tcp</option>
                             <option value="udp">udp</option>
@@ -191,10 +184,9 @@ class VirtualServerForm extends BaseForm {
 
                 <A10SubmitButtons {...rest}/>
 
-              </A10Form>              
+              </A10Form>
           </Col>
         </Row>
-      </div>      
     );
   }
 }
@@ -205,12 +197,12 @@ const initialValues = {
     'name': 'vs',
     'netmask': '/24',
     'port-list': [
-      { 
+      {
         'port-number': 80,
         'range': '80-100',
-        'protocol': 'HTTP'        
+        'protocol': 'HTTP'
       },
-      { 
+      {
         'port-number': 81,
         'range': '80-101',
         'protocol': 'HTTPS'
@@ -225,9 +217,9 @@ const initialValues = {
   }
 };
 
-const InitializeFromStateForm = AppManager({
+const InitializeFromStateForm = FormManager({
   page: 'virtualServer',
-  form: 'virtualServerForm', 
+  form: 'virtualServerForm',
   initialValues: initialValues
 })(VirtualServerForm);
 
