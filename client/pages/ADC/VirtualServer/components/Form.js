@@ -155,7 +155,13 @@ class VirtualServerForm extends BaseForm {
                         <Checkbox value={true} />
                       </A10SchemaField>
 
-                      <A10SchemaField schema={elements['vrid']} name="virtual-server.vrid" label="VRID" conditional={true}  />
+                      <A10SchemaField
+                        schema={elements['vrid']}
+                        name="virtual-server.vrid"
+                        label="VRID"
+                        placeholder="Join a VRRP group (Specify a VRRP-A vrid)"
+                        conditional={true}
+                      />
                       <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
                       <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
                       <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />

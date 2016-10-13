@@ -31,7 +31,7 @@ export class A10Field extends Component {
   }
 
   createElement() {
-    let { input, schema, widgetProps } = this.props;
+    let { input, schema, placeholder, widgetProps } = this.props;
     // console.log(widgetOptions, 'widgetOptions......................');
     let type = schema && schema.type ? schema.type : 'string';
     const Rules = Map({
@@ -47,6 +47,10 @@ export class A10Field extends Component {
         }
       }
     });
+    let definePlaceholder = '';
+    placeholder
+    ? (definePlaceholder = placeholder)
+    : (schema && schema.description && (definePlaceholder = schema.description));
 
     const elementsMap = {
       'string': {
@@ -71,6 +75,7 @@ export class A10Field extends Component {
 
     element = element || elementsMap[type] || elementsMap['string'];
     const { component, ...props } = element;
+    props['placeholder'] = definePlaceholder;
     return React.createElement(component, Object.assign(input, props, widgetProps));
   }
 
