@@ -159,7 +159,8 @@ class VirtualServerForm extends BaseForm {
                         schema={elements['vrid']}
                         name="virtual-server.vrid"
                         label="VRID"
-                        placeholder="Join a VRRP group (Specify a VRRP-A vrid)"
+                        description="Join a VRRP group (Specify a VRRP-A vrid)"
+                        placeholder="Enter vrid."
                         conditional={true}
                       />
                       <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />

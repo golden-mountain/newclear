@@ -30,8 +30,31 @@ export class A10Field extends Component {
     });
   }
 
+  generatorPlaceholder() {
+    const { placeholder, schema } = this.props;
+    const generator = {
+      string: (schema) => {
+        return `${schema.minLength} - ${schema.maxLength} character.`;
+      },
+      number: (schema) => {
+        return `${schema.minimum} - ${schema.maximum} number.`;
+      }
+    };
+    let definePlaceholder = '';
+    placeholder
+    ? (definePlaceholder = placeholder)
+    : (
+      schema
+      && schema.type
+      && generator[schema.type]
+      && (definePlaceholder = generator[schema.type](schema))
+    );
+
+    return definePlaceholder;
+  }
+
   createElement() {
-    let { input, schema, placeholder, widgetProps } = this.props;
+    let { input, schema, widgetProps } = this.props;
     // console.log(widgetOptions, 'widgetOptions......................');
     let type = schema && schema.type ? schema.type : 'string';
     const Rules = Map({
@@ -47,10 +70,6 @@ export class A10Field extends Component {
         }
       }
     });
-    let definePlaceholder = '';
-    placeholder
-    ? (definePlaceholder = placeholder)
-    : (schema && schema.description && (definePlaceholder = schema.description));
 
     const elementsMap = {
       'string': {
@@ -75,7 +94,7 @@ export class A10Field extends Component {
 
     element = element || elementsMap[type] || elementsMap['string'];
     const { component, ...props } = element;
-    props['placeholder'] = definePlaceholder;
+    props['placeholder'] = this.generatorPlaceholder();
     return React.createElement(component, Object.assign(input, props, widgetProps));
   }
 
