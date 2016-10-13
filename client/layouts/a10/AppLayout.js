@@ -8,15 +8,15 @@ import * as axapiActions from 'redux/modules/app/axapi';
 // import auth from 'helpers/auth';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import Toolbar from 'components/Toolbar';
-import './style.scss';
+import Menu from './Menu';
+import './scss/AppLayout.scss';
 
 import LoginForm from 'components/Form/Login';
 // import AppManager from 'helpers/AppManager';
 import { LAST_PAGE_KEY, APP_LAYOUT_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
 
-class App extends Component {
+class AppLayout extends Component {
   static propTypes = {
     children: PropTypes.node
   }
@@ -133,7 +133,7 @@ class App extends Component {
 
     return (
       <main className="main-app">
-        <Toolbar />
+        <Menu />
         
         <NotificationSystem ref="notificationSystem" />
         {this.props.children}
@@ -163,7 +163,7 @@ class App extends Component {
 let InitializeFromStateForm = reduxForm({
   form: 'app'
 }
-)(App);
+)(AppLayout);
 
 InitializeFromStateForm = connect(
   (state) => ({

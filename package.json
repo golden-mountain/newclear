@@ -115,7 +115,7 @@
     "react-notification-system": "^0.2.10",
     "react-redux": "^4.4.5",
     "react-redux-form": "^0.14.4",
-    "react-router": "^2.0.0",
+    "react-router": "^4.0.0-alpha.4",
     "react-router-redux": "^4.0.5",
     "react-select": "^1.0.0-rc.2",
     "react-transform-catch-errors": "^1.0.2",

@@ -1,66 +1,37 @@
-import App from 'containers/App';
-import demoRoutes from './demo';
-import apiRoutes from './api';
-import adcRoutes from './adc';
-import { loadRoute, errorLoading, redirectToDashboard, redirectToLogin } from './routeUtil';
-// import auth from 'helpers/auth';
+import React, { Component } from 'react';
+import Router from 'react-router/BrowserRouter';
 
-const appRoutes = [
-  { path: '/logout',
-    getComponent: (nextState, cb) => {
-      System.import('pages/Auth/logout')
-        .then(loadRoute(cb))
-        .catch(errorLoading);
-    }
-  },
+import AppLayout from '../layouts/a10/AppLayout';
+import AuthRouters from './auth';
+import ADCRouters from './adc';
+import DashboardRouters from './dashboard';
+import ApiTestToolRouters from './tool';
 
-  { onEnter: redirectToDashboard,
-    childRoutes: [
-      // Unauthenticated routes
-      // Redirect to dashboard if user is already logged in
-      { path: '/login',
-        getComponent: (nextState, cb) => {
-          System.import('pages/Auth/login')
-            .then(loadRoute(cb))
-            .catch(errorLoading);
-        }
-      }
-    ]
-  },
 
-  { path: '/',
-    onEnter: redirectToLogin,
-    getComponent: (nextState, cb) => {
-      System.import('pages/Dashboard')
-        .then(loadRoute(cb))
-        .catch(errorLoading);
-    },
-    indexRoute: {
-      getComponent: (nextState, cb) => {
-        // Only load if we're logged in
-        // if (auth.loggedIn()) {
-        System.import('pages/About')
-          .then(loadRoute(cb))
-          .catch(errorLoading);
-        // }
-        // return cb()
-      }
-    },
-    childRoutes: [ ...demoRoutes, ...adcRoutes ]
-  },
+export default class App extends Component {
+  render() {
+    return (
+      <Router>
+        <AppLayout>
+          { ApiTestToolRouters }
+          { AuthRouters }
+          { ADCRouters }
+          { DashboardRouters }
+        </AppLayout>
+      </Router>
+    );
+  }
+}
 
-  ...apiRoutes,
-
-  { path: '*',
-    getComponent: (nextState, cb) => {
-      System.import('pages/StatusPage')
-        .then(loadRoute(cb))
-        .catch(errorLoading);
-    }
-  }  
-];
-
-export default {
-  component: App,
-  childRoutes: appRoutes
-};
+// const MatchWhenAuthorized = ({ component: Component, ...rest }) => (
+//   <Match {...rest} render={props => (
+//     fakeAuth.isAuthenticated ? (
+//       <Component {...props}/>
+//     ) : (
+//       <Redirect to={{
+//         pathname: '/login',
+//         state: { from: props.location }
+//       }}/>
+//     )
+//   )}/>
+// );

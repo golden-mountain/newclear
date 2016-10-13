@@ -1,8 +1,8 @@
 import { render } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router, browserHistory } from 'react-router/es6';
-import { syncHistoryWithStore } from 'react-router-redux';
+// import { Router, browserHistory } from 'react-router/es6';
+// import { syncHistoryWithStore } from 'react-router-redux';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import Immutable, { Iterable } from 'immutable';
@@ -10,7 +10,7 @@ import { createStore, applyMiddleware } from 'redux';
 import installDevTools from 'immutable-devtools';
 import Perf from 'react-addons-perf';
 
-import rootRoute from './routes';
+import RootRouter from './routes';
 // import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import createMiddleware from './redux/middleware/clientMiddleware';
@@ -61,16 +61,16 @@ const store = createStore(
 // }
 // store.subscribe(handleChange)
 
-const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState(state) {
-    return state.get('routing').toJS();
-  }
-});
+// const history = syncHistoryWithStore(browserHistory, store, {
+//   selectLocationState(state) {
+//     return state.get('routing').toJS();
+//   }
+// });
 
 
 render(
   <Provider store={store} key="provider">
-    <Router history={history} routes={rootRoute} />
+    <RootRouter />
   </Provider>,
   document.getElementById('root')
 );

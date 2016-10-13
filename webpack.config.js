@@ -118,7 +118,10 @@ module.exports = {
 
     new webpack.ProvidePlugin({
         Promise: 'es6-promise-promise', // works as expected
-    })    
+    }),
+
+    // new webpack.ContextReplacementPlugin(/.*$/, 'layouts/a10/AppLayout', true, { 'AppLayout': './AppLayout'})
+
   ],
   devtool:'source-map',
   devServer: {

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import { withRouter } from 'react-router';
 import FormManager from 'helpers/FormManager';
+// import { withRouter } from 'react-router';
 import LoginForm from 'components/Form/Login';
 import { Form } from 'react-bootstrap';
 import BaseForm from 'pages/BaseForm';
@@ -10,19 +10,19 @@ class LoginPage extends BaseForm {
     children: PropTypes.node
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.axapiResponse && nextProps.axapiResponse.getIn([ 'response', 'signature' ])) {
-      const { location } = this.props;
-      if (location.state && location.state.nextPathname ) {
-        this.props.router.replace(location.state.nextPathname);
-      } else {
-        this.props.router.replace('/');
-      }
-      return false;
-    }
-    return true;
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.axapiResponse && nextProps.axapiResponse.getIn([ 'response', 'signature' ])) {
+  //     const { location } = this.props;
+  //     if (location.state && location.state.nextPathname ) {
+  //       this.props.router.replace(location.state.nextPathname);
+  //     } else {
+  //       this.props.router.replace('/');
+  //     }
+  //     return false;
+  //   }
+  //   return true;
 
-  }
+  // }
 
   onSubmit(values) {
     const fullAuthData = {
@@ -62,4 +62,4 @@ const InitializeFromStateForm = FormManager({
 })(LoginPage);
 
 
-export default withRouter(InitializeFromStateForm);
+export default InitializeFromStateForm;
