@@ -12,7 +12,7 @@ import {
 
 class A10FieldLayout extends Component {
   render() {
-    const { label, layout, meta: { touched, error }, children } = this.props;
+    const { label, schema, description, layout, meta: { touched, error }, children } = this.props;
     let status = {}, errorMsg = '';
 
     if (touched && error) {
@@ -20,10 +20,14 @@ class A10FieldLayout extends Component {
       status.validationState = 'error';
     }
 
+    let defineDescription = '';
+    description
+    ? (defineDescription = description)
+    : (schema && schema.description && (defineDescription = schema.description));
     return (
       layout === undefined || layout ?
       <FormGroup {...status}>
-        <Col componentClass={ControlLabel} sm={4}>{label}</Col>
+        <Col componentClass={ControlLabel} sm={4} title={defineDescription}>{label}</Col>
         <Col sm={8}>
           {children}
           <FormControl.Feedback />

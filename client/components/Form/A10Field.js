@@ -30,6 +30,29 @@ export class A10Field extends Component {
     });
   }
 
+  generatorPlaceholder() {
+    const { placeholder, schema } = this.props;
+    const generator = {
+      string: (schema) => {
+        return `${schema.minLength} - ${schema.maxLength} character.`;
+      },
+      number: (schema) => {
+        return `${schema.minimum} - ${schema.maximum} number.`;
+      }
+    };
+    let definePlaceholder = '';
+    placeholder
+    ? (definePlaceholder = placeholder)
+    : (
+      schema
+      && schema.type
+      && generator[schema.type]
+      && (definePlaceholder = generator[schema.type](schema))
+    );
+
+    return definePlaceholder;
+  }
+
   createElement() {
     let { input, schema, widgetProps } = this.props;
     // console.log(widgetOptions, 'widgetOptions......................');
@@ -71,6 +94,7 @@ export class A10Field extends Component {
 
     element = element || elementsMap[type] || elementsMap['string'];
     const { component, ...props } = element;
+    props['placeholder'] = this.generatorPlaceholder();
     return React.createElement(component, Object.assign(input, props, widgetProps));
   }
 
