@@ -2,6 +2,37 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 
 export class A10SubmitButtons extends Component {
+  buttons = {
+    create: ({ submitting }, index) => {
+      return (
+        <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
+          {submitting ? <i/> : <i/>} Create
+       </Button>      
+      );
+    },
+    cancel: ({ pristine, submitting }, index) => {
+      return (
+        <Button type="button" disabled={pristine || submitting} onClick={close} key={index} >
+          Cancel
+        </Button>   
+      );
+    },
+    reset: ({ pristine, submitting }, index) => {
+      return (
+        <Button type="button" disabled={pristine || submitting} onClick={close} key={index} >
+          Reset
+        </Button>   
+      );
+    },
+    login: ({ submitting }, index) => {
+      return (
+        <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
+          {submitting ? <i/> : <i/>} Login
+       </Button>      
+      );
+    }
+  };
+
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -9,13 +40,7 @@ export class A10SubmitButtons extends Component {
   }
 
   render() {
-    const { submitting, reset, pristine } = this.props;
-
-    const close = () => {
-      reset();
-      this._parentProps.setLastPageVisible(false);
-    };
-
+    const { buttons=[ 'create', 'cancel' ] } = this.props;
     return (
       <Row>
         <Col xs={12}>
@@ -23,12 +48,11 @@ export class A10SubmitButtons extends Component {
             <Col className="pull-right">
               <ButtonToolbar>
                 <ButtonGroup bsSize="large">
-                  <Button type="submit" disabled={submitting} bsStyle="success">
-                    {submitting ? <i/> : <i/>} Create
-                  </Button>
-                  <Button type="button" disabled={pristine || submitting} onClick={close} >
-                    Cancel
-                  </Button>
+                  {
+                    buttons.map((name, index) =>{
+                      return this.buttons[name](this.props, index);
+                    })
+                  }
                 </ButtonGroup>
               </ButtonToolbar>
               </Col>
@@ -43,3 +67,4 @@ A10SubmitButtons.contextTypes = {
   props: PropTypes.object
 };
 
+export default A10SubmitButtons;

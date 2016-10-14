@@ -8,5 +8,5 @@ const DashboardPage = asyncComponent(() =>
 );
 
 export default [
-  <Match key="default_dashboard" pattern="/dashboard" component={DashboardPage} />
+  <Match key="default_dashboard" pattern="/"  exactly component={DashboardPage} />
 ];

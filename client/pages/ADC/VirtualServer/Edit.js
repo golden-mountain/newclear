@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualServerForm from 'pages/ADC/VirtualServer/components/Form';
 import AppManager from 'helpers/AppManager';
+import BasePage from 'pages/BasePage';
 
-class VirtualServerEdit extends Component {
+class VirtualServerEdit extends BasePage {
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
 
@@ -25,7 +26,8 @@ class VirtualServerEdit extends Component {
 
 
 const InitializeFromStatePage = AppManager({
-  page: 'virtualServer'
+  page: 'virtualServer',
+  form: 'virtualServerForm'
 })(VirtualServerEdit);
 
 export default InitializeFromStatePage;

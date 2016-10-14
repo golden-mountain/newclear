@@ -129,7 +129,7 @@ class FormHacker {
         this.action.payload = this.action.payload.setIn([ 'conditionals' ], conditional);
       }
     } 
-
+    // console.log('reinitial conditional:', this.action);
     return this.action;
   }
 
@@ -181,7 +181,7 @@ export default ({ getState }) => { // eslint-disable-line dispatch //
     const state = getState();
     let hacker = new FormHacker(state, action, next);
     let newAction = hacker.workaround();
-    // console.log('hacker', newAction);
+    // console.log('hacker', newAction, next);
 
     // console.log('............. on form middleware ...............', getState().toJS(), 'state',  action, 'action');    
     return next(newAction);

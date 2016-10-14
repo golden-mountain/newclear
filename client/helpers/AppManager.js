@@ -3,26 +3,35 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 
-import appActions from 'redux/modules/app/index';
 import { getAxapiResponse, getPageVar } from 'helpers/stateHelper';
-import appConfigs from 'configs/app';
-
-// import PageLayout from `layouts/${appConfigs.LAYOUT}/PageLayout`;
+// import appConfigs from 'configs/app';
+import appActions from 'redux/modules/app/index';
+// import * as pageActions from 'redux/modules/app/page';
+// import * as themeActions from 'redux/modules/app/theme';
+// import * as featureActions from 'redux/modules/app/feature';
 
 // Page Connector
 const AppManager = config => warppedElement => {
 
   const bindPage = actionCreator => actionCreator.bind(null, config.page);
 
+  // delete pageActions.default;
+  // delete themeActions.default;
+  // delete featureActions.default;
+  // const appActions = {
+  //   ...pageActions,
+  //   ...themeActions,
+  //   ...featureActions
+  // };
+
   const boundAppAcs = mapValues(appActions, bindPage);
   let page = connect(
     (state) => {
       return {
         axapiResponse: getAxapiResponse(state, config.page), // invalid on context
-        pageVar: getPageVar(state, config.page), // invalid on context
-        pageEnv: config, // valid on context
-        env: config,
-        appEnv: appConfigs
+        initialValues: config.initialValues, // invalid on context
+        page: getPageVar(state, config.page), // invalid on context
+        env: config // valid on context
       };
     },
     (dispatch) => ( bindActionCreators(boundAppAcs, dispatch) )

@@ -3,7 +3,8 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
-
+const config = require ('./client/configs/app');
+console.log(config);
 // const nodeEnv = process.env.NODE_ENV || 'development';
 // const isProd = nodeEnv === 'production';
 
@@ -118,9 +119,9 @@ module.exports = {
 
     new webpack.ProvidePlugin({
         Promise: 'es6-promise-promise', // works as expected
-    }),
+    })
 
-    // new webpack.ContextReplacementPlugin(/.*$/, 'layouts/a10/AppLayout', true, { 'AppLayout': './AppLayout'})
+    // new webpack.ContextReplacementPlugin(/.*layouts$/, false, new RegExp(config.LAYOUT + '$','g'))
 
   ],
   devtool:'source-map',

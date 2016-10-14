@@ -5,6 +5,7 @@ import { APP_CURRENT_PAGE } from 'configs/appKeys';
 
 const fieldReducers = {
   [ REGISTER_PAGE_FIELD ](state, { page, field, payload }) {
+    console.log('register page fielding.........');
     const result = state.setIn([ page, 'form', field ], payload);
     return result;
   },
@@ -33,7 +34,7 @@ export default fieldReducers;
 
 // -------------------- Field Actions --------------------
 export const registerPageField = (page, field, payload) => 
-{ 
+{   
   return { type: REGISTER_PAGE_FIELD, page, field, payload };
 };
 

@@ -1,75 +1,28 @@
 import { Component, PropTypes } from 'react';
-import invariant from 'invariant';
+// import invariant from 'invariant';
 // import { isEqual } from 'lodash';
 
 export default class BaseForm extends Component {
+  constructor(props, context) {
+    super(props, context);
+  }
+
+  // componentWillMount() {
+  //   // console.log('form env', this.props.env);
+  //   this.context.props.registerCurrentPage(Object.assign(this.props.env, this.context.props.env));
+  // }
 
   getChildContext() {
-    return {  props: this.props  };
+    // console.log('context props:', this.context.props, 'props:', this.props);
+    return {  props: Object.assign({} , this.props, this.context.props ) };
   }
 
-  // this is important to stop dead loop by updateing page information
-  // shouldComponentUpdate(nextProps) {
-  //   const shouldUpdate = (propsToNotUpdateFor, nextProps, currentProps) => {
-  //     // if you update some page vars not need update the page, then you must
-  //     // specific propsToNotUpdateFor
-  //     // 
-  //     return Object.keys(nextProps).some(prop => {    
-  //       const compare = !~propsToNotUpdateFor.indexOf(prop) && !isEqual(currentProps && currentProps[ prop ], nextProps && nextProps[ prop ]);
-  //       return compare;
-  //     });
-  //   };
-
-  //   let result = true;
-  //   if (nextProps.page) {
-  //     const propsToNotUpdateForPage = [ 'form' ];
-  //     result = shouldUpdate(propsToNotUpdateForPage, nextProps.page.toJS(), this.props.page && this.props.page.toJS());
-  //   }
-
-  //   // console.log('should update, ', result);
-  //   return result;
-  // }
-
-  // if place here, will update form first
-  // componentWillReceiveProps(nextProps) {
-  //   // const fieldName = this.props.schema['src-name'];
-  //   if (this.props.pageForm) {
-  //     const currentFormValues = this.props.pageForm.getIn([ this.props.env.form, 'values' ] );
-  //     const nextFormValues = nextProps.pageForm.getIn([ this.props.env.form, 'values' ]);
-  //     // console.log(currentFormValues, nextFormValues);
-  //     if (!currentFormValues || !isEqual(currentFormValues, nextFormValues)) {
-  //       // console.log('form value');
-  //       this.props.updateReduxFormSyncErrors(this.props.env.form, 
-  //         {
-  //           'virtual-server': {
-  //             'name': 'Error Name provided'
-  //           }
-  //         }, 
-  //         {}
-  //       );
-  //     }
-  //   }
-  // }
-  componentWillMount() {
-    invariant(this.props.registerCurrentPage, 'BaseForm not a single page component, depends on child page component');
-    this.props.registerCurrentPage(this.props.env);
-    if (this.props.visible === undefined || this.props.visible) {
-      this.props.setPageVisible(this.props.env.page, true);
-    } else {
-      this.props.setPageVisible(this.props.env.page, false);
-    }
-    // get connected url keys
-    if (this.props.urlKeysConnect) {
-      console.log('url keys connect:', this.props.urlKeysConnect);
-    }
-  }
-
-  componentWillUnmount() {
-    // console.log('will unmount this'); 
-    this.props.destroyPage();
-  }
 }
 
 BaseForm.childContextTypes = {
+  props: PropTypes.object.isRequired
+};
+
+BaseForm.contextTypes = {
   props: PropTypes.object.isRequired
 };

@@ -1,10 +1,10 @@
-const OEM = 'a10';
-const LAYOUT = OEM;
-const THEME = OEM;
-const APP_CONFIGS =  {
+var OEM = 'a10';
+var LAYOUT = OEM;
+var THEME = OEM;
+var APP_CONFIGS =  {
   OEM,
   LAYOUT,
   THEME
 };
 
-export default APP_CONFIGS;
+module.exports = APP_CONFIGS;

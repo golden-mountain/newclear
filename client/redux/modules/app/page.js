@@ -1,6 +1,6 @@
 import { 
     REGISTER_PAGE_VAR, REGISTER_PAGE_TITLE , 
-    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE,
+    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE, UPDATE_CURRENT_PAGE,
     REGISTER_PAGE_VISIBLE
 } from 'redux/modules/actionTypes';
 
@@ -32,8 +32,17 @@ const pageReducers = {
     return state.setIn([ APP_CURRENT_PAGE, 'pages', affectPage, 'visible' ], visible);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
+    // console.log('===>', env);
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
     result = result.push(fromJS(env));
+    return state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
+  },
+  [ UPDATE_CURRENT_PAGE ](state, { env }) {
+    // console.log('===>', env);
+    let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
+    let last = result.last().mergeDeep(env);
+    result = result.pop();
+    result = result.push(last);
     return state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
   },
   [ DESTROY_PAGE ](state, { page }) {
@@ -53,6 +62,10 @@ export const registerPageVar = (page, node, payload) => {
 
 export const registerCurrentPage = (page, env) => {
   return { type: REGISTER_CURRENT_PAGE, page, env };
+};
+
+export const updateCurrentPage = (page, env) => {
+  return { type: UPDATE_CURRENT_PAGE, page, env };
 };
 
 export const setPageTitle = (page, title) => {

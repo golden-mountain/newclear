@@ -1,65 +1,29 @@
-import React, { PropTypes } from 'react';
-import FormManager from 'helpers/FormManager';
-// import { withRouter } from 'react-router';
-import LoginForm from 'components/Form/Login';
-import { Form } from 'react-bootstrap';
-import BaseForm from 'pages/BaseForm';
+import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 
-class LoginPage extends BaseForm {
-  static propTypes = {
-    children: PropTypes.node
-  }
+import BasePage from 'pages/BasePage';
+import AppManager from 'helpers/AppManager';
+import LoginForm from './components/Form';
 
-  // shouldComponentUpdate(nextProps) {
-  //   if (nextProps.axapiResponse && nextProps.axapiResponse.getIn([ 'response', 'signature' ])) {
-  //     const { location } = this.props;
-  //     if (location.state && location.state.nextPathname ) {
-  //       this.props.router.replace(location.state.nextPathname);
-  //     } else {
-  //       this.props.router.replace('/');
-  //     }
-  //     return false;
-  //   }
-  //   return true;
-
-  // }
-
-  onSubmit(values) {
-    const fullAuthData = {
-      path: '/axapi/v3/auth',
-      method: 'POST',
-      body: values
-    };
-    this.props.setPageTitle('testaaaaaaaaaaaaaa');
-    return this.props.axapiRequest(fullAuthData);
-  }
-
+class LoginPage extends BasePage {
+ 
   render() {
-    const { handleSubmit, pristine, submitting, reset } = this.props;
-    const subProps = { pristine, submitting, reset };
+    const { from } = this.props.location.state || '/';
+    
     return (
-      <div className="fluid-container">
-        <Form onSubmit={handleSubmit(::this.onSubmit)} horizontal>
-          <LoginForm { ...subProps } />
-        </Form>
-      </div>
+      <Row>
+        <Col xs={12}>
+          <LoginForm from={from}/>
+        </Col>
+      </Row>
     );
   }
 
 }
 
-const initialValues = {
-  credentials: {
-    username: 'admin',
-    password: 'a10'
-  }
-};
-
-const InitializeFromStateForm = FormManager({
-  page: 'login',
-  form: 'loginForm',
-  initialValues: initialValues
+const InitializeFromStatePage = AppManager({
+  page: 'login'
 })(LoginPage);
 
 
-export default InitializeFromStateForm;
+export default InitializeFromStatePage;

@@ -218,9 +218,9 @@ const initialValues = {
 };
 
 const InitializeFromStateForm = FormManager({
-  page: 'virtualServer',
+  // page: 'virtualServer',
   form: 'virtualServerForm',
-  initialValues: initialValues
+  initialValues
 })(VirtualServerForm);
 
 export default InitializeFromStateForm;

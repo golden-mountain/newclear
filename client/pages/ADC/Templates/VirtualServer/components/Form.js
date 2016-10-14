@@ -156,7 +156,6 @@ const initialValues = {
 };
 
 const InitializeFromStateForm = FormManager({
-  page: 'templateVirtualServer',
   form: 'templateVirtualServerForm',
   initialValues: initialValues
 })(TemplateVirtualServerForm);

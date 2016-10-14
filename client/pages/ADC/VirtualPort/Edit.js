@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
 import AppManager from 'helpers/AppManager';
+import BasePage from 'pages/BasePage';
 
-
-class VirtualPortEdit extends Component {
+class VirtualPortEdit extends BasePage {
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
 
@@ -22,7 +22,8 @@ class VirtualPortEdit extends Component {
 
 
 const InitializeFromStatePage = AppManager({
-  page: 'virtualPort'
+  page: 'virtualPort',
+  form: 'virtualPortForm'
 })(VirtualPortEdit);
 
 export default InitializeFromStatePage;
