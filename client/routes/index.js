@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import Router from 'react-router/BrowserRouter';
 
-// import AppLayout from '../layouts/a10/AppLayout';
+import AppRoutes from './app';
 import AuthRouters from './auth';
 import ADCRouters from './adc';
 import DashboardRouters from './dashboard';
 import ApiTestToolRouters from './tool';
-
 
 export default class App extends Component {
   render() {
@@ -14,6 +13,7 @@ export default class App extends Component {
     return (
       <Router>
         <div>
+          { AppRoutes }
           { ApiTestToolRouters }
           { AuthRouters }
           { ADCRouters }

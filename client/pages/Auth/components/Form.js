@@ -16,7 +16,6 @@ class LoginForm extends BaseForm {
   }
 
   onSubmit(values) {
-    console.log('submitting...........');
     const fullAuthData = {
       path: '/axapi/v3/auth',
       method: 'POST',
@@ -32,12 +31,11 @@ class LoginForm extends BaseForm {
   }
 
   render() {
-    // console.log(this.context);
     const { from } = this.props;
     const { sessionID } = this.state;
 
     return (
-      sessionID ? <Redirect to={from || '/'}/> :
+      sessionID ? <Redirect to={ { pathname: from || '/' }}/> :
       <A10Form onSubmit={this.props.handleSubmit(::this.onSubmit)} horizontal>
         <A10SchemaField name="credentials.username" label="Username" validation={{ required }}>
           <FormControl type="text" className="form-control"/>

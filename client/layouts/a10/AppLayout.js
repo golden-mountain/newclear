@@ -67,11 +67,13 @@ class AppLayout extends Component {
 
   render() {
     return (
-      <main className="main-app">
+      <main >
         <Menu />
         
         <NotificationSystem ref="notificationSystem" />
-        {this.props.children}
+        <div className="container-fluid">
+          {this.props.children}
+        </div>
         <Modal show={this.state.showLogin} onHide={this.close}>
           <Modal.Header>
             <Modal.Title>Login</Modal.Title>

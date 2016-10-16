@@ -24,32 +24,28 @@ class VirtualPort extends BaseForm {
 
     const urlKeys = { 'name': 'vs2' };
     return (
+      <A10Form schemas={[ slbVirtualPortSchema ]} edit={false} urlKeys={urlKeys} horizontal>
         <Row>
-
           <Col xs={12}>
-              <A10Form schemas={[ slbVirtualPortSchema ]} edit={false} urlKeys={urlKeys} horizontal>
-                <Row>
-                  <Col xs={12}>
-                    <Panel header={<h4>Basic Field</h4>}>
-                      <A10SchemaField schema={elements['port-number']} name="port.port-number" label="Port" />
+            <Panel header={<h4>Basic Field</h4>}>
+              <A10SchemaField schema={elements['port-number']} name="port.port-number" label="Port" />
 
-                      <A10SchemaField schema={elements['protocol']} name="port.protocol" component={A10Field} label="Port Protocol" conditional={true} value="udp" >
-                        <FormControl componentClass="select">
-                          <option value="tcp">tcp</option>
-                          <option value="udp">udp</option>
-                        </FormControl>
-                      </A10SchemaField>
+              <A10SchemaField schema={elements['protocol']} name="port.protocol" component={A10Field} label="Port Protocol" conditional={true} value="udp" >
+                <FormControl componentClass="select">
+                  <option value="tcp">tcp</option>
+                  <option value="udp">udp</option>
+                </FormControl>
+              </A10SchemaField>
 
-                    </Panel>
-                  </Col>
-
-                </Row>
-
-                <A10SubmitButtons {...rest}/>
-
-              </A10Form>
+            </Panel>
           </Col>
+
         </Row>
+
+        <A10SubmitButtons {...rest}/>
+
+      </A10Form>
+
     );
   }
 }

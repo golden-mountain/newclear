@@ -106,95 +106,91 @@ class VirtualServerForm extends BaseForm {
     };
 
     return (
+      <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
         <Row>
-          <Col xs={10}>
-              <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
-                <Row>
-                  <Col xs={12}>
-                    <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-                      <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" />
+          <Col xs={12}>
+            <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
+              <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" />
 
 
-                      <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
-                        <Checkbox value={true} />
-                      </A10SchemaField>
+              <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
+                <Checkbox value={true} />
+              </A10SchemaField>
 
-                      <A10SchemaField name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
-                        <div>
-                          <Radio value="0" inline> IPv4 </Radio>
-                          <Radio value="1" inline> IPv6 </Radio>
-                        </div>
-                      </A10SchemaField>
+              <A10SchemaField name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+                <div>
+                  <Radio value="0" inline> IPv4 </Radio>
+                  <Radio value="1" inline> IPv6 </Radio>
+                </div>
+              </A10SchemaField>
 
-                      <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
+              <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                      <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
+              <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-                      <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
-                      <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
+              <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
+              <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
 
-                    </Panel>
+            </Panel>
 
-                    <Panel header={<h4>Advanced Fields</h4>} collapsible defaultExpanded>
+            <Panel header={<h4>Advanced Fields</h4>} collapsible defaultExpanded>
 
-                      <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
-                        <Checkbox value={true} />
-                      </A10SchemaField>
+              <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
+                <Checkbox value={true} />
+              </A10SchemaField>
 
-                      <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
-                        <div>
-                          <Radio value="stats-data-enable" inline> Enable </Radio>
-                          <Radio value="stats-data-disable" inline> Disable </Radio>
-                        </div>
-                      </A10SchemaField>
+              <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
+                <div>
+                  <Radio value="stats-data-enable" inline> Enable </Radio>
+                  <Radio value="stats-data-disable" inline> Disable </Radio>
+                </div>
+              </A10SchemaField>
 
-                      <A10SchemaField schema={elements['extended-stats']} name="virtual-server.extended-stats" label="Extended Stats" value={false}>
-                        <Checkbox value={true} />
-                      </A10SchemaField>
+              <A10SchemaField schema={elements['extended-stats']} name="virtual-server.extended-stats" label="Extended Stats" value={false}>
+                <Checkbox value={true} />
+              </A10SchemaField>
 
-                      <A10SchemaField schema={elements['redistribution-flagged']} name="virtual-server.redistribution-flagged" label="Redistribution Flagged" value={false}>
-                        <Checkbox value={true} />
-                      </A10SchemaField>
+              <A10SchemaField schema={elements['redistribution-flagged']} name="virtual-server.redistribution-flagged" label="Redistribution Flagged" value={false}>
+                <Checkbox value={true} />
+              </A10SchemaField>
 
-                      <A10SchemaField
-                        schema={elements['vrid']}
-                        name="virtual-server.vrid"
-                        label="VRID"
-                        description="Join a VRRP group (Specify a VRRP-A vrid)"
-                        placeholder="Enter vrid."
-                        conditional={true}
-                      />
-                      <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
-                      <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
-                      <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />
+              <A10SchemaField
+                schema={elements['vrid']}
+                name="virtual-server.vrid"
+                label="VRID"
+                description="Join a VRRP group (Specify a VRRP-A vrid)"
+                placeholder="Enter vrid."
+                conditional={true}
+              />
+              <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
+              <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
+              <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />
 
-                      <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
-                    </Panel>
-                  {/*</Col>
+              <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
+            </Panel>
+          {/*</Col>
 
-                  <Col xs={6}>*/}
-                    <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
-                      <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
-                        <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
-                        <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
+          <Col xs={6}>*/}
+            <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
+              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
+                <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
+                <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
 
-                        <A10SchemaField layout={false} name="protocol" title="Protocol" >
-                          <FormControl componentClass="select">
-                            <option value="tcp">tcp</option>
-                            <option value="udp">udp</option>
-                          </FormControl>
-                        </A10SchemaField>
+                <A10SchemaField layout={false} name="protocol" title="Protocol" >
+                  <FormControl componentClass="select">
+                    <option value="tcp">tcp</option>
+                    <option value="udp">udp</option>
+                  </FormControl>
+                </A10SchemaField>
 
-                      </A10MultiField>
-                    </Panel>
-                  </Col>
-                </Row>
-
-                <A10SubmitButtons {...rest}/>
-
-              </A10Form>
+              </A10MultiField>
+            </Panel>
           </Col>
         </Row>
+
+        <A10SubmitButtons {...rest}/>
+
+      </A10Form>
     );
   }
 }

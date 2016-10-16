@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router/es6';
+import { Link } from 'react-router';
 
 export default class PageNotFound extends React.Component {
   render() {

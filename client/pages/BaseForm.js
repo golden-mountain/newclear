@@ -8,7 +8,7 @@ export default class BaseForm extends Component {
   }
 
   getChildContext() {
-    console.log('context props:', this.context.props, 'props:', this.props);
+    // console.log('context props:', this.context.props, 'props:', this.props);
     return {  props: this.props };
   }
 
@@ -23,7 +23,8 @@ export default class BaseForm extends Component {
   }
 
   componentWillUnmount() {
-    // console.log('will unmount this'); 
+    // console.log('will unmount this', this.props.env.page); 
+    this.props.setPageVisible(this.props.env.page, false);
     this.props.destroyPage();
   }
 }

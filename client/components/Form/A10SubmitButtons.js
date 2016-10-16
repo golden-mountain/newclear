@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Button, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import { setLastPageVisible } from '';
 
 export class A10SubmitButtons extends Component {
@@ -48,23 +48,19 @@ export class A10SubmitButtons extends Component {
   render() {
     const { buttons=[ 'create', 'cancel' ] } = this.props;
     return (
-      <Row>
-        <Col xs={12}>
-          <FormGroup>
-            <Col className="pull-right">
-              <ButtonToolbar>
-                <ButtonGroup bsSize="large">
-                  {
-                    buttons.map((name, index) =>{
-                      return this.buttons[name](this.props, index);
-                    })
-                  }
-                </ButtonGroup>
-              </ButtonToolbar>
-              </Col>
-          </FormGroup>
-        </Col>
-      </Row>
+      
+      <FormGroup>
+          <ButtonToolbar>
+            <ButtonGroup bsSize="large" className="pull-right">
+              {
+                buttons.map((name, index) =>{
+                  return this.buttons[name](this.props, index);
+                })
+              }
+            </ButtonGroup>
+          </ButtonToolbar>
+      </FormGroup>
+    
     );
   }
 }

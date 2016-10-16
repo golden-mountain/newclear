@@ -2,7 +2,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
-import { reduxForm } from 'redux-form/immutable'; // imported Field
+// import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 import { getAxapiResponse, getPageVar } from 'helpers/stateHelper';
 // import appConfigs from 'configs/app';
@@ -23,11 +23,11 @@ const AppManager = config => warppedElement => {
   //   ...themeActions,
   //   ...featureActions
   // };
-  let page = reduxForm({
-    form: config.form
-  } )(warppedElement);
+  // let page = reduxForm({
+  //   form: config.form
+  // } )(warppedElement);
 
-  page = connect(
+  let page = connect(
     (state) => {
       return {
         axapiResponse: getAxapiResponse(state, config.page), // invalid on context
@@ -41,7 +41,7 @@ const AppManager = config => warppedElement => {
       const boundAppAcs = mapValues(window.appActions, bindPage);
       return bindActionCreators(boundAppAcs, dispatch);
     }
-  )(page);
+  )(warppedElement);
   // console.log(appConfigs);
   // const componentPath = `layouts/${appConfigs.LAYOUT}/PageLayout`;
   // console.log(componentPath);
