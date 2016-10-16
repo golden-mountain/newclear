@@ -1,32 +1,43 @@
-import { Component, PropTypes } from 'react';
-import invariant from 'invariant';
+import { Component } from 'react';
+// import invariant from 'invariant';
 
 export default class BasePage extends Component {
 
-  getChildContext() {
-    return {  props: this.props  };
-  }
+  // constructor(props, context) {
+  //   super(props, context);
+  // }
 
-  componentWillMount() {
-    invariant(this.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
-    this.props.registerCurrentPage(this.props.env);
-    if (this.props.visible === undefined || this.props.visible) {
-      this.props.setPageVisible(this.props.env.page, true);
-    } else {
-      this.props.setPageVisible(this.props.env.page, false);
-    }
-    // get connected url keys
-    if (this.props.urlKeysConnect) {
-      console.log('url keys connect:', this.props.urlKeysConnect);
-    }
-  }
+  // // getChildContext() {
+  // //   return {  props: this.props };
+  // // }
+  // registerPage(configs) {
+  //   this.context.props.registerCurrentPage(configs);
+  //   if (this.props.visible === undefined || this.props.visible) {
+  //     this.context.props.setPageVisible(configs.page, true);
+  //   } else {
+  //     this.context.props.setPageVisible(configs.page, false);
+  //   }
+  //   // get connected url keys
+  //   // if (this.props.urlKeysConnect) {
+  //   //   console.log('url keys connect:', this.context.props.urlKeysConnect);
+  //   // }
+  // }
 
-  componentWillUnmount() {
-    // console.log('will unmount this'); 
-    this.props.destroyPage();
-  }
+  // componentWillMount() {
+  //   // invariant(this.context.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
+  //   if (this.props.env) {
+  //     this.registerPage(this.props.env);
+  //   } else {
+  //     this.registerPage(this.context.props.env);
+  //   }
+  // }
+
+  // componentWillUnmount() {
+  //   // console.log('will unmount this'); 
+  //   this.context.props.destroyPage();
+  // }
 }
 
-BasePage.childContextTypes = {
-  props: PropTypes.object.isRequired
-};
+// BasePage.contextTypes = {
+//   props: PropTypes.object.isRequired
+// };

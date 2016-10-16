@@ -65,6 +65,7 @@ class TableFields extends Component {
   render() {
     const { fields, meta: { touched, error }, popupInfo, kids } = this.props;
 
+    // console.log('popup info:', popupInfo);
     return (
       <div>
         <div className="pull-right">

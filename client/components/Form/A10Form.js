@@ -100,8 +100,6 @@ class A10SchemaForm extends Component {
     if (!context.props) {
       throw new Error('Config should passed from parent');
     }
-
-    this._context = context;
     this._parentProps = context.props;
   }
 
@@ -149,19 +147,20 @@ class A10SchemaForm extends Component {
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
       }
-      const promise = this._context.props.axapiRequest(parsedValues, true);
+      const promise = this.context.props.axapiRequest(parsedValues, true);
       // console.log(' returned promise ', promise);
       if (promise) {
         // TODO: release the store
         // promise.finally(() => {
-        //   this._context.props.storeApiInfo(form, false);
+        //   this.context.props.storeApiInfo(form, false);
         // });
         // console.log('returned from propmise');
       }
 
       return promise;
     } else {
-      this._context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
+      console.log(values, form, save);
+      this.context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
       return new Promise((resolve, reject) => { // eslint-disable-line
         resolve(parsedValues);
       });
@@ -200,7 +199,6 @@ class A10SchemaForm extends Component {
     } = this.props;
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
-    console.log(this._parentProps);
     const { handleSubmit, fieldConnector, env } = this._parentProps;
 
     let submit = (values) => {
@@ -229,7 +227,6 @@ class A10SchemaForm extends Component {
       };
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
-        // console.log('connect to value.................');
         fieldConnector.connectToValues(newValues);
         result = submitFunc.call(this, newValues, env.form, false);
       } else {

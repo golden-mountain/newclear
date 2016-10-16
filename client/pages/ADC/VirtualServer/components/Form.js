@@ -58,6 +58,7 @@ class VirtualServerForm extends BaseForm {
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
+    // console.log(TemplateVirtualServerForm);
     const tplVirtualServerPopupInfo = {
       pageClass: TemplateVirtualServerForm,
       title: 'Create Virtual Server Template',
@@ -225,8 +226,7 @@ const initialValues = {
 };
 
 const InitializeFromStateForm = FormManager({
-  // page: 'virtualServer',
-  form: 'virtualServerForm',
+  page: 'virtual-server-edit',
   initialValues
 })(VirtualServerForm);
 

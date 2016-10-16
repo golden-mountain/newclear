@@ -7,22 +7,28 @@ export default class BaseForm extends Component {
     super(props, context);
   }
 
-  // componentWillMount() {
-  //   // console.log('form env', this.props.env);
-  //   this.context.props.registerCurrentPage(Object.assign(this.props.env, this.context.props.env));
-  // }
-
   getChildContext() {
-    // console.log('context props:', this.context.props, 'props:', this.props);
-    return {  props: Object.assign({} , this.props, this.context.props ) };
+    console.log('context props:', this.context.props, 'props:', this.props);
+    return {  props: this.props };
   }
 
+  componentWillMount() {
+    // invariant(this.context.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
+    this.props.registerCurrentPage(this.props.env);
+    if (this.props.visible === undefined || this.props.visible) {
+      this.props.setPageVisible(this.props.env.page, true);
+    } else {
+      this.props.setPageVisible(this.props.env.page, false);
+    }    
+  }
+
+  componentWillUnmount() {
+    // console.log('will unmount this'); 
+    this.props.destroyPage();
+  }
 }
 
 BaseForm.childContextTypes = {
   props: PropTypes.object.isRequired
 };
 
-BaseForm.contextTypes = {
-  props: PropTypes.object.isRequired
-};

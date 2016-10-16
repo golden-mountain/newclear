@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
 import AppLayout from '../layouts/a10/AppLayout';
+import EmptyLayout from '../layouts/a10/EmptyLayout';
+// import AppManager from 'helpers/AppManager';
+
+// const createLayoutWrapper = (Layout, configs) => {
+//   class Wrapper extends Component {
+//     static childContextTypes = {
+//       props: PropTypes.object.isRequired
+//     }
+
+//     getChildContext() {
+//       return {  props: this.props  };
+//     }
+
+//     render() {
+//       return <Layout>{ this.props.children }</Layout>;
+//     }
+//   }
+
+//   return AppManager(configs)(Wrapper);
+// };
 
 export default function asyncComponent(getComponent, Layout=AppLayout) {
-  return class AsyncComponent extends Component {
+  class AsyncComponent extends Component {
     static Component = null;
     state = { Component: AsyncComponent.Component };
 
@@ -18,15 +38,21 @@ export default function asyncComponent(getComponent, Layout=AppLayout) {
     render() {
       const { Component } = this.state;
       if (Component) {
-        if (typeof Layout == 'object') {
-          console.log(Layout);
-          return <Layout><Component {...this.props} /></Layout>;
-        } else {
-          // console.log(Component, this.props);
-          return <Component {...this.props} />;
+        // console.log(Component, this.props);
+        if (!Layout) {
+          Layout = EmptyLayout;
         }
+
+        // const LayoutWrapper = createLayoutWrapper(Layout, {
+        //   page: this.props.pathname,
+        //   form: this.props.pathname
+        // });
+          
+        return <Layout><Component {...this.props} /></Layout>;
       }
       return null;
     }
-  };
+  }
+
+  return AsyncComponent;
 }

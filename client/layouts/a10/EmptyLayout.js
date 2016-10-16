@@ -1,3 +1,15 @@
-export default function EmptyLayout({ children }) {
-  return children;
+import React, { Component } from 'react';
+
+export default class EmptyLayout extends Component {
+  
+  render() {
+    return (
+      <main className="main-app">
+        
+        {this.props.children}
+        
+      </main>
+    );
+  }
 }
+

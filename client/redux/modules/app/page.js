@@ -32,7 +32,6 @@ const pageReducers = {
     return state.setIn([ APP_CURRENT_PAGE, 'pages', affectPage, 'visible' ], visible);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
-    // console.log('===>', env);
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
     result = result.push(fromJS(env));
     return state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import ApiTesterForm from './components/Form';
-import AppManager from 'helpers/AppManager';
+// import AppManager from 'helpers/AppManager';
+import BasePage from 'pages/BasePage';
 
-class ApiTester extends Component {
+export default class ApiTester extends BasePage {
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
 
@@ -19,8 +20,9 @@ class ApiTester extends Component {
 }
 
 
-const InitializeFromStatePage = AppManager({
-  page: 'apiTester'
-})(ApiTester);
+// const InitializeFromStatePage = AppManager({
+//   page: 'apiTester',
+//   form: 'apiTesterForm'
+// })(ApiTester);
 
-export default InitializeFromStatePage;
+// export default InitializeFromStatePage;

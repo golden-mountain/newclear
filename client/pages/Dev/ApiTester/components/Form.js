@@ -10,6 +10,7 @@ import JSONEditor from 'components/JSONEditor';
 import BaseForm from 'pages/BaseForm';
 
 import FormManager from 'helpers/FormManager';
+import auth from 'helpers/auth';
 
 const initialValues = {
   path: '/axapi/v3/auth',
@@ -18,6 +19,8 @@ const initialValues = {
 };
 
 class AxapiForm extends BaseForm {
+
+  state = { sessionId: auth.getToken() }
 
   setHistoryQuery(historyData) {
     const dateReg = /^\d{4}.*:\d{2}$/;
@@ -34,7 +37,10 @@ class AxapiForm extends BaseForm {
   }
 
   initSession() {
-    this.props.axapiRequest(initialValues);
+    const promise = this.props.axapiRequest(initialValues);
+    promise.then(() => {
+      this.setState({ sessionId: auth.getToken() });
+    });
   }
 
   fetchHistory() {
@@ -51,9 +57,11 @@ class AxapiForm extends BaseForm {
   }
 
   render() {
-    const { handleSubmit, submitting, reset, pristine, axapiRequest, axapiResponse } = this.props;
+    const { submitting, reset, pristine } = this.props;
+    const { axapiResponse, handleSubmit } = this.props;
     const historyData = this.fetchHistory();
     // console.log(axapiResponse);
+    // console.log(this.context, '>>>>>>>>>>>>>props');
     return (
       <div className="container-fluid">
         <Helmet title="API TESTER"/>
@@ -66,14 +74,14 @@ class AxapiForm extends BaseForm {
             <Col xs={5}>   
               <h4>Request </h4>   
               <Panel>
-                <Form onSubmit={handleSubmit(axapiRequest)} horizontal>
+                <Form onSubmit={handleSubmit(this.props.axapiRequest)} horizontal>
                   <FormGroup controlId="formHorizontalEmail">
                     <Col componentClass={ControlLabel} sm={2}>
                       Session
                     </Col>
                     <Col sm={10}>
                   <FormControl.Static>
-                  {sessionStorage.getItem('token') } 
+                  { this.state.sessionId } 
                   <Button onClick={::this.initSession} bsSize="small" >Init Session</Button> 
                   </FormControl.Static>             
                       </Col>
@@ -136,9 +144,8 @@ class AxapiForm extends BaseForm {
 }
 
 const InitializeFromStateForm = FormManager({
-  page: 'apiTester',
-  form: 'apiTesterForm', 
-  initialValues: initialValues
+  page: 'axapiTesterTool',
+  initialValues
 })(AxapiForm);
 
 export default InitializeFromStateForm;

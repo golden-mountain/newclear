@@ -2,10 +2,11 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
+import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 import { getAxapiResponse, getPageVar } from 'helpers/stateHelper';
 // import appConfigs from 'configs/app';
-import appActions from 'redux/modules/app/index';
+// import appActions from 'redux/modules/app/index';
 // import * as pageActions from 'redux/modules/app/page';
 // import * as themeActions from 'redux/modules/app/theme';
 // import * as featureActions from 'redux/modules/app/feature';
@@ -13,7 +14,6 @@ import appActions from 'redux/modules/app/index';
 // Page Connector
 const AppManager = config => warppedElement => {
 
-  const bindPage = actionCreator => actionCreator.bind(null, config.page);
 
   // delete pageActions.default;
   // delete themeActions.default;
@@ -23,9 +23,11 @@ const AppManager = config => warppedElement => {
   //   ...themeActions,
   //   ...featureActions
   // };
+  let page = reduxForm({
+    form: config.form
+  } )(warppedElement);
 
-  const boundAppAcs = mapValues(appActions, bindPage);
-  let page = connect(
+  page = connect(
     (state) => {
       return {
         axapiResponse: getAxapiResponse(state, config.page), // invalid on context
@@ -34,8 +36,12 @@ const AppManager = config => warppedElement => {
         env: config // valid on context
       };
     },
-    (dispatch) => ( bindActionCreators(boundAppAcs, dispatch) )
-  )(warppedElement);
+    (dispatch) => {
+      const bindPage = actionCreator => actionCreator.bind(null, config.page);
+      const boundAppAcs = mapValues(window.appActions, bindPage);
+      return bindActionCreators(boundAppAcs, dispatch);
+    }
+  )(page);
   // console.log(appConfigs);
   // const componentPath = `layouts/${appConfigs.LAYOUT}/PageLayout`;
   // console.log(componentPath);

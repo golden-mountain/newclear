@@ -3,7 +3,7 @@ import { Iterable, List, Map, fromJS } from 'immutable';
 // axapi request import
 import moment from 'moment';
 import { get, isArray } from 'lodash';
-import * as logger from 'helpers/logger';
+// import * as logger from 'helpers/logger';
 
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { 
@@ -45,7 +45,7 @@ const apiReducers = {
   },
   [ AXAPI_SAVE_SUCCESS ](state, { resp, data, page, notifiable }) {
     // console.log('notifiable::::::', notifiable);
-    console.log('success  axapi request ......................................', resp);
+    // console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
       let newResp = resp[0];
       let body = null;
@@ -76,7 +76,7 @@ const apiReducers = {
   },
   [ AXAPI_SAVE_FAIL ](state, { resp, data, page, notifiable }) {
     // console.log('notifiable::::::', notifiable);
-    console.log('failed  axapi request ......................................', resp);
+    // console.log('failed  axapi request ......................................', resp);
     // let newResp = resp;
     let newResp = resp ? resp : { body: '' };
     
@@ -152,7 +152,7 @@ export function axapiRequest(page, data, notifiable=false) {
     promises: promiseFuncs
   };
 
-  logger.group('before sending request', request);
+  // logger.group('before sending request', request);
   return request;
 }
 

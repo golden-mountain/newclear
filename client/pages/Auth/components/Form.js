@@ -23,7 +23,7 @@ class LoginForm extends BaseForm {
       body: values
     };
     // this.props.setPageTitle('testaaaaaaaaaaaaaa');
-    const promise = this.context.props.axapiRequest(fullAuthData);
+    const promise = this.props.axapiRequest(fullAuthData);
     promise.then((result) => {
       console.log(result, ' axapi response');
       this.setState({ sessionID: true });
@@ -32,12 +32,13 @@ class LoginForm extends BaseForm {
   }
 
   render() {
-    const { handleSubmit, from } = this.props;
+    // console.log(this.context);
+    const { from } = this.props;
     const { sessionID } = this.state;
 
     return (
       sessionID ? <Redirect to={from || '/'}/> :
-      <A10Form onSubmit={handleSubmit(::this.onSubmit)} horizontal>
+      <A10Form onSubmit={this.props.handleSubmit(::this.onSubmit)} horizontal>
         <A10SchemaField name="credentials.username" label="Username" validation={{ required }}>
           <FormControl type="text" className="form-control"/>
         </A10SchemaField>
@@ -57,7 +58,7 @@ const initialValues = {
 };
 
 const InitializeFromStateForm = FormManager({
-  form: 'loginForm', 
+  page: 'login', 
   initialValues
 })(LoginForm);
 

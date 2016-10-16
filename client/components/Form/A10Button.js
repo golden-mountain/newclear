@@ -22,11 +22,12 @@ class A10Button extends Component {
 
   render() {
     const { page, env, app, form, children, dispatch, onClick, componentClass,  //eslint-disable-line
-      popup: { formClass, title,  connectOptions, pageName,
+      popup: { pageClass, title,  connectOptions, pageName,
       urlKeysConnect,  ...modalProps }, ...rest } = this.props;
 
+    // console.log('connect options:', connectOptions);
     let popupContent = null, click = onClick, modal = null;
-    if (formClass) {
+    if (pageClass) {
       this.modelVisible = getAppPageVar(app, 'visible', pageName);
       // console.log(this.modelVisible, '..........................visible');
       const changeFormField = (name, value) => {
@@ -34,14 +35,15 @@ class A10Button extends Component {
       };
 
       popupContent = this.modelVisible
-        ? React.createElement(formClass, {
+        ? React.createElement(pageClass, {
           visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
           urlKeysConnect
         })
         : null;
       click = () => {
-        // this.setState({ showPopup: true });
+        // this.setState({ showPopup: true });    
+        // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));    
         dispatch(setPageVisible(env.page, pageName, true));
       };
 

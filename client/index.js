@@ -19,6 +19,11 @@ import reducer from './redux/modules/reducer';
 // Immutable js
 import './index.ejs';
 
+// if not import here, found we can't dispatch things
+// maybe things will bound twice
+import appActions from 'redux/modules/app/index';
+window.appActions = appActions;
+
 // api client middleware
 const client = new ApiClient();
 

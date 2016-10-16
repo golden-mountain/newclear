@@ -60,7 +60,6 @@ const initialValues = {
 
 const InitializeFromStateForm = FormManager({
   page: 'virtualPort',
-  form: 'virtualPortForm',
   initialValues: initialValues
 })(VirtualPort);
 

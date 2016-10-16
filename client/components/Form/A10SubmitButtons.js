@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, Row, Col, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+// import { setLastPageVisible } from '';
 
 export class A10SubmitButtons extends Component {
   buttons = {
@@ -12,14 +13,14 @@ export class A10SubmitButtons extends Component {
     },
     cancel: ({ pristine, submitting }, index) => {
       return (
-        <Button type="button" disabled={pristine || submitting} onClick={close} key={index} >
+        <Button type="button" disabled={pristine || submitting} onClick={::this.close} key={index} >
           Cancel
         </Button>   
       );
     },
     reset: ({ pristine, submitting }, index) => {
       return (
-        <Button type="button" disabled={pristine || submitting} onClick={close} key={index} >
+        <Button type="button" disabled={pristine || submitting} onClick={::this.close} key={index} >
           Reset
         </Button>   
       );
@@ -37,6 +38,11 @@ export class A10SubmitButtons extends Component {
   constructor(props, context) {
     super(props, context);
     this._parentProps = context.props;
+  }
+
+  close() {
+    // const { env, dispatch,  } = this.props;
+    this.context.props.setLastPageVisible(false);
   }
 
   render() {
