@@ -1,11 +1,9 @@
 import React from 'react';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';  // in ECMAScript 6
+import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { Col, Row } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { axapiGet } from 'helpers/axapiHelper';
 import { values }  from 'lodash';
-import Link from 'react-router/Link';
-
 
 class A10Table extends React.Component {
   state = {
@@ -19,10 +17,10 @@ class A10Table extends React.Component {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
-    console.log('path.....', path);
+    // console.log('path.....', path);
     let resp = axapiGet(path, params, env.page, dispatch);
     resp.then((result) => {
-      console.log('result..............', values(result[0].body).pop());
+      // console.log('result..............', values(result[0].body).pop());
       let data = this.tidyData(values(result[0].body).pop());
       this.setState({ data });
     });
@@ -34,27 +32,26 @@ class A10Table extends React.Component {
   }
 
   render() {
-    const { fieldMap, actions, options, schema } = this.props; // eslint-disable-line
+    let { fieldMap, actions, schema, children } = this.props; // eslint-disable-line
     let selectRowProp = {
       mode: 'checkbox', // or checkbox
       clickToSelect: true
     };
 
-    const formatStat = (cell) => {
-      return cell.toUpperCase();
-    };
-
-    const formatName = (cell) => {
-      return <Link to={`/adc/virtual-server/edit/${cell}`} >{cell}</Link>;
+    
+    let options = {
+      onDeleteRow: () => {console.log('deleting row');},
+      onAddRow: () => {console.log('adding row');}
     };
 
     return (
       <Row>
         <Col xs={12}>
-          <BootstrapTable data={this.state.data}  search={true} insertRow={true} deleteRow={true} selectRow={selectRowProp} pagination={true}>
-            <TableHeaderColumn dataField="enable-disable-action" dataSort={true} width="100" dataFormat={formatStat} >Enable</TableHeaderColumn>
-            <TableHeaderColumn dataField="name" isKey={true} dataSort={true} width="300" dataFormat={formatName}>Name</TableHeaderColumn>
-            <TableHeaderColumn dataField="ip-address" dataSort={true}>IP Address</TableHeaderColumn>
+          <BootstrapTable data={this.state.data}  search={true} insertRow={true} 
+            deleteRow={true} selectRow={selectRowProp} pagination={true} options={options}
+            striped={true} hover={true} condensed={true}
+            >
+            {children}
           </BootstrapTable>
           
         </Col>

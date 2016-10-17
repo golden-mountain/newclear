@@ -22,14 +22,14 @@ class A10Button extends Component {
 
   render() {
     const { page, env, app, form, children, dispatch, onClick, componentClass,  //eslint-disable-line
-      popup: { pageClass, title,  connectOptions, pageName,
+      popup: { pageClass, title,  connectOptions, pageName, pageId='default', 
       urlKeysConnect,  ...modalProps }, ...rest } = this.props;
 
     // console.log('connect options:', connectOptions);
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
-      this.modelVisible = getAppPageVar(app, 'visible', pageName);
-      // console.log(this.modelVisible, '..........................visible');
+      this.modelVisible = getAppPageVar(app, [ pageId, 'visible' ], pageName);
+      // console.log(app, pageId, pageName, this.modelVisible, '..........................visible');
       const changeFormField = (name, value) => {
         dispatch(change(env.form, name, value));
       };
@@ -38,13 +38,15 @@ class A10Button extends Component {
         ? React.createElement(pageClass, {
           visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
+          pageId,
           urlKeysConnect
         })
         : null;
       click = () => {
         // this.setState({ showPopup: true });    
         // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));    
-        dispatch(setPageVisible(env.page, pageName, true));
+        dispatch(setPageVisible(env.page, pageName, true, pageId));
+        return false;
       };
 
       modal = (
@@ -65,7 +67,11 @@ class A10Button extends Component {
       modal = children;
     }
 
-    return React.createElement( componentClass || Button, { onClick: click, ...rest }, modal);
+    let buttonStyle = {
+      cursor: 'pointer'
+    };
+    
+    return React.createElement( componentClass || Button, { onClick: click, style: buttonStyle, ...rest }, modal);
   }
 }
 

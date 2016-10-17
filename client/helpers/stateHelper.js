@@ -2,7 +2,7 @@
 // import { mapValues } from 'lodash';
 
 import { Iterable, Map } from 'immutable';
-import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { APP_CURRENT_PAGE, LAST_PAGE_KEY } from 'configs/appKeys';
 
 // import widgetActions from 'redux/modules/app/widgetActions';
 
@@ -24,7 +24,7 @@ export const getAppEnvVar = (state, immutable=false) => {
   }
 };
 
-export const getAppPageVar = (state, key='', pageName='') => {
+export const getAppPageVar = (state, keys='', pageName='') => {
   let path = [];
   const appState = state.getIn([ 'app' ], false);
   if (appState) {
@@ -41,11 +41,15 @@ export const getAppPageVar = (state, key='', pageName='') => {
     path.push(page);
   }
 
-  if (key) {
-    path.push(key);
+  if (keys && typeof keys == 'string') {
+    keys = [ keys ];
   }
 
-  // console.log('path:::::::::', path, state, state.getIn([ "app", "__app_current_page__", "pages" ] ));
+  if (keys) {
+    path= path.concat(keys);
+  }
+
+  // console.log('path:::::::::', path, state );
   return state.getIn(path);
 };
 
@@ -78,3 +82,6 @@ export const getAppValueStore = (state, form='') => {
   return result;
 };
 
+export const getAxapiUid = (state) => {
+  return state.getIn([ 'app', LAST_PAGE_KEY, 'axapiUid' ]);
+};

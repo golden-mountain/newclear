@@ -8,6 +8,7 @@ export const REGISTER_PAGE_BREADCRUMB = 'page/REGISTER_PAGE_BREADCRUMB';
 export const REGISTER_CURRENT_PAGE = 'page/REGISTER_CURRENT_PAGE';
 export const UPDATE_CURRENT_PAGE = 'page/UPDATE_CURRENT_PAGE';
 export const REGISTER_PAGE_VISIBLE = 'page/REGISTER_PAGE_VISIBLE';
+export const DESTROY_PAGE = 'page/DESTROY_PAGE';
 
 
 // field action

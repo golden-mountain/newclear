@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 // import { reduxForm } from 'redux-form/immutable'; // imported Field
 
-import { getAxapiResponse, getPageVar } from 'helpers/stateHelper';
+import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import appConfigs from 'configs/app';
 // import appActions from 'redux/modules/app/index';
 // import * as pageActions from 'redux/modules/app/page';
@@ -30,6 +30,7 @@ const AppManager = config => warppedElement => {
   let page = connect(
     (state) => {
       return {
+        axapiUid: getAxapiUid(state),
         axapiResponse: getAxapiResponse(state, config.page), // invalid on context
         initialValues: config.initialValues, // invalid on context
         page: getPageVar(state, config.page), // invalid on context

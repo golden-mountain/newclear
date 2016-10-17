@@ -1,10 +1,8 @@
 import { 
     REGISTER_PAGE_VAR, REGISTER_PAGE_TITLE , 
-    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE, UPDATE_CURRENT_PAGE,
+    REGISTER_PAGE_BREADCRUMB, REGISTER_CURRENT_PAGE, UPDATE_CURRENT_PAGE, DESTROY_PAGE, 
     REGISTER_PAGE_VISIBLE
 } from 'redux/modules/actionTypes';
-
-const DESTROY_PAGE = 'page/REGISTER_PAGE';
 
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
 import { fromJS, List } from 'immutable';
@@ -19,17 +17,13 @@ const pageReducers = {
   [ REGISTER_PAGE_BREADCRUMB ](state, { page, breadcrumb }) {
     return state.setIn([ page, 'page', 'breadcrumb' ], breadcrumb);
   },
-  [ REGISTER_PAGE_VISIBLE ](state, { currentPage, visible }) {
-    // debugger;
-    // console.log(state.toJS());
+  [ REGISTER_PAGE_VISIBLE ](state, { currentPage, visible, id='default' }) {
     let affectPage = currentPage;
     if (!affectPage) {
       affectPage = state.getIn([ APP_CURRENT_PAGE, 'envs' ]).last().getIn([ 'page' ]);
-      // console.log('last page::::::::', affectPage);
     }
-    // console.log('register page visible, currentPage:', affectPage, 'visible:', visible);
-
-    return state.setIn([ APP_CURRENT_PAGE, 'pages', affectPage, 'visible' ], visible);
+    // console.log('set page visible at: ', [ APP_CURRENT_PAGE, 'pages', affectPage, id, 'visible' ]);
+    return state.setIn([ APP_CURRENT_PAGE, 'pages', affectPage, id, 'visible' ], visible);
   },
   [ REGISTER_CURRENT_PAGE ](state, { env }) {
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ], List());
@@ -46,7 +40,7 @@ const pageReducers = {
   },
   [ DESTROY_PAGE ](state, { page }) {
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ]);
-    result = result.pop();
+    result = result.filterNot(x => x.getIn([ 'page' ]) == page);
     result = state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
     return result.deleteIn([ page ]);
   }
@@ -75,12 +69,15 @@ export const setPageBreadcrumb = (page, breadcrumb) => {
   return { type: REGISTER_PAGE_BREADCRUMB, page, breadcrumb };
 };
 
-export const setPageVisible = (page, currentPage, visible) => {
-  return { type: REGISTER_PAGE_VISIBLE, page, currentPage, visible };
+export const setPageVisible = (page, currentPage, visible, id='default') => {
+  if (!currentPage) {
+    currentPage = page;
+  }
+  return { type: REGISTER_PAGE_VISIBLE, page, currentPage, visible, id };
 };
 
-export const setLastPageVisible = (page, visible) => {
-  return { type: REGISTER_PAGE_VISIBLE, page, visible };
+export const setLastPageVisible = (page, visible, id='default') => {
+  return { type: REGISTER_PAGE_VISIBLE, page, visible, id };
 };
 
 export const destroyPage = (page) => {

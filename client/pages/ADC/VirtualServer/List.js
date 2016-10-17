@@ -1,39 +1,20 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import A10Table from 'components/List/A10Table';
+// import A10Table from 'components/List/A10Table';
 import BasePage from 'pages/BasePage';
-import AppManager from 'helpers/AppManager';
+import VirtualServerTable from './components/Table';
 
-import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
-
-class VirtualServerList extends BasePage {
+export default class VirtualServerList extends BasePage {
  
-
-  render() {
-    const fieldMap = {
-
-    };
-
-    const actions = {
-
-    };
-
-    const options = {
-
-    };
+  render() {    
 
     return (
       <Row>
         <Col xs={12}>
-          <A10Table fieldMap={fieldMap} actions={actions} options={options} schema={slbVirtualServerSchema} />
+          <VirtualServerTable  />
         </Col>
       </Row>
     );
   }
 }
-
-export default AppManager({
-  page: 'virtual-server-list'
-})(VirtualServerList);
-
