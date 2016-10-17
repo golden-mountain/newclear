@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import { Modal, Nav, Breadcrumb } from 'react-bootstrap';
+import Loading from 'react-loading';
 
 import Menu from './Menu';
 import './scss/AppLayout.scss';
@@ -66,10 +67,27 @@ class AppLayout extends Component {
 
 
   render() {
+    console.log('loading.................', this.props.isLoading);
     return (
       <main >
-        <Menu />
-        
+        <Menu>
+          <Nav pullRight>
+            { this.props.isLoading && <Loading type='cylon' color='#e3e3e3'/> }
+          </Nav>        
+        </Menu>
+
+        <Breadcrumb>
+          <Breadcrumb.Item href="#">
+            Home
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href="http://getbootstrap.com/components/#breadcrumbs">
+            Library
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active>
+            Data
+          </Breadcrumb.Item>
+        </Breadcrumb>        
+
         <NotificationSystem ref="notificationSystem" />
         <div className="container-fluid">
           {this.props.children}
@@ -92,6 +110,7 @@ class AppLayout extends Component {
 
 let InitializeFromStateForm = connect(
   (state) => ({
+    isLoading: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'isLoading' ], false),
     axapiUid: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiUid' ]),
     statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
     errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),

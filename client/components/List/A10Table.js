@@ -10,9 +10,9 @@ class A10Table extends React.Component {
     data: []
   }
 
-  componentWillMount() {
-    const { schema, dispatch, env, params } = this.props; // eslint-disable-line
-    let path = this.props.path;
+  refreshTable(props) {
+    const { schema, dispatch, env, params } = props; // eslint-disable-line
+    let path = props.path;
     if (!path) {
       path = schema.axapi;
     }
@@ -23,7 +23,15 @@ class A10Table extends React.Component {
       // console.log('result..............', values(result[0].body).pop());
       let data = this.tidyData(values(result[0].body).pop());
       this.setState({ data });
-    });
+    });    
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   this.refreshTable(nextProps);
+  // }
+
+  componentWillMount() {
+    this.refreshTable(this.props);
   }
 
   tidyData(data) {

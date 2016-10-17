@@ -133,7 +133,7 @@ class VirtualServerForm extends BaseForm {
 
             </Panel>
 
-            <Panel header={<h4>Advanced Fields</h4>} collapsible defaultExpanded>
+            <Panel header={<h4>Advanced Fields</h4>} collapsible>
 
               <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
                 <Checkbox value={true} />

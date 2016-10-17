@@ -154,12 +154,12 @@ class A10SchemaForm extends Component {
         // promise.finally(() => {
         //   this.context.props.storeApiInfo(form, false);
         // });
-        // console.log('returned from propmise');
+        // console.log('returned from propmise');   
       }
 
       return promise;
     } else {
-      console.log(values, form, save);
+      // console.log(values, form, save);
       this.context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
       return new Promise((resolve, reject) => { // eslint-disable-line
         resolve(parsedValues);
@@ -220,10 +220,7 @@ class A10SchemaForm extends Component {
       // close win
       // TODO: decide how to close this form page
       const closeCurrent = () => {
-        // console.log('on closing...........at A10Form');
-        // if popup, close win
-        // else return to some page
-        this._parentProps.setLastPageVisible(false);
+        this._parentProps.setPageVisible(env.pageName, true, env.pageId); 
       };
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {

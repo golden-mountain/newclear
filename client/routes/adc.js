@@ -23,5 +23,5 @@ export default [
   <Match key="slb_virtual-server_edit" pattern="/adc/virtual-server/edit" component={VirtualServerEditPage} />,
   <Match key="slb_virtual-server_list" pattern="/adc/virtual-server/list" component={VirtualServerListPage} />,
   <Match key="slb_virtual-server_port_edit" pattern="/adc/virtual-server/port/edit" component={VirtualPortEditPage} />,
-  <Match key="slb_template-virtual-server_port_edit" pattern="/adc/template/virtual-server/port/edit" component={TemplatesVirtualServerPage} />
+  <Match key="slb_template-virtual-server_edit" pattern="/adc/template/virtual-server/edit" component={TemplatesVirtualServerPage} />
 ];

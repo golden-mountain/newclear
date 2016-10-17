@@ -48,11 +48,14 @@ export class A10SubmitButtons extends Component {
 
   render() {
     const { buttons=[ 'create', 'cancel' ] } = this.props;
+    const style = {
+      marginRight: '15px'
+    };
     return (
       
       <FormGroup>
           <ButtonToolbar>
-            <ButtonGroup bsSize="large" className="pull-right">
+            <ButtonGroup bsSize="large" className="pull-right" style={style}>
               {
                 buttons.map((name, index) =>{
                   return this.buttons[name](this.props, index);

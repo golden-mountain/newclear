@@ -9,14 +9,18 @@ class Logout extends Component {
     children: PropTypes.node
   }
 
+  state = {
+    loggedOut: !auth.loggedIn()
+  }
+
   componentDidMount() {
     auth.logout();
+    this.setState({ loggedOut: true });
   }
 
   render() {
     const { from } = this.props.location.state || '/';
-    const loggedOut = !auth.loggedIn();
-    return (loggedOut && <Redirect to={{ pathname: '/login', state: { referrer: from } }}/>);
+    return (this.state.loggedOut && <Redirect to={{ pathname: '/login', state: { referrer: from } }}/>);
   }
 }
 
