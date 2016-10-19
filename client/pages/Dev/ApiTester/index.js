@@ -2,10 +2,10 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import ApiTesterForm from './components/Form';
-// import AppManager from 'helpers/AppManager';
-import BasePage from 'pages/BasePage';
+import AppManager from 'helpers/AppManager';
+// import BasePage from 'pages/BasePage';
 
-export default class ApiTester extends BasePage {
+export default class ApiTester extends React.Component {
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
 
@@ -19,10 +19,16 @@ export default class ApiTester extends BasePage {
   }
 }
 
+const initialValues = {
+  path: '/axapi/v3/auth',
+  method: 'POST',
+  body: { credentials: { username: 'admin', password: 'a10' } }
+};
 
-// const InitializeFromStatePage = AppManager({
-//   page: 'apiTester',
-//   form: 'apiTesterForm'
-// })(ApiTester);
+const InitializedPage = AppManager({
+  page: 'apiTester',
+  form: 'apiTesterForm',
+  initialValues
+})(ApiTester);
 
-// export default InitializeFromStatePage;
+export default InitializedPage;

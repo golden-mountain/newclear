@@ -1,23 +1,15 @@
 import React from 'react';
-// import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Checkbox, Radio, Col, Row, Panel } from 'react-bootstrap';
-// import Helmet from 'react-helmet';
-// import { isEqual } from 'lodash';
-// import { Map, fromJS } from 'immutable';
-// import { SubmissionError } from 'redux-form';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-import { A10Field, A10SchemaField } from 'components/Form/A10Field';
+import { A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 
-import FormManager from 'helpers/FormManager';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
-import BaseForm from 'pages/BaseForm';
-
-// import * as logger from 'helpers/logger';
-// import { isInt } from 'helpers/validations';
 import slbTemplateVirtualServerSchema from 'schemas/slb-template-virtual-server.json';
 
-class TemplateVirtualServerForm extends BaseForm {
+class TemplateVirtualServerForm extends React.Component {
+  static displayName = 'TemplateVirtualServerForm'
 
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
@@ -28,13 +20,11 @@ class TemplateVirtualServerForm extends BaseForm {
         <A10SchemaField
           schema={elements['name']}
           name="virtual-server.name"
-          component={A10Field}
           label="Name"
         />
         <A10SchemaField
           schema={elements['conn-limit']}
           name="virtual-server.conn-limit"
-          component={A10Field}
           label="Connection Limit"
         />
         <A10SchemaField
@@ -57,7 +47,6 @@ class TemplateVirtualServerForm extends BaseForm {
         <A10SchemaField
           schema={elements['conn-rate-limit']}
           name="virtual-server.conn-rate-limit"
-          component={A10Field}
           label="Connection Rate Limit"
         />
 
@@ -94,37 +83,31 @@ class TemplateVirtualServerForm extends BaseForm {
         <A10SchemaField
           schema={elements['icmp-rate-limit']}
           name="virtual-server.icmp-rate-limit"
-          component={A10Field}
           label="ICMP Rate Limit"
         />
         <A10SchemaField
           schema={elements['icmp-lockup']}
           name="virtual-server.icmp-lockup"
-          component={A10Field}
           label="ICMP Lockup"
         />
         <A10SchemaField
           schema={elements['icmp-lockup-period']}
           name="virtual-server.icmp-lockup-period"
-          component={A10Field}
           label="ICMP Lockup Period (seconds)"
         />
         <A10SchemaField
           schema={elements['icmpv6-rate-limit']}
           name="virtual-server.icmpv6-rate-limit"
-          component={A10Field}
           label="ICMPv6 Rate Limit"
         />
         <A10SchemaField
           schema={elements['icmpv6-lockup']}
           name="virtual-server.icmpv6-lockup"
-          component={A10Field}
           label="ICMPv6 Lockup"
         />
         <A10SchemaField
           schema={elements['icmpv6-lockup-period']}
           name="virtual-server.icmpv6-lockup-period"
-          component={A10Field}
           label="ICMPv6 Lockup Period (seconds)"
         />
 
@@ -152,12 +135,4 @@ class TemplateVirtualServerForm extends BaseForm {
   }
 }
 
-const initialValues = {
-};
-
-const InitializeFromStateForm = FormManager({
-  page: 'templateVirtualServer',
-  initialValues: initialValues
-})(TemplateVirtualServerForm);
-
-export default InitializeFromStateForm;
+export default widgetWrapper(TemplateVirtualServerForm);

@@ -67,7 +67,7 @@ class AppLayout extends Component {
 
 
   render() {
-    console.log('loading.................', this.props.isLoading);
+    // console.log('loading.................', this.props.isLoading);
     return (
       <main >
         <Menu>

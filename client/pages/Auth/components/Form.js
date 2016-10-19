@@ -1,42 +1,39 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Redirect from 'react-router/Redirect';
 import { FormControl } from 'react-bootstrap';
-
 import { A10SchemaField } from 'components/Form/A10Field';
 import A10SubmitButtons from 'components/Form/A10SubmitButtons';
 import A10Form from 'components/Form/A10Form';
-import FormManager from 'helpers/FormManager';
-// import BaseForm from 'pages/BaseForm';
 import { required } from 'helpers/validations';
-import BaseForm from 'pages/BaseForm';
+import { widgetWrapper } from 'helpers/widgetWrapper';
+// import auth from 'helpers/auth';
+import { getPayload } from 'helpers/axapiHelper';
 
-class LoginForm extends BaseForm {
-  state = {
-    sessionID: false
+class LoginForm extends React.Component {
+  static contextTypes = {
+    props: PropTypes.object.isRequired
   }
 
+  static displayName = 'LoginForm'
+
+
+  constructor(props, context) {
+    super(props, context);
+  }
+ 
   onSubmit(values) {
-    const fullAuthData = {
-      path: '/axapi/v3/auth',
-      method: 'POST',
-      body: values
-    };
-    // this.props.setPageTitle('testaaaaaaaaaaaaaa');
-    const promise = this.props.axapiRequest(fullAuthData);
-    promise.then((result) => {
-      console.log(result, ' axapi response');
-      this.setState({ sessionID: true });
-    });
+    const fullAuthData = getPayload('/axapi/v3/auth', 'POST', values);
+    const promise = this.props.componentAxapiRequest(fullAuthData);
     return promise;
   }
 
   render() {
-    const { from } = this.props;
-    const { sessionID } = this.state;
+    const { data } = this.props;
+    const { from } = this.context.props.location.state || '/';
 
     return (
-      sessionID ? <Redirect to={ { pathname: from || '/' }}/> :
-      <A10Form onSubmit={this.props.handleSubmit(::this.onSubmit)} horizontal>
+      data && data.signature ? <Redirect to={{ pathname: from || '/' }} /> :
+      <A10Form onSubmit={this.context.props.handleSubmit(::this.onSubmit)} horizontal>
         <A10SchemaField name="credentials.username" label="Username" validation={{ required }}>
           <FormControl type="text" className="form-control"/>
         </A10SchemaField>
@@ -52,13 +49,4 @@ class LoginForm extends BaseForm {
   }
 }
 
-const initialValues = {
-};
-
-const InitializeFromStateForm = FormManager({
-  page: 'login', 
-  initialValues
-})(LoginForm);
-
-
-export default InitializeFromStateForm;
+export default widgetWrapper(LoginForm);

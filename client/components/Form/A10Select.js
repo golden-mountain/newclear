@@ -10,23 +10,34 @@ import VirtualizedSelect from 'react-virtualized-select';
 
 import A10Button from 'components/Form/A10Button';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { axapiGet } from 'helpers/axapiHelper';
+import { getPayload } from 'helpers/axapiHelper';
+// import { axapiGet } from 'helpers/axapiHelper';
 // import { axapiRequest } from 'redux/modules/app/axapi';
-import { values, get, set, isArray, isEqual } from 'lodash';
+import { values, get, isArray } from 'lodash';
 
 class A10Select extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = { options: [] };
+  static displayName = 'A10Select'
+
+  static contextTypes = {
+    props: PropTypes.object.isRequired
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log('next props:', nextProps, 'next state:', nextState);
-    return !isEqual(nextState.options, this.state.options) || !isEqual(nextProps.value, this.props.value);
-  }
+  // constructor(props, context) {
+  //   super(props, context);
+  //   // this.state = { options: [] };
+  // }
 
-  setOptions(json, values) {
-    // console.log(values, '...............values at A10Select');
+  // // shouldComponentUpdate(nextProps, nextState) {
+  // //   // console.log('next props:', nextProps, 'next state:', nextState);
+  // //   return !isEqual(nextState.options, this.state.options) || !isEqual(nextProps.value, this.props.value);
+  // // }
+
+  formatOptions(values) {
+    let json = [];
+    if (!this.props.loadOptions || !isArray(values)) {
+      return json;
+    }
+    
     let { map: { name, label, reform } } = this.props.loadOptions;
 
     if (!name) {
@@ -38,54 +49,39 @@ class A10Select extends Component {
     }        
 
     values.forEach((value) => {
-      // console.log(value, label, name);
       let title = get(value, label);
       if (reform) {
         title = reform(title);
       }
       json.push({ value: get(value, name), label: title });
-      this.setState({ options: json });
     });
+    return json;
   }
 
   getOptions() {
     // console.log('loading................');
-    const { dispatch, env, loadOptions } = this.props;
+    const { loadOptions } = this.props;
     const asyncNeeded = loadOptions && loadOptions.url && true;  
 
     if (asyncNeeded) {
       const { params } = loadOptions;
-      let resp = axapiGet(loadOptions.url, params, env.page, dispatch);
-      return resp.then(
-        (result) => {
-          let json = [];
-          if (result.length) {
-            values(result.pop().body).forEach( (list) => {
-              isArray(list) && this.setOptions(json, list);
-            });
-          }
-          // console.log('json value: ', json);
-          this.setState({ options: json });
-        },
-        (error) => {
-          console.log('error', error);
-        }
-      );
+      const payload = getPayload(loadOptions.url, 'GET', params);
+      this.props.componentAxapiRequest(payload, false);      
     }
   }
 
-  getOnloadPopupOptions() {
-    const { popupInfo } = this.props;
-    let onLoad = get(popupInfo, 'connectOptions.onLoad');
-    if (!onLoad) {
-      onLoad = (value) => {
-        // console.log('A10Select default onLoad');
-        let json = this.state.options;
-        return this.setOptions(json, values(value));
-      };
-    }
-    return onLoad;
-  }
+  // getOnloadPopupOptions() {
+  //   const { popupInfo } = this.props;
+  //   let onLoad = get(popupInfo, 'connectOptions.onLoad');
+  //   if (!onLoad) {
+  //     onLoad = (value) => {
+  //       // console.log('A10Select default onLoad');
+  //       let json = this.state.options;
+  //       return this.setOptions(json, values(value));
+  //     };
+  //   }
+  //   return onLoad;
+  // }
 
   componentWillMount() {
     // const { loadOptions: { loadOnMount } } = this.props;
@@ -94,17 +90,23 @@ class A10Select extends Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(nextProps);
-  // }
+  // // componentWillReceiveProps(nextProps) {
+  // //   console.log(nextProps);
+  // // }
 
   render() {
-    let { value, onChange, popupInfo } = this.props;
+    let { value, onChange, popupInfo, data } = this.props;
+    let formattedOptions = [];
 
     // const asyncNeeded = loadOptions && loadOptions.url && true;   
-    const loadAttr = { value, onChange, options: this.state.options, simpleValue: true };
+    if (data) {
+      formattedOptions = this.formatOptions(values(data).pop());
+    }
+    console.log('props...........................', formattedOptions);
 
-    set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
+    const loadAttr = { value, onChange, options:formattedOptions, simpleValue: true };
+
+    // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
     
     return (
       popupInfo ? 

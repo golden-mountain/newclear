@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Field } from 'redux-form/immutable'; // imported Field
 import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
@@ -6,38 +6,39 @@ import Helmet from 'react-helmet';
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import JSONEditor from 'components/JSONEditor';
-// import Immutable from 'immutable';
-import BaseForm from 'pages/BaseForm';
 
-import FormManager from 'helpers/FormManager';
 import auth from 'helpers/auth';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
-const initialValues = {
-  path: '/axapi/v3/auth',
-  method: 'POST',
-  body: { credentials: { username: 'admin', password: 'a10' } }
-};
+class AxapiForm extends React.Component {
+  static displayName = 'AxapiForm'
+  
+  static contextTypes = {
+    props: PropTypes.object.isRequired
+  }
 
-class AxapiForm extends BaseForm {
+  constructor(props, context) {
+    super(props, context);
+  }
 
   state = { sessionId: auth.getToken() }
 
   setHistoryQuery(historyData) {
     const dateReg = /^\d{4}.*:\d{2}$/;
     if (dateReg.test(historyData['key'])) {
-      this.props.initialize(historyData.value.data);
+      this.context.props.initialize(historyData.value.data);
     }
     return false;
   }
 
   clearHistoryQuery() {
     localStorage.removeItem('axapi');
-    this.props.initialize(initialValues);
+    this.context.props.initialize(this.context.props.initialValues);
     this.forceUpdate();
   }
 
   initSession() {
-    const promise = this.props.axapiRequest(initialValues);
+    const promise = this.context.props.axapiRequest(this.context.props.initialValues);
     promise.then(() => {
       this.setState({ sessionId: auth.getToken() });
     });
@@ -57,8 +58,9 @@ class AxapiForm extends BaseForm {
   }
 
   render() {
+    console.log(this);
     const { submitting, reset, pristine } = this.props;
-    const { axapiResponse, handleSubmit } = this.props;
+    const { axapiRequest, axapiResponse, handleSubmit } = this.context.props;
     const historyData = this.fetchHistory();
     // console.log(axapiResponse);
     // console.log(this.context, '>>>>>>>>>>>>>props');
@@ -74,7 +76,7 @@ class AxapiForm extends BaseForm {
             <Col xs={5}>   
               <h4>Request </h4>   
               <Panel>
-                <Form onSubmit={handleSubmit(this.props.axapiRequest)} horizontal>
+                <Form onSubmit={handleSubmit(axapiRequest)} horizontal>
                   <FormGroup controlId="formHorizontalEmail">
                     <Col componentClass={ControlLabel} sm={2}>
                       Session
@@ -143,9 +145,9 @@ class AxapiForm extends BaseForm {
   }
 }
 
-const InitializeFromStateForm = FormManager({
-  page: 'axapiTesterTool',
-  initialValues
-})(AxapiForm);
+// const InitializeFromStateForm = FormManager({
+//   page: 'axapiTesterTool',
+//   initialValues
+// })(AxapiForm);
 
-export default InitializeFromStateForm;
+export default widgetWrapper(AxapiForm);

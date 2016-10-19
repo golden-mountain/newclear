@@ -1,12 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { Form } from 'react-bootstrap';
 // import invariant from 'invariant';
 import { Map, List, fromJS } from 'immutable';
 import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
 class SchemaForm {
+  static displayName = 'SchemaForm'
+
   constructor(context) {
     // invariant(schemas, 'Form schemas referred from your pages');
     const { schemas, edit, urlKeys } = context;
@@ -94,6 +97,8 @@ class SchemaForm {
 }
 
 class A10SchemaForm extends Component {
+  static displayName = 'A10SchemaForm'
+
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -189,17 +194,22 @@ class A10SchemaForm extends Component {
       urlKeys,
       dispatch,
       app,
+      page,
+      env,
+      visible,
       schemas,
       edit,
       children,
       onBeforeSubmit,
       onAfterSubmit,
       onSubmit,
+      componentAxapiRequest,
+      componentSetState,
       ...rest
     } = this.props;
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
-    const { handleSubmit, fieldConnector, env } = this._parentProps;
+    const { handleSubmit, fieldConnector } = this._parentProps;
 
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
@@ -254,12 +264,4 @@ A10SchemaForm.contextTypes = {
   props: PropTypes.object
 };
 
-const A10Form = connect(
-  (state) => {
-    return {
-      app: state.getIn([ 'app' ])
-    };
-  }
-)(A10SchemaForm);
-
-export default A10Form;
+export default widgetWrapper(A10SchemaForm);

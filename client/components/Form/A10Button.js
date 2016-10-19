@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import React, { Component, PropTypes } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-// import { APP_CURRENT_PAGE } from 'configs/appKeys';
-import { getAppPageVar } from 'helpers/stateHelper';
+import { getComponentVar } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-// import { toPath, set } from 'lodash';
-// import { fromJS, List } from 'immutable';
-// import { axapiGet } from 'helpers/axapiHelper';
 import FieldConnector from 'helpers/FieldConnector';
-import { setPageVisible } from 'redux/modules/app/page';
-import { change } from 'redux-form/immutable';
-// import PageLayout from 'layouts/a10/PageLayout';
+// import { setComponentVisible } from 'redux/modules/app/component';
+// import { change } from 'redux-form/immutable';
+import invariant from 'invariant';
 
 class A10Button extends Component {
+  static displayName = 'A10Button'
+  static contextTypes = {
+    props: PropTypes.object.isRequired
+  }
+
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -21,48 +21,50 @@ class A10Button extends Component {
   }
 
   render() {
-    const { page, env, app, form, children, dispatch, onClick, componentClass,  //eslint-disable-line
-      popup: { pageClass, title,  connectOptions, pageName, pageId='default', 
-      urlKeysConnect,  ...modalProps }, ...rest } = this.props;
+    const { env, app, form, children, onClick, componentClass,
+      popup: { id, pageClass, title,  connectOptions, 
+      urlKeysConnect,  ...modalProps }, attrs } = this.props;
 
-    // console.log('connect options:', connectOptions);
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
-      this.modelVisible = getAppPageVar(app, [ pageId, 'visible' ], pageName);
-      // console.log(app, pageId, pageName, this.modelVisible, '..........................visible');
-      const changeFormField = (name, value) => {
-        dispatch(change(env.form, name, value));
-      };
-
-      popupContent = this.modelVisible
-        ? React.createElement(pageClass, {
-          visible: true,
-          fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
-          pageId,
-          urlKeysConnect
-        })
-        : null;
+      invariant(pageClass.displayName, `Popup component for Page ${env.page} must have static property displayName and componentId`);
+      this.modelVisible = getComponentVar(app, env.page, env.pageId, pageClass.displayName, id, 'visible');
       click = () => {
         // this.setState({ showPopup: true });    
         // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));    
-        dispatch(setPageVisible(env.page, pageName, true, pageId));
+        this.context.props.setComponentVisible(env.pageId, pageClass.displayName, id, true);
         return false;
       };
+      if (!this.modelVisible) {
+        modal = children;
+      } else {
+        console.log('this model visible', id, this.modelVisible);
+        const changeFormField = (name, value) => {
+          this.context.props.change(env.form, name, value);
+        };
 
-      modal = (
-        <span>{children}
-          <Modal show={this.modelVisible}  {...modalProps}>
-              <Modal.Header>
-                <Modal.Title>{ title || children }</Modal.Title>
-              </Modal.Header>
+        popupContent = React.createElement(pageClass, {
+          visible: true,
+          fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
+          pageId: id,
+          urlKeysConnect
+        });
 
-              <Modal.Body>
-                {popupContent}
-              </Modal.Body>
+        modal = (
+          <span>{children}
+            <Modal show={this.modelVisible}  {...modalProps}>
+                <Modal.Header>
+                  <Modal.Title>{ title || children }</Modal.Title>
+                </Modal.Header>
 
-          </Modal>
-        </span>
-      );
+                <Modal.Body>
+                  {popupContent}
+                </Modal.Body>
+
+            </Modal>
+          </span>
+        );
+      }
     } else {
       modal = children;
     }
@@ -71,7 +73,7 @@ class A10Button extends Component {
       cursor: 'pointer'
     };
     
-    return React.createElement( componentClass || Button, { onClick: click, style: buttonStyle, ...rest }, modal);
+    return React.createElement( componentClass || Button, { onClick: click, style: buttonStyle, ...attrs }, modal);
   }
 }
 

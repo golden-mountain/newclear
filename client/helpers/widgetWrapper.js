@@ -1,49 +1,121 @@
-import React, { Component } from 'react'; //PropTypes
+import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
 import hoistStatics from 'hoist-non-react-statics';
 import { getAppPageVar, getAppEnvVar } from './stateHelper';
+// import React, { Component, PropTypes } from 'react'; //PropTypes
+// import { connect } from 'react-redux';
+import { uniqueId } from 'lodash';
+// import { getAppEnvVar, getAppPageVar } from 'helpers/stateHelper';
 
 // wrapper for widgets, add a wrapper to get state
 export function widgetWrapper(WrappedComponent, ...widgetProps) {
 
-  class Widget extends Component {
-    constructor(props, context) {
-      super(props, context);
-      this.widgetProps = widgetProps;     
-      // this.actions = this.createActions(); 
+  const displayName = 'ConnectTo' + (WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME');
+
+  class Core extends Component {
+    static contextTypes = {
+      props: PropTypes.object.isRequired
     }
 
-    // createActions() {
-    //   const { env: { page }, dispatch } = this.props;
-    //   const bindPage = actionCreator => actionCreator.bind(null, page);
-    //   const bindActions = mapValues(widgetActions, bindPage);   
-    //   return bindActionCreators(bindActions, dispatch);
+    // static childContextTypes = {
+    //   props: PropTypes.object.isRequired
     // }
+   
+    _componentId = 0
 
+    constructor(props, context) {
+      super(props, context);
+    }
+
+    get componentName() {
+      return displayName;
+    }
+
+    get componentId() {
+      if (!this._componentId) {
+        this._componentId = uniqueId(this.componentName.toLowerCase() + '-');
+      }
+      return this._componentId;
+    }
+
+    get instanceData() {
+      const data = this.props.page.getIn([ this.componentName, this.componentId ]);
+      if (data) {
+        return data.toJS();
+      } else {
+        return {};
+      }
+    }
+
+    get pageId() {
+      return this.props.componentEnv.pageId || 'UNKNOWN-PAGE-ID';
+    }
+
+    get pageName() {
+      return this.props.componentEnv.page || 'UNKNOWN-PAGE'; 
+    }
+
+    get visible() {
+      return this.props.page.getIn([ this.componentName, this.componentId, 'visible' ], true);
+    }
+
+    get data() {
+      return this.props.page.getIn([ this.componentName, this.componentId, 'data' ]);
+    }
+
+    get widgetProps() {
+      let componentEnv = {      
+        pageId: this.pageId,
+        page: this.pageName,
+        componentName: this.componentName,
+        componentId: this.componentId
+      };
+      return Object.assign({}, widgetProps, componentEnv);
+    }
+
+    componentAxapiRequest(data, notifiable=false) {
+      return this.context.props.axapiRequest(data, this.pageId, this.componentName, this.componentId, notifiable);
+    }
+
+    componentSetState(data) {
+      return this.context.props.setComponentState(this.pageId, this.componentName, this.componentId, data);
+    }
     // getChildContext() {
-    //   return { actions: this.actions };
+    //   const props = Object.assign(
+    //     {},
+    //     this.context.props
+    //   );
+    //   return {  props: props };
     // }
 
     render() {
-      this.renderedElement = React.createElement(WrappedComponent, Object.assign(this.props, this.widgetProps));
+      const { componentEnv, ...rest } = this.props; // eslint-disable-line
+      const widgetProps = Object.assign(
+        {}, rest, 
+        { 
+          env: Object.assign(componentEnv, this.widgetProps), 
+          data: this.data, 
+          visible: this.visible,
+          componentAxapiRequest: ::this.componentAxapiRequest,
+          componentSetState: ::this.componentSetState
+        }
+      );
+      this.renderedElement = React.createElement(WrappedComponent, widgetProps);
       return this.renderedElement; 
     }
   }
 
-  // Widget.childContextTypes = {
-  //   actions: PropTypes.object
-  // };
-
   const stateMapper = (state) => {
     return {
-      env: getAppEnvVar(state),
+      componentEnv: getAppEnvVar(state),
       page: getAppPageVar(state),
       app: state.getIn([ 'app' ]),
-      form: state.getIn( [ 'form' ])      
+      form: state.getIn([ 'form' ])
     };
   };
 
-
-  let newComponent = connect(stateMapper)(Widget);
-  return hoistStatics(newComponent, WrappedComponent);
+  let newComponent = connect(stateMapper)(Core);
+  newComponent.displayName = displayName;
+  // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
+  return hoistStatics(newComponent, Core, WrappedComponent);
 }

@@ -6,9 +6,7 @@ import { axapiGet } from 'helpers/axapiHelper';
 import { values }  from 'lodash';
 
 class A10Table extends React.Component {
-  state = {
-    data: []
-  }
+  static displayName = 'A10Table'
 
   refreshTable(props) {
     const { schema, dispatch, env, params } = props; // eslint-disable-line
@@ -17,18 +15,8 @@ class A10Table extends React.Component {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
-    // console.log('path.....', path);
-    let resp = axapiGet(path, params, env.page, dispatch);
-    resp.then((result) => {
-      // console.log('result..............', values(result[0].body).pop());
-      let data = this.tidyData(values(result[0].body).pop());
-      this.setState({ data });
-    });    
+    axapiGet(path, params, env, dispatch);  
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   this.refreshTable(nextProps);
-  // }
 
   componentWillMount() {
     this.refreshTable(this.props);
@@ -40,12 +28,12 @@ class A10Table extends React.Component {
   }
 
   render() {
+    // console.log(this);
     let { fieldMap, actions, schema, children } = this.props; // eslint-disable-line
     let selectRowProp = {
       mode: 'checkbox', // or checkbox
       clickToSelect: true
     };
-
     
     let options = {
       onDeleteRow: () => {console.log('deleting row');},
@@ -55,7 +43,7 @@ class A10Table extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <BootstrapTable data={this.state.data}  search={true} insertRow={true} 
+          <BootstrapTable data={values(this.props.data).pop() || [] } search={true} insertRow={true} 
             deleteRow={true} selectRow={selectRowProp} pagination={true} options={options}
             striped={true} hover={true} condensed={true}
             >

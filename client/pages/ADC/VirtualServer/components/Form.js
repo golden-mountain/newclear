@@ -9,8 +9,9 @@ import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 import A10MultiField from 'components/Form/A10MultiField';
-import FormManager from 'helpers/FormManager';
-import BaseForm from 'pages/BaseForm';
+// import FormManager from 'helpers/FormManager';
+// import BaseForm from 'pages/BaseForm';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
 // import * as logger from 'helpers/logger';
 import { isInt } from 'helpers/validations';
@@ -26,7 +27,9 @@ const ipv4 = (value) => {
   return makeError(reg.test(value), 'IPv4 Required');
 };
 
-class VirtualServerForm extends BaseForm {
+class VirtualServerForm extends React.Component {
+  static displayName = 'VirtualServerForm'
+
   addLine() {
     const valuePath = [ 'values', 'virtual-server', 'port-list' ];
     let list = this.props.pageForm.getIn(valuePath, Map()).toJS();
@@ -196,34 +199,4 @@ class VirtualServerForm extends BaseForm {
 }
 
 
-const initialValues = {
-  'virtual-server': {
-    'name': 'vs',
-    'netmask': '/24',
-    'port-list': [
-      {
-        'port-number': 80,
-        'range': '80-100',
-        'protocol': 'HTTP'
-      },
-      {
-        'port-number': 81,
-        'range': '80-101',
-        'protocol': 'HTTPS'
-      }
-    ]
-  },
-  'x': {
-    'virtual-server': {
-      'address-type': '0',
-      'wildcard': false
-    }
-  }
-};
-
-const InitializeFromStateForm = FormManager({
-  page: 'virtual-server-edit',
-  initialValues
-})(VirtualServerForm);
-
-export default InitializeFromStateForm;
+export default widgetWrapper(VirtualServerForm);

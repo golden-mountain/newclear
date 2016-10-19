@@ -9,23 +9,8 @@ import A10Button from 'components/Form/A10Button';
 // import { A10SchemaField } from 'components/Form/A10Field';
 
 class TableFields extends Component {
-  // getFieldData() {
-  //   const { fields, form, env } = this.props;
-  //   let fieldList = [];
-  //   console.log('fields:', fields);
-  //   fields.forEach((name) => {
-  //     console.log('name:', name);
-  //     const path = toPath(`${env.form}.values.${name}`);
-  //     const value = form.getIn(path);
-  //     console.log('path:', path, 'value:', value);
-  //     if (value && value.size) {
-  //       fieldList.push(value.toJS());
-  //     }
-  //   });
+  static displayName = 'TableFields'
 
-  //   console.log('field list:', fieldList);
-  //   return fieldList;
-  // }
   _changeKidsConditional(prefix, conditional) {
     if (!isObject(conditional)) return conditional;
     let cond = {};
@@ -105,6 +90,8 @@ class TableFields extends Component {
 
 
 class A10MultiField extends Component {
+  static displayName = 'A10MultiField'
+    
   constructor(props, context) {
     super(props, context);
   }

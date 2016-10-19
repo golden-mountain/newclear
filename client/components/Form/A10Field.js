@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FormControl } from 'react-bootstrap';
 // import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { Field } from 'redux-form/immutable'; // imported Field
 import { fromJS, Map } from 'immutable';
 import { has } from 'lodash';
@@ -11,6 +11,7 @@ import A10Select from 'components/Form/A10Select';
 import createValidationFuncs from 'helpers/validations';
 
 import FieldLayout from 'layouts/a10/FieldLayout';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
 // multiple options input
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];
@@ -141,6 +142,8 @@ export class A10Field extends Component {
 
 
 class SchemaField extends Component {
+  static displayName = 'SchemaField'
+
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -158,7 +161,7 @@ class SchemaField extends Component {
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    let values = this.props.pageForm.getIn([ this._parentProps.env.form, 'values' ], Map());
+    let values = this.props.form.getIn([ this._parentProps.env.form, 'values' ], Map());
     values = values.setIn(name.split('.'), defaultValue);
     this._parentProps.initialize(values.toJS());
 
@@ -183,8 +186,8 @@ class SchemaField extends Component {
 //     const { name } = this.props;
 //     const fieldNext = nextProps.app.getIn([ this._parentProps.env.page, 'form', name ]);
 //     const fieldThis = this.props.app.getIn([ this._parentProps.env.page, 'form', name ]);
-//     const fieldNextValue = nextProps.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
-//     const fieldThisValue = this.props.pageForm.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
+//     const fieldNextValue = nextProps.form.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
+//     const fieldThisValue = this.props.form.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
 //     return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
 //   }
 //
@@ -252,11 +255,12 @@ SchemaField.contextTypes = {
   props: PropTypes.object
 };
 
-export const A10SchemaField = connect(
-  (state) => {
-    return {
-      app: state.getIn([ 'app' ]),
-      pageForm: state.getIn([ 'form' ])
-    };
-  },
-)(SchemaField);
+// export const A10SchemaField = connect(
+//   (state) => {
+//     return {
+//       app: state.getIn([ 'app' ]),
+//       form: state.getIn([ 'form' ])
+//     };
+//   },
+// )(SchemaField);
+export const A10SchemaField = widgetWrapper(SchemaField);

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-// import A10Table from 'components/List/A10Table';
-import BasePage from 'pages/BasePage';
+import AppManager from 'helpers/AppManager';
+// import Base from 'pages/Base';
 import VirtualServerTable from './components/Table';
 
-export default class VirtualServerList extends BasePage {
+export default class VirtualServerList extends React.Component {
  
   render() {    
 
@@ -18,3 +18,9 @@ export default class VirtualServerList extends BasePage {
     );
   }
 }
+
+export default AppManager({
+  page: 'virtual-server-list'
+})(VirtualServerList);
+
+

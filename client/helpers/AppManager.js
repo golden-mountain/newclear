@@ -1,33 +1,60 @@
-// import React from 'react';
+import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
-// import { reduxForm } from 'redux-form/immutable'; // imported Field
+import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
-// import appConfigs from 'configs/app';
-// import appActions from 'redux/modules/app/index';
-// import * as pageActions from 'redux/modules/app/page';
-// import * as themeActions from 'redux/modules/app/theme';
-// import * as featureActions from 'redux/modules/app/feature';
+import PageLayout from 'layouts/a10/PageLayout';
 
 // Page Connector
-const AppManager = config => warppedElement => {
+const AppManager = config => WarppedElement => {
 
+  class BasePage extends React.Component {
+    static childContextTypes = {
+      props: PropTypes.object.isRequired
+    }
+    
+    constructor(props, context) {
+      super(props, context);
+    }
 
-  // delete pageActions.default;
-  // delete themeActions.default;
-  // delete featureActions.default;
-  // const appActions = {
-  //   ...pageActions,
-  //   ...themeActions,
-  //   ...featureActions
-  // };
-  // let page = reduxForm({
-  //   form: config.form
-  // } )(warppedElement);
+    getChildContext() {
+      // console.log('context props:', this.context.props, 'props:', this.props);
+      return {  props: this.props };
+    }
 
-  let page = connect(
+    componentWillMount() {
+      // invariant(this.context.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
+      // console.log('this props:', this.props);
+      this.props.registerCurrentPage(Object.assign({}, this.props.env, { pageId: this.props.pageId || 'default' }));
+      if (this.props.visible === undefined || this.props.visible) {
+        this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
+      } else {
+        this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
+      }    
+    }
+
+    componentWillUnmount() {
+      // console.log('will unmount this', this.props.env.page); 
+      this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
+      this.props.destroyPage();
+    }
+
+    render() {
+      return <PageLayout> <WarppedElement /></PageLayout>;
+    }
+  }
+
+  if (!config.form) {
+    config.form = config.page;
+  }
+
+  let page = reduxForm({
+    form: config.form
+  } )(BasePage);
+
+  page = connect(
     (state) => {
       return {
         axapiUid: getAxapiUid(state),
@@ -42,16 +69,8 @@ const AppManager = config => warppedElement => {
       const boundAppAcs = mapValues(window.appActions, bindPage);
       return bindActionCreators(boundAppAcs, dispatch);
     }
-  )(warppedElement);
-  // console.log(appConfigs);
-  // const componentPath = `layouts/${appConfigs.LAYOUT}/PageLayout`;
-  // console.log(componentPath);
-  // componentPath = 'layouts/a10/PageLayout';
+  )(page);
 
-  // const PageLayout = require(componentPath);
-  // const PageLayout = require('layouts/a10/PageLayout');
-  // return React.createElement(PageLayout, {}, page);
-  // return <PageLayout>{page}</PageLayout>;
   return page;
 };
 

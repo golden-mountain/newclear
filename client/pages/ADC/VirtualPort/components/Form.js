@@ -1,22 +1,15 @@
 import React from 'react';
-// import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Col, Row, Panel, FormControl } from 'react-bootstrap';
-// import Helmet from 'react-helmet';
-// import { isEqual } from 'lodash';
-// import { Map, fromJS } from 'immutable';
-// import { SubmissionError } from 'redux-form';
+
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 import { A10Field, A10SchemaField } from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
-import FormManager from 'helpers/FormManager';
-import BaseForm from 'pages/BaseForm';
-
-// import * as logger from 'helpers/logger';
-// import { isInt } from 'helpers/validations';
 import slbVirtualPortSchema from 'schemas/slb-virtual-service.json';
 
-class VirtualPort extends BaseForm {
+class VirtualPort extends React.Component {
+  static displayName = 'VirtualPort'
 
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
@@ -50,13 +43,4 @@ class VirtualPort extends BaseForm {
   }
 }
 
-
-const initialValues = {
-};
-
-const InitializeFromStateForm = FormManager({
-  page: 'virtualPort',
-  initialValues: initialValues
-})(VirtualPort);
-
-export default InitializeFromStateForm;
+export default widgetWrapper(VirtualPort);

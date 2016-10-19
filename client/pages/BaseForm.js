@@ -1,36 +1,10 @@
-import { Component, PropTypes } from 'react';
+// import React from 'react';
+import Base from './Base';
+
 // import invariant from 'invariant';
 // import { isEqual } from 'lodash';
 
-export default class BaseForm extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
+export default class BaseForm extends Base {
 
-  getChildContext() {
-    // console.log('context props:', this.context.props, 'props:', this.props);
-    return {  props: this.props };
-  }
-
-  componentWillMount() {
-    // invariant(this.context.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
-    console.log('this props:', this.props);
-    this.props.registerCurrentPage(this.props.env);
-    if (this.props.visible === undefined || this.props.visible) {
-      this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
-    } else {
-      this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
-    }    
-  }
-
-  componentWillUnmount() {
-    // console.log('will unmount this', this.props.env.page); 
-    this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
-    this.props.destroyPage();
-  }
 }
-
-BaseForm.childContextTypes = {
-  props: PropTypes.object.isRequired
-};
 

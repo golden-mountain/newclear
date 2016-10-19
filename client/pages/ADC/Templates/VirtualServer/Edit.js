@@ -3,14 +3,10 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/components/Form';
-// import AppManager from 'helpers/AppManager';
-import BasePage from 'pages/BasePage';
+import AppManager from 'helpers/AppManager';
+// import BasePage from 'pages/BasePage';
 
-export default class TemplateVirtualServerEdit extends BasePage {
-  // env = {
-  //   page: 'template-virtual-server-edit',
-  //   form: 'template-virtual-server-form'
-  // }
+export default class TemplateVirtualServerEdit extends React.Component {
 
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
@@ -25,9 +21,8 @@ export default class TemplateVirtualServerEdit extends BasePage {
 }
 
 
-// const InitializeFromStatePage = AppManager({
-//   page: 'teamplateVirtualServer',
-//   form: 'teamplateVirtualServerForm'
-// })(TemplateVirtualServerEdit);
+const InitializedPage = AppManager({
+  page: 'teamplateVirtualServer'
+})(TemplateVirtualServerEdit);
 
-// export default InitializeFromStatePage;
+export default InitializedPage;

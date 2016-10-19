@@ -41,9 +41,10 @@ export class A10SubmitButtons extends Component {
   }
 
   close() {
+    console.log(this.props, this._parentProps);
     const { env, pageId } = this.props;
     // console.log('page form variables', env, pageId,  this.context.props, this.props);
-    this.props.setPageVisible(env.page, false, pageId);
+    this.context.props.setComponentVisible(env.pageId, env.componentName, pageId, false);
   }
 
   render() {

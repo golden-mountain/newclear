@@ -24,7 +24,7 @@ export const getAppEnvVar = (state, immutable=false) => {
   }
 };
 
-export const getAppPageVar = (state, keys='', pageName='') => {
+export const getAppPageVar = (state, keys='', pageName='', pageId='default') => {
   let path = [];
   const appState = state.getIn([ 'app' ], false);
   if (appState) {
@@ -41,6 +41,10 @@ export const getAppPageVar = (state, keys='', pageName='') => {
     path.push(page);
   }
 
+  if (pageId) {
+    path.push(pageId);
+  }
+
   if (keys && typeof keys == 'string') {
     keys = [ keys ];
   }
@@ -49,8 +53,13 @@ export const getAppPageVar = (state, keys='', pageName='') => {
     path= path.concat(keys);
   }
 
-  // console.log('path:::::::::', path, state );
+  // console.log('path:::::::::', path, state, keys, pageName, pageId );
   return state.getIn(path);
+};
+
+
+export const getComponentVar = (state, pageName, pageId, componentName, componentId, key) => {
+  return state.getIn([ APP_CURRENT_PAGE, 'pages', pageName, pageId, componentName, componentId, key ], null);
 };
 
 // each form submit we will store data to a store accessed by current global page

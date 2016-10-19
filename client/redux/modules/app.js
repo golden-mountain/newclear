@@ -13,17 +13,19 @@ APP
 /* eslint-disable */
 import { Map, fromJS } from 'immutable';
 import axapiReducers from './app/axapi';
+import componentReducers from './app/component';
 import pageReducers from './app/page';
 import themeReducers from './app/theme';
 import featureReducers from './app/feature';
 import formReducers from './app/form';
 
 const behaviors = {
-  ...pageReducers,
-  ...themeReducers,
-  ...axapiReducers,
+  ...axapiReducers,  
+  ...componentReducers,
   ...featureReducers,
-  ...formReducers
+  ...formReducers,  
+  ...pageReducers,
+  ...themeReducers
 };
 
 const empty = Map({});

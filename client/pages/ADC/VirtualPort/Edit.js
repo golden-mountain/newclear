@@ -3,17 +3,13 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
-// import AppManager from 'helpers/AppManager';
-import BasePage from 'pages/BasePage';
+import AppManager from 'helpers/AppManager';
 
-export default class VirtualPortEdit extends BasePage {
-  // env = {
-  //   page: 'virtual-port-edit',
-  //   form: 'virtual-port-form'
-  // }
+
+export default class VirtualPortEdit extends React.Component {
+
 
   render() {
-    // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
 
     return (
       <Row>
@@ -26,9 +22,8 @@ export default class VirtualPortEdit extends BasePage {
 }
 
 
-// const InitializeFromStatePage = AppManager({
-//   page: 'virtualPort',
-//   form: 'virtualPortForm'
-// })(VirtualPortEdit);
+const InitializedPage = AppManager({
+  page: 'virtualPort'
+})(VirtualPortEdit);
 
-// export default InitializeFromStatePage;
+export default InitializedPage;

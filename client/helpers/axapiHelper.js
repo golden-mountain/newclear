@@ -8,17 +8,18 @@ export const postInfo = (path, body) => getPayload(path, 'POST', body );
 export const deleteInfo = (path, body) => getPayload(path, 'DELETE', body ); 
 
 
-const _axapiRequest = (callback, path, body={}, page=APP_CURRENT_PAGE, dispatch=null) => {
-  // console.log(callback, path, body, page);
+const _axapiRequest = (callback, path, body={}, info, dispatch=null) => {
+  const { page , pageId='default', componentName='', componentId='', notifiable=false } = info;
   const requestInfo = callback(path, body);
+  const action = axapiRequest(page, requestInfo, pageId, componentName, componentId, notifiable);
   if (dispatch) {
-    return dispatch(axapiRequest(page, requestInfo));
+    return dispatch(action);
   } else {
-    return axapiRequest(page, requestInfo);
+    return action;
   }  
 };
 
-export const axapiGet = (path, body, page=APP_CURRENT_PAGE, dispatch=null) =>  _axapiRequest(getInfo, path, body, page, dispatch);
-export const axapiPost = (path, body, page=APP_CURRENT_PAGE, dispatch=null) =>  _axapiRequest(postInfo, path, body, page, dispatch);
-export const axapiPut = (path, body, page=APP_CURRENT_PAGE, dispatch=null) =>  _axapiRequest(putInfo, path, body, page, dispatch);
-export const axapiDelete = (path, body, page=APP_CURRENT_PAGE, dispatch=null) =>  _axapiRequest(deleteInfo, path, body, page, dispatch);
+export const axapiGet = (path, body, info={ page: APP_CURRENT_PAGE } , dispatch=null) =>  _axapiRequest(getInfo, path, body, info, dispatch);
+export const axapiPost = (path, body, info={ page: APP_CURRENT_PAGE } , dispatch=null) =>  _axapiRequest(postInfo, path, body, info, dispatch);
+export const axapiPut = (path, body, info={ page: APP_CURRENT_PAGE } , dispatch=null) =>  _axapiRequest(putInfo, path, body, info, dispatch);
+export const axapiDelete = (path, body, info={ page: APP_CURRENT_PAGE }, dispatch=null) =>  _axapiRequest(deleteInfo, path, body, info, dispatch);
