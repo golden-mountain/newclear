@@ -152,14 +152,14 @@ class A10SchemaForm extends Component {
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
       }
-      const promise = this.context.props.axapiRequest(parsedValues, true);
+      const promise = this.props.componentAxapiRequest(parsedValues, true);
       // console.log(' returned promise ', promise);
       if (promise) {
         // TODO: release the store
         // promise.finally(() => {
         //   this.context.props.storeApiInfo(form, false);
         // });
-        // console.log('returned from propmise');   
+        // console.log('returned from propmise');
       }
 
       return promise;
@@ -230,23 +230,21 @@ class A10SchemaForm extends Component {
       // close win
       // TODO: decide how to close this form page
       const closeCurrent = () => {
-        this._parentProps.setPageVisible(env.pageName, true, env.pageId); 
+        this.props.componentSetState({ visible: false });
       };
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
         fieldConnector.connectToValues(newValues);
         result = submitFunc.call(this, newValues, env.form, false);
       } else {
-        // console.log('connect to result.................');
         result = submitFunc.call(this, newValues, env.form, true);
-        // console.log('connect to result at A10Form:', result);
         fieldConnector.connectToResult(result);
-
         if (onAfterSubmit) {
           result = onAfterSubmit.call(this, result);
         }
       }
 
+      console.log('resolevd, execute close win2');
       result.then(closeCurrent);
       return result;
     };

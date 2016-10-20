@@ -15,11 +15,6 @@ class LoginForm extends React.Component {
   }
 
   static displayName = 'LoginForm'
-
-
-  constructor(props, context) {
-    super(props, context);
-  }
  
   onSubmit(values) {
     const fullAuthData = getPayload('/axapi/v3/auth', 'POST', values);
@@ -28,8 +23,9 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    // console.log(this.context.props, 'props....................');
     const { data } = this.props;
-    const { from } = this.context.props.location.state || '/';
+    const { from } = '/';
 
     return (
       data && data.signature ? <Redirect to={{ pathname: from || '/' }} /> :

@@ -34,7 +34,7 @@ class A10Table extends React.Component {
       mode: 'checkbox', // or checkbox
       clickToSelect: true
     };
-    
+
     let options = {
       onDeleteRow: () => {console.log('deleting row');},
       onAddRow: () => {console.log('adding row');}
@@ -49,7 +49,7 @@ class A10Table extends React.Component {
             >
             {children}
           </BootstrapTable>
-          
+
         </Col>
       </Row>
     );

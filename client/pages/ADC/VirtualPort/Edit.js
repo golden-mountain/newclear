@@ -2,9 +2,7 @@ import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
-import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
-import AppManager from 'helpers/AppManager';
-
+import VirtualPortForm from './components/Form';
 
 export default class VirtualPortEdit extends React.Component {
 
@@ -21,9 +19,3 @@ export default class VirtualPortEdit extends React.Component {
   }
 }
 
-
-const InitializedPage = AppManager({
-  page: 'virtualPort'
-})(VirtualPortEdit);
-
-export default InitializedPage;

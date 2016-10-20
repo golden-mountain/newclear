@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
+import { MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
 
 import './scss/Menu.scss';
 
@@ -14,17 +14,17 @@ export default ({ children }) => (
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
-        <NavItem><Link to="/dev/apitester">API Tester</Link></NavItem>
+        <NavItem href="/dev/apitester">API Tester</NavItem>
         <NavDropdown eventKey={3} title="ADC" id="basic-nav-dropdown">
-          <NavItem><Link to="/adc/virtual-server/edit">Edit Virtual Server</Link></NavItem>
-          <NavItem><Link to="/adc/virtual-server/list">Virtual Servers</Link></NavItem>
-          <NavItem><Link to="/adc/virtual-server/port/edit">Virtual Port</Link></NavItem>
-          <NavItem><Link to="/adc/template/virtual-server/edit">Virtual Server Template</Link></NavItem>
+          <MenuItem href="/adc/virtual-server/edit">Edit Virtual Server</MenuItem>
+          <MenuItem href="/adc/virtual-server/list">Virtual Servers</MenuItem>
+          <MenuItem href="/adc/virtual-server/port/edit">Virtual Port</MenuItem>
+          <MenuItem href="/adc/template/virtual-server/edit">Virtual Server Template</MenuItem>
         </NavDropdown>
       </Nav>
       {sessionStorage.token && 
         <Nav pullRight>
-          <NavItem><Link to="/logout">Logout</Link></NavItem>
+          <NavItem href="/logout">Logout</NavItem>
         </Nav>
       }
       {children}

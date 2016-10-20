@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import AppManager from 'helpers/AppManager';
-// import Base from 'pages/Base';
 import VirtualServerTable from './components/Table';
 
 export default class VirtualServerList extends React.Component {
- 
+  static contextTypes = {
+    props: PropTypes.object.isRequired
+  }
+  
   render() {    
-
+    
     return (
       <Row>
         <Col xs={12}>
@@ -18,9 +19,4 @@ export default class VirtualServerList extends React.Component {
     );
   }
 }
-
-export default AppManager({
-  page: 'virtual-server-list'
-})(VirtualServerList);
-
 

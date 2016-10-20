@@ -5,12 +5,14 @@ import { mapValues } from 'lodash';
 import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
-import PageLayout from 'layouts/a10/PageLayout';
+// import PageLayout from 'layouts/a10/PageLayout';
+// import { LAST_PAGE_KEY } from 'configs/appKeys';
+
 
 // Page Connector
-const AppManager = config => WarppedElement => {
+const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
-  class BasePage extends React.Component {
+  class Core extends React.Component {
     static childContextTypes = {
       props: PropTypes.object.isRequired
     }
@@ -20,13 +22,10 @@ const AppManager = config => WarppedElement => {
     }
 
     getChildContext() {
-      // console.log('context props:', this.context.props, 'props:', this.props);
       return {  props: this.props };
     }
 
     componentWillMount() {
-      // invariant(this.context.props.registerCurrentPage, 'BasePage not a single page component, depends on child page component');
-      // console.log('this props:', this.props);
       this.props.registerCurrentPage(Object.assign({}, this.props.env, { pageId: this.props.pageId || 'default' }));
       if (this.props.visible === undefined || this.props.visible) {
         this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
@@ -36,13 +35,12 @@ const AppManager = config => WarppedElement => {
     }
 
     componentWillUnmount() {
-      // console.log('will unmount this', this.props.env.page); 
       this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
       this.props.destroyPage();
     }
 
     render() {
-      return <PageLayout> <WarppedElement /></PageLayout>;
+      return <Layout> <WrappedElement {...WrappedProps} /> </Layout>;
     }
   }
 
@@ -52,11 +50,15 @@ const AppManager = config => WarppedElement => {
 
   let page = reduxForm({
     form: config.form
-  } )(BasePage);
+  } )(Core);
 
   page = connect(
     (state) => {
       return {
+        // isLoading: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'isLoading' ], false),
+        // statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
+        // errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
+        // notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ]),       
         axapiUid: getAxapiUid(state),
         axapiResponse: getAxapiResponse(state, config.page), // invalid on context
         initialValues: config.initialValues, // invalid on context
@@ -74,4 +76,4 @@ const AppManager = config => WarppedElement => {
   return page;
 };
 
-export default AppManager;
+export default CoreManager;

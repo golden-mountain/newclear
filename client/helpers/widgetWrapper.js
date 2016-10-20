@@ -8,23 +8,27 @@ import { uniqueId } from 'lodash';
 // import { getAppEnvVar, getAppPageVar } from 'helpers/stateHelper';
 
 // wrapper for widgets, add a wrapper to get state
-export function widgetWrapper(WrappedComponent, ...widgetProps) {
+export function widgetWrapper(WrappedComponent, widgetProps) {
 
-  const displayName = 'ConnectTo' + (WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME');
+  const widgetName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
+  const displayName = `Widget${widgetName}`;
 
-  class Core extends Component {
+  class Widget extends Component {
+    static displayName = displayName
+
     static contextTypes = {
       props: PropTypes.object.isRequired
     }
 
-    // static childContextTypes = {
-    //   props: PropTypes.object.isRequired
-    // }
-   
+    static childContextTypes = {
+      props: PropTypes.object.isRequired
+    }
+
     _componentId = 0
 
     constructor(props, context) {
       super(props, context);
+      // console.log('context::::::::', this.context);
     }
 
     get componentName() {
@@ -52,7 +56,7 @@ export function widgetWrapper(WrappedComponent, ...widgetProps) {
     }
 
     get pageName() {
-      return this.props.componentEnv.page || 'UNKNOWN-PAGE'; 
+      return this.props.componentEnv.page || 'UNKNOWN-PAGE';
     }
 
     get visible() {
@@ -64,13 +68,13 @@ export function widgetWrapper(WrappedComponent, ...widgetProps) {
     }
 
     get widgetProps() {
-      let componentEnv = {      
+      let componentEnv = {
         pageId: this.pageId,
         page: this.pageName,
         componentName: this.componentName,
         componentId: this.componentId
       };
-      return Object.assign({}, widgetProps, componentEnv);
+      return componentEnv;
     }
 
     componentAxapiRequest(data, notifiable=false) {
@@ -80,28 +84,30 @@ export function widgetWrapper(WrappedComponent, ...widgetProps) {
     componentSetState(data) {
       return this.context.props.setComponentState(this.pageId, this.componentName, this.componentId, data);
     }
-    // getChildContext() {
-    //   const props = Object.assign(
-    //     {},
-    //     this.context.props
-    //   );
-    //   return {  props: props };
-    // }
+
+    getChildContext() {
+      const props = Object.assign(
+        {},
+        this.context.props,
+        this.props
+      );
+      return {  props: props };
+    }
 
     render() {
       const { componentEnv, ...rest } = this.props; // eslint-disable-line
-      const widgetProps = Object.assign(
-        {}, rest, 
-        { 
-          env: Object.assign(componentEnv, this.widgetProps), 
-          data: this.data, 
+      const newProps = Object.assign(
+        {}, rest,
+        {
+          env: Object.assign(componentEnv, this.widgetProps),
+          data: this.data,
           visible: this.visible,
           componentAxapiRequest: ::this.componentAxapiRequest,
           componentSetState: ::this.componentSetState
         }
       );
-      this.renderedElement = React.createElement(WrappedComponent, widgetProps);
-      return this.renderedElement; 
+      this.renderedElement = React.createElement(WrappedComponent, newProps);
+      return this.renderedElement;
     }
   }
 
@@ -110,12 +116,13 @@ export function widgetWrapper(WrappedComponent, ...widgetProps) {
       componentEnv: getAppEnvVar(state),
       page: getAppPageVar(state),
       app: state.getIn([ 'app' ]),
-      form: state.getIn([ 'form' ])
+      form: state.getIn([ 'form' ]),
+      ...widgetProps
     };
   };
 
-  let newComponent = connect(stateMapper)(Core);
+  let newComponent = connect(stateMapper)(Widget);
   newComponent.displayName = displayName;
   // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
-  return hoistStatics(newComponent, Core, WrappedComponent);
+  return hoistStatics(newComponent, Widget, WrappedComponent);
 }

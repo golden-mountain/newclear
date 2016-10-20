@@ -10,9 +10,13 @@ import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
 
-class AppLayout extends Component {
+export default class AppLayout extends Component {
   static propTypes = {
     children: PropTypes.node
+  }
+  
+  static contextTypes = {
+    props: PropTypes.object.isRequired
   }
 
   state = {
@@ -29,9 +33,9 @@ class AppLayout extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { statusCode, errMsg, error, notifiable } = nextProps;
+    const { statusCode, errMsg, error, notifiable, axapiUid } = nextProps;
 
-    if (notifiable) {
+    if (notifiable && axapiUid != this.props.axapiUid) {
       let bsClass = 'success', info = 'Success';
       let _notify = {
         title: 'Hi, Something Wrong!!',
@@ -67,7 +71,8 @@ class AppLayout extends Component {
 
 
   render() {
-    // console.log('loading.................', this.props.isLoading);
+    // console.log('context on layout', this);
+
     return (
       <main >
         <Menu>

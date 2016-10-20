@@ -11,9 +11,8 @@ import VirtualizedSelect from 'react-virtualized-select';
 import A10Button from 'components/Form/A10Button';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
-// import { axapiGet } from 'helpers/axapiHelper';
-// import { axapiRequest } from 'redux/modules/app/axapi';
-import { values, get, isArray } from 'lodash';
+
+import { values, get, isArray, isEqual, set } from 'lodash';
 
 class A10Select extends Component {
   static displayName = 'A10Select'
@@ -22,33 +21,32 @@ class A10Select extends Component {
     props: PropTypes.object.isRequired
   }
 
-  // constructor(props, context) {
-  //   super(props, context);
-  //   // this.state = { options: [] };
-  // }
+  state = {
+    options: []
+  }
 
-  // // shouldComponentUpdate(nextProps, nextState) {
-  // //   // console.log('next props:', nextProps, 'next state:', nextState);
-  // //   return !isEqual(nextState.options, this.state.options) || !isEqual(nextProps.value, this.props.value);
-  // // }
-
-  formatOptions(values) {
+  formatOptions(data) {
     let json = [];
-    if (!this.props.loadOptions || !isArray(values)) {
+    if ( !data || !this.props.loadOptions) {
       return json;
     }
-    
+    let list = values(data).pop();
+
+    if (!isArray(list)) {
+      list = [ list ];
+    }
+
     let { map: { name, label, reform } } = this.props.loadOptions;
 
     if (!name) {
       name = 'name';
-    } 
+    }
 
     if (!label) {
       label = name;
-    }        
+    }
 
-    values.forEach((value) => {
+    list.forEach((value) => {
       let title = get(value, label);
       if (reform) {
         title = reform(title);
@@ -59,29 +57,30 @@ class A10Select extends Component {
   }
 
   getOptions() {
-    // console.log('loading................');
     const { loadOptions } = this.props;
-    const asyncNeeded = loadOptions && loadOptions.url && true;  
+    const asyncNeeded = loadOptions && loadOptions.url && true;
 
     if (asyncNeeded) {
       const { params } = loadOptions;
       const payload = getPayload(loadOptions.url, 'GET', params);
-      this.props.componentAxapiRequest(payload, false);      
+      this.props.componentAxapiRequest(payload, false);
     }
   }
 
-  // getOnloadPopupOptions() {
-  //   const { popupInfo } = this.props;
-  //   let onLoad = get(popupInfo, 'connectOptions.onLoad');
-  //   if (!onLoad) {
-  //     onLoad = (value) => {
-  //       // console.log('A10Select default onLoad');
-  //       let json = this.state.options;
-  //       return this.setOptions(json, values(value));
-  //     };
-  //   }
-  //   return onLoad;
-  // }
+  getOnloadPopupOptions() {
+    const { popupInfo } = this.props;
+    let onLoad = get(popupInfo, 'connectOptions.onLoad');
+    if (!onLoad) {
+      onLoad = (value) => {
+        let formattedOptions = this.formatOptions(value);
+        let allOptions = this.state.options;
+        allOptions = allOptions.concat(formattedOptions);
+        this.setState( { options: allOptions });
+        return formattedOptions;
+      };
+    }
+    return onLoad;
+  }
 
   componentWillMount() {
     // const { loadOptions: { loadOnMount } } = this.props;
@@ -90,26 +89,24 @@ class A10Select extends Component {
     }
   }
 
-  // // componentWillReceiveProps(nextProps) {
-  // //   console.log(nextProps);
-  // // }
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.data, this.props.data )) {
+      const formattedOptions = this.formatOptions(nextProps.data);
+      this.setState( { options: formattedOptions });
+    }
+  }
 
   render() {
-    let { value, onChange, popupInfo, data } = this.props;
-    let formattedOptions = [];
+    let { value, onChange, popupInfo } = this.props;
+    // const asyncNeeded = loadOptions && loadOptions.url && true;
 
-    // const asyncNeeded = loadOptions && loadOptions.url && true;   
-    if (data) {
-      formattedOptions = this.formatOptions(values(data).pop());
-    }
-    console.log('props...........................', formattedOptions);
+    const loadAttr = { value, onChange, options: this.state.options, simpleValue: true };
 
-    const loadAttr = { value, onChange, options:formattedOptions, simpleValue: true };
+    set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
+    set(popupInfo, 'id', 'default');
 
-    // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
-    
     return (
-      popupInfo ? 
+      popupInfo ?
       <InputGroup>
         <VirtualizedSelect {...loadAttr}/>
         <InputGroup.Addon>
@@ -117,7 +114,7 @@ class A10Select extends Component {
         </InputGroup.Addon>
       </InputGroup>
       :
-      <VirtualizedSelect {...loadAttr}/>      
+      <VirtualizedSelect {...loadAttr}/>
     );
   }
 }

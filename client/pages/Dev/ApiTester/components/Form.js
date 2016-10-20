@@ -33,12 +33,12 @@ class AxapiForm extends React.Component {
 
   clearHistoryQuery() {
     localStorage.removeItem('axapi');
-    this.context.props.initialize(this.context.props.initialValues);
+    this.context.props.initialize(this.props.initialValues);
     this.forceUpdate();
   }
 
   initSession() {
-    const promise = this.context.props.axapiRequest(this.context.props.initialValues);
+    const promise = this.context.props.axapiRequest(this.props.initialValues);
     promise.then(() => {
       this.setState({ sessionId: auth.getToken() });
     });
@@ -145,9 +145,10 @@ class AxapiForm extends React.Component {
   }
 }
 
-// const InitializeFromStateForm = FormManager({
-//   page: 'axapiTesterTool',
-//   initialValues
-// })(AxapiForm);
+const initialValues = {
+  path: '/axapi/v3/auth',
+  method: 'POST',
+  body: { credentials: { username: 'admin', password: 'a10' } }
+};
 
-export default widgetWrapper(AxapiForm);
+export default widgetWrapper(AxapiForm, { initialValues });

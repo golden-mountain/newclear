@@ -2,7 +2,7 @@ import { Iterable, List, Map, fromJS } from 'immutable';
 
 // axapi request import
 import moment from 'moment';
-import { get, isArray } from 'lodash';
+import { get, isArray, uniqueId } from 'lodash';
 // import * as logger from 'helpers/logger';
 
 import { LAST_PAGE_KEY, APP_CURRENT_PAGE } from 'configs/appKeys';
@@ -34,10 +34,10 @@ const pushAxapiReqs = (item) => {
   localStorage.setItem('axapi', itemStr);
 };
 
-const getUid = () => new Date().getTime +'-' + parseInt(Math.random()*1000);
+const getUid = () => uniqueId('AXAPI-ID-');
 
 const apiReducers = {
-  [ AXAPI_REQUEST ](state, { page, pageId, componentName, componentId }) {
+  [ AXAPI_REQUEST ](state) {
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi', 'isLoading' ], true);
     // result = result.setIn([ APP_CURRENT_PAGE,  'pages', page, pageId, componentName, componentId, 'data', 'isLoading' ], true);
     console.log('loading......................................');
@@ -52,7 +52,7 @@ const apiReducers = {
       if (newResp.req.method === 'GET') {
         body = newResp.body;
       } else {
-        body = newResp.body.response || newResp.body.authresponse;
+        body = newResp.body.response || newResp.body.authresponse || newResp.body;
       }
 
       pushAxapiReqs({ data, result: body });
@@ -110,7 +110,6 @@ export default apiReducers;
 
 // ----------------- AXAPI ------------------------
 export function axapiRequest(page, data, pageId='default', componentName='', componentId='', notifiable=false) {
-  console.log(page, data, pageId, componentName,componentId);
   const authHeaders = {
     'content-type': 'application/json'
   };

@@ -21,9 +21,11 @@ class A10Button extends Component {
   }
 
   render() {
+    /* eslint-disable no-unused-vars */
     const { env, app, form, children, onClick, componentClass,
-      popup: { id, pageClass, title,  connectOptions, 
+      popup: { id, pageClass, title,  connectOptions, pageName,
       urlKeysConnect,  ...modalProps }, attrs } = this.props;
+    /* eslint-enable no-unused-vars */
 
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
@@ -37,12 +39,14 @@ class A10Button extends Component {
       };
       if (!this.modelVisible) {
         modal = children;
+        // console.log('show button itself without modal');
       } else {
-        console.log('this model visible', id, this.modelVisible);
+        // console.log('this model visible', id, this.modelVisible);
         const changeFormField = (name, value) => {
           this.context.props.change(env.form, name, value);
         };
 
+        // console.log('debug field connector ', FieldConnector);
         popupContent = React.createElement(pageClass, {
           visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),

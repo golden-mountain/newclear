@@ -8,6 +8,7 @@ export default class FieldConnector {
     this._formData = formData;
     this._env = env;
     this._change = change;
+    // console.log('...............', options, formData, env, change);
   }
 
   getOptions() {
@@ -60,16 +61,24 @@ export default class FieldConnector {
   }
 
   connectToResult(promise) {
+    console.log('ready to connect to result0');
+
     let { connectToResult, onLoad } = this.options;
 
+    console.log('ready to connect to result');
     if (connectToResult) {
       promise.then((values) => {
+        console.log('ready to connect to result 2');
         const newValues = values.pop().body;
+        console.log('ready to connect to result 3');        
         // values is axapi returned values
         this.connectTo(connectToResult, fromJS(newValues));
         // onLoad could connect to values once
+        console.log('ready to connect to result 4');        
         if (onLoad) {
-          onLoad(newValues);        
+          console.log('ready to connect to result 5');
+          onLoad(newValues);   
+          console.log('ready to connect to result 6');
         }
       });
     }

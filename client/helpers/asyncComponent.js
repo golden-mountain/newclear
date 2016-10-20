@@ -1,25 +1,7 @@
 import React, { Component } from 'react';
 import AppLayout from '../layouts/a10/AppLayout';
 import EmptyLayout from '../layouts/a10/EmptyLayout';
-// import AppManager from 'helpers/AppManager';
-
-// const createLayoutWrapper = (Layout, configs) => {
-//   class Wrapper extends Component {
-//     static childContextTypes = {
-//       props: PropTypes.object.isRequired
-//     }
-
-//     getChildContext() {
-//       return {  props: this.props  };
-//     }
-
-//     render() {
-//       return <Layout>{ this.props.children }</Layout>;
-//     }
-//   }
-
-//   return AppManager(configs)(Wrapper);
-// };
+import CoreManager from 'helpers/CoreManager';
 
 export default function asyncComponent(getComponent, Layout=AppLayout) {
   class AsyncComponent extends Component {
@@ -38,17 +20,15 @@ export default function asyncComponent(getComponent, Layout=AppLayout) {
     render() {
       const { Component } = this.state;
       if (Component) {
-        // console.log(Component, this.props);
         if (!Layout) {
           Layout = EmptyLayout;
         }
 
-        // const LayoutWrapper = createLayoutWrapper(Layout, {
-        //   page: this.props.pathname,
-        //   form: this.props.pathname
-        // });
-          
-        return <Layout><Component {...this.props} /></Layout>;
+        const LayoutWrapper = CoreManager({
+          page: this.props.pathname
+        })(Layout, Component, this.props);
+        
+        return <LayoutWrapper />;
       }
       return null;
     }
