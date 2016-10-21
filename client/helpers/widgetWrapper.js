@@ -12,6 +12,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   const widgetName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
   const displayName = `Widget${widgetName}`;
+  const componentId = uniqueId(displayName + '-');
 
   class Widget extends Component {
     static displayName = displayName
@@ -24,11 +25,10 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       props: PropTypes.object.isRequired
     }
 
-    _componentId = 0
+    // _componentId = 0
 
     constructor(props, context) {
       super(props, context);
-      // console.log('context::::::::', this.context);
     }
 
     get componentName() {
@@ -36,10 +36,11 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
     }
 
     get componentId() {
-      if (!this._componentId) {
-        this._componentId = uniqueId(this.componentName.toLowerCase() + '-');
-      }
-      return this._componentId;
+      // if (!this._componentId) {
+      //   this._componentId = uniqueId(this.componentName.toLowerCase() + '-');
+      // }
+      // return this._componentId;
+      return componentId;
     }
 
     get instanceData() {
@@ -106,6 +107,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
           componentSetState: ::this.componentSetState
         }
       );
+      // console.log('widgetProps', rest, this);
       this.renderedElement = React.createElement(WrappedComponent, newProps);
       return this.renderedElement;
     }
@@ -122,7 +124,8 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
   };
 
   let newComponent = connect(stateMapper)(Widget);
-  newComponent.displayName = displayName;
+  newComponent.displayName = displayName; //`Connect(${displayName})`;
+  newComponent.componentId = componentId; //`Connect(${displayName})`;
   // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
   return hoistStatics(newComponent, Widget, WrappedComponent);
 }

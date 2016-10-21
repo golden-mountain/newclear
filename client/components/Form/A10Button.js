@@ -30,11 +30,11 @@ class A10Button extends Component {
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
       invariant(pageClass.displayName, `Popup component for Page ${env.page} must have static property displayName and componentId`);
-      this.modelVisible = getComponentVar(app, env.page, env.pageId, pageClass.displayName, id, 'visible');
+      this.modelVisible = getComponentVar(app, env.page, env.pageId, pageClass.displayName, pageClass.componentId, 'visible');
       click = () => {
-        // this.setState({ showPopup: true });    
-        // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));    
-        this.context.props.setComponentVisible(env.pageId, pageClass.displayName, id, true);
+        // this.setState({ showPopup: true });
+        // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));
+        this.context.props.setComponentVisible(env.pageId, pageClass.displayName, pageClass.componentId, true);
         return false;
       };
       if (!this.modelVisible) {
@@ -46,11 +46,14 @@ class A10Button extends Component {
           this.context.props.change(env.form, name, value);
         };
 
+        // console.log(pageClass.displayName, pageClass.componentId);
         // console.log('debug field connector ', FieldConnector);
         popupContent = React.createElement(pageClass, {
           visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
-          pageId: id,
+          // pageId: id,
+          componentName: pageClass.displayName,
+          componentId: pageClass.componentId,
           urlKeysConnect
         });
 
@@ -76,7 +79,7 @@ class A10Button extends Component {
     let buttonStyle = {
       cursor: 'pointer'
     };
-    
+
     return React.createElement( componentClass || Button, { onClick: click, style: buttonStyle, ...attrs }, modal);
   }
 }

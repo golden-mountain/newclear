@@ -21,8 +21,9 @@ export default class FieldConnector {
     connectTo.forEach((map, prefix) => {
       const formValue = this._formData.getIn(valuePath.concat(toPath(prefix)));
       let obj = formValue.toJS();
-      
+
       if (List.isList(formValue)) {
+        // console.log('formValue is list', formValue);
         let newObj = {};
 
         // formValue.forEach((value) => {
@@ -30,19 +31,21 @@ export default class FieldConnector {
           let v = values.getIn(toPath(source));
           if (v) {
             set(newObj, target, v);
-          } 
-        });             
+          }
+        });
         // });
         obj.push(newObj);
       } else {
+        // console.log('formValue is object', formValue);
+        //TODO: form change value not triggled??
         map.forEach((source, target) => {
           let v = values.getIn(toPath(source));
           if (v) {
             set(obj, target, v);
           }
         });
-      }          
-      // console.log('object value is...............', obj);
+      }
+      // console.log('object value is...............', obj, prefix);
       this._change(prefix, fromJS(obj));
     });
   }
@@ -55,34 +58,26 @@ export default class FieldConnector {
     }
 
     if (connectToValue) {
-      this.connectTo(connectToValue, values);      
+      this.connectTo(connectToValue, values);
     }
     return values;
   }
 
   connectToResult(promise) {
-    console.log('ready to connect to result0');
-
     let { connectToResult, onLoad } = this.options;
 
-    console.log('ready to connect to result');
     if (connectToResult) {
       promise.then((values) => {
-        console.log('ready to connect to result 2');
         const newValues = values.pop().body;
-        console.log('ready to connect to result 3');        
+        if (onLoad) {
+          onLoad(newValues);
+        }
         // values is axapi returned values
         this.connectTo(connectToResult, fromJS(newValues));
         // onLoad could connect to values once
-        console.log('ready to connect to result 4');        
-        if (onLoad) {
-          console.log('ready to connect to result 5');
-          onLoad(newValues);   
-          console.log('ready to connect to result 6');
-        }
       });
     }
-    
+
     return promise;
   }
 

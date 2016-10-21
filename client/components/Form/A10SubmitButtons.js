@@ -8,28 +8,28 @@ export class A10SubmitButtons extends Component {
       return (
         <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
           {submitting ? <i/> : <i/>} Create
-       </Button>      
+       </Button>
       );
     },
     cancel: ({ pristine, submitting }, index) => {
       return (
         <Button type="button" disabled={pristine || submitting} onClick={::this.close} key={index} >
           Cancel
-        </Button>   
+        </Button>
       );
     },
     reset: ({ pristine, submitting }, index) => {
       return (
         <Button type="button" disabled={pristine || submitting} onClick={::this.close} key={index} >
           Reset
-        </Button>   
+        </Button>
       );
     },
     login: ({ submitting }, index) => {
       return (
         <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
           {submitting ? <i/> : <i/>} Login
-       </Button>      
+       </Button>
       );
     }
   };
@@ -37,14 +37,15 @@ export class A10SubmitButtons extends Component {
   // context defined at page
   constructor(props, context) {
     super(props, context);
-    this._parentProps = context.props;
+    // this._parentProps = context.props;
   }
 
   close() {
     // console.log(this.props, this._parentProps);
-    const { env, pageId } = this.props;
+    const { env: { pageId } } = this.props;
+    const { componentName, componentId } = this.context.props;
     // console.log('page form variables', env, pageId,  this.context.props, this.props);
-    this.context.props.setComponentVisible(env.pageId, env.componentName, pageId, false);
+    this.context.props.setComponentVisible(pageId, componentName, componentId, false);
   }
 
   render() {
@@ -53,7 +54,7 @@ export class A10SubmitButtons extends Component {
       marginRight: '15px'
     };
     return (
-      
+
       <FormGroup>
           <ButtonToolbar>
             <ButtonGroup bsSize="large" className="pull-right" style={style}>
@@ -65,7 +66,7 @@ export class A10SubmitButtons extends Component {
             </ButtonGroup>
           </ButtonToolbar>
       </FormGroup>
-    
+
     );
   }
 }

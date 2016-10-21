@@ -210,6 +210,7 @@ class A10SchemaForm extends Component {
     /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
+    // console.log(this.props, this.context);
 
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
@@ -228,9 +229,12 @@ class A10SchemaForm extends Component {
 
       let result = null;
       // close win
-      // TODO: decide how to close this form page
       const closeCurrent = () => {
-        this.props.componentSetState({ visible: false });
+        const { env: { pageId } } = this.props;
+        const { componentName, componentId } = this.context.props;
+        // console.log('page form variables', env, pageId,  this.context.props, this.props);
+        this.context.props.setComponentVisible(pageId, componentName, componentId, false);
+        // this.props.componentSetState({ visible: false });
       };
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
@@ -244,7 +248,7 @@ class A10SchemaForm extends Component {
         }
       }
 
-      console.log('resolevd, execute close win2');
+      // console.log('resolevd, execute close win2');
       result.then(closeCurrent);
       return result;
     };
