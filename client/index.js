@@ -3,10 +3,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 // import { Router, browserHistory } from 'react-router/es6';
 // import { syncHistoryWithStore } from 'react-router-redux';
-import createLogger from 'redux-logger';
+// import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-import Immutable, { Iterable } from 'immutable';
-import { createStore, applyMiddleware } from 'redux';
+import Immutable from 'immutable';
+import { createStore, applyMiddleware, compose } from 'redux';
 import installDevTools from 'immutable-devtools';
 import Perf from 'react-addons-perf';
 
@@ -33,31 +33,32 @@ let middlewares = [ thunk,  createMiddleware(client), formMiddleware ];
 //webpack define plugin defined env
 if (__DEV__) { // eslint-disable-line
   // logger middleware
-  const transformer = (state) => {
-    if (Iterable.isIterable(state)) return state.toJS();
-    else return state;
-  };
-  const logger = createLogger({
-    stateTransformer: transformer,
-    actionTransformer: transformer,
-    collapsed: true,
-    diff: true,
-    duration : true
-  });
+  // const transformer = (state) => {
+  //   if (Iterable.isIterable(state)) return state.toJS();
+  //   else return state;
+  // };
+  // const logger = createLogger({
+  //   stateTransformer: transformer,
+  //   actionTransformer: transformer,
+  //   collapsed: true,
+  //   diff: true,
+  //   duration : true
+  // });
 
-  middlewares.push(logger);
+  // middlewares.push(logger);
 
   installDevTools(Immutable);
 
   window.Perf = Perf;
 }
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const initialState = Immutable.Map(); // eslint-disable-line ignore it
 const store = createStore(
   reducer,
   initialState,
-  applyMiddleware(...middlewares)
+  composeEnhancers(applyMiddleware(...middlewares))
 );
 
 // function handleChange() {

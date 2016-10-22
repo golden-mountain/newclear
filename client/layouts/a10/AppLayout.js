@@ -10,7 +10,7 @@ import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
 
-export default class AppLayout extends Component {
+class AppLayout extends Component {
   static propTypes = {
     children: PropTypes.node
   }

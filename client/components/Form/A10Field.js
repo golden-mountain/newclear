@@ -12,6 +12,7 @@ import createValidationFuncs from 'helpers/validations';
 
 import FieldLayout from 'layouts/a10/FieldLayout';
 import { widgetWrapper } from 'helpers/widgetWrapper';
+import { FORM_FIELD_KEY } from 'configs/appKeys';
 
 // multiple options input
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];
@@ -100,7 +101,7 @@ export class A10Field extends Component {
   }
 
   render() {
-    let { children, input, ...fieldOptions } = this.props;
+    let { children, input, onChange, ...fieldOptions } = this.props;
     const callback = (child) => {
       let inputOptions = {};
 
@@ -108,38 +109,23 @@ export class A10Field extends Component {
       // only support React Bootstrap
       // to set value and checked for inputs
       if (registeredMVInputs.indexOf(child.type.name) > -1) {
-        // console.log('mv element is:', restInput.name);
-        inputOptions['checked'] = child.props.value === value;
+        inputOptions['checked'] = child.props.value.toString() == value.toString();
       } else {
-        // console.log('text element is:', restInput.name);
         inputOptions['value'] = value;
       }
 
-      // console.log('input options:', { ...inputOptions, ...restInput });
-      return  React.cloneElement(child, { ...inputOptions, ...restInput });
+      return  React.cloneElement(child, { ...inputOptions, ...restInput, onChange });
     };
 
     if (!children) {
       children = this.createElement() ;
     }
     let newChild = this.findInputElements(children, registeredInputs, callback);
-    // newChild = React.Children.map(newChild, callback);
     return (
       <FieldLayout {...fieldOptions}> { newChild } </FieldLayout>
     );
   }
 }
-
-
-// export const A10Field = connect(
-//   (state, ownProps) => {
-//     logger.debug('debug field props', ownProps);
-//     return {
-//       fieldObj: state.getIn([ 'form' ])
-//     };
-//   }
-// )(AXField);
-
 
 class SchemaField extends Component {
   static displayName = 'SchemaField'
@@ -151,8 +137,7 @@ class SchemaField extends Component {
       throw new Error('Config should passed from parent');
     }
 
-    this._context = context;
-    this._parentProps = this._context.props;
+    this._parentProps = this.context.props;
   }
 
   componentWillMount() {
@@ -177,11 +162,9 @@ class SchemaField extends Component {
       validations: validation,
       conditionals: this.parseConditional(conditional, defaultValue)
     };
-    this._parentProps.registerPageField(name, fromJS(fieldOptions));
+    this.context.props.comRegisterPageField(name, fromJS(fieldOptions));
   }
 
-// <<<<<<< Updated upstream
-// =======
 //   shouldComponentUpdate(nextProps) {
 //     const { name } = this.props;
 //     const fieldNext = nextProps.app.getIn([ this._parentProps.env.page, 'form', name ]);
@@ -190,8 +173,7 @@ class SchemaField extends Component {
 //     const fieldThisValue = this.props.form.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
 //     return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
 //   }
-//
-// >>>>>>> Stashed changes
+
   parseSchemaConditional(name, schema) {
     let result = {};
 
@@ -239,11 +221,21 @@ class SchemaField extends Component {
 
   render() {
     let { name, children, app, ...rest } = this.props; // eslint-disable-line
-    const visible = app.getIn([ this._parentProps.env.page, 'form', name, 'conditionals', 'visible' ]);
-    // console.log(fieldProp, '......................................');
+    const { instancePath } = this.context.props;
+
+    const visible = app.getIn([ ...instancePath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
+
+    const onChange = (event) => {
+      let value = event.target.value;
+      if (event.target.checked !== undefined) {
+        value = event.target.checked ? value : '';
+      }
+      ::this.context.props.comReduxFormFieldChange(instancePath[0], name, value);
+    };
+
     return (
       visible ?
-        <Field name={name} component={A10Field} {...rest}>
+        <Field name={name} component={A10Field} onChange={onChange} {...rest}>
           { children }
         </Field>
       : null
@@ -255,12 +247,4 @@ SchemaField.contextTypes = {
   props: PropTypes.object
 };
 
-// export const A10SchemaField = connect(
-//   (state) => {
-//     return {
-//       app: state.getIn([ 'app' ]),
-//       form: state.getIn([ 'form' ])
-//     };
-//   },
-// )(SchemaField);
 export const A10SchemaField = widgetWrapper(SchemaField);

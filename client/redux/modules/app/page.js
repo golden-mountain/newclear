@@ -40,9 +40,9 @@ const pageReducers = {
   },
   [ DESTROY_PAGE ](state, { pagePath }) {
     let result = state.getIn([ APP_CURRENT_PAGE, 'envs' ]);
-    result = result.filterNot(x => x.getIn([ 'page' ]) == pagePath.page);
+    result = result.filterNot(x => x.getIn([ 'page' ]) == pagePath[0]);
     result = state.setIn([ APP_CURRENT_PAGE, 'envs' ], result);
-    return result.deleteIn([ pagePath.page ]);
+    return result.deleteIn([ pagePath[0] ]);
   }
 };
 

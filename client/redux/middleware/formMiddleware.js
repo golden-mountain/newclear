@@ -2,7 +2,7 @@ import { actionTypes } from 'redux-form/immutable';
 import { Map, Iterable } from 'immutable';
 import { toPath } from 'lodash';
 import { getFormVar, getPageVar, getAppEnvVar } from 'helpers/stateHelper';
-// import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { FORM_FIELD_KEY } from 'configs/appKeys';
 
 import { REGISTER_PAGE_FIELD, SYNC_PAGE_FIELD } from 'redux/modules/actionTypes'; //CHANGE
 
@@ -25,7 +25,7 @@ class FormHacker {
         action = this.reinitialConditional();
         break;
       case actionTypes.CHANGE:
-        this.changeConditional(false);
+        action = this.changeConditional(false);
         break;
       case actionTypes.BLUR:
       case actionTypes.START_SUBMIT: //eslint-disable-line
@@ -37,7 +37,7 @@ class FormHacker {
 
   _getVarsByEnv() {
     const pageEnv = getAppEnvVar(this.state);
-    const pageVar = getPageVar(this.state, [ pageEnv.page, pageEnv.pageId ] );
+    const pageVar = getPageVar(this.state, this.action.instancePath );
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
 
     return { pageEnv, pageVar, reduxFormVar };
@@ -63,7 +63,7 @@ class FormHacker {
 
   validate(pageVar, reduxFormVar) {
     let result = Map({});
-    const pageValidators = pageVar.getIn([ 'form' ], Map());
+    const pageValidators = pageVar.getIn([ FORM_FIELD_KEY ], Map());
     // console.log(pageValidators.toJS(), '=======================pageValidators');
 
     pageValidators.forEach((field, name) => {
@@ -99,6 +99,8 @@ class FormHacker {
   reinitialConditional() {
     const { pageVar, reduxFormVar } = this._getVarsByEnv();
     if (pageVar && reduxFormVar) {
+      // console.log(pageVar.toJSON());
+      // console.log(this.action);
       const name = this.action.field;
       let conditional = this.action.payload.getIn([ 'conditionals' ]);
       const getElementValue = (fieldName) => reduxFormVar.getIn([ 'values', ...fieldName.split('.') ]);
@@ -107,7 +109,7 @@ class FormHacker {
       if (Iterable.isIterable(conditional)) {
         const depName = conditional.getIn([ 'dependOn' ], '');
         const depValue = conditional.getIn([ 'dependValue' ], null);
-        const depOnObjVisible = pageVar.getIn([ 'form', depName, 'conditionals', 'visible' ], true);
+        const depOnObjVisible = pageVar.getIn([ FORM_FIELD_KEY, depName, 'conditionals', 'visible' ], true);
 
         if (depOnObjVisible && depName) {
           const conditionalObjValue = getElementValue(depName);
@@ -133,8 +135,9 @@ class FormHacker {
   }
 
   changeConditional() {
-    const { pageEnv, pageVar, reduxFormVar } = this._getVarsByEnv();
-    const fields = pageVar.getIn([ 'form' ]);
+    const { instancePath, ...action } = this.action; //eslint-disable-line
+    const { pageVar, reduxFormVar } = this._getVarsByEnv();
+    const fields = pageVar.getIn([ FORM_FIELD_KEY ]);
     let storedBackFields = Map({});
 
     const setVisible = (elements, parentFieldName, parentIsVisible, conditionalObjValue) => {
@@ -154,8 +157,7 @@ class FormHacker {
             }
 
             // for debugging
-            // console.log(elementName, 'depOn:', depOn, 'depValue:', depValue, 'conditionalObjValue:', conditionalObjValue, 'parentIsVisible:', parentIsVisible, 'isNewVisible:', isNewVisible);
-
+            // console.log( elementName, 'depOn:', depOn, 'depValue:', depValue, 'conditionalObjValue:', conditionalObjValue, 'parentIsVisible:', parentIsVisible, 'isNewVisible:', isNewVisible);
             result = result.deleteIn([ 'validations' ]);
             result = result.setIn([ 'conditionals', 'visible'  ], isNewVisible);
             storedBackFields = storedBackFields.setIn([ elementName ], result);
@@ -167,10 +169,12 @@ class FormHacker {
       });
     };
 
-    setVisible(fields, this.action.meta.field, fields.getIn([ this.action.meta.field, 'conditionals', 'visible' ]), this.action.payload);
+    setVisible(fields, action.meta.field, fields.getIn([ action.meta.field, 'conditionals', 'visible' ]), action.payload);
 
     // console.log('storedBackFields...................', storedBackFields);
-    this.next({ type: SYNC_PAGE_FIELD, page: pageEnv.page, payload: storedBackFields });
+    this.next({ type: SYNC_PAGE_FIELD, instancePath, payload: storedBackFields });
+    console.log(action);
+    return action;
   }
 
 }

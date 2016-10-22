@@ -13,7 +13,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   const widgetName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
   const displayName = `Widget${widgetName}`;
-  const componentId = uniqueId(displayName + '-');
+  // let componentId = uniqueId(displayName + '-');
 
   class Widget extends Component {
     static displayName = displayName
@@ -26,22 +26,18 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       props: PropTypes.object.isRequired
     }
 
-    // _componentId = 0
-
-    constructor(props, context) {
-      super(props, context);
-    }
+    _componentId = uniqueId(displayName + '-')
 
     /**
      * support all actions dispatchable
      * new method name like 'comSetComponentData', 'comSetComponentVisible'
      */
-    get newMethods() {
+    getNewMethods(instancePath) {
       const appActions = {};
       Object.keys(window.appActions).forEach((actionName) => {
         const newMethodName = `com${upperFirst(actionName)}`;
         appActions[newMethodName] = (...args) => {
-          args.unshift(this.instancePath);
+          args.unshift(instancePath);
           return this.props.dispatch(window.appActions[actionName].apply(null, args));
         };
       });
@@ -52,12 +48,8 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       return displayName;
     }
 
-    get componentId() {
-      // if (!this._componentId) {
-      //   this._componentId = uniqueId(this.componentName.toLowerCase() + '-');
-      // }
-      // return this._componentId;
-      return componentId;
+    get componentId() {      
+      return this._componentId;
     }
 
     get instanceData() {
@@ -86,36 +78,33 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
     }
 
     get instancePath() {
-      return buildInstancePath(this.pageId, this.pageName, this.componentName, this.componentId );
+      return buildInstancePath(this.pageName, this.pageId, this.componentName, this.componentId );
     }
 
-    // componentAxapiRequest(data, notifiable=false) {
-    //   return this.context.props.axapiRequest(this.instancePath, data, notifiable);
-    // }
-    //
-    // componentSetState(data) {
-    //   return this.context.props.setComponentState(this.pageId, this.componentName, this.componentId, data);
-    // }
-
     getChildContext() {
+      const thisProps = {
+        instancePath: this.instancePath,
+        ...this.getNewMethods(this.instancePath)
+      };
+
       const props = Object.assign(
         {},
-        this.context.props,
-        this.props
+        thisProps,
+        this.context.props
       );
       return {  props: props };
     }
 
     render() {
       const newProps = Object.assign(
-        {}, this.props, this.newMethods,
+        {}, this.props, this.getNewMethods(this.instancePath),
         {
           instancePath: this.instancePath,
           data: this.data,
           visible: this.visible
         }
       );
-      // console.log('widgetProps', rest, this);
+      // console.log('widgetProps', this);
       this.renderedElement = React.createElement(WrappedComponent, newProps);
       return this.renderedElement;
     }
@@ -132,8 +121,8 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
   };
 
   let newComponent = connect(stateMapper)(Widget);
-  newComponent.displayName = displayName; //`Connect(${displayName})`;
-  newComponent.componentId = componentId; //`Connect(${displayName})`;
+  newComponent.displayName = `Connect(${displayName})`;
+  // newComponent.componentId = componentId; //`Connect(${displayName})`;
   // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
   return hoistStatics(newComponent, Widget, WrappedComponent);
 }

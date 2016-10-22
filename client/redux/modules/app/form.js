@@ -1,16 +1,22 @@
-// import { actionTypes } from 'redux-form/immutable';
+import { actionTypes } from 'redux-form/immutable';
 import { List } from 'immutable';
 import { REGISTER_PAGE_FIELD, SYNC_PAGE_FIELD, STORE_API_INFO } from 'redux/modules/actionTypes';
-import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { APP_CURRENT_PAGE, FORM_FIELD_KEY } from 'configs/appKeys';
 
 const fieldReducers = {
+  // [ CHANGE_FIELD_VALUE ](state, { instancePath, field, payload }) {
+  //   // console.log('register instancePath fielding.........', [ ...instancePath, FORM_FIELD_KEYS, field ]);
+  //   const result = state.setIn([ ...instancePath, FORM_FIELD_KEY, field ], payload);
+  //   return result;
+  // },
   [ REGISTER_PAGE_FIELD ](state, { instancePath, field, payload }) {
-    // console.log('register instancePath fielding.........', [ ...instancePath, 'form', field ]);
-    const result = state.setIn([ ...instancePath, 'form', field ], payload);
+    // console.log('register instancePath fielding.........', [ ...instancePath, FORM_FIELD_KEYS, field ]);
+    const result = state.setIn([ ...instancePath, FORM_FIELD_KEY, field ], payload);
     return result;
   },
   [ SYNC_PAGE_FIELD ](state, { instancePath, payload }) {
-    const result = state.mergeDeepIn([ ...instancePath, 'form' ], payload);
+    console.log(instancePath, payload);
+    const result = state.mergeDeepIn([ ...instancePath, FORM_FIELD_KEY ], payload);
     // console.log('mergedresult', result);
     return result;
   },
@@ -48,6 +54,9 @@ export const storeApiInfo = (instancePath, form, apiInfo, connectOptions) =>
   return { type: STORE_API_INFO, instancePath, form, apiInfo, connectOptions };
 };
 
+export const reduxFormFieldChange = (instancePath, form, field, value, touch) => {
+  return { type: actionTypes.CHANGE, meta: { form, field, touch }, payload: value, instancePath };
+};
 // /* eslint-disable no-unused-vars */
 // export const updateReduxFormSyncErrors = (instancePath, form, syncErrors = {}, error) =>
 //   ({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form }, payload: { syncErrors, error } });

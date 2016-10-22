@@ -11,6 +11,7 @@ import { buildInstancePath } from 'helpers/actionHelper';
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
+  const pagePath = buildInstancePath(config.page, 'default' );
 
   class Core extends React.Component {
     static childContextTypes = {
@@ -26,16 +27,16 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     componentWillMount() {
-      this.props.registerCurrentPage(Object.assign({}, this.props.env, { pageId: this.props.pageId || 'default' }));
-      if (this.props.visible === undefined || this.props.visible) {
-        this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
-      } else {
-        this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
-      }
+      this.props.registerCurrentPage(Object.assign({}, this.props.env));
+      // if (this.props.visible === undefined || this.props.visible) {
+      //   this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
+      // } else {
+      //   this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
+      // }
     }
 
     componentWillUnmount() {
-      this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
+      // this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
       this.props.destroyPage();
     }
 
@@ -52,7 +53,6 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     form: config.form
   } )(Core);
 
-  const pagePath = buildInstancePath(config.page, 'default' );
   // console.log(pagePath);
   const bindPageInstance = actionCreator => actionCreator.bind(null, pagePath);
   const boundAppAcs = mapValues(window.appActions, bindPageInstance);
