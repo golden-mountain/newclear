@@ -25,9 +25,10 @@ export default function asyncComponent(getComponent, Layout=AppLayout) {
         }
 
         const LayoutWrapper = CoreManager({
-          page: this.props.pathname
+          page: this.props.pathname,
+          pageId: 'default'
         })(Layout, Component, this.props);
-        
+
         return <LayoutWrapper />;
       }
       return null;

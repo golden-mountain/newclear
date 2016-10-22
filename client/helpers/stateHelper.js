@@ -7,43 +7,32 @@ import { APP_CURRENT_PAGE, LAST_PAGE_KEY } from 'configs/appKeys';
 // import widgetActions from 'redux/modules/app/widgetActions';
 
 
-export const getAxapiResponse = (state, page) => Iterable.isIterable(state) ? state.getIn([ 'app', page, 'axapi' ]) : Map({});
+export const getAxapiResponse = (state, instancePath) => Iterable.isIterable(state) ? state.getIn([ 'app', ...instancePath, 'data' ]) : Map({});
 export const getFormVar = (state, form) => Iterable.isIterable(state) ? state.getIn([ 'form', form ]) : Map({});
-export const getPageVar = (state, page) => {
-  return Iterable.isIterable(state) ? state.getIn([ 'app', page ]) : Map({});
+export const getPageVar = (state, instancePath) => {
+  return Iterable.isIterable(state) ? state.getIn([ 'app', ...instancePath ]) : Map({});
 };
 
 export const getAppEnvVar = (state, immutable=false) => {
   const envs = state.getIn([ 'app', APP_CURRENT_PAGE, 'envs' ]);
   if (envs) {
-    return immutable 
-    ? envs.last() 
+    return immutable
+    ? envs.last()
     : envs.last().toJS();
   } else {
     return {};
   }
 };
 
-export const getAppPageVar = (state, keys='', pageName='', pageId='default') => {
+export const getAppPageVar = (state, instancePath=[], keys='') => {
+  // let { page, pageId } = instancePath;
   let path = [];
   const appState = state.getIn([ 'app' ], false);
   if (appState) {
-    path = [ 'app', APP_CURRENT_PAGE, 'pages' ];  
-  } else {
-    path = [ APP_CURRENT_PAGE, 'pages' ];
-  }
-  
-  let page = pageName;
-  if (!page) {
-    let env = getAppEnvVar(state);
-    path.push(env.page);
-  } else {
-    path.push(page);
+    path = [ 'app' ];
   }
 
-  if (pageId) {
-    path.push(pageId);
-  }
+  path = path.concat(instancePath);
 
   if (keys && typeof keys == 'string') {
     keys = [ keys ];
@@ -53,13 +42,12 @@ export const getAppPageVar = (state, keys='', pageName='', pageId='default') => 
     path= path.concat(keys);
   }
 
-  // console.log('path:::::::::', path, state, keys, pageName, pageId );
   return state.getIn(path);
 };
 
 
-export const getComponentVar = (state, pageName, pageId, componentName, componentId, key) => {
-  return state.getIn([ APP_CURRENT_PAGE, 'pages', pageName, pageId, componentName, componentId, key ], null);
+export const getComponentVar = (state, instancePath, key) => {
+  return state.getIn([ ...instancePath, key ], null);
 };
 
 // each form submit we will store data to a store accessed by current global page
@@ -67,7 +55,7 @@ export const getAppValueStore = (state, form='') => {
   const appState = state.getIn([ 'app' ], false);
   let path = [];
   if (appState) {
-    path = [ 'app', APP_CURRENT_PAGE, 'store' ];  
+    path = [ 'app', APP_CURRENT_PAGE, 'store' ];
   } else {
     path = [ APP_CURRENT_PAGE, 'store' ];
   }
@@ -75,15 +63,13 @@ export const getAppValueStore = (state, form='') => {
   if (form) {
     path.push(form);
   }
-  
+
   let apiData = state.getIn(path);
   let result = [];
   if (apiData) {
     apiData.forEach((data) => { // for form level
-      data.forEach((req) => { // 
-        // reqs.forEach((req) => {
+      data.forEach((req) => { //
         result.push(req);
-        // });
       });
     });
   }

@@ -63,7 +63,7 @@ class A10Select extends Component {
     if (asyncNeeded) {
       const { params } = loadOptions;
       const payload = getPayload(loadOptions.url, 'GET', params);
-      this.props.componentAxapiRequest(payload, false);
+      this.props.comAxapiRequest(payload, false);
     }
   }
 

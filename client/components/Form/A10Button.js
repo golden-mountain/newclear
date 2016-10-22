@@ -34,7 +34,7 @@ class A10Button extends Component {
       click = () => {
         // this.setState({ showPopup: true });
         // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));
-        this.context.props.setComponentVisible(env.pageId, pageClass.displayName, pageClass.componentId, true);
+        this.props.comSetComponentVisible(true);
         return false;
       };
       if (!this.modelVisible) {

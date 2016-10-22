@@ -7,7 +7,7 @@ import { reduxForm } from 'redux-form/immutable'; // imported Field
 import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'layouts/a10/PageLayout';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
-
+import { buildInstancePath } from 'helpers/actionHelper';
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -16,7 +16,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     static childContextTypes = {
       props: PropTypes.object.isRequired
     }
-    
+
     constructor(props, context) {
       super(props, context);
     }
@@ -31,7 +31,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
         this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
       } else {
         this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
-      }    
+      }
     }
 
     componentWillUnmount() {
@@ -52,25 +52,26 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     form: config.form
   } )(Core);
 
+  const pagePath = buildInstancePath(config.page, 'default' );
+  // console.log(pagePath);
+  const bindPageInstance = actionCreator => actionCreator.bind(null, pagePath);
+  const boundAppAcs = mapValues(window.appActions, bindPageInstance);
+
   page = connect(
     (state) => {
       return {
         // isLoading: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'isLoading' ], false),
         // statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
         // errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
-        // notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ]),       
+        // notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ]),
         axapiUid: getAxapiUid(state),
-        axapiResponse: getAxapiResponse(state, config.page), // invalid on context
+        axapiResponse: getAxapiResponse(state, pagePath), // invalid on context
         initialValues: config.initialValues, // invalid on context
-        page: getPageVar(state, config.page), // invalid on context
+        page: getPageVar(state, pagePath), // invalid on context
         env: config // valid on context
       };
     },
-    (dispatch) => {
-      const bindPage = actionCreator => actionCreator.bind(null, config.page);
-      const boundAppAcs = mapValues(window.appActions, bindPage);
-      return bindActionCreators(boundAppAcs, dispatch);
-    }
+    (dispatch) => bindActionCreators(boundAppAcs, dispatch)
   )(page);
 
   return page;

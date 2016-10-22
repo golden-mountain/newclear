@@ -15,10 +15,10 @@ class LoginForm extends React.Component {
   }
 
   static displayName = 'LoginForm'
- 
+
   onSubmit(values) {
     const fullAuthData = getPayload('/axapi/v3/auth', 'POST', values);
-    const promise = this.props.componentAxapiRequest(fullAuthData);
+    const promise = this.props.comAxapiRequest(fullAuthData);
     return promise;
   }
 
@@ -39,7 +39,7 @@ class LoginForm extends React.Component {
         </A10SchemaField>
 
         <A10SubmitButtons buttons={[ 'login', 'reset' ]}/>
-    
+
       </A10Form>
     );
   }

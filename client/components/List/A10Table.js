@@ -15,7 +15,7 @@ class A10Table extends React.Component {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
-    axapiGet(path, params, env, dispatch);  
+    axapiGet(path, params, env, dispatch);
   }
 
   componentWillMount() {
@@ -28,7 +28,7 @@ class A10Table extends React.Component {
   }
 
   render() {
-    // console.log(this);
+    // console.log(this.props.comSetComponentData('dkdkdkdkdkdkkddkdkkd'));
     let { fieldMap, actions, schema, children } = this.props; // eslint-disable-line
     let selectRowProp = {
       mode: 'checkbox', // or checkbox
@@ -43,7 +43,7 @@ class A10Table extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <BootstrapTable data={values(this.props.data).pop() || [] } search={true} insertRow={true} 
+          <BootstrapTable data={values(this.props.data).pop() || [] } search={true} insertRow={true}
             deleteRow={true} selectRow={selectRowProp} pagination={true} options={options}
             striped={true} hover={true} condensed={true}
             >

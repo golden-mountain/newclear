@@ -1,6 +1,6 @@
 // var context = require.context('.', false, /\.js$/), reducers = {};
 // context.keys().forEach(function (key) {
-//   var invalidKeys = [ 'index' ];  
+//   var invalidKeys = [ 'index' ];
 //   var k = key.replace(/^\.\/(.*)\.js?$/, '$1');
 //   if (!~invalidKeys.indexOf(k)) {
 //     let module = context(key);

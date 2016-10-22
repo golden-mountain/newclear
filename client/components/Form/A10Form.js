@@ -152,7 +152,7 @@ class A10SchemaForm extends Component {
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
       }
-      const promise = this.props.componentAxapiRequest(parsedValues, true);
+      const promise = this.props.comAxapiRequest(parsedValues, true);
       // console.log(' returned promise ', promise);
       if (promise) {
         // TODO: release the store
@@ -189,25 +189,18 @@ class A10SchemaForm extends Component {
   }
 
   render() {
-    /* eslint-disable no-unused-vars */
     const {
-      urlKeys,
-      dispatch,
-      app,
-      page,
       env,
-      visible,
-      schemas,
-      edit,
       children,
       onBeforeSubmit,
       onAfterSubmit,
       onSubmit,
-      componentAxapiRequest,
-      componentSetState,
-      ...rest
+      // Form props
+      bsClass,
+      componentClass,
+      horizontal,
+      inline
     } = this.props;
-    /* eslint-enable no-unused-vars */
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
     // console.log(this.props, this.context);
@@ -254,8 +247,9 @@ class A10SchemaForm extends Component {
     };
 
     // console.log(onSubmit, '..............');
+    const formProps = { bsClass, componentClass, horizontal, inline };
     return (
-      <Form onSubmit={ handleSubmit(submit) } { ...rest }>
+      <Form onSubmit={ handleSubmit(submit) } { ...formProps }>
         { children }
       </Form>
     );

@@ -4,8 +4,9 @@ import hoistStatics from 'hoist-non-react-statics';
 import { getAppPageVar, getAppEnvVar } from './stateHelper';
 // import React, { Component, PropTypes } from 'react'; //PropTypes
 // import { connect } from 'react-redux';
-import { uniqueId } from 'lodash';
+import { uniqueId, upperFirst } from 'lodash';
 // import { getAppEnvVar, getAppPageVar } from 'helpers/stateHelper';
+import { buildInstancePath } from 'helpers/actionHelper';
 
 // wrapper for widgets, add a wrapper to get state
 export function widgetWrapper(WrappedComponent, widgetProps) {
@@ -31,6 +32,22 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       super(props, context);
     }
 
+    /**
+     * support all actions dispatchable
+     * new method name like 'comSetComponentData', 'comSetComponentVisible'
+     */
+    get newMethods() {
+      const appActions = {};
+      Object.keys(window.appActions).forEach((actionName) => {
+        const newMethodName = `com${upperFirst(actionName)}`;
+        appActions[newMethodName] = (...args) => {
+          args.unshift(this.instancePath);
+          return this.props.dispatch(window.appActions[actionName].apply(null, args));
+        };
+      });
+      return appActions;
+    }
+
     get componentName() {
       return displayName;
     }
@@ -44,7 +61,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
     }
 
     get instanceData() {
-      const data = this.props.page.getIn([ this.componentName, this.componentId ]);
+      const data = this.props.page.getIn(this.instancePath);
       if (data) {
         return data.toJS();
       } else {
@@ -53,38 +70,32 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
     }
 
     get pageId() {
-      return this.props.componentEnv.pageId || 'UNKNOWN-PAGE-ID';
+      return this.props.env.pageId || 'UNKNOWN-PAGE-ID';
     }
 
     get pageName() {
-      return this.props.componentEnv.page || 'UNKNOWN-PAGE';
+      return this.props.env.page || 'UNKNOWN-PAGE';
     }
 
     get visible() {
-      return this.props.page.getIn([ this.componentName, this.componentId, 'visible' ], true);
+      return this.props.page.getIn([ ...this.instancePath, 'visible' ], true);
     }
 
     get data() {
-      return this.props.page.getIn([ this.componentName, this.componentId, 'data' ]);
+      return this.props.page.getIn([ ...this.instancePath, 'data' ]);
     }
 
-    get widgetProps() {
-      let componentEnv = {
-        pageId: this.pageId,
-        page: this.pageName,
-        componentName: this.componentName,
-        componentId: this.componentId
-      };
-      return componentEnv;
+    get instancePath() {
+      return buildInstancePath(this.pageId, this.pageName, this.componentName, this.componentId );
     }
 
-    componentAxapiRequest(data, notifiable=false) {
-      return this.context.props.axapiRequest(data, this.pageId, this.componentName, this.componentId, notifiable);
-    }
-
-    componentSetState(data) {
-      return this.context.props.setComponentState(this.pageId, this.componentName, this.componentId, data);
-    }
+    // componentAxapiRequest(data, notifiable=false) {
+    //   return this.context.props.axapiRequest(this.instancePath, data, notifiable);
+    // }
+    //
+    // componentSetState(data) {
+    //   return this.context.props.setComponentState(this.pageId, this.componentName, this.componentId, data);
+    // }
 
     getChildContext() {
       const props = Object.assign(
@@ -96,15 +107,12 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
     }
 
     render() {
-      const { componentEnv, ...rest } = this.props; // eslint-disable-line
       const newProps = Object.assign(
-        {}, rest,
+        {}, this.props, this.newMethods,
         {
-          env: Object.assign(componentEnv, this.widgetProps),
+          instancePath: this.instancePath,
           data: this.data,
-          visible: this.visible,
-          componentAxapiRequest: ::this.componentAxapiRequest,
-          componentSetState: ::this.componentSetState
+          visible: this.visible
         }
       );
       // console.log('widgetProps', rest, this);
@@ -115,7 +123,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   const stateMapper = (state) => {
     return {
-      componentEnv: getAppEnvVar(state),
+      env: getAppEnvVar(state),
       page: getAppPageVar(state),
       app: state.getIn([ 'app' ]),
       form: state.getIn([ 'form' ]),

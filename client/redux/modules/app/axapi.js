@@ -5,10 +5,10 @@ import moment from 'moment';
 import { get, isArray, uniqueId } from 'lodash';
 // import * as logger from 'helpers/logger';
 
-import { LAST_PAGE_KEY, APP_CURRENT_PAGE } from 'configs/appKeys';
-import { 
-  AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL, 
-  AXAPI_REQUEST, AXAPI_CLEAR_LAST_ERROR 
+import { LAST_PAGE_KEY } from 'configs/appKeys';
+import {
+  AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL,
+  AXAPI_REQUEST, AXAPI_CLEAR_LAST_ERROR
 } from 'redux/modules/actionTypes';
 
 const isAuthUrl = (data) => data.path.toLowerCase().indexOf('/axapi/v3/auth') > -1;
@@ -43,7 +43,7 @@ const apiReducers = {
     console.log('loading......................................');
     return result;
   },
-  [ AXAPI_REQUEST_SUCCESS ](state, { resp, data, page, pageId, componentName, componentId, notifiable }) {
+  [ AXAPI_REQUEST_SUCCESS ](state, { resp, data, instancePath, notifiable }) {
     // console.log('notifiable::::::', notifiable);
     console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
@@ -58,7 +58,7 @@ const apiReducers = {
       pushAxapiReqs({ data, result: body });
       if (isAuthUrl(data)) {
         sessionStorage.setItem('token', body.signature);
-      }    
+      }
 
       const responseData = fromJS({
         error: newResp.error,
@@ -70,18 +70,18 @@ const apiReducers = {
       result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
       result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
       //return result.setIn([ page, 'axapi' ], responseData);
-      result = result.setIn([ APP_CURRENT_PAGE,  'pages', page, pageId,  componentName, componentId, 'data' ], body);
-      return result;  
+      result = result.setIn([ ...instancePath, 'data' ], body);
+      return result;
     } else {
       console.log('More than one request', resp);
     }
   },
-  [ AXAPI_REQUEST_FAIL ](state, { resp, data, page, pageId, componentId, componentName, notifiable }) {
+  [ AXAPI_REQUEST_FAIL ](state, { resp, data, instancePath, notifiable }) {
     // console.log('notifiable::::::', notifiable);
     console.log('failed  axapi request ......................................', resp);
     // let newResp = resp;
     let newResp = resp ? resp : { body: '' };
-    
+
     pushAxapiReqs({ data, result: newResp.body });
     if (get(newResp, 'unauthorized', false) === true) {
       sessionStorage.removeItem('token');
@@ -93,30 +93,31 @@ const apiReducers = {
       statusCode: newResp.status,
       response: body
     });
-    
+
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
     result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
     result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
-    result = result.setIn([ APP_CURRENT_PAGE,  'pages', page, pageId, componentName, componentId, 'data' ], body);
+    result = result.setIn([ ...instancePath, 'data' ], body);
     return result;
   },
   [ AXAPI_CLEAR_LAST_ERROR ](state) {
     console.log('deleting last error.............');
-    return state.deleteIn([ LAST_PAGE_KEY, 'axapi' ]);    
+    return state.deleteIn([ LAST_PAGE_KEY, 'axapi' ]);
   }
 };
 
 export default apiReducers;
 
 // ----------------- AXAPI ------------------------
-export function axapiRequest(page, data, pageId='default', componentName='', componentId='', notifiable=false) {
+export function axapiRequest(instancePath, data, notifiable=false) {
+  let { page, pageId, componentName, componentId } = instancePath;
   const authHeaders = {
     'content-type': 'application/json'
   };
 
   let primaryData = {}, jsData = data;
   if (Iterable.isIterable(data)) {
-    jsData = data.toJS();    
+    jsData = data.toJS();
   }
 
   if (isArray(jsData)) {
@@ -156,13 +157,10 @@ export function axapiRequest(page, data, pageId='default', componentName='', com
   }
 
   let request = {
-    data:primaryData, 
-    page,
+    data:primaryData,
+    instancePath,
     notifiable,
-    pageId,
-    componentName,
-    componentId,
-    types: [ AXAPI_REQUEST, AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL ],    
+    types: [ AXAPI_REQUEST, AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL ],
     promises: promiseFuncs
   };
 
@@ -175,5 +173,5 @@ export function axapiRequest(page, data, pageId='default', componentName='', com
 //   console.log('clear last error');
 //   return {
 //     type: AXAPI_CLEAR_LAST_ERROR
-//   };  
+//   };
 // }
