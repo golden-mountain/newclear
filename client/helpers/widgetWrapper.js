@@ -13,20 +13,29 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   const widgetName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
   const displayName = `Widget${widgetName}`;
-  // let componentId = uniqueId(displayName + '-');
+  let componentId = uniqueId(displayName + '-');
 
   class Widget extends Component {
     static displayName = displayName
 
     static contextTypes = {
-      props: PropTypes.object.isRequired
+      props: PropTypes.object,
+      context: PropTypes.object,
+      ballKicker: PropTypes.object
     }
 
     static childContextTypes = {
-      props: PropTypes.object.isRequired
+      props: PropTypes.object,
+      context: PropTypes.object,
+      ballKicker: PropTypes.object
     }
 
     _componentId = uniqueId(displayName + '-')
+
+    // constructor(props, context) {
+    //   super(props, context);
+    //   this.context.ballKicker.registerStandardsBall(this.instancePath);
+    // }
 
     /**
      * support all actions dispatchable
@@ -77,6 +86,10 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       return this.props.page.getIn([ ...this.instancePath, 'data' ]);
     }
 
+    get activeData() {
+      return this.props.page.getIn([ ...this.instancePath, 'active-data' ]);
+    }
+
     get instancePath() {
       return buildInstancePath(this.pageName, this.pageId, this.componentName, this.componentId );
     }
@@ -92,7 +105,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
         thisProps,
         this.context.props
       );
-      return {  props: props };
+      return {  props: props, context: this.context, ballKicker: this.context.ballKicker };
     }
 
     render() {
@@ -101,12 +114,17 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
         {
           instancePath: this.instancePath,
           data: this.data,
-          visible: this.visible
+          visible: this.visible,
+          activeData: this.activeData,
+          // instanceData: this.instanceData,
+          findBallReceiver: this.context.ballKicker.findTargetReceiver.bind(this.context.ballKicker, this.context),
+          kickBall: this.context.ballKicker.kick.bind(this.context.ballKicker, this.instancePath),
+          accpetBall: this.context.ballKicker.accept.bind(this.context.ballKicker, this.instancePath),
+          registerBalls: this.context.ballKicker.registerStandardsBall.bind(this.context.ballKicker, this.instancePath)
         }
       );
       // console.log('widgetProps', this);
-      this.renderedElement = React.createElement(WrappedComponent, newProps);
-      return this.renderedElement;
+      return this.visible ? React.createElement(WrappedComponent, newProps) : null;
     }
   }
 
@@ -122,7 +140,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   let newComponent = connect(stateMapper)(Widget);
   newComponent.displayName = `Connect(${displayName})`;
-  // newComponent.componentId = componentId; //`Connect(${displayName})`;
+  newComponent.componentId = componentId; //`Connect(${displayName})`;
   // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
   return hoistStatics(newComponent, Widget, WrappedComponent);
 }

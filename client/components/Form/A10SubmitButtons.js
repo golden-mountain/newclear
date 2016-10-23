@@ -34,18 +34,13 @@ export class A10SubmitButtons extends Component {
     }
   };
 
-  // context defined at page
-  constructor(props, context) {
-    super(props, context);
-    // this._parentProps = context.props;
+  static contextTypes = {
+    props: PropTypes.object
   }
 
   close() {
-    // console.log(this.props, this._parentProps);
-    const { env: { pageId } } = this.props;
-    const { componentName, componentId } = this.context.props;
-    // console.log('page form variables', env, pageId,  this.context.props, this.props);
-    this.context.props.setComponentVisible(pageId, componentName, componentId, false);
+    const { modalInstancePath } = this.props;
+    this.props.kickBall(modalInstancePath, 'hideMe');
   }
 
   render() {
@@ -70,9 +65,5 @@ export class A10SubmitButtons extends Component {
     );
   }
 }
-
-A10SubmitButtons.contextTypes = {
-  props: PropTypes.object
-};
 
 export default A10SubmitButtons;

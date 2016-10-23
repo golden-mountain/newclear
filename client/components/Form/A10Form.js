@@ -6,6 +6,7 @@ import { Map, List, fromJS } from 'immutable';
 import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
+import { FORM_FIELD_KEY } from 'configs/appKeys';
 
 class SchemaForm {
   static displayName = 'SchemaForm'
@@ -97,7 +98,13 @@ class SchemaForm {
 }
 
 class A10SchemaForm extends Component {
-  static displayName = 'A10SchemaForm'
+  static displayName = 'A10Form'
+
+  // static contextTypes = {
+  //   props: PropTypes.object,
+  //   context: PropTypes.object,
+  //   ballKicker: PropTypes.object
+  // }
 
   // context defined at page
   constructor(props, context) {
@@ -106,6 +113,8 @@ class A10SchemaForm extends Component {
       throw new Error('Config should passed from parent');
     }
     this._parentProps = context.props;
+    // console.log(this.props);
+    this.props.registerBalls();
   }
 
   // connect
@@ -174,7 +183,7 @@ class A10SchemaForm extends Component {
 
   dataFinalize(values) {
     let newValues = values;
-    const formFields = this.props.app.getIn([ this._parentProps.env.page, 'form' ]);
+    const formFields = this.props.page.getIn([ ...this.context.props.instancePath, FORM_FIELD_KEY ]);
     formFields.forEach((fieldProps, fieldName) => {
       const visible = fieldProps.getIn([ 'conditionals', 'visible' ]);
       // console.log(visible, ' is field visible, and field name is ', fieldName);
@@ -190,7 +199,7 @@ class A10SchemaForm extends Component {
 
   render() {
     const {
-      env,
+      instancePath,
       children,
       onBeforeSubmit,
       onAfterSubmit,
@@ -203,7 +212,6 @@ class A10SchemaForm extends Component {
     } = this.props;
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
-    // console.log(this.props, this.context);
 
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
@@ -213,6 +221,7 @@ class A10SchemaForm extends Component {
 
       // let visible data hidden
       newValues = this.dataFinalize(newValues);
+
       // patch values need keep outside newValues, otherwise, data finalizer could be remove it by visible
       newValues = newValues.mergeDeep(fromJS(patchedValues));
 
@@ -222,20 +231,15 @@ class A10SchemaForm extends Component {
 
       let result = null;
       // close win
-      const closeCurrent = () => {
-        const { env: { pageId } } = this.props;
-        const { componentName, componentId } = this.context.props;
-        // console.log('page form variables', env, pageId,  this.context.props, this.props);
-        this.context.props.setComponentVisible(pageId, componentName, componentId, false);
-        // this.props.componentSetState({ visible: false });
-      };
+      const closeCurrent = () => this.props.kickBall(this.context.props.instancePath, 'hideMe');
+
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
-        fieldConnector.connectToValues(newValues);
-        result = submitFunc.call(this, newValues, env.form, false);
+        // fieldConnector.connectToValues(newValues);
+        result = submitFunc.call(this, newValues, instancePath[0], false);
       } else {
-        result = submitFunc.call(this, newValues, env.form, true);
-        fieldConnector.connectToResult(result);
+        result = submitFunc.call(this, newValues, instancePath[0], true);
+        // fieldConnector.connectToResult(result);
         if (onAfterSubmit) {
           result = onAfterSubmit.call(this, result);
         }

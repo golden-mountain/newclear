@@ -101,7 +101,7 @@ export class A10Field extends Component {
   }
 
   render() {
-    let { children, input, onChange, ...fieldOptions } = this.props; //eslint-disable-line
+    let { children, input, onChange, onBlur, ...fieldOptions } = this.props; //eslint-disable-line
     const callback = (child) => {
       let inputOptions = {};
 
@@ -114,9 +114,7 @@ export class A10Field extends Component {
         inputOptions['value'] = value;
       }
 
-      inputOptions.onChange = (event) => {
-        // const result = restInput.onChange(event.target.value);
-        // onChange(event);
+      const getEventValue = (event) => {
         let value = event.target.value;
         if(event.target.checked !== undefined) {
           if (typeof event.target.value == 'string') {
@@ -125,8 +123,21 @@ export class A10Field extends Component {
             }
           }
         }
+        return value;
+      };
+
+      inputOptions.onChange = (event) => {
+        let value = getEventValue(event);
+        let result = restInput.onChange(event);
         onChange(value);
-        return restInput.onChange(event);
+        return result;
+      };
+
+      inputOptions.onBlur = (event) => {
+        let value = getEventValue(event);
+        let result = restInput.onBlur(event);
+        onBlur(value);
+        return result;
       };
       // console.log(restInput.onChange,  child);
       return  React.cloneElement(child, { ...restInput, ...inputOptions });
@@ -241,12 +252,16 @@ class SchemaField extends Component {
     const visible = app.getIn([ ...instancePath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
 
     const onChange = (value) => {      
-      ::this.context.props.comFormValueChange(name, value);
+      ::this.context.props.comSetFieldConditial(name, value);
+    };
+
+    const onBlur = (value) => {      
+      ::this.context.props.comTriggleValidation(name, value);
     };
 
     return (
       visible ?
-        <Field name={name} component={A10Field} onChange={onChange} {...rest}>
+        <Field name={name} component={A10Field} onChange={onChange} onBlur={onBlur} {...rest}>
           { children }
         </Field>
       : null

@@ -17,6 +17,7 @@ class LoginForm extends React.Component {
   static displayName = 'LoginForm'
 
   onSubmit(values) {
+    console.log('handle submit');
     const fullAuthData = getPayload('/axapi/v3/auth', 'POST', values);
     const promise = this.props.comAxapiRequest(fullAuthData);
     return promise;

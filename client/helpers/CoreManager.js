@@ -8,6 +8,7 @@ import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'layouts/a10/PageLayout';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { buildInstancePath } from 'helpers/actionHelper';
+import BallKicker from 'helpers/BallKicker';
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -15,15 +16,18 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
   class Core extends React.Component {
     static childContextTypes = {
-      props: PropTypes.object.isRequired
+      props: PropTypes.object,
+      ballKicker: PropTypes.object
     }
 
-    constructor(props, context) {
-      super(props, context);
-    }
+    ballKicker = new BallKicker(this.props.dispatch);
+    // constructor(props, context) {
+    //   super(props, context);
+    //   this.ballkicker = new Ballkicker();
+    // }
 
     getChildContext() {
-      return {  props: this.props };
+      return {  props: this.props, ballKicker: this.ballKicker };
     }
 
     componentWillMount() {

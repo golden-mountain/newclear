@@ -3,14 +3,16 @@ import { Button, Modal } from 'react-bootstrap';
 import { getComponentVar } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import FieldConnector from 'helpers/FieldConnector';
+import { buildInstancePath } from 'helpers/actionHelper';
 // import { setComponentVisible } from 'redux/modules/app/component';
 // import { change } from 'redux-form/immutable';
-import invariant from 'invariant';
+// import invariant from 'invariant';
 
 class A10Button extends Component {
   static displayName = 'A10Button'
   static contextTypes = {
-    props: PropTypes.object.isRequired
+    props: PropTypes.object,
+    context: PropTypes.object
   }
 
   // context defined at page
@@ -22,38 +24,33 @@ class A10Button extends Component {
 
   render() {
     /* eslint-disable no-unused-vars */
-    const { env, app, form, children, onClick, componentClass,
-      popup: { id, pageClass, title,  connectOptions, pageName,
+    const { env, app, form, children, onClick, componentClass, instancePath,
+      popup: { id, pageClass, title,  connectOptions,
       urlKeysConnect,  ...modalProps }, attrs } = this.props;
     /* eslint-enable no-unused-vars */
 
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
-      invariant(pageClass.displayName, `Popup component for Page ${env.page} must have static property displayName and componentId`);
-      this.modelVisible = getComponentVar(app, env.page, env.pageId, pageClass.displayName, pageClass.componentId, 'visible');
+      const modalInstancePath = buildInstancePath(instancePath[0], instancePath[1], pageClass.displayName, pageClass.componentId);
+      this.modelVisible = getComponentVar(app, modalInstancePath, 'visible');
+      console.log(modalInstancePath, this.modelVisible);
       click = () => {
-        // this.setState({ showPopup: true });
-        // dispatch(registerCurrentPage(env.page, { page: pageName, form: pageName }));
-        this.props.comSetComponentVisible(true);
+        console.log(modalInstancePath, 'show ............');
+        this.props.kickBall(modalInstancePath, 'showMe');
         return false;
       };
+
       if (!this.modelVisible) {
         modal = children;
-        // console.log('show button itself without modal');
       } else {
-        // console.log('this model visible', id, this.modelVisible);
         const changeFormField = (name, value) => {
-          this.context.props.change(env.form, name, value);
+          this.context.props.change(instancePath[0], name, value);
         };
 
-        // console.log(pageClass.displayName, pageClass.componentId);
-        // console.log('debug field connector ', FieldConnector);
         popupContent = React.createElement(pageClass, {
-          visible: true,
+          // visible: true,
           fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
-          // pageId: id,
-          componentName: pageClass.displayName,
-          componentId: pageClass.componentId,
+          modalInstancePath,
           urlKeysConnect
         });
 

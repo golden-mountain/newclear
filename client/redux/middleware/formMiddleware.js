@@ -4,7 +4,7 @@ import { toPath } from 'lodash';
 import { getFormVar, getPageVar, getAppEnvVar } from 'helpers/stateHelper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
 
-import { REGISTER_PAGE_FIELD, CHANGE_FIELD_VALUE } from 'redux/modules/actionTypes'; //CHANGE
+import { REGISTER_PAGE_FIELD, CHANGE_FIELD_CONDITIONAL, TRIGGLE_VALIDATION } from 'redux/modules/actionTypes'; //CHANGE
 
 const empty = Map({});
 
@@ -24,11 +24,11 @@ class FormHacker {
         this.dispatchValidation(true);
         action = this.reinitialConditional();
         break;
-      case CHANGE_FIELD_VALUE:
+      case CHANGE_FIELD_CONDITIONAL:
         action = this.changeConditional(false);
         break;
-      case actionTypes.BLUR:
-      case actionTypes.START_SUBMIT: //eslint-disable-line
+      case TRIGGLE_VALIDATION:
+      // case actionTypes.START_SUBMIT: //eslint-disable-line
         this.dispatchValidation();
         break;
     }
@@ -49,7 +49,7 @@ class FormHacker {
     if (pageVar && reduxFormVar) {
       const syncErrors = this.validate(pageVar, reduxFormVar);
       const errors = syncErrors.isEmpty() ? false : syncErrors.toJS();
-      console.log('new errors:', errors);
+      // console.log('new errors:', errors);
       if (register) {
         if (!syncErrors.isEmpty()) {
           this.next({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form: pageEnv.form }, payload: { syncErrors: errors, error: false } });
@@ -64,7 +64,7 @@ class FormHacker {
   validate(pageVar, reduxFormVar) {
     let result = Map({});
     const pageValidators = pageVar.getIn([ FORM_FIELD_KEY ], Map());
-    console.log(pageValidators.toJS(), '=======================pageValidators');
+    // console.log(pageVar, pageValidators.toJS(), '=======================pageValidators');
 
     pageValidators.forEach((field, name) => {
       if (Iterable.isIterable(field)) {
@@ -72,14 +72,14 @@ class FormHacker {
         if (validations && Iterable.isIterable(validations)) {
           const thisValues = reduxFormVar.getIn([ 'values' ]) || reduxFormVar.getIn([ 'initial' ]);
           const elementValue = thisValues.getIn( toPath(name) );
-          console.log('validations is Iterable..............', validations, Iterable.isIterable(validations));
+          // console.log('validations is Iterable..............', validations, Iterable.isIterable(validations));
           validations.forEach((func, k) => { // eslint-disable-line
             let msg = '';
             if (elementValue !== undefined && k !== 'required') {
               msg = func(elementValue, name, reduxFormVar, pageVar);
             }
 
-            console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
+            // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
             if (msg) {
               result = result.setIn(toPath(name), msg);
               return msg;
@@ -157,7 +157,7 @@ class FormHacker {
             }
 
             // for debugging
-            console.log( elementName, 'depOn:', depOn, 'depValue:', depValue, 'conditionalObjValue:', conditionalObjValue, 'parentIsVisible:', parentIsVisible, 'isNewVisible:', isNewVisible);
+            // console.log( elementName, 'depOn:', depOn, 'depValue:', depValue, 'conditionalObjValue:', conditionalObjValue, 'parentIsVisible:', parentIsVisible, 'isNewVisible:', isNewVisible);
             result = result.deleteIn([ 'validations' ]);
             result = result.setIn([ 'conditionals', 'visible'  ], isNewVisible);
             storedBackFields = storedBackFields.setIn([ elementName ], result);
@@ -173,7 +173,7 @@ class FormHacker {
 
     // console.log('storedBackFields...................', storedBackFields);
     // this.next({ type: CHANGE_FIELD_VALUE, instancePath, payload: storedBackFields });
-    return { type: CHANGE_FIELD_VALUE, instancePath, payload: storedBackFields };
+    return { type: CHANGE_FIELD_CONDITIONAL, instancePath, payload: storedBackFields };
   }
 
 }

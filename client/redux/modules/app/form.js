@@ -1,10 +1,10 @@
 // import { actionTypes } from 'redux-form/immutable';
 import { List } from 'immutable';
-import { REGISTER_PAGE_FIELD, STORE_API_INFO, CHANGE_FIELD_VALUE } from 'redux/modules/actionTypes';
+import { REGISTER_PAGE_FIELD, STORE_API_INFO, CHANGE_FIELD_CONDITIONAL, TRIGGLE_VALIDATION  } from 'redux/modules/actionTypes';
 import { APP_CURRENT_PAGE, FORM_FIELD_KEY } from 'configs/appKeys';
 
 const fieldReducers = {
-  [ CHANGE_FIELD_VALUE ](state, { instancePath, payload }) {
+  [ CHANGE_FIELD_CONDITIONAL ](state, { instancePath, payload }) {
     return state.mergeDeepIn([ ...instancePath, FORM_FIELD_KEY ], payload);
   },
   [ REGISTER_PAGE_FIELD ](state, { instancePath, field, payload }) {
@@ -25,6 +25,10 @@ const fieldReducers = {
       old = old.concat(apiInfo);
       return state.setIn([ APP_CURRENT_PAGE, 'store', form ], old);
     }
+  },
+  [ TRIGGLE_VALIDATION ](state, { instancePath, payload }) {
+    console.log(instancePath, payload);
+    return state;
   }
 };
 
@@ -41,8 +45,13 @@ export const storeApiInfo = (instancePath, form, apiInfo, connectOptions) =>
   return { type: STORE_API_INFO, instancePath, form, apiInfo, connectOptions };
 };
 
-export const formValueChange = (instancePath, field, value) => {
+export const setFieldConditial = (instancePath, field, value) => {
   // console.log(instancePath, field, value);
-  return { type: CHANGE_FIELD_VALUE, instancePath, field, value };
+  return { type: CHANGE_FIELD_CONDITIONAL, instancePath, field, value };
+};
+
+export const triggleValidation = (instancePath, field, value) => {
+  // console.log(instancePath, field, value);
+  return { type: TRIGGLE_VALIDATION, instancePath, field, value };
 };
 

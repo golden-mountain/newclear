@@ -2,7 +2,7 @@ import React from 'react';
 import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { Col, Row } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { axapiGet } from 'helpers/axapiHelper';
+import { getPayload } from 'helpers/axapiHelper';
 import { values }  from 'lodash';
 
 class A10Table extends React.Component {
@@ -15,7 +15,8 @@ class A10Table extends React.Component {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
-    axapiGet(path, params, env, dispatch);
+    // axapiGet(path, params, env, dispatch);
+    this.props.comAxapiRequest(getPayload(path, 'GET'));
   }
 
   componentWillMount() {
