@@ -101,11 +101,11 @@ export class A10Field extends Component {
   }
 
   render() {
-    let { children, input, onChange, ...fieldOptions } = this.props;
+    let { children, input, onChange, ...fieldOptions } = this.props; //eslint-disable-line
     const callback = (child) => {
       let inputOptions = {};
 
-      const { value, ...restInput } = input;
+      let { value, ...restInput } = input;
       // only support React Bootstrap
       // to set value and checked for inputs
       if (registeredMVInputs.indexOf(child.type.name) > -1) {
@@ -114,7 +114,22 @@ export class A10Field extends Component {
         inputOptions['value'] = value;
       }
 
-      return  React.cloneElement(child, { ...inputOptions, ...restInput, onChange });
+      inputOptions.onChange = (event) => {
+        // const result = restInput.onChange(event.target.value);
+        // onChange(event);
+        let value = event.target.value;
+        if(event.target.checked !== undefined) {
+          if (typeof event.target.value == 'string') {
+            if (!event.target.checked) {
+              value = '';
+            }
+          }
+        }
+        onChange(value);
+        return restInput.onChange(event);
+      };
+      // console.log(restInput.onChange,  child);
+      return  React.cloneElement(child, { ...restInput, ...inputOptions });
     };
 
     if (!children) {
@@ -225,12 +240,8 @@ class SchemaField extends Component {
 
     const visible = app.getIn([ ...instancePath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
 
-    const onChange = (event) => {
-      let value = event.target.value;
-      if (event.target.checked !== undefined) {
-        value = event.target.checked ? value : '';
-      }
-      ::this.context.props.comReduxFormFieldChange(instancePath[0], name, value);
+    const onChange = (value) => {      
+      ::this.context.props.comFormValueChange(name, value);
     };
 
     return (

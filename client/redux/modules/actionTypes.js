@@ -16,7 +16,7 @@ export const REGISTER_COMPONENT_VISIBLE = 'page/REGISTER_COMPONENT_VISIBLE';
 
 // field action
 export const REGISTER_PAGE_FIELD = 'page/fields/REGISTER_PAGE_FIELD';
-export const SYNC_PAGE_FIELD = 'page/fields/SYNC_PAGE_FIELD';
+// export const SYNC_PAGE_FIELD = 'page/fields/SYNC_PAGE_FIELD';
 export const STORE_API_INFO = 'page/form/STORE_API_INFO';
 export const CHANGE_FIELD_VALUE = 'page/form/CHANGE_FIELD_VALUE';
 

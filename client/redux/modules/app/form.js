@@ -1,23 +1,15 @@
-import { actionTypes } from 'redux-form/immutable';
+// import { actionTypes } from 'redux-form/immutable';
 import { List } from 'immutable';
-import { REGISTER_PAGE_FIELD, SYNC_PAGE_FIELD, STORE_API_INFO } from 'redux/modules/actionTypes';
+import { REGISTER_PAGE_FIELD, STORE_API_INFO, CHANGE_FIELD_VALUE } from 'redux/modules/actionTypes';
 import { APP_CURRENT_PAGE, FORM_FIELD_KEY } from 'configs/appKeys';
 
 const fieldReducers = {
-  // [ CHANGE_FIELD_VALUE ](state, { instancePath, field, payload }) {
-  //   // console.log('register instancePath fielding.........', [ ...instancePath, FORM_FIELD_KEYS, field ]);
-  //   const result = state.setIn([ ...instancePath, FORM_FIELD_KEY, field ], payload);
-  //   return result;
-  // },
+  [ CHANGE_FIELD_VALUE ](state, { instancePath, payload }) {
+    return state.mergeDeepIn([ ...instancePath, FORM_FIELD_KEY ], payload);
+  },
   [ REGISTER_PAGE_FIELD ](state, { instancePath, field, payload }) {
     // console.log('register instancePath fielding.........', [ ...instancePath, FORM_FIELD_KEYS, field ]);
     const result = state.setIn([ ...instancePath, FORM_FIELD_KEY, field ], payload);
-    return result;
-  },
-  [ SYNC_PAGE_FIELD ](state, { instancePath, payload }) {
-    console.log(instancePath, payload);
-    const result = state.mergeDeepIn([ ...instancePath, FORM_FIELD_KEY ], payload);
-    // console.log('mergedresult', result);
     return result;
   },
   [ STORE_API_INFO ](state, { form, apiInfo, connectOptions }) {
@@ -44,20 +36,13 @@ export const registerPageField = (instancePath, field, payload) =>
   return { type: REGISTER_PAGE_FIELD, instancePath, field, payload };
 };
 
-export const syncPageField = (instancePath, payload) =>
-{
-  return { type: SYNC_PAGE_FIELD, instancePath, payload };
-};
-
 export const storeApiInfo = (instancePath, form, apiInfo, connectOptions) =>
 {
   return { type: STORE_API_INFO, instancePath, form, apiInfo, connectOptions };
 };
 
-export const reduxFormFieldChange = (instancePath, form, field, value, touch) => {
-  return { type: actionTypes.CHANGE, meta: { form, field, touch }, payload: value, instancePath };
+export const formValueChange = (instancePath, field, value) => {
+  // console.log(instancePath, field, value);
+  return { type: CHANGE_FIELD_VALUE, instancePath, field, value };
 };
-// /* eslint-disable no-unused-vars */
-// export const updateReduxFormSyncErrors = (instancePath, form, syncErrors = {}, error) =>
-//   ({ type: actionTypes.UPDATE_SYNC_ERRORS, meta: { form }, payload: { syncErrors, error } });
-// /* eslint-enable no-unused-vars */
+
