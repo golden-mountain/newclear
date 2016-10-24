@@ -129,6 +129,7 @@
     "redux-thunk": "^2.1.0",
     "scroll-behavior": "^0.8.1",
     "superagent": "^2.1.0",
+    "tree-model": "^1.0.4",
     "wolfy87-eventemitter": "^5.1.0"
   }
 }

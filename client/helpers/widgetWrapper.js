@@ -13,7 +13,8 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
   const widgetName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
   const displayName = `Widget${widgetName}`;
-  let componentId = uniqueId(displayName + '-');
+  const connectorName = `Connect(${displayName})`;
+  const connectorId = uniqueId(displayName + '-');
 
   class Widget extends Component {
     static displayName = displayName
@@ -32,10 +33,13 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
 
     _componentId = uniqueId(displayName + '-')
 
-    // constructor(props, context) {
-    //   super(props, context);
-    //   this.context.ballKicker.registerStandardsBall(this.instancePath);
-    // }
+    constructor(props, context) {
+      super(props, context);
+      // this.context.ballKicker.registerStandardsBall(this.instancePath);
+      const { instancePath, pagePath } = this.context.props;
+      this.context.ballKicker.registerComponent(this.connectInstancePath, instancePath || pagePath);
+      this.context.ballKicker.registerComponent(this.instancePath, this.connectInstancePath);
+    }
 
     /**
      * support all actions dispatchable
@@ -57,7 +61,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       return displayName;
     }
 
-    get componentId() {      
+    get componentId() {
       return this._componentId;
     }
 
@@ -94,6 +98,10 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
       return buildInstancePath(this.pageName, this.pageId, this.componentName, this.componentId );
     }
 
+    get connectInstancePath() {
+      return buildInstancePath(this.pageName, this.pageId, connectorName, connectorId );
+    }
+
     getChildContext() {
       const thisProps = {
         instancePath: this.instancePath,
@@ -105,7 +113,7 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
         thisProps,
         this.context.props
       );
-      return {  props: props, context: this.context, ballKicker: this.context.ballKicker };
+      return {  props: props, ballKicker: this.context.ballKicker };
     }
 
     render() {
@@ -116,8 +124,9 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
           data: this.data,
           visible: this.visible,
           activeData: this.activeData,
-          // instanceData: this.instanceData,
-          findBallReceiver: this.context.ballKicker.findTargetReceiver.bind(this.context.ballKicker, this.context),
+          instanceData: this.instanceData,
+          findTargetByName: this.context.ballKicker.findTargetByComponentName.bind(this.context.ballKicker),
+          findBallReceiver: this.context.ballKicker.findTargetReceiver.bind(this.context.ballKicker, this.instancePath),
           kickBall: this.context.ballKicker.kick.bind(this.context.ballKicker, this.instancePath),
           accpetBall: this.context.ballKicker.accept.bind(this.context.ballKicker, this.instancePath),
           registerBalls: this.context.ballKicker.registerStandardsBall.bind(this.context.ballKicker, this.instancePath)
@@ -139,8 +148,8 @@ export function widgetWrapper(WrappedComponent, widgetProps) {
   };
 
   let newComponent = connect(stateMapper)(Widget);
-  newComponent.displayName = `Connect(${displayName})`;
-  newComponent.componentId = componentId; //`Connect(${displayName})`;
+  newComponent.displayName = connectorName;
+  newComponent.componentId = connectorId; //`Connect(${displayName})`;
   // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
   return hoistStatics(newComponent, Widget, WrappedComponent);
 }

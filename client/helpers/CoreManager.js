@@ -21,10 +21,11 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     ballKicker = new BallKicker(this.props.dispatch);
-    // constructor(props, context) {
-    //   super(props, context);
-    //   this.ballkicker = new Ballkicker();
-    // }
+
+    constructor(props, context) {
+      super(props, context);
+      this.ballKicker.registerComponent(pagePath);
+    }
 
     getChildContext() {
       return {  props: this.props, ballKicker: this.ballKicker };
@@ -72,6 +73,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
         axapiResponse: getAxapiResponse(state, pagePath), // invalid on context
         initialValues: config.initialValues, // invalid on context
         page: getPageVar(state, pagePath), // invalid on context
+        pagePath,
         env: config // valid on context
       };
     },

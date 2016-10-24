@@ -65,7 +65,6 @@ class VirtualServerForm extends React.Component {
     const tplVirtualServerPopupInfo = {
       pageClass: TemplateVirtualServerForm,
       title: 'Create Virtual Server Template',
-      pageName: 'templateVirtualServer',
       bsSize:'lg',
       connectOptions: {
         connectToResult: {
@@ -90,7 +89,6 @@ class VirtualServerForm extends React.Component {
       pageClass: VirtualPortForm,
       urlKeysConnect: [ 'virtual-server.name' ],
       title: 'Create Virtual Port',
-      pageName: 'virtualPort',
       bsSize:'lg',
       connectOptions: {
         connectToValue: {
