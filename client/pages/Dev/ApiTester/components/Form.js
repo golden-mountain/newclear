@@ -151,4 +151,4 @@ const initialValues = {
   body: { credentials: { username: 'admin', password: 'a10' } }
 };
 
-export default widgetWrapper(AxapiForm, { initialValues });
+export default widgetWrapper({ initialValues })(AxapiForm);

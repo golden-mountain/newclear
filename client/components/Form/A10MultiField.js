@@ -110,4 +110,4 @@ class A10MultiField extends Component {
   }
 }
 
-export default widgetWrapper(A10MultiField);
+export default widgetWrapper()(A10MultiField);

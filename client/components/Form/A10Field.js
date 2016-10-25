@@ -281,4 +281,4 @@ class SchemaField extends Component {
   }
 }
 
-export const A10SchemaField = widgetWrapper(SchemaField);
+export const A10SchemaField = widgetWrapper()(SchemaField);

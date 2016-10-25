@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { Form } from 'react-bootstrap';
 // import invariant from 'invariant';
 import { Map, List, fromJS } from 'immutable';
-import { toPath, has, uniqueId } from 'lodash';
+import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
@@ -99,7 +99,7 @@ class SchemaForm {
 
 class A10SchemaForm extends Component {
   static displayName = 'A10SchemaForm'
-  static componentId = uniqueId('A10SchemaForm-')
+  // static componentId = uniqueId('A10SchemaForm-')
 
   static contextTypes = {
     props: PropTypes.object,
@@ -268,4 +268,4 @@ class A10SchemaForm extends Component {
   }
 }
 
-export default widgetWrapper(A10SchemaForm);
+export default widgetWrapper()(A10SchemaForm);

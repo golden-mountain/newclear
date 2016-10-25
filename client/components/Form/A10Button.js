@@ -80,4 +80,4 @@ class A10Button extends Component {
   }
 }
 
-export default widgetWrapper(A10Button);
+export default widgetWrapper()(A10Button);

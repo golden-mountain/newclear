@@ -57,10 +57,16 @@ export default class BallKicker  extends EventEmitter {
       return node.model.id === parentId;
     });
 
+    let mountNodes = this.componentTree.all((node) => {
+      return node.model.id === parentId;
+    });
+
     if (!mountNode) {
       mountNode = this.componentTree;
     }
-    console.log(instancePath, mountNode);
+
+
+    console.log(instancePath, mountNodes);
     mountNode.addChild(node);
   }
 

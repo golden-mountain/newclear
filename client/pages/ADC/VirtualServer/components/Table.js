@@ -80,4 +80,4 @@ class VirtualServerTable extends React.Component {
 //   page: 'virtual-server-list'
 // })(VirtualServerTable);
 
-export default widgetWrapper(VirtualServerTable);
+export default widgetWrapper()(VirtualServerTable);

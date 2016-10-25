@@ -57,4 +57,4 @@ class A10Table extends React.Component {
   }
 }
 
-export default widgetWrapper(A10Table);
+export default widgetWrapper()(A10Table);

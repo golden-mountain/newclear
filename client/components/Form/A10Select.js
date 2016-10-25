@@ -133,4 +133,4 @@ A10Select.contextTypes = {
   actions: PropTypes.object
 };
 
-export default widgetWrapper(A10Select);
+export default widgetWrapper()(A10Select);

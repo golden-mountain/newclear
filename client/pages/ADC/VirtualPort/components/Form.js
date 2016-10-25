@@ -43,4 +43,4 @@ class VirtualPort extends React.Component {
   }
 }
 
-export default widgetWrapper(VirtualPort);
+export default widgetWrapper()(VirtualPort);

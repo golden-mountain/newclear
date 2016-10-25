@@ -46,4 +46,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default widgetWrapper(LoginForm);
+export default widgetWrapper()(LoginForm);

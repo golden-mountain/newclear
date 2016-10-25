@@ -135,4 +135,4 @@ class TemplateVirtualServerForm extends React.Component {
   }
 }
 
-export default widgetWrapper(TemplateVirtualServerForm);
+export default widgetWrapper()(TemplateVirtualServerForm);
