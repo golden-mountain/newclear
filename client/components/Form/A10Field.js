@@ -156,6 +156,11 @@ export class A10Field extends Component {
 class SchemaField extends Component {
   static displayName = 'SchemaField'
 
+  static contextTypes = {
+    props: PropTypes.object,
+    ballKicker: PropTypes.object
+  }
+
   // context defined at page
   constructor(props, context) {
     super(props, context);
@@ -163,7 +168,8 @@ class SchemaField extends Component {
       throw new Error('Config should passed from parent');
     }
 
-    this._parentProps = this.context.props;
+    // console.log('schema field instancePath', this.context.props.instancePath);
+    // this.context.props = this.context.props;
   }
 
   componentWillMount() {
@@ -172,9 +178,9 @@ class SchemaField extends Component {
     let { validation, conditional } = this.props;
     // register initialValues
     let defaultValue = value !== undefined ? value : (schema ? schema.default : null);
-    let values = this.props.form.getIn([ this._parentProps.env.form, 'values' ], Map());
+    let values = this.props.form.getIn([ this.context.props.env.form, 'values' ], Map());
     values = values.setIn(name.split('.'), defaultValue);
-    this._parentProps.initialize(values.toJS());
+    this.context.props.initialize(values.toJS());
 
     if (!validation && schema) {
       validation = this.parseValidation(schema);
@@ -188,15 +194,21 @@ class SchemaField extends Component {
       validations: validation,
       conditionals: this.parseConditional(conditional, defaultValue)
     };
-    this.context.props.comRegisterPageField(name, fromJS(fieldOptions));
+    const instanceParentPath = this._registeredPath();
+    // console.log(instanceParentPath);
+    this.props.comRegisterPageField(instanceParentPath, name, fromJS(fieldOptions));
+  }
+
+  _registeredPath() {
+    return this.props.findParent('A10SchemaForm');
   }
 
 //   shouldComponentUpdate(nextProps) {
 //     const { name } = this.props;
-//     const fieldNext = nextProps.app.getIn([ this._parentProps.env.page, 'form', name ]);
-//     const fieldThis = this.props.app.getIn([ this._parentProps.env.page, 'form', name ]);
-//     const fieldNextValue = nextProps.form.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
-//     const fieldThisValue = this.props.form.getIn([ this._parentProps.env.form, 'values', ...toPath(name) ]);
+//     const fieldNext = nextProps.app.getIn([ this.context.props.env.page, 'form', name ]);
+//     const fieldThis = this.props.app.getIn([ this.context.props.env.page, 'form', name ]);
+//     const fieldNextValue = nextProps.form.getIn([ this.context.props.env.form, 'values', ...toPath(name) ]);
+//     const fieldThisValue = this.props.form.getIn([ this.context.props.env.form, 'values', ...toPath(name) ]);
 //     return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
 //   }
 
@@ -247,16 +259,16 @@ class SchemaField extends Component {
 
   render() {
     let { name, children, app, ...rest } = this.props; // eslint-disable-line
-    const { instancePath } = this.context.props;
+    const instanceParentPath = this._registeredPath();
 
-    const visible = app.getIn([ ...instancePath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
+    const visible = app.getIn([ ...instanceParentPath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
 
-    const onChange = (value) => {      
-      ::this.context.props.comSetFieldConditial(name, value);
+    const onChange = (value) => {
+      ::this.props.comSetFieldConditial(instanceParentPath, name, value);
     };
 
-    const onBlur = (value) => {      
-      ::this.context.props.comTriggleValidation(name, value);
+    const onBlur = (value) => {
+      ::this.props.comTriggleValidation(instanceParentPath, name, value);
     };
 
     return (
@@ -268,9 +280,5 @@ class SchemaField extends Component {
     );
   }
 }
-
-SchemaField.contextTypes = {
-  props: PropTypes.object
-};
 
 export const A10SchemaField = widgetWrapper(SchemaField);

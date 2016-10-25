@@ -4,12 +4,13 @@ import { REGISTER_PAGE_FIELD, STORE_API_INFO, CHANGE_FIELD_CONDITIONAL, TRIGGLE_
 import { APP_CURRENT_PAGE, FORM_FIELD_KEY } from 'configs/appKeys';
 
 const fieldReducers = {
-  [ CHANGE_FIELD_CONDITIONAL ](state, { instancePath, payload }) {
-    return state.mergeDeepIn([ ...instancePath, FORM_FIELD_KEY ], payload);
+  [ CHANGE_FIELD_CONDITIONAL ](state, { parentPath, payload }) {
+    // console.log(parentPath, payload);
+    return state.mergeDeepIn([ ...parentPath, FORM_FIELD_KEY ], payload);
   },
-  [ REGISTER_PAGE_FIELD ](state, { instancePath, field, payload }) {
+  [ REGISTER_PAGE_FIELD ](state, { parentPath, field, payload }) {
     // console.log('register instancePath fielding.........', [ ...instancePath, FORM_FIELD_KEYS, field ]);
-    const result = state.setIn([ ...instancePath, FORM_FIELD_KEY, field ], payload);
+    const result = state.setIn([ ...parentPath, FORM_FIELD_KEY, field ], payload);
     return result;
   },
   [ STORE_API_INFO ](state, { form, apiInfo, connectOptions }) {
@@ -26,8 +27,8 @@ const fieldReducers = {
       return state.setIn([ APP_CURRENT_PAGE, 'store', form ], old);
     }
   },
-  [ TRIGGLE_VALIDATION ](state, { instancePath, payload }) {
-    console.log(instancePath, payload);
+  [ TRIGGLE_VALIDATION ](state, { parentPath, payload }) {
+    console.log(parentPath, payload);
     return state;
   }
 };
@@ -35,23 +36,22 @@ const fieldReducers = {
 export default fieldReducers;
 
 // -------------------- Field Actions --------------------
-export const registerPageField = (instancePath, field, payload) =>
+export const registerPageField = (instancePath, parentPath, field, payload) =>
 {
-  return { type: REGISTER_PAGE_FIELD, instancePath, field, payload };
+  return { type: REGISTER_PAGE_FIELD, instancePath, parentPath, field, payload };
 };
 
-export const storeApiInfo = (instancePath, form, apiInfo, connectOptions) =>
+export const storeApiInfo = (instancePath, parentPath, form, apiInfo, connectOptions) =>
 {
-  return { type: STORE_API_INFO, instancePath, form, apiInfo, connectOptions };
+  return { type: STORE_API_INFO, instancePath, parentPath, form, apiInfo, connectOptions };
 };
 
-export const setFieldConditial = (instancePath, field, value) => {
-  // console.log(instancePath, field, value);
-  return { type: CHANGE_FIELD_CONDITIONAL, instancePath, field, value };
+export const setFieldConditial = (instancePath, parentPath, field, value) => {
+  // console.log(instancePath,parentPath, field, value);
+  return { type: CHANGE_FIELD_CONDITIONAL, instancePath, parentPath, field, value };
 };
 
-export const triggleValidation = (instancePath, field, value) => {
+export const triggleValidation = (instancePath, parentPath, field, value) => {
   // console.log(instancePath, field, value);
   return { type: TRIGGLE_VALIDATION, instancePath, field, value };
 };
-

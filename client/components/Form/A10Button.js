@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { getComponentVar } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import FieldConnector from 'helpers/FieldConnector';
-// import { buildInstancePath } from 'helpers/actionHelper';
+import { buildInstancePath } from 'helpers/actionHelper';
 // import { setComponentVisible } from 'redux/modules/app/component';
 // import { change } from 'redux-form/immutable';
 // import invariant from 'invariant';
@@ -31,11 +31,12 @@ class A10Button extends Component {
 
     let popupContent = null, click = onClick, modal = null;
     if (pageClass) {
-      // const modalInstancePath = buildInstancePath(instancePath[0], instancePath[1], pageClass.displayName, pageClass.componentId);
-      const modalInstancePath = this.props.findTargetByName(pageClass.displayName);
+      const modalInstancePath = buildInstancePath(instancePath[0], instancePath[1], pageClass.displayName, pageClass.componentId);
+      // const modalInstancePath = this.props.findTargetByName(pageClass.displayName);
       this.modelVisible = getComponentVar(app, modalInstancePath, 'visible');
+      // console.log(this.modelVisible, 'modal instance', modalInstancePath);
       click = () => {
-        this.props.kickBall(modalInstancePath, 'showMe');
+        this.props.kickBall('showMe', null, modalInstancePath);
         return false;
       };
 
@@ -47,9 +48,8 @@ class A10Button extends Component {
         };
 
         popupContent = React.createElement(pageClass, {
-          // visible: true,
-          fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
           modalInstancePath,
+          fieldConnector: new FieldConnector(connectOptions, form, env, changeFormField),
           urlKeysConnect
         });
 

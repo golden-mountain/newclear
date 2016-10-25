@@ -10,6 +10,7 @@ import { APP_CURRENT_PAGE, LAST_PAGE_KEY } from 'configs/appKeys';
 export const getAxapiResponse = (state, instancePath) => Iterable.isIterable(state) ? state.getIn([ 'app', ...instancePath, 'data' ]) : Map({});
 export const getFormVar = (state, form) => Iterable.isIterable(state) ? state.getIn([ 'form', form ]) : Map({});
 export const getPageVar = (state, instancePath) => {
+  // console.log(instancePath, '............... state helper');
   if (!instancePath) {
     return Map();
   }

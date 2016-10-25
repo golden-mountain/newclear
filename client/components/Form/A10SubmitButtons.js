@@ -40,7 +40,7 @@ export class A10SubmitButtons extends Component {
 
   close() {
     const { modalInstancePath } = this.props;
-    this.props.kickBall(modalInstancePath, 'hideMe');
+    this.props.kickBall('hideMe', null, modalInstancePath);
   }
 
   render() {

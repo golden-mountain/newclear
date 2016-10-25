@@ -37,7 +37,7 @@ class FormHacker {
 
   _getVarsByEnv() {
     const pageEnv = getAppEnvVar(this.state);
-    const pageVar = getPageVar(this.state, this.action.instancePath );
+    const pageVar = getPageVar(this.state, this.action.parentPath );
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
 
     return { pageEnv, pageVar, reduxFormVar };
@@ -135,7 +135,7 @@ class FormHacker {
   }
 
   changeConditional() {
-    const { instancePath, ...action } = this.action; //eslint-disable-line
+    const { parentPath, ...action } = this.action; //eslint-disable-line
     const { pageVar, reduxFormVar } = this._getVarsByEnv();
     const fields = pageVar.getIn([ FORM_FIELD_KEY ]);
     let storedBackFields = Map({});
@@ -173,7 +173,7 @@ class FormHacker {
 
     // console.log('storedBackFields...................', storedBackFields);
     // this.next({ type: CHANGE_FIELD_VALUE, instancePath, payload: storedBackFields });
-    return { type: CHANGE_FIELD_CONDITIONAL, instancePath, payload: storedBackFields };
+    return { type: CHANGE_FIELD_CONDITIONAL, parentPath, payload: storedBackFields };
   }
 
 }

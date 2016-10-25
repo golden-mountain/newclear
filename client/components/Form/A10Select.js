@@ -12,7 +12,7 @@ import A10Button from 'components/Form/A10Button';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 
-import { values, get, isArray, isEqual, set } from 'lodash';
+import { values, get, isArray } from 'lodash';
 
 class A10Select extends Component {
   static displayName = 'A10Select'
@@ -21,9 +21,16 @@ class A10Select extends Component {
     props: PropTypes.object.isRequired
   }
 
-  state = {
-    options: []
+  constructor(props, context) {
+    super(props, context);
+    this.props.accpetBall('updateSelect', () => {
+      // console.log(from, to, newValue);
+      this.getOptions();
+      this.newValue = 'a1';
+    });
   }
+
+  newValue = ''
 
   formatOptions(data) {
     let json = [];
@@ -67,20 +74,20 @@ class A10Select extends Component {
     }
   }
 
-  getOnloadPopupOptions() {
-    const { popupInfo } = this.props;
-    let onLoad = get(popupInfo, 'connectOptions.onLoad');
-    if (!onLoad) {
-      onLoad = (value) => {
-        let formattedOptions = this.formatOptions(value);
-        let allOptions = this.state.options;
-        allOptions = allOptions.concat(formattedOptions);
-        this.setState( { options: allOptions });
-        return formattedOptions;
-      };
-    }
-    return onLoad;
-  }
+  // getOnloadPopupOptions() {
+  //   const { popupInfo } = this.props;
+  //   let onLoad = get(popupInfo, 'connectOptions.onLoad');
+  //   if (!onLoad) {
+  //     onLoad = (value) => {
+  //       let formattedOptions = this.formatOptions(value);
+  //       let allOptions = this.state.options;
+  //       allOptions = allOptions.concat(formattedOptions);
+  //       this.setState( { options: allOptions });
+  //       return formattedOptions;
+  //     };
+  //   }
+  //   return onLoad;
+  // }
 
   componentWillMount() {
     // const { loadOptions: { loadOnMount } } = this.props;
@@ -89,21 +96,24 @@ class A10Select extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.data, this.props.data )) {
-      const formattedOptions = this.formatOptions(nextProps.data);
-      this.setState( { options: formattedOptions });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (!isEqual(nextProps.data, this.props.data )) {
+  //     const formattedOptions = this.formatOptions(nextProps.data);
+  //     this.setState( { options: formattedOptions });
+  //   }
+  // }
 
   render() {
-    let { value, onChange, popupInfo } = this.props;
+    let { value, data, onChange, popupInfo } = this.props;
+    const formattedOptions = this.formatOptions(data);
+    // console.log(data);
     // const asyncNeeded = loadOptions && loadOptions.url && true;
+    let setValue = this.newValue || value;
+    console.log('set to VirtualizedSelect value', setValue);
+    const loadAttr = { value: setValue, onChange, options: formattedOptions, simpleValue: true };
 
-    const loadAttr = { value, onChange, options: this.state.options, simpleValue: true };
-
-    set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
-    set(popupInfo, 'id', 'default');
+    // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
+    // set(popupInfo, 'id', 'default');
 
     return (
       popupInfo ?
