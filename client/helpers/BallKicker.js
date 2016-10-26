@@ -3,18 +3,22 @@ import EventEmitter from 'wolfy87-eventemitter';
 
 export default class BallKicker  extends EventEmitter {
 
-  getEventName(instancePath, event) {
-    // console.log('instance event:',  `${event}.${instancePath.join('.')}`);
-    return `${event}.${instancePath.join('.')}`;
+  getEventId(instancePath, event) {
+    const eventId = instancePath.join('_');
+    let str = `${event}-${eventId}`;
+    str = str.replace(/[\s|\/]/g, '-');
+    return instancePath.length ? str : event;
   }
 
   kick(from, event, params=null, to=[]) {
-    // console.log('kick', event,  to);
-    this.emitEvent(event, [ from, to, params ]);
+    const eventId = this.getEventId(to, event);
+    console.log('kick', eventId);
+    this.emitEvent(eventId, [ from, to, params ]);
   }
 
-  accept(from, event, listener, to=[]) { // eslint-disable-line
-    // console.log('register from', event, to);
-    this.addListener(event, listener);
+  accept(to, event, listener, from=[]) { // eslint-disable-line
+    const eventId = this.getEventId(to, event);
+    console.log('from to:', eventId);
+    this.addListener(this.getEventId(to, event), listener);
   }
 }

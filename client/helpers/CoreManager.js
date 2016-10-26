@@ -9,6 +9,7 @@ import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { buildInstancePath } from 'helpers/actionHelper';
 import ComponentManager from 'helpers/ComponentManager';
+import A10Modal from 'components/Modal';
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -20,10 +21,15 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
       cm: PropTypes.object
     }
 
+    static contextTypes = {
+      store: PropTypes.object
+    }
+
     //cm == component manager
     constructor(props, context) {
       super(props, context);
-      this.cm = new ComponentManager(this.props.dispatch);
+      // console.log(props, this.context);
+      this.cm = new ComponentManager(this.props);
       this.cm.registerComponent(pagePath);
     }
 
@@ -46,7 +52,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     render() {
-      return <Layout> <WrappedElement {...WrappedProps} /> </Layout>;
+      return <Layout> <WrappedElement {...WrappedProps} /> <A10Modal /></Layout>;
     }
   }
 

@@ -1,23 +1,21 @@
+
 import { repeat } from 'lodash';
 import TreeModel  from  'tree-model';
 import BallKicker from 'helpers/BallKicker';
 import {
-  SHOW_COMPONENT_AS_MODAL, SHOW_COMPONENT, HIDE_COMPONENT
+  SHOW_COMPONENT, HIDE_COMPONENT
 } from 'configs/messages';
+// import { renderComponent } from 'helpers/dom';
 
 class ComponentListener {
   standBalls = {
     [SHOW_COMPONENT](from, to, params) { // eslint-disable-line
       // console.log(from, to, params , 'show Me executed');
-      return ::this.dispatch(window.appActions.setComponentVisible(to, true));
+      return this.dispatch(window.appActions.setComponentVisible(to, true));
     },
     [HIDE_COMPONENT](from, to, params) { // eslint-disable-line
-      // console.log(from, to, params, '::hideMe');
-      return ::this.dispatch(window.appActions.setComponentVisible(to, false));
-    },
-    [SHOW_COMPONENT_AS_MODAL](from, to, params) { // eslint-disable-line
-      console.log(from, to, params, '::create a component');
-      // return ::this.dispatch(window.appActions.setComponentVisible(to, false));
+      // console.log(from, to, params, 'hideMe');
+      return this.dispatch(window.appActions.setComponentVisible(to, false));
     }
   }
 
@@ -30,7 +28,7 @@ class ComponentListener {
     // console.log(this, instancePath);
     for (let event in this.standBalls) {
       const eventAction = this.standBalls[event];
-      this.ballKicker.addListener( event, eventAction, [ from, to ] );
+      this.ballKicker.addListener( event, eventAction.bind(this), [ from, to ] );
     }
   }
 }
@@ -39,10 +37,10 @@ export default class ComponentManager {
 
   componentTreeModel = new TreeModel()
 
-  constructor(dispatch) {
-    this.dispatch = dispatch;
+  constructor(props) {
+    this.dispatch = props.dispatch;
     this.ballKicker = new BallKicker();
-    this.listener = new ComponentListener(dispatch, this.ballKicker);
+    this.listener = new ComponentListener(this.dispatch, this.ballKicker);
     this.componentTree = this.componentTreeModel.parse({
       id:'root',
       instancePath: [ 'root', 'default' ],
@@ -82,15 +80,15 @@ export default class ComponentManager {
       return node.model.id === parentId;
     });
 
-    let mountNodes = this.componentTree.all((node) => {
-      return node.model.id === parentId;
-    });
+    // let mountNodes = this.componentTree.all((node) => {
+    //   return node.model.id === parentId;
+    // });
 
     if (!mountNode) {
       mountNode = this.componentTree;
     }
 
-    console.log(instancePath, mountNodes);
+    // console.log(instancePath, mountNodes);
     mountNode.addChild(node);
   }
 

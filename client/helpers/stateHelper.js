@@ -19,10 +19,16 @@ export const getPageVar = (state, instancePath) => {
 
 export const getAppEnvVar = (state, immutable=false) => {
   const envs = state.getIn([ 'app', APP_CURRENT_PAGE, 'envs' ]);
+
   if (envs) {
-    return immutable
-    ? envs.last()
-    : envs.last().toJS();
+    try {
+      return immutable
+      ? envs.last()
+      : envs.last().toJS();
+    } catch( e ) {
+      console.log(envs);
+      return {};
+    }
   } else {
     return {};
   }

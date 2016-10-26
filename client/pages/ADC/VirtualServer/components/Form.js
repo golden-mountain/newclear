@@ -62,10 +62,15 @@ class VirtualServerForm extends React.Component {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
     // console.log(TemplateVirtualServerForm);
+    const instance = React.createElement(TemplateVirtualServerForm);
+    console.log(instance.type.getInstancePath());
+
     const tplVirtualServerPopupInfo = {
-      pageClass: TemplateVirtualServerForm,
-      title: 'Create Virtual Server Template',
-      bsSize:'lg',
+      componentClass: TemplateVirtualServerForm,
+      modalProps: {
+        title: 'Create Virtual Server Template',
+        bsSize:'lg'
+      },
       connectOptions: {
         connectToResult: {
           'virtual-server': {
@@ -86,10 +91,12 @@ class VirtualServerForm extends React.Component {
     };
 
     let popupInfo = {
-      pageClass: VirtualPortForm,
+      componentClass: VirtualPortForm,
       urlKeysConnect: [ 'virtual-server.name' ],
-      title: 'Create Virtual Port',
-      bsSize:'lg',
+      modalProps: {
+        title: 'Create Virtual Port',
+        bsSize:'lg'
+      },
       connectOptions: {
         connectToValue: {
           'virtual-server.port-list': {

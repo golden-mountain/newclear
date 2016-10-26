@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
-import { getAppPageVar, getAppEnvVar } from './stateHelper';
+import { getAppPageVar } from './stateHelper';
 import { uniqueId, upperFirst } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
-import ModalLayout from 'layouts/a10/ModalLayout';
 
 // wrapper for widgets, add a wrapper to get state
 export const widgetWrapper = widgetProps => {
@@ -35,7 +34,7 @@ export const widgetWrapper = widgetProps => {
         super(props, context);
         this.cm = this.context.cm;
         this.cm.registerComponent(this.instancePath, this.props.targetInstance);
-        this.cm.printComponentTree();
+        // this.cm.printComponentTree();
         // this.cm.acceptBalls();
       }
 
@@ -73,11 +72,11 @@ export const widgetWrapper = widgetProps => {
       }
 
       get pageId() {
-        return this.props.env.pageId || 'UNKNOWN-PAGE-ID';
+        return this.context.props.pagePath[1] || 'UNKNOWN-PAGE-ID';
       }
 
       get pageName() {
-        return this.props.env.page || 'UNKNOWN-PAGE';
+        return this.context.props.pagePath[0] || 'UNKNOWN-PAGE';
       }
 
       get visible() {
@@ -116,7 +115,8 @@ export const widgetWrapper = widgetProps => {
       }
 
       render() {
-        const { modalProps } = this.props;
+        // const { modalProps } = this.props;
+        // console.log(this.context.props);
         const newProps = Object.assign(
           {}, this.props, this.getNewMethods(this.instancePath),
           {
@@ -134,23 +134,13 @@ export const widgetWrapper = widgetProps => {
           }
         );
         // console.log('widgetProps',  this.componentId, this.visible);
-        return (
-          this.visible ?
-            ( this.visible == 'modal' ?
-              <ModalLayout modalProps={modalProps}>
-                <WrappedComponent  {...newProps} />
-                  </ModalLayout>
-                  :
-                  <WrappedComponent  {...newProps} />
-            )
-          : null
-        );
+        return (this.visible ? <WrappedComponent  {...newProps} /> : null);
       }
     }
 
     const stateMapper = (state) => {
       return {
-        env: getAppEnvVar(state),
+        // env: getAppEnvVar(state),
         page: getAppPageVar(state),
         app: state.getIn([ 'app' ]),
         form: state.getIn([ 'form' ]),
@@ -171,15 +161,25 @@ export const widgetWrapper = widgetProps => {
         cm: PropTypes.object
       }
 
+      static childContextTypes = {
+        props: PropTypes.object,
+        cm: PropTypes.object
+      }
+
       constructor(props, context) {
         super(props, context);
         const { instancePath, pagePath } = this.context.props;
         this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
       }
 
+      getChildContext() {
+        return {  props: this.context.props, cm: this.context.cm };
+      }
+
       get instancePath() {
         const componentName = targetComponentName;
         const componentId = this.componentId;
+        // console.log(this.context.props);
         const [ pageName, pageId ] = this.context.props.pagePath;
         // console.log(this.context.props, pageName, pageId, componentName, componentId );
         return buildInstancePath(pageName, pageId, componentName, componentId );

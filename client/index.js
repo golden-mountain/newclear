@@ -1,4 +1,3 @@
-import { render } from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 // import { Router, browserHistory } from 'react-router/es6';
@@ -16,6 +15,8 @@ import ApiClient from './helpers/ApiClient';
 import createMiddleware from './redux/middleware/clientMiddleware';
 import formMiddleware from './redux/middleware/formMiddleware';
 import reducer from './redux/modules/reducer';
+import { createDomElement } from 'helpers/dom';
+
 // Immutable js
 import './index.ejs';
 
@@ -74,9 +75,9 @@ const store = createStore(
 // });
 
 
-render(
+createDomElement(
   <Provider store={store} key="provider">
     <RootRouter />
   </Provider>,
-  document.getElementById('root')
+  'root'
 );
