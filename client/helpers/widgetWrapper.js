@@ -1,12 +1,9 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
-// import hoistStatics from 'hoist-non-react-statics';
 import { getAppPageVar, getAppEnvVar } from './stateHelper';
-// import React, { Component, PropTypes } from 'react'; //PropTypes
-// import { connect } from 'react-redux';
 import { uniqueId, upperFirst } from 'lodash';
-// import { getAppEnvVar, getAppPageVar } from 'helpers/stateHelper';
 import { buildInstancePath } from 'helpers/actionHelper';
+import ModalLayout from 'layouts/a10/ModalLayout';
 
 // wrapper for widgets, add a wrapper to get state
 export const widgetWrapper = widgetProps => {
@@ -14,16 +11,8 @@ export const widgetWrapper = widgetProps => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
   return WrappedComponent => {
-    // console.log(WrappedComponent.displayName, '..........................');
-    // WrappedComponent.displayName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
-    // const wrappedComponentId = uniqueId( WrappedComponent.displayName + '-' );
-
-    // TODO: the uniqueId not changed when set new component
-    // WrappedComponent.componentId = wrappedComponentId;
 
     const displayName = `Widget${WrappedComponent.displayName}`;
-    // const connectorName = `Connect(${displayName})`;
-    // const connectorId = wrappedComponentId;
 
     class Widget extends Component {
       static displayName = displayName
@@ -31,30 +20,23 @@ export const widgetWrapper = widgetProps => {
       static contextTypes = {
         props: PropTypes.object,
         // context: PropTypes.object,
-        ballKicker: PropTypes.object
+        cm: PropTypes.object
       }
 
       static childContextTypes = {
         props: PropTypes.object,
         // context: PropTypes.object,
-        ballKicker: PropTypes.object
+        cm: PropTypes.object
       }
 
       _componentId = uniqueId(displayName + '-')
 
       constructor(props, context) {
         super(props, context);
-        // this.context.ballKicker.registerStandardsBall(this.instancePath);
-        // const { instancePath, pagePath } = this.context.props;
-        // console.log(this.connectInstancePath);
-        // console.log(instancePath, this.instancePath);
-        // console.log('Wrapped Widget Name:', widgetName, 'Wrapper Name: ', displayName, 'Connector Name:', connectorName);
-        // console.log('----Wrapped Widget ID:', WrappedComponent.componentId, '----Wrapper ID: ', this.componentId, '----Connector ID:', connectorId);
-        // this.context.ballKicker.registerComponent(this.connectInstancePath, instancePath || pagePath);
-        this.context.ballKicker.registerComponent(this.instancePath, this.props.targetInstance);
-        // this.context.ballKicker.registerComponent(this.instancePath, instancePath || pagePath);
-        // this.context.ballKicker.registerComponent(this.wrappedComponentPath, this.instancePath);
-        this.context.ballKicker.printComponentTree();
+        this.cm = this.context.cm;
+        this.cm.registerComponent(this.instancePath, this.props.targetInstance);
+        this.cm.printComponentTree();
+        // this.cm.acceptBalls();
       }
 
       /**
@@ -130,10 +112,11 @@ export const widgetWrapper = widgetProps => {
           thisProps
         );
         // console.log(this.context.props, thisProps);
-        return {  props: props, ballKicker: this.context.ballKicker };
+        return {  props: props, cm: this.context.cm };
       }
 
       render() {
+        const { modalProps } = this.props;
         const newProps = Object.assign(
           {}, this.props, this.getNewMethods(this.instancePath),
           {
@@ -142,16 +125,26 @@ export const widgetWrapper = widgetProps => {
             visible: this.visible,
             activeData: this.activeData,
             instanceData: this.instanceData,
-            findParent: this.context.ballKicker.findParent.bind(this.context.ballKicker, this.instancePath),
-            findTargetByName: this.context.ballKicker.findTargetByComponentName.bind(this.context.ballKicker),
-            findBallReceiver: this.context.ballKicker.findTargetReceiver.bind(this.context.ballKicker, this.instancePath),
-            kickBall: this.context.ballKicker.kick.bind(this.context.ballKicker, this.instancePath),
-            accpetBall: this.context.ballKicker.accept.bind(this.context.ballKicker, this.instancePath),
-            registerBalls: this.context.ballKicker.registerStandardsBall.bind(this.context.ballKicker, this.instancePath)
+            findParent: this.cm.findParent.bind(this.cm, this.instancePath),
+            findTargetByName: this.cm.findTargetByComponentName.bind(this.cm),
+            findBallReceiver: this.cm.findTargetReceiver.bind(this.cm, this.instancePath),
+            kickBall: this.cm.ballKicker.kick.bind(this.cm.ballKicker, this.instancePath),
+            catchBall: this.cm.ballKicker.accept.bind(this.cm.ballKicker, this.instancePath),
+            registerBalls: this.cm.listener.registerStandardBalls.bind(this.cm.listener, this.instancePath)
           }
         );
         // console.log('widgetProps',  this.componentId, this.visible);
-        return this.visible ? React.createElement(WrappedComponent, newProps) : null;
+        return (
+          this.visible ?
+            ( this.visible == 'modal' ?
+              <ModalLayout modalProps={modalProps}>
+                <WrappedComponent  {...newProps} />
+                  </ModalLayout>
+                  :
+                  <WrappedComponent  {...newProps} />
+            )
+          : null
+        );
       }
     }
 
@@ -166,13 +159,8 @@ export const widgetWrapper = widgetProps => {
     };
 
     const ConnnectedWidget = connect(stateMapper)(Widget);
-    // newComponent.displayName = connectorName;
-    // newComponent.componentId = connectorId; //`Connect(${displayName})`;
-    // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
-    // return hoistStatics(newComponent, Widget, WrappedComponent);
-
     const targetComponentName = `TargetWidget${WrappedComponent.displayName}`;
-    // const targetComponentId = uniqueId( targetComponentName + '-');
+
     class TargetWrapper extends Component {
       static displayName = targetComponentName
 
@@ -180,15 +168,13 @@ export const widgetWrapper = widgetProps => {
 
       static contextTypes = {
         props: PropTypes.object,
-        // context: PropTypes.object,
-        ballKicker: PropTypes.object
+        cm: PropTypes.object
       }
 
       constructor(props, context) {
         super(props, context);
         const { instancePath, pagePath } = this.context.props;
-        this.context.ballKicker.registerComponent(this.instancePath, instancePath || pagePath);
-
+        this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
       }
 
       get instancePath() {
@@ -201,9 +187,7 @@ export const widgetWrapper = widgetProps => {
 
       render() {
         const { children, ...rest } = this.props;
-        
-        // console.log(instance);
-        return <ConnnectedWidget targetInstance={this.instancePath} {...rest} >{children}</ConnnectedWidget>;
+        return (<ConnnectedWidget targetInstance={this.instancePath} {...rest} >{children}</ConnnectedWidget>);
       }
     }
     return TargetWrapper;

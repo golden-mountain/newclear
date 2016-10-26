@@ -23,7 +23,7 @@ class A10Select extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.props.accpetBall('updateSelect', () => {
+    this.props.catchBall('updateSelect', () => {
       // console.log(from, to, newValue);
       this.getOptions();
       this.newValue = 'a1';
