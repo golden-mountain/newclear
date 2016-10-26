@@ -215,7 +215,7 @@ class A10SchemaForm extends Component {
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
     const parentInstancePath = this.props.findParent('A10SchemaForm');
-    console.log(parentInstancePath);
+    // console.log(parentInstancePath);
     let submit = (values) => {
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
       // console.log('1');
@@ -258,7 +258,7 @@ class A10SchemaForm extends Component {
       return result;
     };
 
-    // console.log(onSubmit, '..............');
+    // console.log('.......................................', children);
     const formProps = { bsClass, componentClass, horizontal, inline };
     return (
       <Form onSubmit={ handleSubmit(submit) } { ...formProps }>

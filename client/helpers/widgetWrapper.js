@@ -14,16 +14,16 @@ export const widgetWrapper = widgetProps => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
   return WrappedComponent => {
-    // console.log(WrappedComponent, '..........................');
-    WrappedComponent.displayName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
-    const wrappedComponentId = uniqueId( WrappedComponent.displayName + '-' );
+    // console.log(WrappedComponent.displayName, '..........................');
+    // WrappedComponent.displayName = WrappedComponent.displayName || 'NOT_DEFINED_DISPLAY_NAME';
+    // const wrappedComponentId = uniqueId( WrappedComponent.displayName + '-' );
 
     // TODO: the uniqueId not changed when set new component
-    WrappedComponent.componentId = wrappedComponentId;
+    // WrappedComponent.componentId = wrappedComponentId;
 
     const displayName = `Widget${WrappedComponent.displayName}`;
-    const connectorName = `Connect(${displayName})`;
-    const connectorId = wrappedComponentId;
+    // const connectorName = `Connect(${displayName})`;
+    // const connectorId = wrappedComponentId;
 
     class Widget extends Component {
       static displayName = displayName
@@ -45,12 +45,13 @@ export const widgetWrapper = widgetProps => {
       constructor(props, context) {
         super(props, context);
         // this.context.ballKicker.registerStandardsBall(this.instancePath);
-        const { instancePath, pagePath } = this.context.props;
+        // const { instancePath, pagePath } = this.context.props;
+        // console.log(this.connectInstancePath);
         // console.log(instancePath, this.instancePath);
         // console.log('Wrapped Widget Name:', widgetName, 'Wrapper Name: ', displayName, 'Connector Name:', connectorName);
         // console.log('----Wrapped Widget ID:', WrappedComponent.componentId, '----Wrapper ID: ', this.componentId, '----Connector ID:', connectorId);
-        this.context.ballKicker.registerComponent(this.connectInstancePath, instancePath || pagePath);
-        this.context.ballKicker.registerComponent(this.instancePath, this.connectInstancePath);
+        // this.context.ballKicker.registerComponent(this.connectInstancePath, instancePath || pagePath);
+        this.context.ballKicker.registerComponent(this.instancePath, this.props.targetInstance);
         // this.context.ballKicker.registerComponent(this.instancePath, instancePath || pagePath);
         // this.context.ballKicker.registerComponent(this.wrappedComponentPath, this.instancePath);
         this.context.ballKicker.printComponentTree();
@@ -113,13 +114,9 @@ export const widgetWrapper = widgetProps => {
         return buildInstancePath(this.pageName, this.pageId, this.componentName, this.componentId );
       }
 
-      get connectInstancePath() {
-        return buildInstancePath(this.pageName, this.pageId, connectorName, connectorId );
-      }
-
-      get wrappedComponentPath() {
-        return buildInstancePath(this.pageName, this.pageId, WrappedComponent.displayName, WrappedComponent.componentId );
-      }
+      // get wrappedComponentPath() {
+      //   return buildInstancePath(this.pageName, this.pageId, WrappedComponent.displayName, WrappedComponent.componentId );
+      // }
 
       getChildContext() {
         const thisProps = {
@@ -153,7 +150,7 @@ export const widgetWrapper = widgetProps => {
             registerBalls: this.context.ballKicker.registerStandardsBall.bind(this.context.ballKicker, this.instancePath)
           }
         );
-        // console.log('widgetProps', this.visible);
+        // console.log('widgetProps',  this.componentId, this.visible);
         return this.visible ? React.createElement(WrappedComponent, newProps) : null;
       }
     }
@@ -168,12 +165,48 @@ export const widgetWrapper = widgetProps => {
       };
     };
 
-    let newComponent = connect(stateMapper)(Widget);
-    newComponent.displayName = connectorName;
-    newComponent.componentId = connectorId; //`Connect(${displayName})`;
+    const ConnnectedWidget = connect(stateMapper)(Widget);
+    // newComponent.displayName = connectorName;
+    // newComponent.componentId = connectorId; //`Connect(${displayName})`;
     // newComponent.contextTypes =  { props: PropTypes.object.isRequired };
     // return hoistStatics(newComponent, Widget, WrappedComponent);
-    return newComponent;
+
+    const targetComponentName = `TargetWidget${WrappedComponent.displayName}`;
+    // const targetComponentId = uniqueId( targetComponentName + '-');
+    class TargetWrapper extends Component {
+      static displayName = targetComponentName
+
+      componentId = uniqueId( targetComponentName + '-')
+
+      static contextTypes = {
+        props: PropTypes.object,
+        // context: PropTypes.object,
+        ballKicker: PropTypes.object
+      }
+
+      constructor(props, context) {
+        super(props, context);
+        const { instancePath, pagePath } = this.context.props;
+        this.context.ballKicker.registerComponent(this.instancePath, instancePath || pagePath);
+
+      }
+
+      get instancePath() {
+        const componentName = targetComponentName;
+        const componentId = this.componentId;
+        const [ pageName, pageId ] = this.context.props.pagePath;
+        // console.log(this.context.props, pageName, pageId, componentName, componentId );
+        return buildInstancePath(pageName, pageId, componentName, componentId );
+      }
+
+      render() {
+        const { children, ...rest } = this.props;
+        
+        // console.log(instance);
+        return <ConnnectedWidget targetInstance={this.instancePath} {...rest} >{children}</ConnnectedWidget>;
+      }
+    }
+    return TargetWrapper;
   };
 };
 

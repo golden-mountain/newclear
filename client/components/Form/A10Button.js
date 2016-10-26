@@ -34,7 +34,7 @@ class A10Button extends Component {
       const modalInstancePath = buildInstancePath(instancePath[0], instancePath[1], pageClass.displayName, pageClass.componentId);
       // const modalInstancePath = this.props.findTargetByName(pageClass.displayName);
       this.modelVisible = getComponentVar(app, modalInstancePath, 'visible');
-      // console.log(this.modelVisible, 'modal instance', modalInstancePath);
+      console.log(this.modelVisible, 'modal instance', modalInstancePath);
       click = () => {
         this.props.kickBall('showMe', null, modalInstancePath);
         return false;
