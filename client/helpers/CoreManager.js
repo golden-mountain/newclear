@@ -9,7 +9,7 @@ import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { buildInstancePath } from 'helpers/actionHelper';
 import ComponentManager from 'helpers/ComponentManager';
-import A10Modal from 'components/Modal';
+// import A10Modal from 'components/Modal';
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -52,7 +52,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     render() {
-      return <Layout> <WrappedElement {...WrappedProps} /> <A10Modal /></Layout>;
+      return <Layout> <WrappedElement {...WrappedProps} /> </Layout>;
     }
   }
 

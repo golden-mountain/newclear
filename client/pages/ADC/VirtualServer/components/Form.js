@@ -62,8 +62,6 @@ class VirtualServerForm extends React.Component {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualServerSchema.properties;
     // console.log(TemplateVirtualServerForm);
-    const instance = React.createElement(TemplateVirtualServerForm);
-    console.log(instance.type.getInstancePath());
 
     const tplVirtualServerPopupInfo = {
       componentClass: TemplateVirtualServerForm,
@@ -72,7 +70,7 @@ class VirtualServerForm extends React.Component {
         bsSize:'lg'
       },
       connectOptions: {
-        connectToResult: {
+        connectToValue: {
           'virtual-server': {
             'template-virtual-server': 'virtual-server.name'
           }
@@ -92,6 +90,7 @@ class VirtualServerForm extends React.Component {
 
     let popupInfo = {
       componentClass: VirtualPortForm,
+      // instancePath: this.props.createInstancePath(),
       urlKeysConnect: [ 'virtual-server.name' ],
       modalProps: {
         title: 'Create Virtual Port',
@@ -118,7 +117,7 @@ class VirtualServerForm extends React.Component {
         <Row>
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-              <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" value="vs2" />
+              <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" />
 
 
               <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>

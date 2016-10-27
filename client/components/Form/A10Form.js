@@ -7,6 +7,7 @@ import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
+import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL } from 'configs/messages';
 
 class SchemaForm {
   static displayName = 'SchemaForm'
@@ -114,7 +115,8 @@ class A10SchemaForm extends Component {
     }
     this._parentProps = context.props;
     // console.log(this.props);
-    this.props.registerBalls();
+    console.log(this.context);
+    // this.props.registerBalls();
   }
 
   // connect
@@ -202,6 +204,7 @@ class A10SchemaForm extends Component {
   render() {
     const {
       instancePath,
+      targetInstancePath,
       children,
       onBeforeSubmit,
       onAfterSubmit,
@@ -214,9 +217,11 @@ class A10SchemaForm extends Component {
     } = this.props;
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
-    const parentInstancePath = this.props.findParent('A10SchemaForm');
-    // console.log(parentInstancePath);
+    // const parentInstancePath = this.props.findParent('A10SchemaForm');
+    // console.log(this._parentProps, this.props);
     let submit = (values) => {
+      // console.log(this._parentProps, this.props);
+
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
       // console.log('1');
       if (onBeforeSubmit) {
@@ -236,9 +241,10 @@ class A10SchemaForm extends Component {
       let result = null;
       // close win
       // console.log(this.context.props, this.props);
-      const closeCurrent = () => {
-        this.props.kickBall('hideMe', null, parentInstancePath);
-      };
+      // const closeCurrent = () => {
+      //   console.log('modal parent', targetInstancePath);
+      //   this.props.kickBall(HIDE_COMPONENT_MODAL, null, targetInstancePath);
+      // };
       // console.log('4');
       // update values
       if (has(fieldConnector , 'options.connectToValue')) {
@@ -253,8 +259,17 @@ class A10SchemaForm extends Component {
         }
       }
 
+
       // console.log('resolevd, execute close win2');
-      result.then((data) => { this.props.kickBall('updateSelect', { data } ); closeCurrent(); });
+      // console.log(this._parentProps, targetInstancePath, this.props);
+      result.then(() => {
+        // console.log(targetInstancePath, '..................a t 10 form');
+        const parentInstancePath = this.props.findParent('A10SchemaForm');
+        // console.log('parentInstancePath', parentInstancePath, this.props.instancePath);
+        this.props.kickBall(UPDATE_TARGET_DATA, newValues, targetInstancePath );
+        // this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
+        this.props.kickBall(HIDE_COMPONENT_MODAL, null, parentInstancePath);
+      });
       return result;
     };
 

@@ -1,40 +1,57 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
-import { SHOW_COMPONENT_AS_MODAL } from 'configs/messages';
+import { SHOW_COMPONENT_AS_MODAL, HIDE_COMPONENT_MODAL } from 'configs/messages';
 import { widgetWrapper } from 'helpers/widgetWrapper';
+
+class ModalLayout extends Component {
+  render() {
+    const { children, visible, title, ...props } = this.props;
+    return (<Modal show={visible}  {...props}>
+      <Modal.Header>
+        <Modal.Title>{ title }</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        {children}
+      </Modal.Body>
+    </Modal>);
+  }
+}
 
 class A10Modal extends Component {
   static displayName = 'A10Modal'
-  state = { visible: false, params: null }
+  state = { modals: [] }
 
   constructor(props, context) {
     super(props, context);
-    this.props.catchBall(SHOW_COMPONENT_AS_MODAL, (from, to, params) => {
-      console.log(from, to, params);
-      console.log('catched the ball', params);
-      this.setState({ visible: true, params });
+    this.props.catchBall(SHOW_COMPONENT_AS_MODAL, (from, to, params) => { // eslint-disable-line
+      // console.log('catched the ball', from, params);
+      let modals = this.state.modals;
+      modals.push(params);
+      this.setState({ modals });
+    });
+
+    this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
+      let modals = this.state.modals;
+      modals.pop(params);
+      this.setState({ modals });
     });
   }
 
+
   render() {
-    if (!this.state.visible) {
-      return null;
-    } else {
-      const { componentClass, modalProps: { title, props }, ...rest } = this.state.params;
-      const ComponentClass = componentClass;
 
-      return (
-        <Modal show={this.state.visible}  {...props}>
-          <Modal.Header>
-            <Modal.Title>{ title }</Modal.Title>
-          </Modal.Header>
+    return (
+      <div className="modalHome">
+        { this.state.modals.map((modal, index) => {
+          const { componentClass, modalProps, ...rest } = modal;
+          console.log('...',componentClass, rest);
+          const ComponentClass = componentClass;
+          return <ModalLayout key={index} visible {...modalProps}><ComponentClass modal {...rest } /></ModalLayout>;
+        }) }
+      </div>
+    );
 
-          <Modal.Body>
-            <ComponentClass {...rest} />
-          </Modal.Body>
-        </Modal>
-      );
-    }
   }
 }
 

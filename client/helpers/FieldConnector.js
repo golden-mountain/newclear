@@ -1,14 +1,20 @@
 import { toPath, set } from 'lodash';
 import { fromJS, List } from 'immutable';
 // import { axapiGet } from 'helpers/axapiHelper';
+import { change } from 'redux-form/immutable'; // imported Field
 
 export default class FieldConnector {
-  constructor(options, formData, env, change) {
+  constructor(options, formData, env, onChange=null) {
     this.options = options;
     this._formData = formData;
     this._env = env;
-    this._change = change;
-    // console.log('...............', options, formData, env, change);
+    if (typeof onChange === 'function') {
+      this._change = onChange;
+    } else {
+      this._change = (objectName, values) => {
+        return change(env.form, objectName, values);
+      };
+    }
   }
 
   getOptions() {
@@ -37,7 +43,6 @@ export default class FieldConnector {
         obj.push(newObj);
       } else {
         // console.log('formValue is object', formValue);
-        //TODO: form change value not triggled??
         map.forEach((source, target) => {
           let v = values.getIn(toPath(source));
           if (v) {

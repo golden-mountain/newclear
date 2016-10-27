@@ -28,7 +28,7 @@ class ComponentListener {
     // console.log(this, instancePath);
     for (let event in this.standBalls) {
       const eventAction = this.standBalls[event];
-      this.ballKicker.addListener( event, eventAction.bind(this), [ from, to ] );
+      this.ballKicker.accept([], event, eventAction.bind(this) );
     }
   }
 }
@@ -160,7 +160,7 @@ export default class ComponentManager {
           return;
         }
       });
-      path = nextNode.getPath();
+      nextNode && (path = nextNode.getPath());
     }
 
     let result = path.slice(-3, -2)[0];

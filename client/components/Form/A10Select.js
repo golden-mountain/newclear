@@ -13,20 +13,29 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 
 import { values, get, isArray } from 'lodash';
+import { UPDATE_TARGET_DATA } from 'configs/messages';
+
+import FieldConnector from 'helpers/FieldConnector';
+
 
 class A10Select extends Component {
   static displayName = 'A10Select'
 
   static contextTypes = {
-    props: PropTypes.object.isRequired
+    props: PropTypes.object,
+    ballKicker: PropTypes.object
   }
 
   constructor(props, context) {
     super(props, context);
-    this.props.catchBall('updateSelect', () => {
-      // console.log(from, to, newValue);
+    console.log(this.context.props, this.props);
+    this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
+      const { popupInfo: { connectOptions } } = this.props;
+      const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
+      console.log(from, to, params);
       this.getOptions();
-      this.newValue = 'a1';
+      // this.newValue = 'a1';
+      fieldConnector.connectToValues(params);
     });
   }
 
@@ -108,9 +117,9 @@ class A10Select extends Component {
     const formattedOptions = this.formatOptions(data);
     // console.log(data);
     // const asyncNeeded = loadOptions && loadOptions.url && true;
-    let setValue = this.newValue || value;
-    console.log('set to VirtualizedSelect value', setValue);
-    const loadAttr = { value: setValue, onChange, options: formattedOptions, simpleValue: true };
+    // let setValue = this.newValue || value;
+    // console.log('set to VirtualizedSelect value', setValue);
+    const loadAttr = { value, onChange, options: formattedOptions, simpleValue: true };
 
     // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
     // set(popupInfo, 'id', 'default');
@@ -120,7 +129,7 @@ class A10Select extends Component {
       <InputGroup>
         <VirtualizedSelect {...loadAttr}/>
         <InputGroup.Addon>
-          <A10Button popup={ popupInfo } componentClass="a">+</A10Button>
+          <A10Button popup={ popupInfo } componentClass="a" >+</A10Button>
         </InputGroup.Addon>
       </InputGroup>
       :
@@ -128,9 +137,5 @@ class A10Select extends Component {
     );
   }
 }
-
-A10Select.contextTypes = {
-  actions: PropTypes.object
-};
 
 export default widgetWrapper()(A10Select);

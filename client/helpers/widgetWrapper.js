@@ -54,6 +54,13 @@ export const widgetWrapper = widgetProps => {
         return appActions;
       }
 
+      createInstancePath(prefix='') {
+        if (!prefix) {
+          prefix = this.componentName;
+        }
+        return buildInstancePath(this.pageName, this.pageId, prefix, uniqueId(prefix + '-') );
+      }
+
       get componentName() {
         return displayName;
       }
@@ -92,6 +99,9 @@ export const widgetWrapper = widgetProps => {
       }
 
       get instancePath() {
+        if (this.props._instancePath) {
+          return this.props._instancePath;
+        }
         return buildInstancePath(this.pageName, this.pageId, this.componentName, this.componentId );
       }
 
@@ -110,21 +120,22 @@ export const widgetWrapper = widgetProps => {
           this.context.props,
           thisProps
         );
-        // console.log(this.context.props, thisProps);
+        // console.log(this.context.props);
         return {  props: props, cm: this.context.cm };
       }
 
       render() {
-        // const { modalProps } = this.props;
-        // console.log(this.context.props);
+        // console.log(this.props);
         const newProps = Object.assign(
           {}, this.props, this.getNewMethods(this.instancePath),
           {
             instancePath: this.instancePath,
+            parentPath: this.context.props.instancePath,
             data: this.data,
             visible: this.visible,
             activeData: this.activeData,
             instanceData: this.instanceData,
+            createInstancePath: this.createInstancePath.bind(this),
             findParent: this.cm.findParent.bind(this.cm, this.instancePath),
             findTargetByName: this.cm.findTargetByComponentName.bind(this.cm),
             findBallReceiver: this.cm.findTargetReceiver.bind(this.cm, this.instancePath),

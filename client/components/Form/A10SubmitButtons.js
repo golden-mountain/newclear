@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import { setLastPageVisible } from '';
+import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 
 export class A10SubmitButtons extends Component {
   buttons = {
@@ -39,8 +40,8 @@ export class A10SubmitButtons extends Component {
   }
 
   close() {
-    const { modalInstancePath } = this.props;
-    this.props.kickBall('hideMe', null, modalInstancePath);
+    console.log('Close ... ', this.props.instancePath);
+    this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
   }
 
   render() {
