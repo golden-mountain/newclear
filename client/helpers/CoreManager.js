@@ -56,6 +56,10 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
   }
 
+  if (!config.page) {
+    config.page = '404';
+  }
+
   if (!config.form) {
     config.form = config.page;
   }

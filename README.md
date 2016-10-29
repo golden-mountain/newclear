@@ -6,3 +6,17 @@
 > LiveReload
 > React Developer Tools
 > Redux DevTools
+
+# Module Manager
+> Module Visible: license, oem
+> Page switch: transition
+
+name,
+pages: { enabled: true },
+
+visibleManager: [
+  license
+],
+
+
+

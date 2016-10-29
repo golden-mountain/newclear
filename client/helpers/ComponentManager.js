@@ -54,7 +54,7 @@ export default class ComponentManager {
 
   registerComponent(instancePath, parentInstancePath=[ 'root' ]) {
     let node = null;
-    if (typeof instancePath[0] !== 'string') {
+    if (typeof instancePath[0] == 'object') {
       // list
       instancePath.forEach((instance) => {
         let n1 = this.componentTreeModel.parse({
@@ -67,11 +67,13 @@ export default class ComponentManager {
           node = n1;
         }
       });
-    } else {
+    } else if (instancePath[0]) {
       node = this.componentTreeModel.parse({
         id: this.getInstanceId(instancePath),
         instancePath
       });
+    } else {
+      return false;
     }
     // console.log(node, '>>>>>>>>>>>>>>>>node');
 

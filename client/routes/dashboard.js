@@ -7,6 +7,4 @@ const DashboardPage = asyncComponent(() =>
   System.import('pages/Dashboard').then(module => module.default)
 );
 
-export default [
-  <Match key="default_dashboard" pattern="/"  exactly component={DashboardPage} />
-];
+export default  <Match key="default_dashboard" pattern="/"  exactly component={DashboardPage} />;
