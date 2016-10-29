@@ -3,8 +3,7 @@ import RouterBase from 'helpers/RouterBase';
 import asyncComponent from 'helpers/asyncComponent';
 
 const SLBDashboard = asyncComponent(() =>
-  System.import('./slb').then(module => module.default), 
-  false
+  System.import('./slb').then(module => module.default)
 );
 
 

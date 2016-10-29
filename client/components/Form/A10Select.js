@@ -28,11 +28,11 @@ class A10Select extends Component {
 
   constructor(props, context) {
     super(props, context);
-    console.log(this.context.props, this.props);
+    // console.log(this.context.props, this.props);
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
       const { popupInfo: { connectOptions } } = this.props;
       const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
-      console.log(from, to, params);
+      // console.log(from, to, params);
       this.getOptions();
       // this.newValue = 'a1';
       fieldConnector.connectToValues(params);

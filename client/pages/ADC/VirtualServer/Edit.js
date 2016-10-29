@@ -3,8 +3,9 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualServerForm from './components/Form';
+import PageBase from 'helpers/PageBase';
 
-export default class VirtualServerEdit extends React.Component {
+export default class VirtualServerEdit extends PageBase {
 
   render() {
 

@@ -1,7 +1,27 @@
 import React from 'react';
-import { Match } from 'react-router';
+import { Match, Redirect } from 'react-router';
+import { isEqual } from 'lodash';
+
 // import { TransitionMotion, spring } from 'react-motion';
-export const MatchWithFade = Match;
+import BallKicker from 'helpers/BallKicker';
+import { REDIRECT_ROUTE } from 'configs/messages';
+
+export const MatchWithFade = ({ component:Component, activePath: { activePath, params }, ...rest }) => {
+  console.log( activePath, params);
+  return (
+    <Match {...rest} render={(props) => (
+      activePath ?
+        (<Redirect to={{
+          pathname: activePath,
+          query: params,
+          state: { referrer: props.location }
+        }}/>)
+      :
+      (<Component {...props} />)
+
+    )} />
+  );
+};
 
 // export const MatchWithFade = ({ component:Component, ...rest }) => {
 //   const willLeave = () => ({ zIndex: 1, opacity: spring(0) });
@@ -44,12 +64,30 @@ export const MatchWithFade = Match;
 // };
 
 export default class RouterBase extends React.Component {
+  static paths = {}
   path = ''
-  pages = ''
+  pages = {}
+  activePath = ''
 
-  // state = {
-  //   activePage: 'list'
-  // }
+  state = {
+    activePath: '',
+    params: {}
+  }
+
+  constructor(props) {
+    super(props);
+    this.ballKicker = new BallKicker();
+    this.ballKicker.accept([], REDIRECT_ROUTE, (from, to, { path, params }) => {
+      if (RouterBase.paths[path]) {
+        this.setState({ activePath: RouterBase.paths[path], params: params });
+      }
+    }, []);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
+    // console.log(nextState, this.state);
+    return !isEqual(this.state, nextState);
+  }
 
   buildPath(page) {
     const { path:parentPath } = this.props;
@@ -64,18 +102,18 @@ export default class RouterBase extends React.Component {
     }
   }
 
-  render() {    
+  render() {
     return (
       <div>
         {
           Object.entries(this.pages).map(([ pageName, PageComponent ]) => {
             const path = this.buildPath(pageName);
-            // console.log(path);
-            return <MatchWithFade key={path} pattern={path} component={PageComponent} />;
+            RouterBase.paths[pageName] = path;
+            return <MatchWithFade key={path} pattern={path} component={PageComponent} activePath={this.state} />;
           })
         }
       </div>
     );
   }
-  
+
 }

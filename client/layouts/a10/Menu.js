@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import './scss/Menu.scss';
+const List = ({ children, className }) => {
+  return <li className={ className }> { children } </li>;
+};
 
 export default ({ children }) => (
  <Navbar inverse fluid>
@@ -14,20 +17,20 @@ export default ({ children }) => (
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
-        <NavItem href="/dev/apitester">API Tester</NavItem>
+        <List><Link to="/dev/apitester">API Tester</Link></List>
         <NavDropdown eventKey={3} title="ADC" id="basic-nav-dropdown">
-          <MenuItem href="/adc/virtual-server/edit">Edit Virtual Server</MenuItem>
-          <MenuItem href="/adc/virtual-server/list">Virtual Servers</MenuItem>
-          <MenuItem href="/adc/virtual-server/port/edit">Virtual Port</MenuItem>
-          <MenuItem href="/adc/template/virtual-server/edit">Virtual Server Template</MenuItem>
+          <List><Link to="/adc/virtual-server/edit">Edit Virtual Server</Link></List>
+          <List><Link to="/adc/virtual-server/list">Virtual Servers</Link></List>
+          <List><Link to="/adc/virtual-port/edit">Virtual Port</Link></List>
+          <List><Link to="/adc/template-virtual-server/edit">Virtual Server Template</Link></List>
         </NavDropdown>
       </Nav>
-      {sessionStorage.token && 
+      {sessionStorage.token &&
         <Nav pullRight>
-          <NavItem href="/logout">Logout</NavItem>
+          <List><Link to="/auth/logout">Logout</Link></List>
         </Nav>
       }
       {children}
-    </Navbar.Collapse>   
+    </Navbar.Collapse>
   </Navbar>
 );

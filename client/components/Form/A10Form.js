@@ -115,7 +115,7 @@ class A10SchemaForm extends Component {
     }
     this._parentProps = context.props;
     // console.log(this.props);
-    console.log(this.context);
+    // console.log(this.context);
     // this.props.registerBalls();
   }
 

@@ -31,12 +31,12 @@ class A10Button extends Component {
     const { popup: { componentClass, ...componentProps }, parentPath } = this.props;  // eslint-disable-line
     const ModalComponent = componentClass;
     // console.log('A10Button', parentPath, this.contentInstancePath);
-    return <ModalComponent {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} />;
+    return <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} />;
   }
 
   render() {
     const { children, componentClass, popup: { modalProps } } = this.props;
-    const modalChildren = this.createModalChildren();
+    // const modalChildren = this.createModalChildren();
 
     let buttonStyle = {
       cursor: 'pointer'
@@ -52,9 +52,11 @@ class A10Button extends Component {
     return (
       <ButtonClass onClick={click} style={buttonStyle}>
         {children}
-        <ModalLayout visible={this.state.visible} {...modalProps} >
-          { modalChildren }
-        </ModalLayout>
+        { modalProps ?
+          <ModalLayout visible={this.state.visible} {...modalProps} >
+            { this.createModalChildren() }
+          </ModalLayout>
+        : null}
       </ButtonClass>);
   }
 }

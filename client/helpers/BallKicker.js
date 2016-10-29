@@ -7,7 +7,11 @@ export default class BallKicker {
    * Tree format:
    * { eventName: [{ from, to }, { from, to } , ...]  }
    */
-  eventTree = {}
+  static eventTree = {}
+
+  constructor() {
+    this.eventTree = BallKicker.eventTree;
+  }
 
   // getEventId(instancePath, event) {
   //   const eventId = instancePath.join('_');

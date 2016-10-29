@@ -15,6 +15,7 @@ export default function asyncComponent(getComponent, Layout=AppLayout) {
           this.setState({ Component });
         });
       }
+      // console.log(this.props, ' show props at async component');
     }
 
     render() {
