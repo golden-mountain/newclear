@@ -4,8 +4,9 @@ import { Col, Row } from 'react-bootstrap';
 
 import VirtualServerForm from './components/Form';
 import PageBase from 'helpers/PageBase';
+import pageWrapper from 'helpers/pageWrapper';
 
-export default class VirtualServerEdit extends PageBase {
+class VirtualServerEdit extends PageBase {
 
   render() {
 
@@ -22,3 +23,5 @@ export default class VirtualServerEdit extends PageBase {
     );
   }
 }
+
+export default pageWrapper(VirtualServerEdit);

@@ -1,6 +1,6 @@
 // import EventEmitter from 'wolfy87-eventemitter';
 //  extends EventEmitter
-import { isEqual } from 'lodash';
+import { isEqual, remove } from 'lodash';
 
 export default class BallKicker {
   /**
@@ -47,18 +47,34 @@ export default class BallKicker {
   }
 
   _isSubsetComponent(to, storedTo) {
-    console.log('to:', to, ' stored event: ', storedTo);
+    // console.log('to:', to, ' stored event: ', storedTo);
     // system registered event
     if (to.length == 0) {
       return true;
     }
 
-    let diff = storedTo;
-    if (to.length == 3) {
-      diff = storedTo.slice(0, 2);
-      console.log('diff', diff);
+    if (storedTo.length < to.length) {
+      return false;
     }
+
+    const diff = storedTo.slice(0, to.length);
+    // console.log('diff', diff);
     return isEqual(to, diff);
+  }
+
+  removeEvent(to) {
+    Object.entries(this.eventTree).forEach(([ event, storedEvents ]) => { //eslint-disable-line
+      storedEvents.forEach((stored, index) => {
+        if (to.length <= 3 && this._isSubsetComponent(to, stored.to)) {
+          remove(storedEvents, (obj, n) => {
+            return n === index;
+          });
+          this.eventTree[event] = storedEvents;
+        }
+      });
+    });
+    // console.log('after remove:' ,this.eventTree);
+    // this.dumpEventTree();
   }
 
   kick(from, event, params=null, to=[]) {

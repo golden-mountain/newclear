@@ -7,3 +7,6 @@ export const UPDATE_TARGET_DATA = 'UPDATE_TARGET_DATA';
 
 // event on pages
 export const REDIRECT_ROUTE = 'REDIRECT_ROUTE';
+
+// form modal
+export const SUBMIT_FORM = 'SUBMIT_FORM';

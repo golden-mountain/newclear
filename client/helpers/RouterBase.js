@@ -1,24 +1,15 @@
 import React from 'react';
-import { Match, Redirect } from 'react-router';
-import { isEqual } from 'lodash';
+import { Match } from 'react-router';
+import { isEqual, set } from 'lodash';
 
 // import { TransitionMotion, spring } from 'react-motion';
-import BallKicker from 'helpers/BallKicker';
-import { REDIRECT_ROUTE } from 'configs/messages';
+// import BallKicker from 'helpers/BallKicker';
+// import { REDIRECT_ROUTE } from 'configs/messages';
 
-export const MatchWithFade = ({ component:Component, activePath: { activePath, params }, ...rest }) => {
-  console.log( activePath, params);
+export const MatchWithFade = ({ component:Component, paths, ...rest }) => {
   return (
     <Match {...rest} render={(props) => (
-      activePath ?
-        (<Redirect to={{
-          pathname: activePath,
-          query: params,
-          state: { referrer: props.location }
-        }}/>)
-      :
-      (<Component {...props} />)
-
+      (<Component {...props} paths={paths} />)
     )} />
   );
 };
@@ -69,36 +60,40 @@ export default class RouterBase extends React.Component {
   pages = {}
   activePath = ''
 
-  state = {
-    activePath: '',
-    params: {}
-  }
+  // state = {
+  //   activePath: '',
+  //   params: {}
+  // }
 
-  constructor(props) {
-    super(props);
-    this.ballKicker = new BallKicker();
-    this.ballKicker.accept([], REDIRECT_ROUTE, (from, to, { path, params }) => {
-      if (RouterBase.paths[path]) {
-        this.setState({ activePath: RouterBase.paths[path], params: params });
-      }
-    }, []);
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.ballKicker = new BallKicker();
+  //   this.ballKicker.accept([], REDIRECT_ROUTE, (from, to, { path, params }) => {
+  //     if (RouterBase.paths[path]) {
+  //       this.setState({ activePath: RouterBase.paths[path], params: params });
+  //     }
+  //   }, []);
+  // }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
     // console.log(nextState, this.state);
     return !isEqual(this.state, nextState);
   }
 
+  get paths() {
+    return RouterBase.paths;
+  }
+
   buildPath(page) {
     const { path:parentPath } = this.props;
     if (parentPath == this.path) {
       if ( parentPath == page ) {
-        return `/${page}`;
+        return [ page ];
       } else {
-        return `/${parentPath}/${page}`;
+        return [ this.path, page ];
       }
     } else {
-      return `/${parentPath}/${this.path}/${page}`;
+      return [ parentPath, this.path, page ];
     }
   }
 
@@ -107,9 +102,10 @@ export default class RouterBase extends React.Component {
       <div>
         {
           Object.entries(this.pages).map(([ pageName, PageComponent ]) => {
-            const path = this.buildPath(pageName);
-            RouterBase.paths[pageName] = path;
-            return <MatchWithFade key={path} pattern={path} component={PageComponent} activePath={this.state} />;
+            const paths = this.buildPath(pageName);
+            const path = '/' + paths.join('/');
+            set(RouterBase.paths, paths.join('.'), path);
+            return <MatchWithFade key={path} pattern={path} component={PageComponent} paths={this.paths} />;
           })
         }
       </div>

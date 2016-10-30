@@ -3,8 +3,10 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import TemplateVirtualServerForm from './components/Form';
+import PageBase from 'helpers/PageBase';
+import pageWrapper from 'helpers/pageWrapper';
 
-export default class TemplateVirtualServerEdit extends React.Component {
+class TemplateVirtualServerEdit extends PageBase {
 
   render() {
     return (
@@ -17,3 +19,4 @@ export default class TemplateVirtualServerEdit extends React.Component {
   }
 }
 
+export default pageWrapper(TemplateVirtualServerEdit);

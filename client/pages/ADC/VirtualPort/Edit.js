@@ -3,8 +3,10 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualPortForm from './components/Form';
+import PageBase from 'helpers/PageBase';
+import pageWrapper from 'helpers/pageWrapper';
 
-export default class VirtualPortEdit extends React.Component {
+class VirtualPortEdit extends PageBase {
 
 
   render() {
@@ -19,3 +21,4 @@ export default class VirtualPortEdit extends React.Component {
   }
 }
 
+export default pageWrapper(VirtualPortEdit);

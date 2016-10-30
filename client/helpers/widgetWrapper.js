@@ -112,6 +112,9 @@ export const widgetWrapper = widgetProps => {
       getChildContext() {
         const thisProps = {
           instancePath: this.instancePath,
+          // modal: this.props.modal || false,
+          // // example, the A10Select is the target element to update
+          // targetInstancePath: this.props.targetInstancePath,
           ...this.getNewMethods(this.instancePath)
         };
 
@@ -120,7 +123,7 @@ export const widgetWrapper = widgetProps => {
           this.context.props,
           thisProps
         );
-        // console.log(this.context.props);
+        // console.log(this.context.props, this.props);
         return {  props: props, cm: this.context.cm };
       }
 

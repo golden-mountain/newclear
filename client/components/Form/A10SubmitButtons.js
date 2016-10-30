@@ -28,7 +28,7 @@ export class A10SubmitButtons extends Component {
     },
     login: ({ submitting }, index) => {
       return (
-        <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
+        <Button type="button" disabled={submitting} onClick={::this.submit} bsStyle="success" key={index}>
           {submitting ? <i/> : <i/>} Login
        </Button>
       );
@@ -40,13 +40,23 @@ export class A10SubmitButtons extends Component {
   }
 
   close() {
-    console.log('Close ... ', this.props, this.context.props);
+    // console.log('Close ... ', this.props, this.context.props);
     if (this.props.modal) {
       this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
     } else {
-      this.props.kickBall(REDIRECT_ROUTE, { path:'list' });
+      this.props.kickBall(REDIRECT_ROUTE, { path: 'list' });
     }
   }
+
+  // submit() {
+  //   console.log('')
+  //   this.props.kickBall(SUBMIT_FORM, null, this.props.instancePath);
+  //   if (this.props.modal) {
+  //     this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
+  //   } else {
+  //     this.props.kickBall(REDIRECT_ROUTE, { path: 'list' });
+  //   }    
+  // }
 
   render() {
     const { buttons=[ 'create', 'cancel' ] } = this.props;

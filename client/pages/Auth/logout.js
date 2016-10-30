@@ -1,10 +1,11 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import auth from 'helpers/auth';
 // import { withRouter } from 'react-router';
 import Redirect from 'react-router/Redirect';
+import PageBase from 'helpers/PageBase';
 
-class Logout extends Component {
+class Logout extends PageBase {
   static propTypes = {
     children: PropTypes.node
   }

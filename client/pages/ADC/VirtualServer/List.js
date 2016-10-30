@@ -1,12 +1,12 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import VirtualServerTable from './components/Table';
+import PageBase from 'helpers/PageBase';
+import pageWrapper from 'helpers/pageWrapper';
 
-export default class VirtualServerList extends React.Component {
-  static contextTypes = {
-    props: PropTypes.object.isRequired
-  }
+class VirtualServerList extends PageBase {
+  
   
   render() {    
     
@@ -20,3 +20,4 @@ export default class VirtualServerList extends React.Component {
   }
 }
 
+export default pageWrapper(VirtualServerList);
