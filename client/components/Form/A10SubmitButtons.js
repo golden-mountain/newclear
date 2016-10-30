@@ -28,7 +28,7 @@ export class A10SubmitButtons extends Component {
     },
     login: ({ submitting }, index) => {
       return (
-        <Button type="button" disabled={submitting} onClick={::this.submit} bsStyle="success" key={index}>
+        <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
           {submitting ? <i/> : <i/>} Login
        </Button>
       );

@@ -27,8 +27,8 @@ const fieldReducers = {
       return state.setIn([ APP_CURRENT_PAGE, 'store', form ], old);
     }
   },
-  [ TRIGGLE_VALIDATION ](state, { parentPath, payload }) {
-    console.log(parentPath, payload);
+  [ TRIGGLE_VALIDATION ](state, { parentPath, field, value }) { // eslint-disable-line
+    // console.log(parentPath, field, value);
     return state;
   }
 };
@@ -52,6 +52,6 @@ export const setFieldConditial = (instancePath, parentPath, field, value) => {
 };
 
 export const triggleValidation = (instancePath, parentPath, field, value) => {
-  // console.log(instancePath, field, value);
-  return { type: TRIGGLE_VALIDATION, instancePath, field, value };
+  // console.log(instancePath, parentPath, field, value);
+  return { type: TRIGGLE_VALIDATION, instancePath, parentPath, field, value };
 };

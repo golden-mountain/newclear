@@ -264,6 +264,7 @@ class SchemaField extends Component {
     const visible = app.getIn([ ...instanceParentPath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
 
     const onChange = (value) => {
+      console.log(instanceParentPath);
       ::this.props.comSetFieldConditial(instanceParentPath, name, value);
     };
 

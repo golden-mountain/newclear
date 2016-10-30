@@ -33,29 +33,24 @@ class VirtualServerTable extends React.Component {
       return cell.toUpperCase();
     };
 
-    const formatName = (cell) => {
-      let popupInfo = {
-        pageClass: VirtualServerForm,
+    const formatName = (cell) => {  
+
+      const popupInfo = {
+        componentClass: VirtualServerForm,
         urlKeysConnect: [ 'virtual-server.name' ],
-        title: 'Create Virtual Server',
-        // pageName: 'virtual-server-edit',
         id: cell,
-        bsSize:'lg'
-        // connectOptions: {
-        //   connectToValue: {
-        //     'virtual-server.port-list': {
-        //       'port-number': 'port.port-number',
-        //       'range': 'port.range',
-        //       'protocol': 'port.protocol'
-        //     }
-        //   },
-        //   connectToApiStore: {
-        //     targetIsArray: true,
-        //     target: 'virtual-server.port-list',
-        //     source: 'port'
-        //   }
-        // }
-      };      
+        modalProps: {
+          title: 'Edit Virtual Server',
+          bsSize:'lg'
+        },
+        connectOptions: {
+          connectToValue: {
+            'virtual-server': {
+              'template-virtual-server': 'virtual-server.name'
+            }
+          }
+        }
+      };
       return <A10Button popup={ popupInfo } componentClass="a">{cell}</A10Button>;
       // return <Link to={`/adc/virtual-server/edit/${cell}`} >{cell}</Link>;
     };

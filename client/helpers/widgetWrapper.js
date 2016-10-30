@@ -110,27 +110,25 @@ export const widgetWrapper = widgetProps => {
       // }
 
       getChildContext() {
-        const thisProps = {
-          instancePath: this.instancePath,
-          // modal: this.props.modal || false,
-          // // example, the A10Select is the target element to update
-          // targetInstancePath: this.props.targetInstancePath,
-          ...this.getNewMethods(this.instancePath)
-        };
-
         const props = Object.assign(
           {},
           this.context.props,
-          thisProps
+          this.getNewProps()
         );
-        // console.log(this.context.props, this.props);
-        return {  props: props, cm: this.context.cm };
+
+        return { props: props, cm: this.context.cm };
       }
 
-      render() {
-        // console.log(this.props);
-        const newProps = Object.assign(
-          {}, this.props, this.getNewMethods(this.instancePath),
+      componentWillUnmount() {
+        // console.log('removed event from ', this.basePath);
+        this.cm.ballKicker.removeEvent(this.instancePath);
+      }
+
+      getNewProps() {
+        return Object.assign(
+          {}, 
+          this.props, 
+          this.getNewMethods(this.instancePath),
           {
             instancePath: this.instancePath,
             parentPath: this.context.props.instancePath,
@@ -147,6 +145,11 @@ export const widgetWrapper = widgetProps => {
             registerBalls: this.cm.listener.registerStandardBalls.bind(this.cm.listener, this.instancePath)
           }
         );
+      }
+
+      render() {
+        // console.log(this.props);
+        const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
         return (this.visible ? <WrappedComponent  {...newProps} /> : null);
       }
@@ -175,10 +178,10 @@ export const widgetWrapper = widgetProps => {
         cm: PropTypes.object
       }
 
-      static childContextTypes = {
-        props: PropTypes.object,
-        cm: PropTypes.object
-      }
+      // static childContextTypes = {
+      //   props: PropTypes.object,
+      //   cm: PropTypes.object
+      // }
 
       constructor(props, context) {
         super(props, context);
@@ -186,9 +189,9 @@ export const widgetWrapper = widgetProps => {
         this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
       }
 
-      getChildContext() {
-        return {  props: this.context.props, cm: this.context.cm };
-      }
+      // getChildContext() {
+      //   return {  props: this.context.props, cm: this.context.cm };
+      // }
 
       get instancePath() {
         const componentName = targetComponentName;

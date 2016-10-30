@@ -39,6 +39,7 @@ class FormHacker {
     const pageEnv = getAppEnvVar(this.state);
     const pageVar = getPageVar(this.state, this.action.parentPath );
     const reduxFormVar = getFormVar(this.state, pageEnv.form);
+    // console.log(pageVar, this.action);
 
     return { pageEnv, pageVar, reduxFormVar };
   }
@@ -75,11 +76,12 @@ class FormHacker {
           // console.log('validations is Iterable..............', validations, Iterable.isIterable(validations));
           validations.forEach((func, k) => { // eslint-disable-line
             let msg = '';
-            if (elementValue !== undefined && k !== 'required') {
+            // console.log(func, k, elementValue);
+            if ((elementValue !== undefined && k !== 'required') || (k === 'required' || k === 'object-key')) {
               msg = func(elementValue, name, reduxFormVar, pageVar);
+              // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue, ' rule:', k);
             }
 
-            // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue);
             if (msg) {
               result = result.setIn(toPath(name), msg);
               return msg;

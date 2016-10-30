@@ -7,7 +7,7 @@ import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
-import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL } from 'configs/messages';
+import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from 'configs/messages';
 
 class SchemaForm {
   static displayName = 'SchemaForm'
@@ -190,14 +190,12 @@ class A10SchemaForm extends Component {
     const formFields = this.props.page.getIn([ ...instanceParentPath, FORM_FIELD_KEY ]);
     formFields.forEach((fieldProps, fieldName) => {
       const visible = fieldProps.getIn([ 'conditionals', 'visible' ]);
-      // console.log(visible, ' is field visible, and field name is ', fieldName);
 
       if (!visible) {
         newValues = newValues.deleteIn(toPath(fieldName));
       }
     });
 
-    // console.log('field values', newValues.toJS());
     return newValues;
   }
 
@@ -218,19 +216,18 @@ class A10SchemaForm extends Component {
     // console.log(urlKeys, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this._parentProps;
     // const parentInstancePath = this.props.findParent('A10SchemaForm');
-    // console.log(this._parentProps, this.props);
+    // console.log(this._parentProps);
     let submit = (values) => {
-      // console.log(this._parentProps, this.props);
+      // validation triggle
+      const parentInstancePath = this.props.findParent(A10SchemaForm.displayName);
+      this.props.comTriggleValidation(parentInstancePath);
 
       let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
-      // console.log('1');
       if (onBeforeSubmit) {
         patchedValues = onBeforeSubmit(newValues);
       }
-      // console.log('2');
       // let visible data hidden
       newValues = this.dataFinalize(newValues);
-      // console.log('3');
       // patch values need keep outside newValues, otherwise, data finalizer could be remove it by visible
       newValues = newValues.mergeDeep(fromJS(patchedValues));
 
@@ -239,14 +236,6 @@ class A10SchemaForm extends Component {
       }
 
       let result = null;
-      // close win
-      // console.log(this.context.props, this.props);
-      // const closeCurrent = () => {
-      //   console.log('modal parent', targetInstancePath);
-      //   this.props.kickBall(HIDE_COMPONENT_MODAL, null, targetInstancePath);
-      // };
-      // console.log('4');
-      // update values
       if (has(fieldConnector , 'options.connectToValue')) {
         // fieldConnector.connectToValues(newValues);
         result = submitFunc.call(this, newValues, instancePath[0], false);
@@ -259,16 +248,14 @@ class A10SchemaForm extends Component {
         }
       }
 
-
-      // console.log('resolevd, execute close win2');
-      // console.log(this._parentProps, targetInstancePath, this.props);
       result.then(() => {
-        // console.log(targetInstancePath, '..................a t 10 form');
-        const parentInstancePath = this.props.findParent('A10SchemaForm');
-        // console.log('parentInstancePath', parentInstancePath, this.props.instancePath);
         this.props.kickBall(UPDATE_TARGET_DATA, newValues, targetInstancePath );
-        // this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
-        this.props.kickBall(HIDE_COMPONENT_MODAL, null, parentInstancePath);
+        if (this._parentProps.modal) {
+          this.props.kickBall(HIDE_COMPONENT_MODAL, null, parentInstancePath);
+        } else {
+          this.props.kickBall(REDIRECT_ROUTE, { path: 'list' });
+        }
+        
       });
       return result;
     };

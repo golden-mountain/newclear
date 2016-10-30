@@ -14,7 +14,7 @@ class VirtualPort extends React.Component {
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     const elements = slbVirtualPortSchema.properties;
-
+    // console.log(this.props, this.context);
     const urlKeys = { 'name': 'vs2' };
     return (
       <A10Form schemas={[ slbVirtualPortSchema ]} edit={false} urlKeys={urlKeys} horizontal>

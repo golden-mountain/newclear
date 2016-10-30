@@ -94,6 +94,10 @@ export default class ComponentManager {
     mountNode.addChild(node);
   }
 
+  // unregisterComponent(instancePath) {
+  
+  // }
+
   printComponentTree() {
     console.log('--------------------------- Start Print Tree -------------------------------');
     this.printComponentTree2(this.componentTree);

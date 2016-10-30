@@ -35,18 +35,24 @@ class A10Button extends Component {
   }
 
   render() {
-    const { children, componentClass, popup: { modalProps } } = this.props;
+    const { children, componentClass, onClick, popup: { modalProps } } = this.props;
     // const modalChildren = this.createModalChildren();
 
     let buttonStyle = {
       cursor: 'pointer'
     };
 
-    const click = () => {
-      // kick to wrapper, wrapper know how to do
-      this.setState({ visible: true });
-      return false;
-    };
+    let click = () => {};
+    if (typeof onClick == 'function') {
+      click = onClick;
+    } else if (modalProps) {
+      click = () => {
+        console.log('click.................');
+        // kick to wrapper, wrapper know how to do
+        this.setState({ visible: true });
+        return false;
+      };
+    }
 
     const ButtonClass = componentClass || Button;
     return (
