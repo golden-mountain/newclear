@@ -8,7 +8,7 @@ export class A10SubmitButtons extends Component {
     create: ({ submitting }, index) => {
       return (
         <Button type="submit" disabled={submitting} bsStyle="success" key={index}>
-          {submitting ? <i/> : <i/>} Create
+          {submitting ? <i/> : <i/>} Save
        </Button>
       );
     },
@@ -55,7 +55,7 @@ export class A10SubmitButtons extends Component {
   //     this.props.kickBall(HIDE_COMPONENT_MODAL, null, this.props.instancePath);
   //   } else {
   //     this.props.kickBall(REDIRECT_ROUTE, { path: 'list' });
-  //   }    
+  //   }
   // }
 
   render() {

@@ -24,6 +24,9 @@ class FormHacker {
         this.dispatchValidation(true);
         action = this.reinitialConditional();
         break;
+      // case actionTypes.INITIALIZE:
+      //   this.reinitialConditional();
+      //   break;
       case CHANGE_FIELD_CONDITIONAL:
         action = this.changeConditional(false);
         break;

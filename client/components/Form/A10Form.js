@@ -12,38 +12,41 @@ import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from 'config
 class SchemaForm {
   static displayName = 'SchemaForm'
 
-  constructor(context) {
+  constructor(schemas, isEdit, urlParams) {
     // invariant(schemas, 'Form schemas referred from your pages');
-    const { schemas, edit, urlKeys } = context;
-    this.context = context;
+    // const { schemas, edit, urlParams } = context;
+    // console.log(schemas, isEdit, urlParams );
+    // this.context = context;
     this.schemas = schemas;
-    this.isEdit = edit;
-    this.urlKeys = urlKeys;
+    this.isEdit = isEdit;
+    this.urlParams = fromJS(urlParams);
     this.state = {
       invalidProps: {}
     };
-
   }
 
-  _parseAxapiURL(axapi, value) {
+  getAxapiURL(axapi, groupName) {
     let axapiOrg = axapi;
     if (this.isEdit !== true ) {
       axapiOrg = axapiOrg.replace(/\/[^\/]+?$/, '');
     }
 
     const path = axapiOrg.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
-      // console.log(words, ' are mached words', this.urlKeys[words], ' keys from urlKeys');
-      if (this.urlKeys && this.urlKeys[words]) {
-        return this.urlKeys[words];
-      } else {
-        return value.getIn(words, '');
-      }
+      // console.log(words, ' are mached words', this.urlParams[words], ' keys from urlParams');
+      // if (this.urlParams && this.urlParams[words]) {
+      //   return this.urlParams[words];
+      // } else {
+      //   return value.getIn(words, '');
+      // }
+      const value = this.urlParams.getIn([ groupName, words ]);
+      // console.log(value);
+      return value;
     });
     // console.log(path, 'are submiting parth');
     return path;
   }
 
-  _getObjectPrefixes() {
+  getObjectPrefixes() {
     let prefixes = {};
     this.schemas.forEach((schema) => {
       // console.log(schema);
@@ -56,7 +59,7 @@ class SchemaForm {
   // remove invalid values by schema
   parseValues(values) {
     const newValues = fromJS(values);
-    const prefixes = this._getObjectPrefixes();
+    const prefixes = this.getObjectPrefixes();
 
     let parsedValues = Map({});
     let invalidProps = Map({});
@@ -79,7 +82,7 @@ class SchemaForm {
           }
         });
         fullRequestData = {
-          path: this._parseAxapiURL(axapi, fieldGroup),
+          path: this.getAxapiURL(axapi, fieldGroupName),
           method: 'POST',
           body: parsedValues
         };
@@ -113,15 +116,47 @@ class A10SchemaForm extends Component {
     if (!context.props) {
       throw new Error('Config should passed from parent');
     }
-    this._parentProps = context.props;
-    // console.log(this.props);
-    // console.log(this.context);
-    // this.props.registerBalls();
+    // this.context.props = context.props;
+    const { schemas } = this.props;
+    const { urlParams, edit } = this.context.props;
+    this.isEdit = edit;
+    this.schemaHandler = new SchemaForm(schemas, edit, urlParams);
+    // console.log(this.context.props, this.props);
   }
+
+  componentWillMount() {
+    if (this.isEdit) {
+      let requests = [];
+      this.props.schemas.forEach((schema) => {
+        const requestURL = this.schemaHandler.getAxapiURL(schema.axapi, schema['obj-name']);
+        const request = {
+          path: requestURL,
+          method: 'GET'
+        };
+        requests.push(request);
+      });
+      const result = this.props.comAxapiRequest(requests);
+      result.then(() => {
+        let data = fromJS(this.props.data);
+        if (typeof this.props.onInitialize === 'function') {
+          data = this.props.onInitialize(data);
+        }
+        this.context.props.initialize(data);
+        // TODO:
+        // after initialized, need reinitialConditional
+      });
+    }
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.data) {
+  //     this.context.props.initialize(nextProps.data);
+  //   }
+  // }
 
   // connect
   connectValues(storeData, parsedValues) {
-    // const { fieldConnector: { options: { connectToApiStore } } } = this._parentProps;
+    // const { fieldConnector: { options: { connectToApiStore } } } = this.context.props;
     let primaryObj = parsedValues.first(), mergingObj = Map(), copyStoreData = [];
     storeData.forEach((apiRequestData) => {
       if (apiRequestData.connectOptions) {
@@ -155,10 +190,10 @@ class A10SchemaForm extends Component {
 
   defaultHandleSubmit(values, form, save=true) {
     let parsedValues = values;
-    const schemaFormHandler = new SchemaForm(this.props);
-    parsedValues = schemaFormHandler.parseValues(parsedValues);
+    parsedValues = this.schemaHandler.parseValues(parsedValues);
 
     if (save) {
+      // console.log('test......0.1');
       let storeData = getAppValueStore(this.props.app);
       if (storeData.length) {
         parsedValues = this.connectValues(storeData, parsedValues);
@@ -175,8 +210,9 @@ class A10SchemaForm extends Component {
 
       return promise;
     } else {
+      // console.log('dont save');
       // console.log(values, form, save);
-      this.context.props.storeApiInfo(form, parsedValues, this._parentProps.fieldConnector.options);
+      this.context.props.storeApiInfo(form, parsedValues, this.context.props.fieldConnector.options);
       return new Promise((resolve, reject) => { // eslint-disable-line
         resolve(parsedValues);
       });
@@ -213,10 +249,11 @@ class A10SchemaForm extends Component {
       horizontal,
       inline
     } = this.props;
-    // console.log(urlKeys, 'is url keys...............');
-    const { handleSubmit, fieldConnector } = this._parentProps;
+    // console.log(data);
+    // console.log(urlParams, 'is url keys...............');
+    const { handleSubmit, fieldConnector } = this.context.props;
     // const parentInstancePath = this.props.findParent('A10SchemaForm');
-    // console.log(this._parentProps);
+    // console.log(this.context.props, this.props);
     let submit = (values) => {
       // validation triggle
       const parentInstancePath = this.props.findParent(A10SchemaForm.displayName);
@@ -226,20 +263,28 @@ class A10SchemaForm extends Component {
       if (onBeforeSubmit) {
         patchedValues = onBeforeSubmit(newValues);
       }
+      // console.log('test............');
+
       // let visible data hidden
       newValues = this.dataFinalize(newValues);
+      // console.log('test............1');
+
       // patch values need keep outside newValues, otherwise, data finalizer could be remove it by visible
       newValues = newValues.mergeDeep(fromJS(patchedValues));
 
       if (onSubmit) {
         submitFunc = onSubmit;
       }
+      // console.log(submitFunc);
 
       let result = null;
       if (has(fieldConnector , 'options.connectToValue')) {
+        // console.log('3');
         // fieldConnector.connectToValues(newValues);
         result = submitFunc.call(this, newValues, instancePath[0], false);
+        // console.log('3.1');
       } else {
+        // console.log('4');
         result = submitFunc.call(this, newValues, instancePath[0], true);
         // console.log('5');
         // fieldConnector.connectToResult(result);
@@ -250,12 +295,12 @@ class A10SchemaForm extends Component {
 
       result.then(() => {
         this.props.kickBall(UPDATE_TARGET_DATA, newValues, targetInstancePath );
-        if (this._parentProps.modal) {
+        if (this.context.props.modal) {
           this.props.kickBall(HIDE_COMPONENT_MODAL, null, parentInstancePath);
         } else {
           this.props.kickBall(REDIRECT_ROUTE, { path: 'list' });
         }
-        
+
       });
       return result;
     };

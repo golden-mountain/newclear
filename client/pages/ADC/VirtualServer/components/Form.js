@@ -112,12 +112,30 @@ class VirtualServerForm extends React.Component {
       }
     };
 
+    const onInitialize = (dataFromAPI) => {
+      // console.log(dataFromAPI);
+      const ipv4 = dataFromAPI.getIn([ 'virtual-server', 'ip-address' ], false);
+      if (ipv4) {
+        if( ipv4 === '0.0.0.0') {
+          dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], true);
+        } else {
+          dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
+        }
+
+        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '0');
+      } else {
+        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
+        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '1');
+      }
+      return dataFromAPI;
+    };
+
     return (
-      <A10Form onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} edit={false} horizontal>
+      <A10Form onInitialize={onInitialize} onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} horizontal>
         <Row>
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-              <A10SchemaField schema={elements['name']} name="virtual-server.name" required label="Name" value="vs2" />
+              <A10SchemaField schema={elements['name']} name="virtual-server.name" required label="Name" />
               <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
                 <Checkbox value={true} />
               </A10SchemaField>

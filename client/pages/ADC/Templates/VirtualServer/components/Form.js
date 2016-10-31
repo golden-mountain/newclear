@@ -123,7 +123,7 @@ class TemplateVirtualServerForm extends React.Component {
     );
 
     return (
-      <A10Form schemas={[ slbTemplateVirtualServerSchema ]} edit={false}  horizontal>
+      <A10Form schemas={[ slbTemplateVirtualServerSchema ]} horizontal>
         <Row>
           <Col xs={12}>
             {panelFields}

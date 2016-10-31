@@ -16,7 +16,7 @@ class VirtualPort extends React.Component {
     // console.log(this.props, this.context);
     const urlKeys = { 'name': 'vs2' };
     return (
-      <A10Form schemas={[ slbVirtualPortSchema ]} edit={false} urlKeys={urlKeys} horizontal>
+      <A10Form schemas={[ slbVirtualPortSchema ]} urlKeys={urlKeys} horizontal>
         <Row>
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>}>

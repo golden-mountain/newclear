@@ -24,20 +24,23 @@ class A10Button extends Component {
     this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
       this.setState({ visible: false });
     }, this.contentInstancePath);
-
   }
 
-  createModalChildren() {
-    const { popup: { componentClass, ...componentProps }, parentPath } = this.props;  // eslint-disable-line
-    const ModalComponent = componentClass;
-    // console.log('A10Button', parentPath, this.contentInstancePath);
-    return <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} />;
+  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
+    // console.log(nextProps, nextState);
+    return this.state.visible !== nextState.visible;
   }
 
   render() {
-    const { children, componentClass, onClick, popup: { modalProps } } = this.props;
+    const {
+      children,
+      componentClass,
+      onClick,
+      popup: { modalProps, componentClass:ModalComponent, ...componentProps },
+      parentPath
+    } = this.props;
     // const modalChildren = this.createModalChildren();
-
+    // console.log(componentProps);
     let buttonStyle = {
       cursor: 'pointer'
     };
@@ -47,8 +50,9 @@ class A10Button extends Component {
       click = onClick;
     } else if (modalProps) {
       click = () => {
-        console.log('click.................');
+        // console.log('click.................');
         // kick to wrapper, wrapper know how to do
+        // event.topPropagation();
         this.setState({ visible: true });
         return false;
       };
@@ -60,7 +64,7 @@ class A10Button extends Component {
         {children}
         { modalProps ?
           <ModalLayout visible={this.state.visible} {...modalProps} >
-            { this.createModalChildren() }
+            <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} />
           </ModalLayout>
         : null}
       </ButtonClass>);

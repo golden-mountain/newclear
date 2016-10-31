@@ -66,6 +66,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
   let page = reduxForm({
     form: config.form
+    // enableReinitialize: true
   } )(Core);
 
   // console.log(pagePath);

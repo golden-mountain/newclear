@@ -29,6 +29,19 @@ const GENERATOR_PLACEHOLDER = {
 };
 
 export class A10Field extends Component {
+
+  shouldComponentUpdate(nextProps, nextState) {//eslint-disable-line
+    // const entries = Object.entries(nextProps), thisEntries = Object.entries(this.props);
+    // console.log(nextProps);
+    const needUpdateFields = [ 'input.value' ];
+    let needUpdate = this.props.checkComponentNeedUpdate(needUpdateFields, nextProps, this.props);
+    if (!needUpdate) {
+      // check form
+      needUpdate = !this.props.form.equals(nextProps.form);
+    }
+    return needUpdate;
+  }
+
   findInputElements(children, allowedTypes, callback) {
     return React.Children.map(children, child => {
       if (has(child, 'type.name') && allowedTypes.indexOf(child.type.name) > -1) {
@@ -266,7 +279,7 @@ class SchemaField extends Component {
     const visible = app.getIn([ ...instanceParentPath, FORM_FIELD_KEY, name, 'conditionals', 'visible' ]);
 
     const onChange = (value) => {
-      console.log(instanceParentPath);
+      // console.log(instanceParentPath);
       ::this.props.comSetFieldConditial(instanceParentPath, name, value);
     };
 

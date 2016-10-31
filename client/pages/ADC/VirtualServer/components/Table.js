@@ -12,7 +12,7 @@ import VirtualServerForm from 'pages/ADC/VirtualServer/components/Form';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 
-class VirtualServerTable extends React.Component { 
+class VirtualServerTable extends React.Component {
   static displayName = 'VirtualServerTable'
 
   render() {
@@ -33,15 +33,20 @@ class VirtualServerTable extends React.Component {
       return cell.toUpperCase();
     };
 
-    const formatName = (cell) => {  
+    const formatName = (cell) => {
 
       const popupInfo = {
         componentClass: VirtualServerForm,
-        urlKeysConnect: [ 'virtual-server.name' ],
-        id: cell,
+        urlParams: {
+          'virtual-server': {
+            name: cell
+          }
+        },
+        edit: true,
         modalProps: {
           title: 'Edit Virtual Server',
           bsSize:'lg'
+          // componentClassName: 'super-large-modal'
         },
         connectOptions: {
           connectToValue: {

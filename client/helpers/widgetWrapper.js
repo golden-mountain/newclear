@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
 import { getAppPageVar } from './stateHelper';
-import { uniqueId, upperFirst } from 'lodash';
+import { uniqueId, upperFirst, get } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 
 // wrapper for widgets, add a wrapper to get state
@@ -115,7 +115,7 @@ export const widgetWrapper = widgetProps => {
           this.context.props,
           this.getNewProps()
         );
-
+        // console.log(props);
         return { props: props, cm: this.context.cm };
       }
 
@@ -124,18 +124,32 @@ export const widgetWrapper = widgetProps => {
         this.cm.ballKicker.removeEvent(this.instancePath);
       }
 
+      checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {
+        // const needUpdateFields = [ 'input.value', 'data', 'visible', 'activeData' ];
+        for (let i in needUpdateFields) {
+          const fieldName = needUpdateFields[i];
+          const nextValue = get(nextProps, fieldName), thisValue = get(thisProps, fieldName);
+          if (nextValue != thisValue) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       getNewProps() {
         return Object.assign(
-          {}, 
-          this.props, 
+          {},
+          this.props,
           this.getNewMethods(this.instancePath),
           {
             instancePath: this.instancePath,
             parentPath: this.context.props.instancePath,
             data: this.data,
+            // initialValues: this.data || this.context.props.initialValues,
             visible: this.visible,
             activeData: this.activeData,
             instanceData: this.instanceData,
+            checkComponentNeedUpdate: this.checkComponentNeedUpdate.bind(this),
             createInstancePath: this.createInstancePath.bind(this),
             findParent: this.cm.findParent.bind(this.cm, this.instancePath),
             findTargetByName: this.cm.findTargetByComponentName.bind(this.cm),
@@ -149,6 +163,9 @@ export const widgetWrapper = widgetProps => {
 
       render() {
         // console.log(this.props);
+        // if (this.props.edit !== undefined) {
+        //   console.log(this.instancePath, this.props, '...............widget edit enabled');
+        // }
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
         return (this.visible ? <WrappedComponent  {...newProps} /> : null);
@@ -191,6 +208,12 @@ export const widgetWrapper = widgetProps => {
 
       // getChildContext() {
       //   return {  props: this.context.props, cm: this.context.cm };
+      // }
+
+      // shouldComponentUpdate(nextProps, nextState) {
+      //   if (!this.props.noOptimize) {
+      //     return !isEqual(this.props, nextProps) && !isEqual(nextState, this.state);
+      //   }
       // }
 
       get instancePath() {
