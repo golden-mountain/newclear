@@ -5,3 +5,8 @@
 .hidden {
   display:none;
 }
+
+.required::after {
+  content: ' *';
+  color: #FF0000;
+}

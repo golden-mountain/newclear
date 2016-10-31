@@ -117,25 +117,23 @@ class VirtualServerForm extends React.Component {
         <Row>
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-              <A10SchemaField schema={elements['name']} name="virtual-server.name" label="Name" />
-
-
+              <A10SchemaField schema={elements['name']} name="virtual-server.name" required label="Name" value="vs2" />
               <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
                 <Checkbox value={true} />
               </A10SchemaField>
 
-              <A10SchemaField name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+              <A10SchemaField name="x.virtual-server.address-type" label="Address Type" required value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
                 <div>
                   <Radio value="0" inline> IPv4 </Radio>
                   <Radio value="1" inline> IPv6 </Radio>
                 </div>
               </A10SchemaField>
 
-              <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
+              <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" required validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
               <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-              <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address"  conditional={{ 'x.virtual-server.address-type': '1' }} />
+              <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address" required conditional={{ 'x.virtual-server.address-type': '1' }} />
               <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
 
             </Panel>

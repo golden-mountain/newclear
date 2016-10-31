@@ -18,6 +18,16 @@ import { FORM_FIELD_KEY } from 'configs/appKeys';
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];
 const registeredInputs = registeredMVInputs.concat([ 'FormControl' ]);
 
+// Use schema to generator placeholder
+const GENERATOR_PLACEHOLDER = {
+  string: (schema) => {
+    return `${schema.minLength} - ${schema.maxLength} character.`;
+  },
+  number: (schema) => {
+    return `${schema.minimum} - ${schema.maximum} number.`;
+  }
+};
+
 export class A10Field extends Component {
   findInputElements(children, allowedTypes, callback) {
     return React.Children.map(children, child => {
@@ -34,22 +44,14 @@ export class A10Field extends Component {
 
   generatorPlaceholder() {
     const { placeholder, schema } = this.props;
-    const generator = {
-      string: (schema) => {
-        return `${schema.minLength} - ${schema.maxLength} character.`;
-      },
-      number: (schema) => {
-        return `${schema.minimum} - ${schema.maximum} number.`;
-      }
-    };
     let definePlaceholder = '';
     placeholder
     ? (definePlaceholder = placeholder)
     : (
       schema
       && schema.type
-      && generator[schema.type]
-      && (definePlaceholder = generator[schema.type](schema))
+      && GENERATOR_PLACEHOLDER[schema.type]
+      && (definePlaceholder = GENERATOR_PLACEHOLDER[schema.type](schema))
     );
 
     return definePlaceholder;
