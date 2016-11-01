@@ -12,14 +12,15 @@ import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from 'config
 class SchemaForm {
   static displayName = 'SchemaForm'
 
-  constructor(schemas, isEdit, urlParams) {
+  constructor({ schemas, edit, urlParams, removePrefix }) {
     // invariant(schemas, 'Form schemas referred from your pages');
     // const { schemas, edit, urlParams } = context;
     // console.log(schemas, isEdit, urlParams );
     // this.context = context;
     this.schemas = schemas;
-    this.isEdit = isEdit;
+    this.isEdit = edit;
     this.urlParams = fromJS(urlParams);
+    this.removePrefix = removePrefix;
     this.state = {
       invalidProps: {}
     };
@@ -58,7 +59,15 @@ class SchemaForm {
 
   // remove invalid values by schema
   parseValues(values) {
-    const newValues = fromJS(values);
+    // console.log(values);
+    let newValues = fromJS(values);
+    // removePrefix example: template.virtual-server.xx
+    // will remove template, use this to add name space to each form
+    // to avoid same name to recover each other on redux form
+    if (this.removePrefix && newValues.getIn([ this.removePrefix ], false)) {
+      newValues = newValues.getIn([ this.removePrefix ]);
+    }
+
     const prefixes = this.getObjectPrefixes();
 
     let parsedValues = Map({});
@@ -81,6 +90,7 @@ class SchemaForm {
             invalidProps = invalidProps.setIn([ fieldGroupName, fieldName ], fieldValue);
           }
         });
+
         fullRequestData = {
           path: this.getAxapiURL(axapi, fieldGroupName),
           method: 'POST',
@@ -117,10 +127,10 @@ class A10SchemaForm extends Component {
       throw new Error('Config should passed from parent');
     }
     // this.context.props = context.props;
-    const { schemas } = this.props;
+    const { schemas, removePrefix } = this.props;
     const { urlParams, edit } = this.context.props;
     this.isEdit = edit;
-    this.schemaHandler = new SchemaForm(schemas, edit, urlParams);
+    this.schemaHandler = new SchemaForm({ schemas, edit, urlParams, removePrefix });
     // console.log(this.context.props, this.props);
   }
 
@@ -156,6 +166,7 @@ class A10SchemaForm extends Component {
 
   // connect
   connectValues(storeData, parsedValues) {
+    // console.log(parsedValues);
     // const { fieldConnector: { options: { connectToApiStore } } } = this.context.props;
     let primaryObj = parsedValues.first(), mergingObj = Map(), copyStoreData = [];
     storeData.forEach((apiRequestData) => {
@@ -191,6 +202,7 @@ class A10SchemaForm extends Component {
   defaultHandleSubmit(values, form, save=true) {
     let parsedValues = values;
     parsedValues = this.schemaHandler.parseValues(parsedValues);
+    // console.log('parsed values::::', parsedValues);
 
     if (save) {
       // console.log('test......0.1');

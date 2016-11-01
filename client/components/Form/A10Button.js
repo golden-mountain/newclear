@@ -18,12 +18,23 @@ class A10Button extends Component {
 
   constructor(props, context) {
     super(props, context);
-
     this.contentInstancePath = this.props.createInstancePath('A10ButtonModal');
+  }
 
-    this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
-      this.setState({ visible: false });
-    }, this.contentInstancePath);
+  // componentWillMount() {
+  //   console.log('mount....');
+  //   this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
+  //     this.setState({ visible: false });
+  //   }, this.contentInstancePath);
+  // }
+
+  componentWillUpdate(nextProps, nextState) { // eslint-disable-line
+    console.log('updating....');
+    if (nextState.visible) {
+      this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
+        this.setState({ visible: false });
+      }, this.contentInstancePath);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line

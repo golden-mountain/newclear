@@ -195,13 +195,13 @@ class VirtualServerForm extends React.Component {
 
           <Col xs={6}>*/}
             <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
-              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
+              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} schema={elements['port-list']} >
                 <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
                 <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
 
                 <A10SchemaField layout={false} name="protocol" title="Protocol" >
                   <FormControl componentClass="select">
-                    <option value="tcp">tcp</option>
+                    <option value="tcp" selected>tcp</option>
                     <option value="udp">udp</option>
                   </FormControl>
                 </A10SchemaField>

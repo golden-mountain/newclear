@@ -26,20 +26,23 @@ class A10Select extends Component {
     ballKicker: PropTypes.object
   }
 
+  newValue = ''
+
   constructor(props, context) {
     super(props, context);
     // console.log(this.context.props, this.props);
+  }
+
+  componentWillUpdate() {
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
       const { popupInfo: { connectOptions } } = this.props;
       const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
-      // console.log(from, to, params);
+      // console.log(connectOptions, from, to, params);
       this.getOptions();
       // this.newValue = 'a1';
       fieldConnector.connectToValues(params);
     });
   }
-
-  newValue = ''
 
   formatOptions(data) {
     let json = [];
@@ -73,6 +76,7 @@ class A10Select extends Component {
   }
 
   getOptions() {
+    //BUG: switch from other page, can't refresh the list??
     const { loadOptions } = this.props;
     const asyncNeeded = loadOptions && loadOptions.url && true;
 
@@ -129,7 +133,7 @@ class A10Select extends Component {
       <InputGroup>
         <VirtualizedSelect {...loadAttr}/>
         <InputGroup.Addon>
-          <A10Button popup={ popupInfo } componentClass="a" >+</A10Button>
+          <A10Button popup={ popupInfo } componentClass="a" edit={false} >+</A10Button>
         </InputGroup.Addon>
       </InputGroup>
       :

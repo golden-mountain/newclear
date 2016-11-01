@@ -63,12 +63,14 @@ export default class BallKicker {
   }
 
   removeEvent(to) {
+    // console.log('remove event to:', to);
     Object.entries(this.eventTree).forEach(([ event, storedEvents ]) => { //eslint-disable-line
       storedEvents.forEach((stored, index) => {
-        if (to.length <= 3 && this._isSubsetComponent(to, stored.to)) {
+        if (this._isSubsetComponent(to, stored.to)) {
           remove(storedEvents, (obj, n) => {
             return n === index;
           });
+          console.log('removed event:', event, to);
           this.eventTree[event] = storedEvents;
         }
       });
@@ -78,14 +80,14 @@ export default class BallKicker {
   }
 
   kick(from, event, params=null, to=[]) {
-    console.log('kicked event:', event);
+    console.log('kicked event:', event, to);
     // find from event tree by match all to path
     const eventTree = this.eventTree[event];
     if (eventTree) {
       // to: [page, id, class, id] or [ page, id, class ] or []
       eventTree.forEach((componentAtEvent) => {
         if (this._isSubsetComponent(to, componentAtEvent.to)) {
-          // console.log('triggled event:', event, componentAtEvent);
+          console.log('triggled event:', event, componentAtEvent);
           componentAtEvent.listener.apply(null, [ from, to, params ]);
         }
       });
@@ -95,7 +97,6 @@ export default class BallKicker {
   }
 
   accept(from, event, listener, to=[]) { // eslint-disable-line
-    // console.log('registered event:', event, ' from: ', from, ' to: ', to, ' listener ', listener);
     if (!this.eventTree[event]) {
       this.eventTree[event] = [];
     }
@@ -109,7 +110,7 @@ export default class BallKicker {
     });
 
     if (!finded) {
-      // console.log('registering from:', from, ' to:', to);
+      console.log('registering from:', event, from, ' to:', to);
       this.eventTree[event].push({ from, to, listener });
       // this.dumpEventTree();
     }

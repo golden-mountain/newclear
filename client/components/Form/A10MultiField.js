@@ -39,10 +39,12 @@ class TableFields extends Component {
     return () => {
       let newFields = fields;
       let proto = {};
-      forEach(kids, (kid, name) => {
+      kids.forEach((kid) => {
+        const name = kid.props.name;
         proto[name] = '';
       });
       newFields.push(proto);
+      // console.log(newFields);
       return newFields;
     };
   }
@@ -91,7 +93,7 @@ class TableFields extends Component {
 
 class A10MultiField extends Component {
   static displayName = 'A10MultiField'
-    
+
   constructor(props, context) {
     super(props, context);
   }
@@ -99,6 +101,7 @@ class A10MultiField extends Component {
   render() {
     let { component, name, children, ...rest } = this.props;
     // console.log('rest.............', this.props);
+    // TODO: schema need used for cleaning data
 
     if (!component) {
       component = TableFields;

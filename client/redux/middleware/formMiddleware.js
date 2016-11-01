@@ -174,6 +174,7 @@ class FormHacker {
       });
     };
 
+    // console.log(action);
     setVisible(fields, action.field, fields.getIn([ action.field, 'conditionals', 'visible' ]), action.value);
 
     // console.log('storedBackFields...................', storedBackFields);

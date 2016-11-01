@@ -25,7 +25,12 @@ export default class FieldConnector {
     let valuePath = [ this._env.form, 'values' ];
     connectTo = fromJS(connectTo);
     connectTo.forEach((map, prefix) => {
-      const formValue = this._formData.getIn(valuePath.concat(toPath(prefix)));
+      let formValue = this._formData.getIn(valuePath.concat(toPath(prefix)));
+      if (!formValue) {
+        let path = toPath(prefix);
+        path[0] += '-list';
+        formValue = this._formData.getIn(valuePath.concat(path));
+      }
       let obj = formValue.toJS();
 
       if (List.isList(formValue)) {

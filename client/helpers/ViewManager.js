@@ -15,7 +15,9 @@ export default class ViewManager {
     let visible = true;
     this.plugins.forEach((plg) => {
       visible = plg.isVisible();
-      return visible;
+      if (!visible) {
+        return visible;
+      }
     });
     return visible;
   }
@@ -26,6 +28,6 @@ export default class ViewManager {
       readOnly = plg.isReadOnly();
       return readOnly;
     });
-    return readOnly;  
+    return readOnly;
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Match } from 'react-router';
-import { isEqual, set } from 'lodash';
+import { set } from 'lodash';
 
 // import { TransitionMotion, spring } from 'react-motion';
 // import BallKicker from 'helpers/BallKicker';
@@ -75,10 +75,10 @@ export default class RouterBase extends React.Component {
   //   }, []);
   // }
 
-  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
-    // console.log(nextState, this.state);
-    return !isEqual(this.state, nextState);
-  }
+  // shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
+  //   // console.log(nextState, this.state);
+  //   return !isEqual(this.state, nextState);
+  // }
 
   get paths() {
     return RouterBase.paths;

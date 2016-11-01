@@ -130,8 +130,8 @@ export class A10Field extends Component {
       }
 
       const getEventValue = (event) => {
-        let value = event.target.value;
-        if(event.target.checked !== undefined) {
+        let value = event.target.value, type = event.target.type.toLowerCase();
+        if(type == 'radio' || type == 'checkbox') {
           if (typeof event.target.value == 'string') {
             if (!event.target.checked) {
               value = '';
