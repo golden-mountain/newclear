@@ -15,10 +15,16 @@ class Router extends RouterBase {
   path = 'virtual-server'
 
   pages = {
-    edit: VirtualServerEditPage,
-    list: VirtualServerListPage
+    edit: {
+      component: VirtualServerEditPage,
+      menuPath: [ 'ADC', 'SLB', 'Virtual Server', 'Edit' ]
+    },
+    list: {
+      component: VirtualServerListPage,
+      menuPath: [ 'ADC', 'SLB', 'Virtual Server', 'List' ]
+    }
   }
-  
+
 }
 
 export default Router;

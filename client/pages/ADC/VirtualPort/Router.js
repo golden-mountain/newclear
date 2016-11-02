@@ -10,7 +10,10 @@ class Router extends RouterBase {
   path = 'virtual-port'
 
   pages = {
-    edit: VirtualPortEditPage
+    edit: {
+      component: VirtualPortEditPage,
+      menuPath: [ 'ADC', 'SLB', 'Virtual Port', 'Edit' ]
+    }
     // list: VirtualServerListPage
   }
 
