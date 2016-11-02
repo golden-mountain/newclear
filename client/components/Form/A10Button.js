@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
-import ModalLayout from 'layouts/a10/ModalLayout';
+import configApp from 'configs/app';
+
+const OEM = configApp.OEM;
+const ModalLayout = require('layouts/' + OEM + '/ModalLayout').default;
 
 class A10Button extends Component {
   static displayName = 'A10Button'
