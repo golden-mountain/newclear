@@ -52,10 +52,14 @@ const pageWrapper = (Page) => {
     }
 
     getRedirectPath(suffix) {
-      const paths = this.basePath;
-      paths.pop();
-      paths.push(suffix);
-      return '/' + paths.join('/'); 
+      if (suffix.indexOf('/') > -1) {
+        return suffix;
+      } else {
+        const paths = this.basePath;
+        paths.pop();
+        paths.push(suffix);
+        return '/' + paths.join('/');
+      }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -67,7 +71,7 @@ const pageWrapper = (Page) => {
         pathname: this.state.path,
         params: this.state.params,
         state: { from: this.props.location }
-      }} />) : (<Page {...this.props} />); 
+      }} />) : (<Page {...this.props} />);
     }
 
   }

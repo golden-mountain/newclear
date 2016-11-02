@@ -8,28 +8,41 @@ import { required } from 'helpers/validations';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 // import auth from 'helpers/auth';
 import { getPayload } from 'helpers/axapiHelper';
+import { UPDATE_TARGET_DATA } from 'configs/messages';
 
 class LoginForm extends React.Component {
   static contextTypes = {
-    props: PropTypes.object.isRequired
+    props: PropTypes.object.isRequired,
+    cm: PropTypes.object.isRequired
   }
 
   static displayName = 'LoginForm'
 
   onSubmit(values) {
-    console.log('handle submit');
+    // console.log('handle submit');
     const fullAuthData = getPayload('/axapi/v3/auth', 'POST', values);
     const promise = this.props.comAxapiRequest(fullAuthData);
     return promise;
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { data, modal } = nextProps;
+    if (data && data.signature && modal) {
+      // everything need update if logined 
+      this.props.kickBall(UPDATE_TARGET_DATA);
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
-    // console.log(this.context.props, 'props....................');
-    const { data } = this.props;
+    // console.log(this.props, 'props....................');
+    const { data, modal } = this.props;
     const { from } = '/';
 
     return (
-      data && data.signature ? <Redirect to={{ pathname: from || '/' }} /> :
+      data && data.signature ? (modal ? null : <Redirect to={{ pathname: from || '/' }} />) :
       <A10Form onSubmit={this.context.props.handleSubmit(::this.onSubmit)} horizontal>
         <A10SchemaField name="credentials.username" label="Username" validation={{ required }}>
           <FormControl type="text" className="form-control"/>

@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
 import { getAppPageVar } from './stateHelper';
-import { uniqueId, upperFirst, get } from 'lodash';
+import { uniqueId,  get } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
+import { devPlugins, prodPlugins } from './WidgetPlugins';
 
 // wrapper for widgets, add a wrapper to get state
 export const widgetWrapper = widgetProps => {
@@ -32,26 +33,44 @@ export const widgetWrapper = widgetProps => {
 
       constructor(props, context) {
         super(props, context);
+        this.plugins = [];
+        this.registerPlugins();
         this.cm = this.context.cm;
         this.cm.registerComponent(this.instancePath, this.props.targetInstance);
         // this.cm.printComponentTree();
         // this.cm.acceptBalls();
+        this.executePluginMethod('onInitialize');
       }
 
-      /**
-       * support all actions dispatchable
-       * new method name like 'comSetComponentData', 'comSetComponentVisible'
-       */
-      getNewMethods(instancePath) {
-        const appActions = {};
-        Object.keys(window.appActions).forEach((actionName) => {
-          const newMethodName = `com${upperFirst(actionName)}`;
-          appActions[newMethodName] = (...args) => {
-            args.unshift(instancePath);
-            return this.props.dispatch(window.appActions[actionName].apply(null, args));
-          };
+      registerPlugins() {
+        if (__DEV__) { // eslint-disable-line
+          this.plugins = devPlugins.map((Plugin) => {
+            if (Plugin.name) {
+              return new Plugin();
+            }
+          });
+        }
+
+        this.plugins = this.plugins.concat(prodPlugins.map((Plugin) => {
+          if (Plugin && Plugin.name) {
+            return new Plugin();
+          }
+        }));
+      }
+
+      executePluginMethod(methodName, props, ...args) {
+        let result = props;
+        this.plugins.forEach((plugin) => {
+          if (plugin && plugin[methodName]) {
+            let _result = plugin[methodName].call(this, args, result);
+            if (!_result && plugin.name) {
+              console.warn('No result returns from ', plugin.name );
+            } else {
+              result = _result;
+            }
+          }
         });
-        return appActions;
+        return result;
       }
 
       createInstancePath(prefix='') {
@@ -110,7 +129,7 @@ export const widgetWrapper = widgetProps => {
       // }
 
       getChildContext() {
-        const props = Object.assign(
+        let props = Object.assign(
           {},
           this.context.props,
           this.getNewProps()
@@ -119,9 +138,25 @@ export const widgetWrapper = widgetProps => {
         return { props: props, cm: this.context.cm };
       }
 
+      componentWillMount() {
+        this.executePluginMethod('onMount');
+      }
+
       componentWillUnmount() {
-        // console.log('removed event from ', this.basePath);
+        this.executePluginMethod('onUnmount');
         this.cm.ballKicker.removeEvent(this.instancePath);
+      }
+
+      componentWillReceiveProps(nextProps, nextState) {
+        this.executePluginMethod('onReceiveProps', nextProps, nextState);
+      }
+
+      componentWillUpdate(nextProps, nextState) {
+        return this.executePluginMethod('onBeforeUpdate', nextProps, nextState) || true;
+      }
+
+      shouldComponentUpdate(nextProps, nextState) {
+        return this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
       }
 
       checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {
@@ -137,10 +172,11 @@ export const widgetWrapper = widgetProps => {
       }
 
       getNewProps() {
-        return Object.assign(
+        let pluginProps = this.executePluginMethod('onBeforeSetProps');
+        let props = Object.assign(
           {},
           this.props,
-          this.getNewMethods(this.instancePath),
+          // this.getNewMethods(this.instancePath),
           {
             instancePath: this.instancePath,
             parentPath: this.context.props.instancePath,
@@ -157,15 +193,14 @@ export const widgetWrapper = widgetProps => {
             kickBall: this.cm.ballKicker.kick.bind(this.cm.ballKicker, this.instancePath),
             catchBall: this.cm.ballKicker.accept.bind(this.cm.ballKicker, this.instancePath),
             registerBalls: this.cm.listener.registerStandardBalls.bind(this.cm.listener, this.instancePath)
-          }
+          },
+          pluginProps
         );
+
+        return props;
       }
 
       render() {
-        // console.log(this.props);
-        // if (this.props.edit !== undefined) {
-        //   console.log(this.instancePath, this.props, '...............widget edit enabled');
-        // }
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
         return (this.visible ? <WrappedComponent  {...newProps} /> : null);

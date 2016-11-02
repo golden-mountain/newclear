@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Nav, Breadcrumb } from 'react-bootstrap';
+import { Nav, Breadcrumb } from 'react-bootstrap';
 import Loading from 'react-loading';
 
 import Menu from './Menu';
@@ -9,23 +9,29 @@ import './scss/AppLayout.scss';
 import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
+import ModalLayout from 'layouts/a10/ModalLayout';
+import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 
 class AppLayout extends Component {
   static propTypes = {
     children: PropTypes.node
   }
-  
+
   static contextTypes = {
-    props: PropTypes.object.isRequired
+    props: PropTypes.object.isRequired,
+    cm: PropTypes.object.isRequired
   }
 
   state = {
-    showLogin: !~sessionStorage.token, 
+    showLogin: !~sessionStorage.token,
     showError: false
   };
 
   constructor(props, context) {
     super(props, context);
+    this.context.cm.ballKicker.accept([], HIDE_COMPONENT_MODAL, (from, to, params) => { //eslint-disable-line
+      this.setState({ showLogin: false });
+    }, [ 'app', 'default', 'modal', 'instance' ]);
   }
 
   componentDidMount() {
@@ -62,11 +68,11 @@ class AppLayout extends Component {
     }
 
     this.setState({
-      showLogin: statusCode === 401 || statusCode === 403, 
+      showLogin: statusCode === 401 || statusCode === 403,
       showError: statusCode >= 400
     });
 
-    
+
   }
 
 
@@ -78,36 +84,29 @@ class AppLayout extends Component {
         <Menu>
           <Nav pullRight>
             { this.props.isLoading && <Loading type='cylon' color='#e3e3e3'/> }
-          </Nav>        
+          </Nav>
         </Menu>
 
         <Breadcrumb>
           <Breadcrumb.Item href="#">
             Home
           </Breadcrumb.Item>
-          <Breadcrumb.Item href="http://getbootstrap.com/components/#breadcrumbs">
+          <Breadcrumb.Item href="#">
             Library
           </Breadcrumb.Item>
           <Breadcrumb.Item active>
             Data
           </Breadcrumb.Item>
-        </Breadcrumb>        
+        </Breadcrumb>
 
         <NotificationSystem ref="notificationSystem" />
         <div className="container-fluid">
           {this.props.children}
         </div>
-        <Modal show={this.state.showLogin} onHide={this.close}>
-          <Modal.Header>
-            <Modal.Title>Login</Modal.Title>
-          </Modal.Header>
 
-          <Modal.Body>
-            <LoginForm />
-          </Modal.Body>
-
-        </Modal>
-      
+        <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
+          <LoginForm modal />
+        </ModalLayout>
       </main>
     );
   }
