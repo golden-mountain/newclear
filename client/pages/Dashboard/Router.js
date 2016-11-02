@@ -11,7 +11,10 @@ class Router extends RouterBase {
   path = 'dashboard'
 
   pages = {
-    slb: SLBDashboard
+    slb: {
+      component: SLBDashboard,
+      menuPath: [ 'Dashboard', 'SLB' ]
+    }
   }
 
   routers = [ SLBDashboard ]

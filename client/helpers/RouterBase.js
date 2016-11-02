@@ -60,26 +60,6 @@ export default class RouterBase extends React.Component {
   pages = {}
   activePath = ''
 
-  // state = {
-  //   activePath: '',
-  //   params: {}
-  // }
-
-  // constructor(props) {
-  //   super(props);
-  //   this.ballKicker = new BallKicker();
-  //   this.ballKicker.accept([], REDIRECT_ROUTE, (from, to, { path, params }) => {
-  //     if (RouterBase.paths[path]) {
-  //       this.setState({ activePath: RouterBase.paths[path], params: params });
-  //     }
-  //   }, []);
-  // }
-
-  // shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
-  //   // console.log(nextState, this.state);
-  //   return !isEqual(this.state, nextState);
-  // }
-
   get paths() {
     return RouterBase.paths;
   }
@@ -98,14 +78,22 @@ export default class RouterBase extends React.Component {
   }
 
   render() {
+    const { mm } = this.props;
     return (
       <div>
         {
           Object.entries(this.pages).map(([ pageName, PageComponent ]) => {
             const paths = this.buildPath(pageName);
             const path = '/' + paths.join('/');
-            set(RouterBase.paths, paths.join('.'), path);
-            return <MatchWithFade key={path} pattern={path} component={PageComponent} paths={this.paths} />;
+            set(RouterBase.paths, paths, path);
+            let _PageComponent = PageComponent;
+            if (PageComponent.menuPath) {
+              // build menu
+              mm.registerMenuItem(PageComponent.menuPath, path);
+              _PageComponent = PageComponent.component;
+            }
+
+            return <MatchWithFade key={path} pattern={path} component={_PageComponent} paths={this.paths} />;
           })
         }
       </div>

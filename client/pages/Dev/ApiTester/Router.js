@@ -11,9 +11,12 @@ class Router extends RouterBase {
   path = 'dev'
 
   pages = {
-    apitester: ApiTesterRouter
+    apitester: {
+      component: ApiTesterRouter,
+      menuPath: [ 'Dev Tools', 'AXAPI Debugger' ]
+    }
   }
-  
+
 }
 
 export default Router;

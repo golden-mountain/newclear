@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Nav, Breadcrumb } from 'react-bootstrap';
 import Loading from 'react-loading';
 
-import Menu from './Menu';
+import Menu from 'components/Menu';
 import './scss/AppLayout.scss';
 
 import LoginForm from 'pages/Auth/components/Form';
