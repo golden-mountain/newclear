@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
-import { getAppPageVar } from './stateHelper';
+// import { getAppPageVar } from './stateHelper';
 import { uniqueId,  get } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 import { devPlugins, prodPlugins } from './WidgetPlugins';
+// import { Iterable } from 'immutable';
 
 // wrapper for widgets, add a wrapper to get state
-export const widgetWrapper = widgetProps => {
+export const widgetWrapper = ReduxDataConnector => {
   // const uniqueId = (prefix='') => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
@@ -29,6 +30,7 @@ export const widgetWrapper = widgetProps => {
         cm: PropTypes.object
       }
 
+
       _componentId = uniqueId(displayName + '-')
 
       constructor(props, context) {
@@ -36,10 +38,14 @@ export const widgetWrapper = widgetProps => {
         this.plugins = [];
         this.registerPlugins();
         this.cm = this.context.cm;
-        this.cm.registerComponent(this.instancePath, this.props.targetInstance);
+
+        const { instancePath, pagePath } = this.context.props;
+        // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
+        this.cm.registerComponent(this.instancePath, instancePath || pagePath);
         // this.cm.printComponentTree();
         // this.cm.acceptBalls();
         this.executePluginMethod('onInitialize');
+        // console.log(this.context.props);
       }
 
       registerPlugins() {
@@ -89,7 +95,7 @@ export const widgetWrapper = widgetProps => {
       }
 
       get instanceData() {
-        const data = this.props.page.getIn(this.instancePath);
+        const data = this.props.page && this.props.page.getIn(this.instancePath);
         if (data) {
           return data.toJS();
         } else {
@@ -106,15 +112,19 @@ export const widgetWrapper = widgetProps => {
       }
 
       get visible() {
-        return this.props.page.getIn([ ...this.instancePath, 'visible' ], true);
+        return (
+        (this.props.app &&
+         this.props.app.getIn([ ...this.instancePath, 'visible' ], true))
+        || true);
       }
 
       get data() {
-        return this.props.page.getIn([ ...this.instancePath, 'data' ]);
+        // console.log(this.props, this.instancePath);
+        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'data' ]);
       }
 
       get activeData() {
-        return this.props.page.getIn([ ...this.instancePath, 'active-data' ]);
+        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'active-data' ]);
       }
 
       get instancePath() {
@@ -139,6 +149,7 @@ export const widgetWrapper = widgetProps => {
       }
 
       componentWillMount() {
+        // console.log('Mount at .............', WrappedComponent.displayName);
         this.executePluginMethod('onMount');
       }
 
@@ -148,6 +159,7 @@ export const widgetWrapper = widgetProps => {
       }
 
       componentWillReceiveProps(nextProps, nextState) {
+        // console.log('Receive at .............', WrappedComponent.displayName);
         this.executePluginMethod('onReceiveProps', nextProps, nextState);
       }
 
@@ -156,7 +168,16 @@ export const widgetWrapper = widgetProps => {
       }
 
       shouldComponentUpdate(nextProps, nextState) {
-        return this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+        // console.log('Rendering at .............', WrappedComponent.displayName);
+        let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+        return result;
+      }
+
+      checkWidgetDataUpdate(nextProps) {
+        const thisComInstanceData = this.instanceData;
+        const nextComInstanceData = nextProps.app.getIn(this.instancePath);
+        const needUpdateFields = [ 'data', 'active-data', 'visible' ];
+        return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
       }
 
       checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {
@@ -186,6 +207,7 @@ export const widgetWrapper = widgetProps => {
             activeData: this.activeData,
             instanceData: this.instanceData,
             checkComponentNeedUpdate: this.checkComponentNeedUpdate.bind(this),
+            checkWidgetDataUpdate: this.checkWidgetDataUpdate.bind(this),
             createInstancePath: this.createInstancePath.bind(this),
             findParent: this.cm.findParent.bind(this.cm, this.instancePath),
             findTargetByName: this.cm.findTargetByComponentName.bind(this.cm),
@@ -207,65 +229,13 @@ export const widgetWrapper = widgetProps => {
       }
     }
 
-    const stateMapper = (state) => {
-      return {
-        // env: getAppEnvVar(state),
-        page: getAppPageVar(state),
-        app: state.getIn([ 'app' ]),
-        form: state.getIn([ 'form' ]),
-        ...widgetProps
-      };
-    };
-
-    const ConnnectedWidget = connect(stateMapper)(Widget);
-    const targetComponentName = `TargetWidget${WrappedComponent.displayName}`;
-
-    class TargetWrapper extends Component {
-      static displayName = targetComponentName
-
-      componentId = uniqueId( targetComponentName + '-')
-
-      static contextTypes = {
-        props: PropTypes.object,
-        cm: PropTypes.object
-      }
-
-      // static childContextTypes = {
-      //   props: PropTypes.object,
-      //   cm: PropTypes.object
-      // }
-
-      constructor(props, context) {
-        super(props, context);
-        const { instancePath, pagePath } = this.context.props;
-        this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
-      }
-
-      // getChildContext() {
-      //   return {  props: this.context.props, cm: this.context.cm };
-      // }
-
-      // shouldComponentUpdate(nextProps, nextState) {
-      //   if (!this.props.noOptimize) {
-      //     return !isEqual(this.props, nextProps) && !isEqual(nextState, this.state);
-      //   }
-      // }
-
-      get instancePath() {
-        const componentName = targetComponentName;
-        const componentId = this.componentId;
-        // console.log(this.context.props);
-        const [ pageName, pageId ] = this.context.props.pagePath;
-        // console.log(this.context.props, pageName, pageId, componentName, componentId );
-        return buildInstancePath(pageName, pageId, componentName, componentId );
-      }
-
-      render() {
-        const { children, ...rest } = this.props;
-        return (<ConnnectedWidget targetInstance={this.instancePath} {...rest} >{children}</ConnnectedWidget>);
-      }
+    // let ConnnectedWidget = null;
+    if (ReduxDataConnector) {
+      return connect(ReduxDataConnector)(Widget);
+    } else {
+      return Widget;
     }
-    return TargetWrapper;
+    // return ConnnectedWidget;
   };
 };
 

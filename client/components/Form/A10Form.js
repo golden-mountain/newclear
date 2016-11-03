@@ -28,12 +28,14 @@ class SchemaForm {
 
   getAxapiURL(axapi, groupName) {
     let axapiOrg = axapi;
+    console.log(this.urlParams);
     if (this.isEdit !== true ) {
       axapiOrg = axapiOrg.replace(/\/[^\/]+?$/, '');
     }
 
+    // console.log('--------------', axapiOrg);
     const path = axapiOrg.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
-      // console.log(words, ' are mached words', this.urlParams[words], ' keys from urlParams');
+      // console.log(words, ' are mached words', this.urlParams, ' keys from urlParams');
       // if (this.urlParams && this.urlParams[words]) {
       //   return this.urlParams[words];
       // } else {
@@ -48,7 +50,13 @@ class SchemaForm {
   }
 
   getObjectPrefixes() {
+    if (!this.schemas) {
+      return {};
+    }
+
     let prefixes = {};
+    // console.log(this.schemas, ' this schemas');
+
     this.schemas.forEach((schema) => {
       // console.log(schema);
       prefixes[schema['obj-name']] = schema;
@@ -67,7 +75,7 @@ class SchemaForm {
     if (this.removePrefix && newValues.getIn([ this.removePrefix ], false)) {
       newValues = newValues.getIn([ this.removePrefix ]);
     }
-
+    // console.log('..............', newValues);
     const prefixes = this.getObjectPrefixes();
 
     let parsedValues = Map({});
@@ -83,13 +91,13 @@ class SchemaForm {
         const { properties, axapi } = prefixes[fieldGroupName];
         // check each properties
         fieldGroup.forEach((fieldValue, fieldName) => { // eslint-disable-line
-          // console.log('properties.....', properties[fieldName], 'fieldName', fieldName);
           if (properties[fieldName]) {
             parsedValues = parsedValues.setIn([ fieldGroupName, fieldName ], fieldValue);
           } else {
             invalidProps = invalidProps.setIn([ fieldGroupName, fieldName ], fieldValue);
           }
         });
+        // console.log('full auth data..............');
 
         fullRequestData = {
           path: this.getAxapiURL(axapi, fieldGroupName),
@@ -201,7 +209,6 @@ class A10SchemaForm extends Component {
 
   defaultHandleSubmit(values, form, save=true) {
     let parsedValues = values;
-    parsedValues = this.schemaHandler.parseValues(parsedValues);
     // console.log('parsed values::::', parsedValues);
 
     if (save) {
@@ -235,7 +242,7 @@ class A10SchemaForm extends Component {
     let newValues = values;
     const instanceParentPath = this.props.findParent(A10SchemaForm.displayName);
     // console.log(instanceParentPath);
-    const formFields = this.props.page.getIn([ ...instanceParentPath, FORM_FIELD_KEY ]);
+    const formFields = this.props.app.getIn([ ...instanceParentPath, FORM_FIELD_KEY ]);
     formFields.forEach((fieldProps, fieldName) => {
       const visible = fieldProps.getIn([ 'conditionals', 'visible' ]);
 
@@ -262,6 +269,7 @@ class A10SchemaForm extends Component {
       inline
     } = this.props;
     // console.log(data);
+    // console.log('render at A10Form');
     // console.log(urlParams, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this.context.props;
     // const parentInstancePath = this.props.findParent('A10SchemaForm');
@@ -270,8 +278,12 @@ class A10SchemaForm extends Component {
       // validation triggle
       const parentInstancePath = this.props.findParent(A10SchemaForm.displayName);
       this.props.comTriggleValidation(parentInstancePath);
+      // console.log('test234............');
 
-      let newValues = values, patchedValues = Map(), submitFunc = this.defaultHandleSubmit;
+      let newValues = this.schemaHandler.parseValues(values),
+        patchedValues = Map(),
+        submitFunc = this.defaultHandleSubmit;
+
       if (onBeforeSubmit) {
         patchedValues = onBeforeSubmit(newValues);
       }
@@ -279,7 +291,7 @@ class A10SchemaForm extends Component {
 
       // let visible data hidden
       newValues = this.dataFinalize(newValues);
-      // console.log('test............1');
+      // console.log('test............1', newValues);
 
       // patch values need keep outside newValues, otherwise, data finalizer could be remove it by visible
       newValues = newValues.mergeDeep(fromJS(patchedValues));
@@ -327,4 +339,10 @@ class A10SchemaForm extends Component {
   }
 }
 
-export default widgetWrapper()(A10SchemaForm);
+export default widgetWrapper((state) => {
+  return {
+    // env: getAppEnvVar(state),
+    app: state.getIn([ 'app' ]),
+    form: state.getIn([ 'form' ])
+  };
+})(A10SchemaForm);

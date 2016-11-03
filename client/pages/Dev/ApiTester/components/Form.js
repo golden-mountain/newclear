@@ -10,9 +10,15 @@ import JSONEditor from 'components/JSONEditor';
 import auth from 'helpers/auth';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 
+const initialValues = {
+  path: '/axapi/v3/auth',
+  method: 'POST',
+  body: { credentials: { username: 'admin', password: 'a10' } }
+};
+
 class AxapiForm extends React.Component {
   static displayName = 'AxapiForm'
-  
+
   static contextTypes = {
     props: PropTypes.object.isRequired
   }
@@ -33,12 +39,12 @@ class AxapiForm extends React.Component {
 
   clearHistoryQuery() {
     localStorage.removeItem('axapi');
-    this.context.props.initialize(this.props.initialValues);
+    this.context.props.initialize(initialValues);
     this.forceUpdate();
   }
 
   initSession() {
-    const promise = this.context.props.axapiRequest(this.props.initialValues);
+    const promise = this.context.props.axapiRequest(initialValues);
     promise.then(() => {
       this.setState({ sessionId: auth.getToken() });
     });
@@ -58,7 +64,7 @@ class AxapiForm extends React.Component {
   }
 
   render() {
-    console.log(this);
+    // console.log(this);
     const { submitting, reset, pristine } = this.props;
     const { axapiRequest, axapiResponse, handleSubmit } = this.context.props;
     const historyData = this.fetchHistory();
@@ -70,11 +76,11 @@ class AxapiForm extends React.Component {
           <Row>
             <Col xs={2}>
               <h4>Request History </h4>
-              <Inspector data={historyData || {}} onClick={::this.setHistoryQuery} /> 
+              <Inspector data={historyData || {}} onClick={::this.setHistoryQuery} />
               <Button onClick={::this.clearHistoryQuery} >Clear</Button>
             </Col>
-            <Col xs={5}>   
-              <h4>Request </h4>   
+            <Col xs={5}>
+              <h4>Request </h4>
               <Panel>
                 <Form onSubmit={handleSubmit(axapiRequest)} horizontal>
                   <FormGroup controlId="formHorizontalEmail">
@@ -83,12 +89,12 @@ class AxapiForm extends React.Component {
                     </Col>
                     <Col sm={10}>
                   <FormControl.Static>
-                  { this.state.sessionId } 
-                  <Button onClick={::this.initSession} bsSize="small" >Init Session</Button> 
-                  </FormControl.Static>             
+                  { this.state.sessionId }
+                  <Button onClick={::this.initSession} bsSize="small" >Init Session</Button>
+                  </FormControl.Static>
                       </Col>
-                  </FormGroup>  
-                        
+                  </FormGroup>
+
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Path</Col>
                     <Col sm={10}>
@@ -109,7 +115,7 @@ class AxapiForm extends React.Component {
                     <FormControl.Feedback />
                   </FormGroup>
 
-          
+
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Body</Col>
                     <Col sm={10}>
@@ -137,18 +143,12 @@ class AxapiForm extends React.Component {
             </Col>
             <Col xs={5}>
               <h4>Current Result </h4>
-              <Inspector data={axapiResponse && axapiResponse.toJS() || {}} />              
+              <Inspector data={axapiResponse && axapiResponse.toJS() || {}} />
             </Col>
           </Row>
-      </div>      
+      </div>
     );
   }
 }
 
-const initialValues = {
-  path: '/axapi/v3/auth',
-  method: 'POST',
-  body: { credentials: { username: 'admin', password: 'a10' } }
-};
-
-export default widgetWrapper({ initialValues })(AxapiForm);
+export default widgetWrapper()(AxapiForm);

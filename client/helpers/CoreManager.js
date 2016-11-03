@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 import { reduxForm } from 'redux-form/immutable'; // imported Field
 
-import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
+// import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'layouts/a10/PageLayout';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { buildInstancePath } from 'helpers/actionHelper';
@@ -74,16 +74,16 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
   const boundAppAcs = mapValues(window.appActions, bindPageInstance);
 
   page = connect(
-    (state) => {
+    () => {
       return {
         // isLoading: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'isLoading' ], false),
         // statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
         // errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
         // notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ]),
-        axapiUid: getAxapiUid(state),
-        axapiResponse: getAxapiResponse(state, pagePath), // invalid on context
-        initialValues: config.initialValues, // invalid on context
-        page: getPageVar(state, pagePath), // invalid on context
+        // axapiUid: getAxapiUid(state),
+        // axapiResponse: getAxapiResponse(state, pagePath), // invalid on context
+        // initialValues: config.initialValues, // invalid on context
+        // page: getPageVar(state, pagePath), // invalid on context
         pagePath,
         env: config // valid on context
       };

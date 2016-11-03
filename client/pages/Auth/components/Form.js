@@ -28,7 +28,7 @@ class LoginForm extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { data, modal } = nextProps;
     if (data && data.signature && modal) {
-      // everything need update if logined 
+      // everything need update if logined
       this.props.kickBall(UPDATE_TARGET_DATA);
       return false;
     }
@@ -37,7 +37,6 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    // console.log(this.props, 'props....................');
     const { data, modal } = this.props;
     const { from } = '/';
 
@@ -59,4 +58,10 @@ class LoginForm extends React.Component {
   }
 }
 
-export default widgetWrapper()(LoginForm);
+export default widgetWrapper((state) => {
+  return {
+    // env: getAppEnvVar(state),
+    app: state.getIn([ 'app' ])
+    // form: state.getIn([ 'form' ])
+  };
+})(LoginForm);

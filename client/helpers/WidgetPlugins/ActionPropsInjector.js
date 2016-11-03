@@ -12,7 +12,7 @@ export default class ActionPropsInjector {
       const newMethodName = `com${upperFirst(actionName)}`;
       appActions[newMethodName] = (...args) => {
         args.unshift(instancePath);
-        return this.props.dispatch(window.appActions[actionName].apply(null, args));
+        return this.context.props.dispatch(window.appActions[actionName].apply(null, args));
       };
     });
     return appActions;

@@ -226,6 +226,10 @@ class SchemaField extends Component {
 //     const fieldThisValue = this.props.form.getIn([ this.context.props.env.form, 'values', ...toPath(name) ]);
 //     return !fieldNext.equals(fieldThis) || !isEqual(fieldThisValue, fieldNextValue);
 //   }
+  // shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
+  //   // console.log('Rendering at .............', WrappedComponent.displayName);
+  //   return true;
+  // }
 
   parseSchemaConditional(name, schema) {
     let result = {};
@@ -297,4 +301,11 @@ class SchemaField extends Component {
   }
 }
 
-export const A10SchemaField = widgetWrapper()(SchemaField);
+export const A10SchemaField = widgetWrapper((state) => {
+  return {
+    // env: getAppEnvVar(state),
+    // page: getAppPageVar(state),
+    app: state.getIn([ 'app' ]),
+    form: state.getIn([ 'form' ])
+  };
+})(SchemaField);

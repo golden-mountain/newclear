@@ -95,7 +95,7 @@ export default class ComponentManager {
   }
 
   // unregisterComponent(instancePath) {
-  
+
   // }
 
   printComponentTree() {
@@ -169,7 +169,7 @@ export default class ComponentManager {
       nextNode && (path = nextNode.getPath());
     }
 
-    let result = path.slice(-3, -2)[0];
+    let result = path.slice(-2, -1)[0];
     // console.log(displayName, 'new result:',result);
     return result.model ? result.model.instancePath : [];
   }
