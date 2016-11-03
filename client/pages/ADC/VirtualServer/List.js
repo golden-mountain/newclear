@@ -6,10 +6,9 @@ import PageBase from 'helpers/PageBase';
 import pageWrapper from 'helpers/pageWrapper';
 
 class VirtualServerList extends PageBase {
-  
-  
-  render() {    
-    
+
+
+  render() {
     return (
       <Row>
         <Col xs={12}>

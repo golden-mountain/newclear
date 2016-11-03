@@ -1,4 +1,6 @@
 # Reactjs based AX GUI Framework
+## TODO:
+1. Follow airbnb as eslint rules
 
 ## DEV START COMMAND
 Startup and switch AXAPI HOST:

@@ -235,7 +235,7 @@ class A10SchemaForm extends Component {
     let newValues = values;
     const instanceParentPath = this.props.findParent(A10SchemaForm.displayName);
     // console.log(instanceParentPath);
-    const formFields = this.props.page.getIn([ ...instanceParentPath, FORM_FIELD_KEY ]);
+    const formFields = this.props.app.getIn([ ...instanceParentPath, FORM_FIELD_KEY ]);
     formFields.forEach((fieldProps, fieldName) => {
       const visible = fieldProps.getIn([ 'conditionals', 'visible' ]);
 
@@ -262,6 +262,7 @@ class A10SchemaForm extends Component {
       inline
     } = this.props;
     // console.log(data);
+    // console.log('render at A10Form');
     // console.log(urlParams, 'is url keys...............');
     const { handleSubmit, fieldConnector } = this.context.props;
     // const parentInstancePath = this.props.findParent('A10SchemaForm');
@@ -327,4 +328,10 @@ class A10SchemaForm extends Component {
   }
 }
 
-export default widgetWrapper()(A10SchemaForm);
+export default widgetWrapper((state) => {
+  return {
+    // env: getAppEnvVar(state),
+    app: state.getIn([ 'app' ]),
+    form: state.getIn([ 'form' ])
+  };
+})(A10SchemaForm);

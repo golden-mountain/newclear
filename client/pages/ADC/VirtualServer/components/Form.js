@@ -2,7 +2,7 @@ import React from 'react';
 // import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
 // import { isEqual } from 'lodash';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 // import A10Button from 'components/Form/A10Button';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
@@ -30,16 +30,6 @@ const ipv4 = (value) => {
 class VirtualServerForm extends React.Component {
   static displayName = 'VirtualServerForm'
 
-  addLine() {
-    const valuePath = [ 'values', 'virtual-server', 'port-list' ];
-    let list = this.props.pageForm.getIn(valuePath, Map()).toJS();
-    list.push({
-      'port-number': 91,
-      'range': '92',
-      'protocol': 'tcp'
-    });
-    this.props.change('virtual-server.port-list', list);
-  }
 
   handleSubmit(v) {
     let values = fromJS(v);
@@ -56,7 +46,6 @@ class VirtualServerForm extends React.Component {
 
     return {};
   }
-
 
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
