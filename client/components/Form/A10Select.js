@@ -15,7 +15,7 @@ import { getPayload } from 'helpers/axapiHelper';
 import { values, get, isArray } from 'lodash';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
 
-import FieldConnector from 'helpers/FieldConnector';
+// import FieldConnector from 'helpers/FieldConnector';
 
 
 class A10Select extends Component {
@@ -35,12 +35,16 @@ class A10Select extends Component {
 
   componentWillUpdate() {
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
-      const { popupInfo: { connectOptions } } = this.props;
-      const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
+      // const { popupInfo: { connectOptions } } = this.props;
+      // console.log(params, connectOptions);
+      // const connect = (connectOptions, params) => {
+      //
+      // };
+      // const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
       // console.log(connectOptions, from, to, params);
       this.getOptions();
       // this.newValue = 'a1';
-      fieldConnector.connectToValues(params);
+      // fieldConnector.connectToValues(params);
     });
   }
 
