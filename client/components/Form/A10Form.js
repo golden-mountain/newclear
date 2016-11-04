@@ -28,7 +28,7 @@ class SchemaForm {
 
   getAxapiURL(axapi, groupName) {
     let axapiOrg = axapi;
-    console.log(this.urlParams);
+    // console.log(this.urlParams);
     if (this.isEdit !== true ) {
       axapiOrg = axapiOrg.replace(/\/[^\/]+?$/, '');
     }

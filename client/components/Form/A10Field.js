@@ -9,7 +9,6 @@ import { has } from 'lodash';
 import A10Select from 'components/Form/A10Select';
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
-
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
 import configApp from 'configs/app';

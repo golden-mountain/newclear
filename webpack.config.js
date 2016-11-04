@@ -4,20 +4,42 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 const config = require ('./client/configs/app');
-console.log(config);
+// console.log(config);
 // const nodeEnv = process.env.NODE_ENV || 'development';
 // const isProd = nodeEnv === 'production';
 
 // const autoprefixer = require('autoprefixer');
 // const precss       = require('precss');
 
+function LayoutModuleReplacementPlugin(resourceRegExp, newResource, contentBase) {
+  return {
+    apply: function(compiler) {
+    	compiler.plugin("normal-module-factory", function(nmf) {
+    		nmf.plugin("before-resolve", function(result, callback) {
+    			if(!result) return callback();
+    			if(resourceRegExp.test(result.request)) {
+    				if(typeof newResource === "function") {
+    					newResource(result);
+    				} else {
+    					result.request = path.resolve(contentBase, result.request.replace(resourceRegExp, newResource));
+    				}
+    			}
+    			return callback(null, result);
+    		});
+    	});
+    }
+  }
+}
+
+const CONTENT_BASE = './client';
+
 module.exports = {
   // devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
   context: path.join(__dirname, 'client'),
   entry: {
     js: [
-      'babel-polyfill', 
-      'index', 'pages/Home'
+      'babel-polyfill',
+      'index'
     ],
     vendor: [
       'bootstrap-loader', 'react', 'react-dom'
@@ -52,7 +74,7 @@ module.exports = {
       {
         test: /\.md/,
         loaders: [ "html-loader", "markdown-loader" ]
-      },      
+      },
       {
         test: /\.(js|jsx)$/,
         include: path.join(__dirname, 'client'),
@@ -71,17 +93,18 @@ module.exports = {
       {
         test: /\.(gif|png|jpg|jpeg|ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file'
-      }    
+      }
     ],
   },
   resolve: {
     extensions: [ '.js', '.jsx'],
     modules: [
-      path.resolve('./client'),
+      path.resolve(CONTENT_BASE),
       'node_modules'
     ]
   },
   plugins: [
+    new LayoutModuleReplacementPlugin(/layouts\/(.*)/,  './layouts/' + config.OEM + '/$1', path.resolve(CONTENT_BASE)),
     new CleanPlugin('builds'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
@@ -91,7 +114,7 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
-      debug: true, 
+      debug: true,
       // options: {
       //   postcss: [ autoprefixer ],
       //   // cleaner:  [autoprefixer({ browsers: [] })],
@@ -108,14 +131,14 @@ module.exports = {
     //   sourceMap: false
     // }),
     new webpack.DefinePlugin({
-      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')      
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
     }),
     new HtmlWebpackPlugin({  // Also generate a test.html
       // filename: 'index.html',
       title: 'A10 TPS GUI',
       template: 'index.ejs'
-    }),    
-    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }), 
+    }),
+    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
 
     new webpack.ProvidePlugin({
         Promise: 'es6-promise-promise', // works as expected
@@ -126,10 +149,10 @@ module.exports = {
   ],
   devtool:'source-map',
   devServer: {
-    contentBase: './client',
+    contentBase: CONTENT_BASE,
     noInfo: true,
     hot: true,
-    inline: true,    
+    inline: true,
     proxy: {
       '/axapi/*': {
         target: 'https://' + ( process.env.AXAPI_HOST || '192.168.105.196' ),
@@ -138,6 +161,6 @@ module.exports = {
           console.log(req, 'this is request');
         }
       }
-    }, 
+    },
   }
 }
