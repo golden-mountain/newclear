@@ -1,6 +1,10 @@
 import React from 'react';
 import { set } from 'lodash';
-import MenuLayout from 'layouts/a10/MenuLayout';
+// import MenuLayout from 'layouts/a10/MenuLayout';
+import configApp from 'configs/app';
+
+const OEM = configApp.OEM;
+const MenuLayout = require('layouts/' + OEM + '/MenuLayout').default;
 
 export default class MenuManager extends React.Component {
   static menuItems = {}

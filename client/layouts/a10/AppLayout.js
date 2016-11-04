@@ -9,8 +9,11 @@ import './scss/AppLayout.scss';
 import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
-import ModalLayout from 'layouts/a10/ModalLayout';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
+import configApp from 'configs/app';
+
+const OEM = configApp.OEM;
+const ModalLayout = require('layouts/' + OEM + '/ModalLayout').default;
 
 class AppLayout extends Component {
   static propTypes = {
