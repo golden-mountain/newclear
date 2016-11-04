@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import AppLayout from '../layouts/a10/AppLayout';
-import EmptyLayout from '../layouts/a10/EmptyLayout';
+import AppLayout from 'layouts/AppLayout';
+import EmptyLayout from 'layouts/EmptyLayout';
 import CoreManager from 'helpers/CoreManager';
 
 export default function asyncComponent(getComponent, Layout=AppLayout) {

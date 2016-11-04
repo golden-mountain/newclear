@@ -9,7 +9,7 @@ import './scss/AppLayout.scss';
 import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import NotificationSystem from 'react-notification-system';
-import ModalLayout from 'layouts/a10/ModalLayout';
+import ModalLayout from 'layouts/ModalLayout';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 
 class AppLayout extends Component {

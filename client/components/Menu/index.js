@@ -1,6 +1,6 @@
 import React from 'react';
 import { set } from 'lodash';
-import MenuLayout from 'layouts/a10/MenuLayout';
+import MenuLayout from 'layouts/MenuLayout';
 
 export default class MenuManager extends React.Component {
   static menuItems = {}

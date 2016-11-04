@@ -5,7 +5,7 @@ import { mapValues } from 'lodash';
 import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 // import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
-// import PageLayout from 'layouts/a10/PageLayout';
+// import PageLayout from 'layouts/PageLayout';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
 import { buildInstancePath } from 'helpers/actionHelper';
 import ComponentManager from 'helpers/ComponentManager';

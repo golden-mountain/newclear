@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
-import ModalLayout from 'layouts/a10/ModalLayout';
+import ModalLayout from 'layouts/ModalLayout';
 
 class A10Button extends Component {
   static displayName = 'A10Button'

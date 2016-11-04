@@ -10,7 +10,7 @@ import A10Select from 'components/Form/A10Select';
 // import * as logger from 'helpers/logger';
 import createValidationFuncs from 'helpers/validations';
 
-import FieldLayout from 'layouts/a10/FieldLayout';
+import FieldLayout from 'layouts/FieldLayout';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { FORM_FIELD_KEY } from 'configs/appKeys';
 
