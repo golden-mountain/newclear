@@ -1,19 +1,27 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Nav, Breadcrumb } from 'react-bootstrap';
-import Loading from 'react-loading';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Menu from 'components/Menu';
-import './scss/AppLayout.scss';
+// import { Nav, Breadcrumb } from 'react-bootstrap';
+// import Loading from 'react-loading';
 
-import LoginForm from 'pages/Auth/components/Form';
+// import Menu from 'components/Menu';
+// import './scss/AppLayout.scss';
+
+// import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
-import NotificationSystem from 'react-notification-system';
+// import NotificationSystem from 'react-notification-system';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
-import configApp from 'configs/app';
+// import configApp from 'configs/app';
 
-const OEM = configApp.OEM;
-const ModalLayout = require('layouts/' + OEM + '/ModalLayout').default;
+// const OEM = configApp.OEM;
+// const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
+
+
+import Header from './jsx/Layout/Header';
+import Sidebar from './jsx/Layout/Sidebar';
+import Offsidebar from './jsx/Layout/Offsidebar';
+import Footer from './jsx/Layout/Footer';
 
 class AppLayout extends Component {
   static propTypes = {
@@ -82,36 +90,73 @@ class AppLayout extends Component {
   render() {
     // console.log('context on layout', this);
 
+    // Animations supported
+    //      'rag-fadeIn'
+    //      'rag-fadeInUp'
+    //      'rag-fadeInDown'
+    //      'rag-fadeInRight'
+    //      'rag-fadeInLeft'
+    //      'rag-fadeInUpBig'
+    //      'rag-fadeInDownBig'
+    //      'rag-fadeInRightBig'
+    //      'rag-fadeInLeftBig'
+    //      'rag-zoomBackDown'
+
+    const animationName = 'rag-fadeIn';
+
     return (
-      <main >
-        <Menu>
-          <Nav pullRight>
-            { this.props.isLoading && <Loading type='cylon' color='#e3e3e3'/> }
-          </Nav>
-        </Menu>
+        <div className="wrapper">
+            <Header />
 
-        <Breadcrumb>
-          <Breadcrumb.Item href="#">
-            Home
-          </Breadcrumb.Item>
-          <Breadcrumb.Item href="#">
-            Library
-          </Breadcrumb.Item>
-          <Breadcrumb.Item active>
-            Data
-          </Breadcrumb.Item>
-        </Breadcrumb>
+            <Sidebar />
 
-        <NotificationSystem ref="notificationSystem" />
-        <div className="container-fluid">
-          {this.props.children}
+            <Offsidebar />
+
+            <ReactCSSTransitionGroup
+              component="section"
+              transitionName={animationName}
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={500}
+            >
+              {React.cloneElement(this.props.children, {
+                key: Math.random()
+              })}
+            </ReactCSSTransitionGroup>
+
+            <Footer />
         </div>
-
-        <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
-          <LoginForm modal />
-        </ModalLayout>
-      </main>
     );
+
+    // return (
+    //   <main >
+    //     <Menu>
+    //       <Nav pullRight>
+    //         { this.props.isLoading && <Loading type='cylon' color='#e3e3e3'/> }
+    //       </Nav>
+    //     </Menu>
+
+    //     <Breadcrumb>
+    //       <Breadcrumb.Item href="#">
+    //         Home
+    //       </Breadcrumb.Item>
+    //       <Breadcrumb.Item href="#">
+    //         Library
+    //       </Breadcrumb.Item>
+    //       <Breadcrumb.Item active>
+    //         Data
+    //       </Breadcrumb.Item>
+    //     </Breadcrumb>
+
+    //     <NotificationSystem ref="notificationSystem" />
+    //     <div className="container-fluid">
+    //       {this.props.children}
+    //     </div>
+
+    //     <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
+    //       <LoginForm modal />
+    //     </ModalLayout>
+    //   </main>
+    // );
   }
 }
 

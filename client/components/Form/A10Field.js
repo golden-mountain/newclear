@@ -14,7 +14,7 @@ import { FORM_FIELD_KEY } from 'configs/appKeys';
 import configApp from 'configs/app';
 
 const OEM = configApp.OEM;
-const FieldLayout = require('layouts/' + OEM + '/FieldLayout').default;
+const FieldLayout = require('oem/' + OEM + '/FieldLayout').default;
 
 // multiple options input
 const registeredMVInputs = [ 'Checkbox', 'Radio' ];

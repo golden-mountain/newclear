@@ -3,8 +3,8 @@ import CoreManager from 'helpers/CoreManager';
 import configApp from 'configs/app';
 
 const OEM = configApp.OEM;
-const AppLayout = require('../layouts/' + OEM + '/AppLayout').default;
-const EmptyLayout = require('../layouts/' + OEM + '/EmptyLayout').default;
+const AppLayout = require('../oem/' + OEM + '/AppLayout').default;
+const EmptyLayout = require('../oem/' + OEM + '/EmptyLayout').default;
 
 export default function asyncComponent(getComponent, Layout=AppLayout) {
   class AsyncComponent extends Component {

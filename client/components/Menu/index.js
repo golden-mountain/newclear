@@ -3,7 +3,7 @@ import { set } from 'lodash';
 import configApp from 'configs/app';
 
 const OEM = configApp.OEM;
-const MenuLayout = require('layouts/' + OEM + '/MenuLayout').default;
+const MenuLayout = require('oem/' + OEM + '/MenuLayout').default;
 
 export default class MenuManager extends React.Component {
   static menuItems = {}

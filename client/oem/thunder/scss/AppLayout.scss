@@ -1,0 +1,12 @@
+.viewport {
+    margin-top:2.4em;
+}
+
+.hidden {
+  display:none;
+}
+
+.required::after {
+  content: ' *';
+  color: #FF0000;
+}

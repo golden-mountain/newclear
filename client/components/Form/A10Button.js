@@ -5,7 +5,7 @@ import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 import configApp from 'configs/app';
 
 const OEM = configApp.OEM;
-const ModalLayout = require('layouts/' + OEM + '/ModalLayout').default;
+const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 
 class A10Button extends Component {
   static displayName = 'A10Button'

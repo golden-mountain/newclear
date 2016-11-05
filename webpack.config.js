@@ -11,25 +11,25 @@ const config = require ('./client/configs/app');
 // const autoprefixer = require('autoprefixer');
 // const precss       = require('precss');
 
-function LayoutModuleReplacementPlugin(resourceRegExp, newResource, contentBase) {
-  return {
-    apply: function(compiler) {
-    	compiler.plugin("normal-module-factory", function(nmf) {
-    		nmf.plugin("before-resolve", function(result, callback) {
-    			if(!result) return callback();
-    			if(resourceRegExp.test(result.request)) {
-    				if(typeof newResource === "function") {
-    					newResource(result);
-    				} else {
-    					result.request = path.resolve(contentBase, result.request.replace(resourceRegExp, newResource));
-    				}
-    			}
-    			return callback(null, result);
-    		});
-    	});
-    }
-  }
-}
+// function LayoutModuleReplacementPlugin(resourceRegExp, newResource, contentBase) {
+//   return {
+//     apply: function(compiler) {
+//     	compiler.plugin("normal-module-factory", function(nmf) {
+//     		nmf.plugin("before-resolve", function(result, callback) {
+//     			if(!result) return callback();
+//     			if(resourceRegExp.test(result.request)) {
+//     				if(typeof newResource === "function") {
+//     					newResource(result);
+//     				} else {
+//     					result.request = path.resolve(contentBase, result.request.replace(resourceRegExp, newResource));
+//     				}
+//     			}
+//     			return callback(null, result);
+//     		});
+//     	});
+//     }
+//   }
+// }
 
 const CONTENT_BASE = './client';
 
@@ -103,8 +103,11 @@ module.exports = {
       'node_modules'
     ]
   },
+  externals: {
+    jQuery: 'jQuery.noConflict()'
+  },
   plugins: [
-    new LayoutModuleReplacementPlugin(/layouts\/(.*)/,  './layouts/' + config.OEM + '/$1', path.resolve(CONTENT_BASE)),
+    // new LayoutModuleReplacementPlugin(/layouts\/(.*)/,  './layouts/' + config.OEM + '/$1', path.resolve(CONTENT_BASE)),
     new CleanPlugin('builds'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
