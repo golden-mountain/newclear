@@ -1,4 +1,4 @@
-var OEM = 'a10';
+var OEM = 'thunder';
 var LAYOUT = OEM;
 var THEME = OEM;
 var APP_CONFIGS =  {

@@ -1,95 +1,93 @@
-import * as CONST from '../Common/constants';
+// import * as CONST from '../Common/constants';
 
 export default () => {
 
-    var $win     = $(window);
-    var $html    = $('html');
-    var $body    = $('body');
-    var $sidebar = $('.sidebar');
-    var mq       = CONST.APP_MEDIAQUERY;
+  var $win     = $(window);
+  var $html    = $('html');
+  var $body    = $('body');
+  var $sidebar = $('.sidebar');
+  // var mq       = CONST.APP_MEDIAQUERY;
 
-    // AUTOCOLLAPSE ITEMS
-    // -----------------------------------
+  // AUTOCOLLAPSE ITEMS
+  // -----------------------------------
 
-    var sidebarCollapse = $sidebar.find('.collapse');
-    sidebarCollapse.on('show.bs.collapse', function(event){
+  var sidebarCollapse = $sidebar.find('.collapse');
+  sidebarCollapse.on('show.bs.collapse', function (event) {
 
-      event.stopPropagation();
-      if ( $(this).parents('.collapse').length === 0 )
-        sidebarCollapse.filter('.in').collapse('hide');
+    event.stopPropagation();
+    if ( $(this).parents('.collapse').length === 0 )
+      sidebarCollapse.filter('.in').collapse('hide');
 
-    });
+  });
 
-    // SIDEBAR ACTIVE STATE
-    // -----------------------------------
+  // SIDEBAR ACTIVE STATE
+  // -----------------------------------
 
-    // // Find current active item
-    // var currentItem = $('.sidebar .active').parents('li');
+  // // Find current active item
+  // var currentItem = $('.sidebar .active').parents('li');
 
-    // // hover mode don't try to expand active collapse
-    // if ( ! useAsideHover() )
-    //   currentItem
-    //     .addClass('active')     // activate the parent
-    //     .children('.collapse')  // find the collapse
-    //     .collapse('show');      // and show it
+  // // hover mode don't try to expand active collapse
+  // if ( ! useAsideHover() )
+  //   currentItem
+  //     .addClass('active')     // activate the parent
+  //     .children('.collapse')  // find the collapse
+  //     .collapse('show');      // and show it
 
-    // // remove this if you use only collapsible sidebar items
-    // $sidebar.find('li > a + ul').on('show.bs.collapse', function (e) {
-    //   if( useAsideHover() ) e.preventDefault();
-    // });
+  // // remove this if you use only collapsible sidebar items
+  // $sidebar.find('li > a + ul').on('show.bs.collapse', function (e) {
+  //   if( useAsideHover() ) e.preventDefault();
+  // });
 
-    // SIDEBAR COLLAPSED ITEM HANDLER
-    // -----------------------------------
+  // SIDEBAR COLLAPSED ITEM HANDLER
+  // -----------------------------------
 
 
-    var eventName = isTouch() ? 'click' : 'mouseenter' ;
-    var subNav = $();
-    $sidebar.on( eventName, '.nav > li', function() {
+  var eventName = isTouch() ? 'click' : 'mouseenter' ;
+  var subNav = $();
+  $sidebar.on( eventName, '.nav > li', function () {
 
-      if( isSidebarCollapsed() || useAsideHover() ) {
+    if( isSidebarCollapsed() || useAsideHover() ) {
 
-        subNav.trigger('mouseleave');
-        subNav = toggleMenuItem( $(this) );
+      subNav.trigger('mouseleave');
+      subNav = toggleMenuItem( $(this) );
 
-        // Used to detect click and touch events outside the sidebar
-        sidebarAddBackdrop();
+      // Used to detect click and touch events outside the sidebar
+      sidebarAddBackdrop();
+    }
+
+  });
+
+  var sidebarAnyclickClose = $sidebar.data('sidebarAnyclickClose');
+
+  // Allows to close
+  if ( typeof sidebarAnyclickClose !== 'undefined' ) {
+
+    $('.wrapper').on('click.sidebar', function (e) {
+      // don't check if sidebar not visible
+      if( ! $body.hasClass('aside-toggled')) return;
+
+      var $target = $(e.target);
+      if( ! $target.parents('.aside').length && // if not child of sidebar
+          ! $target.parents('.topnavbar-wrapper').length && // if not child of header
+          ! $target.is('#user-block-toggle') && // user block toggle anchor
+          ! $target.parent().is('#user-block-toggle') // user block toggle icon
+        ) {
+        $body.removeClass('aside-toggled');
       }
 
     });
-
-    var sidebarAnyclickClose = $sidebar.data('sidebarAnyclickClose');
-
-    // Allows to close
-    if ( typeof sidebarAnyclickClose !== 'undefined' ) {
-
-      $('.wrapper').on('click.sidebar', function(e){
-        // don't check if sidebar not visible
-        if( ! $body.hasClass('aside-toggled')) return;
-
-        var $target = $(e.target);
-        if( ! $target.parents('.aside').length && // if not child of sidebar
-            ! $target.parents('.topnavbar-wrapper').length && // if not child of header
-            ! $target.is('#user-block-toggle') && // user block toggle anchor
-            ! $target.parent().is('#user-block-toggle') // user block toggle icon
-          ) {
-                $body.removeClass('aside-toggled');
-        }
-
-      });
-    }
-
-
+  }
 
   function sidebarAddBackdrop() {
-    var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop'} );
-    $backdrop.insertAfter('.aside').on("click mouseenter", function () {
+    var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop' } );
+    $backdrop.insertAfter('.aside').on('click mouseenter', function () {
       removeFloatingNav();
     });
   }
 
   // Open the collapse sidebar submenu items when on touch devices
   // - desktop only opens on hover
-  function toggleTouchItem($element){
+  function toggleTouchItem($element) {
     $element
       .siblings('li')
       .removeClass('open')
@@ -131,7 +129,7 @@ export default () => {
         bottom:   (subNav.outerHeight(true) + itemTop > vwHeight) ? 0 : 'auto'
       });
 
-    subNav.on('mouseleave', function() {
+    subNav.on('mouseleave', function () {
       toggleTouchItem($listItem);
       subNav.remove();
     });
@@ -151,17 +149,17 @@ export default () => {
   function isSidebarCollapsed() {
     return $body.hasClass('aside-collapsed');
   }
-  function isSidebarToggled() {
-    return $body.hasClass('aside-toggled');
-  }
-  function isMobile() {
-    return $win.width() < mq.tablet;
-  }
-  function isFixed(){
+  // function isSidebarToggled() {
+  //   return $body.hasClass('aside-toggled');
+  // }
+  // function isMobile() {
+  //   return $win.width() < mq.tablet;
+  // }
+  function isFixed() {
     return $body.hasClass('layout-fixed');
   }
   function useAsideHover() {
     return $body.hasClass('aside-hover');
   }
 
-} // rendered
+}; // rendered

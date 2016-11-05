@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
-import './scss/Menu.scss';
+// import './scss/Menu.scss';
 const List = ({ children, className }) => {
   return <li className={ className }> { children } </li>;
 };

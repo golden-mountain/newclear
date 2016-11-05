@@ -1,21 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // import { Nav, Breadcrumb } from 'react-bootstrap';
 // import Loading from 'react-loading';
 
 // import Menu from 'components/Menu';
 // import './scss/AppLayout.scss';
+import './sass/bootstrap.scss';
+import './sass/app.scss';
 
-// import LoginForm from 'pages/Auth/components/Form';
+//issue:LOAD font awesome: https://github.com/gowravshekar/font-awesome-webpack/issues/20
+import 'style!css!less!font-awesome-webpack/font-awesome-styles.loader!font-awesome-webpack/font-awesome.config.js';
+
+import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
-// import NotificationSystem from 'react-notification-system';
+import NotificationSystem from 'react-notification-system';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
-// import configApp from 'configs/app';
+import configApp from 'configs/app';
 
-// const OEM = configApp.OEM;
-// const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
+const OEM = configApp.OEM;
+const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 
 
 import Header from './jsx/Layout/Header';
@@ -102,40 +107,43 @@ class AppLayout extends Component {
     //      'rag-fadeInLeftBig'
     //      'rag-zoomBackDown'
 
-    const animationName = 'rag-fadeIn';
+    // const animationName = 'rag-fadeIn';
 
     return (
-        <div className="wrapper">
-            <Header />
+      <div className="wrapper">
+          <Header />
 
-            <Sidebar />
+          <Sidebar />
 
-            <Offsidebar />
+          <Offsidebar />
 
-            <ReactCSSTransitionGroup
-              component="section"
-              transitionName={animationName}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={500}
-            >
-              {React.cloneElement(this.props.children, {
-                key: Math.random()
-              })}
-            </ReactCSSTransitionGroup>
+          {/* <ReactCSSTransitionGroup
+            component="section"
+            transitionName={animationName}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
+          > */}
+            {/* {React.cloneElement(this.props.children, {
+              key: Math.random()
+            })} */}
+          <section>
+            {this.props.children}
+          </section>
+          {/* </ReactCSSTransitionGroup> */}
 
-            <Footer />
-        </div>
+          <Footer />
+          <NotificationSystem ref="notificationSystem" />
+
+
+          <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
+            <LoginForm modal />
+          </ModalLayout>
+      </div>
     );
 
-    // return (
-    //   <main >
-    //     <Menu>
-    //       <Nav pullRight>
-    //         { this.props.isLoading && <Loading type='cylon' color='#e3e3e3'/> }
-    //       </Nav>
-    //     </Menu>
 
-    //     <Breadcrumb>
+    //
+    //     {/* <Breadcrumb>
     //       <Breadcrumb.Item href="#">
     //         Home
     //       </Breadcrumb.Item>
@@ -145,18 +153,8 @@ class AppLayout extends Component {
     //       <Breadcrumb.Item active>
     //         Data
     //       </Breadcrumb.Item>
-    //     </Breadcrumb>
+    //     </Breadcrumb> */}
 
-    //     <NotificationSystem ref="notificationSystem" />
-    //     <div className="container-fluid">
-    //       {this.props.children}
-    //     </div>
-
-    //     <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
-    //       <LoginForm modal />
-    //     </ModalLayout>
-    //   </main>
-    // );
   }
 }
 

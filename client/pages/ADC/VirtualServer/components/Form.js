@@ -122,7 +122,7 @@ class VirtualServerForm extends React.Component {
     return (
       <A10Form onInitialize={onInitialize} onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} horizontal>
         <Row>
-          <Col xs={12}>
+          <Col xs={6}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
               <A10SchemaField schema={elements['name']} name="virtual-server.name" required label="Name" />
               <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
@@ -144,8 +144,8 @@ class VirtualServerForm extends React.Component {
               <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
 
             </Panel>
-
-            <Panel header={<h4>Advanced Fields</h4>} collapsible>
+            {/* collapsible */}
+            <Panel header={<h4>Virtual Server Advanced Fields</h4>} >
 
               <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
                 <Checkbox value={true} />
@@ -180,9 +180,9 @@ class VirtualServerForm extends React.Component {
 
               <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
             </Panel>
-          {/*</Col>
+          </Col>
 
-          <Col xs={6}>*/}
+          <Col xs={6}>
             <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
               <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} schema={elements['port-list']} >
                 <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />

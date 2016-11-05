@@ -2,6 +2,7 @@ import React from 'react';
 import pubsub from 'pubsub-js';
 import HeaderRun from './Header.run';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 class Header extends React.Component {
 
@@ -23,7 +24,7 @@ class Header extends React.Component {
         <span className="label label-danger">11</span>
       </span>
     );
-    
+
     return (
       <header className="topnavbar-wrapper">
         { /* START Top Navbar */ }
@@ -32,10 +33,10 @@ class Header extends React.Component {
           <div className="navbar-header">
             <a href="#/" className="navbar-brand">
               <div className="brand-logo">
-                <img src="img/logo.png" alt="App Logo" className="img-responsive" />
+                {/* <img src="img/logo.png" alt="App Logo" className="img-responsive" /> */}
               </div>
               <div className="brand-logo-collapsed">
-                <img src="img/logo-single.png" alt="App Logo" className="img-responsive" />
+                {/* <img src="img/logo-single.png" alt="App Logo" className="img-responsive" /> */}
               </div>
             </a>
           </div>
@@ -91,7 +92,7 @@ class Header extends React.Component {
                 <MenuItem className="animated flipInX" eventKey={3.2}>Profile</MenuItem>
                 <MenuItem className="animated flipInX" eventKey={3.3}>Dashboard</MenuItem>
                 <MenuItem divider />
-                <MenuItem className="animated flipInX" eventKey={3.3}>Logout</MenuItem>
+                <MenuItem className="animated flipInX" eventKey={3.3}><Link to="/auth/logout">Logout</Link></MenuItem>
               </NavDropdown>
               { /* END Alert menu */ }
               { /* START Offsidebar button */ }

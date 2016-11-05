@@ -1,6 +1,15 @@
 import React from 'react';
 
-import { Col, Row } from 'react-bootstrap';
+// import { Col, Row } from 'react-bootstrap';
+
+// const requireLayout = (name) => {
+//   const configApp = require('configs/app');
+//   const OEM = configApp.OEM;
+//   return require('oem/' + OEM + '/jsx/Forms/' + name).default;
+// };
+import configApp from 'configs/app';
+const OEM = configApp.OEM;
+const StandardFormPageLayout = require('oem/' + OEM + '/jsx/Forms/FormGeneral').default;
 
 import VirtualServerForm from './components/Form';
 import PageBase from 'helpers/PageBase';
@@ -11,15 +20,9 @@ class VirtualServerEdit extends PageBase {
   render() {
 
     return (
-      <Row>
-        <Col xs={2}>
-          <h4>Help  </h4>
-          {/* <Button onClick={::this.addLine} > Add a Line </Button> */}
-        </Col>
-        <Col xs={10}>
-          <VirtualServerForm />
-        </Col>
-      </Row>
+      <StandardFormPageLayout title="Virtual Server Edit" description="Virtual Server Is A Main Object For SLB">
+        <VirtualServerForm />
+      </StandardFormPageLayout>
     );
   }
 }

@@ -115,7 +115,7 @@ $headings-color:          inherit;
 //## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
 
 //** Load fonts from this directory.
-$icon-font-path:          "../fonts/";
+$icon-font-path:          "./fonts/";
 //** File name for all font files.
 $icon-font-name:          "glyphicons-halflings-regular";
 //** Element ID within SVG icon file.
@@ -534,7 +534,7 @@ $state-success-text:             $brand-success;
 $state-success-bg:               #dff0d8;
 $state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%);
 
-$state-info-text:                $brand-info; 
+$state-info-text:                $brand-info;
 $state-info-bg:                  #d9edf7;
 $state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%);
 
@@ -900,5 +900,3 @@ $page-header-border-color:    $gray-lighter;
 $dl-horizontal-offset:        $component-offset-horizontal;
 //** Horizontal line color.
 $hr-border:                   $gray-lighter;
-
-

@@ -42,7 +42,8 @@ module.exports = {
       'index'
     ],
     vendor: [
-      'bootstrap-loader', 'react', 'react-dom'
+      // 'bootstrap-loader',
+      'react', 'react-dom'
     ]
   },
   output: {
@@ -91,9 +92,17 @@ module.exports = {
         ]
       },
       {
-        test: /\.(gif|png|jpg|jpeg|ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+         loader: "url-loader?limit=10000&minetype=application/font-woff"
+      },
+      {
+        test: /\.(gif|png|jpg|jpeg|ttf|eot|svg?)(\?[a-z0-9]+)?$/,
         loader: 'file'
       }
+      // {
+      //   test: require.resolve('jquery'),
+      //   loader: 'expose?jQuery!expose?$'
+      // }
     ],
   },
   resolve: {
@@ -103,9 +112,9 @@ module.exports = {
       'node_modules'
     ]
   },
-  externals: {
-    jQuery: 'jQuery.noConflict()'
-  },
+  // externals: {
+  //   jQuery: 'jQuery.noConflict()'
+  // },
   plugins: [
     // new LayoutModuleReplacementPlugin(/layouts\/(.*)/,  './layouts/' + config.OEM + '/$1', path.resolve(CONTENT_BASE)),
     new CleanPlugin('builds'),
@@ -145,6 +154,11 @@ module.exports = {
 
     new webpack.ProvidePlugin({
         Promise: 'es6-promise-promise', // works as expected
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+        // 'window.C': path.resolve(CONTENT_BASE , 'configs/app.js'),
+        // 'window.appActions': path.resolve(CONTENT_BASE, 'redux/modules/app/index.js')
     })
 
     // new webpack.ContextReplacementPlugin(/.*layouts$/, false, new RegExp(config.LAYOUT + '$','g'))

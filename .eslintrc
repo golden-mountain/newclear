@@ -2,7 +2,7 @@
   "extends": "eslint:recommended",
   "ecmaFeatures": {
     "modules": true
-  }, 
+  },
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -10,8 +10,11 @@
     "node": true
   },
   "globals": {
+      "Promise": false,
       "System": false,
-      "Promise": false
+      "jQuery": false,
+      "$": false,
+      "C": false
   },
   "rules": {
     "no-console": 0,
@@ -36,4 +39,3 @@
     "react"
   ]
 }
-

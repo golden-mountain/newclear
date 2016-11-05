@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { forEach, uniqueId } from 'lodash';
 
-import './scss/Menu.scss';
+// import './scss/Menu.scss';
 const List = ({ children, className }) => {
   return <li className={ className }> { children } </li>;
 };
