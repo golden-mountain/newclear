@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { TableHeaderColumn } from 'react-bootstrap-table';  // in ECMAScript 6
+// import { TableHeaderColumn } from 'react-bootstrap-table';  // in ECMAScript 6
 
-import A10Table from 'components/List/A10Table';
+import A10Table, { A10TableColumn } from 'components/List/A10Table';
 
 // import AppManager from 'helpers/AppManager';
 // import BaseTable from 'pages/BaseTable';
@@ -65,10 +65,11 @@ class VirtualServerTable extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <A10Table fieldMap={fieldMap} actions={actions} options={options} schema={slbVirtualServerSchema} >
-            <TableHeaderColumn dataField="enable-disable-action" dataSort={true} width="100" dataFormat={formatStat} >Enable</TableHeaderColumn>
-            <TableHeaderColumn dataField="name" isKey={true} dataSort={true} width="300" dataFormat={formatName}>Name</TableHeaderColumn>
-            <TableHeaderColumn dataField="ip-address" dataSort={true} dataFormat={formatIp}>IP Address</TableHeaderColumn>
+          <A10Table fieldMap={fieldMap} actions={actions} options={options} schema={slbVirtualServerSchema} responsive striped hover newLast loadOnInitial >
+            <A10TableColumn dataField="name" checkbox style={{ width:'20px' }}  />
+            <A10TableColumn dataField="enable-disable-action" style={{ width:'80px' }} dataFormat={formatStat} >Enable</A10TableColumn>
+            <A10TableColumn dataField="name" style={{ width:'30%' }} dataFormat={formatName}>Name</A10TableColumn>
+            <A10TableColumn dataField="ip-address" dataFormat={formatIp}>IP Address</A10TableColumn>
           </A10Table>
         </Col>
       </Row>

@@ -35,7 +35,7 @@ class A10FieldLayout extends Component {
         </Col>
       </FormGroup>
       :
-      <FormGroup bsClass="no-layout" {...status}>
+      <FormGroup bsClass="form-group" {...status}>
         {children}
         <FormControl.Feedback />
         {errorMsg}

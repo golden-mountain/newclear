@@ -1,10 +1,13 @@
 // import React from 'react';
 import RouterBase from 'helpers/RouterBase';
 import asyncComponent from 'helpers/asyncComponent';
+import configApp from 'configs/app';
+const OEM = configApp.OEM;
+const LoginPageLayout = require('oem/' + OEM + '/LoginLayout').default;
 
 const Login = asyncComponent(() =>
   System.import('./login').then(module => module.default), 
-  false
+  LoginPageLayout
 );
 
 const Logout = asyncComponent(() =>

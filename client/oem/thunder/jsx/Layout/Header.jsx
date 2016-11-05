@@ -3,6 +3,8 @@ import pubsub from 'pubsub-js';
 import HeaderRun from './Header.run';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
+import logo from '../../img/logo.png';
+import logoLarger from '../../img/logo-larger.png';
 
 class Header extends React.Component {
 
@@ -33,10 +35,10 @@ class Header extends React.Component {
           <div className="navbar-header">
             <a href="#/" className="navbar-brand">
               <div className="brand-logo">
-                {/* <img src="img/logo.png" alt="App Logo" className="img-responsive" /> */}
+                <img src={logoLarger} alt="A10networks Inc." className="img-responsive" style={{ width: '80px' }} />
               </div>
               <div className="brand-logo-collapsed">
-                {/* <img src="img/logo-single.png" alt="App Logo" className="img-responsive" /> */}
+                <img src={logo} alt="A10networks Inc." className="img-responsive" style={{ width: '80px' }} />
               </div>
             </a>
           </div>

@@ -1,22 +1,23 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
-
 import VirtualServerTable from './components/Table';
+
+import configApp from 'configs/app';
+const OEM = configApp.OEM;
+const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
+
 import PageBase from 'helpers/PageBase';
 import pageWrapper from 'helpers/pageWrapper';
 
-class VirtualServerList extends PageBase {
-
+class VirtualServerListPage extends PageBase {
 
   render() {
+
     return (
-      <Row>
-        <Col xs={12}>
-          <VirtualServerTable  />
-        </Col>
-      </Row>
+      <StandardPageLayout title="Virtual Servers" description="Virtual Servers List Page">
+        <VirtualServerTable />
+      </StandardPageLayout>
     );
   }
 }
 
-export default pageWrapper(VirtualServerList);
+export default pageWrapper(VirtualServerListPage);

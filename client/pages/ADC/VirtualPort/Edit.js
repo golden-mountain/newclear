@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Col, Row } from 'react-bootstrap';
+import configApp from 'configs/app';
+const OEM = configApp.OEM;
+const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 
 import VirtualPortForm from './components/Form';
 import PageBase from 'helpers/PageBase';
@@ -8,15 +10,12 @@ import pageWrapper from 'helpers/pageWrapper';
 
 class VirtualPortEdit extends PageBase {
 
-
   render() {
 
     return (
-      <Row>
-        <Col xs={10}>
-          <VirtualPortForm />
-        </Col>
-      </Row>
+      <StandardPageLayout title="Virtual Port Edit" description="Virtual Port Is A Port Of Virtual Server">
+        <VirtualPortForm />
+      </StandardPageLayout>
     );
   }
 }

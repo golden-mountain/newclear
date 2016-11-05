@@ -137,7 +137,7 @@ class A10Select extends Component {
       <InputGroup>
         <VirtualizedSelect {...loadAttr}/>
         <InputGroup.Addon>
-          <A10Button popup={ popupInfo } componentClass="a" edit={false} >+</A10Button>
+          <A10Button popup={ popupInfo } componentClass="a" edit={false} ><em className="fa fa-plus"/></A10Button>
         </InputGroup.Addon>
       </InputGroup>
       :

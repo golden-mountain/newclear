@@ -1,22 +1,23 @@
+import React from 'react';
+import ContentWrapper from './jsx/Layout/ContentWrapper';
 
-import React, { Component } from 'react';
 
-import Helmet from 'react-helmet';
+class PageLayout extends React.Component {
 
-// import { SectionHeader } from '../Components/Layout';
-
-class PageLayout extends Component {
-  // export default InitializeFromStateForm;
   render() {
+    const { title, description, children } = this.props;
 
-    const { children } = this.props;
     return (
-      <div className="container-fluid">
-        <Helmet title="Edit Virtual Port" />
-        {children}
-      </div>
-    );
+      <ContentWrapper>
+        <h3>
+          {title}
+           <small>{description}</small>
+        </h3>
+        { children }
+      </ContentWrapper>
+      );
   }
+
 }
 
 export default PageLayout;
