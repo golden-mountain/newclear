@@ -27,6 +27,10 @@ class Header extends React.Component {
       </span>
     );
 
+    const A10MenuItem = ({ to, className, children }) => {
+      return (<li className={className} role="presentation"><Link to={to} >{children}</Link></li>);
+    };
+
     return (
       <header className="topnavbar-wrapper">
         { /* START Top Navbar */ }
@@ -94,7 +98,7 @@ class Header extends React.Component {
                 <MenuItem className="animated flipInX" eventKey={3.2}>Profile</MenuItem>
                 <MenuItem className="animated flipInX" eventKey={3.3}>Dashboard</MenuItem>
                 <MenuItem divider />
-                <MenuItem className="animated flipInX" eventKey={3.3}><Link to="/auth/logout">Logout</Link></MenuItem>
+                <A10MenuItem className="animated flipInX" to="/auth/logout">Logout</A10MenuItem>
               </NavDropdown>
               { /* END Alert menu */ }
               { /* START Offsidebar button */ }

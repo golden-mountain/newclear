@@ -56,7 +56,7 @@ class VirtualServerForm extends React.Component {
       componentClass: TemplateVirtualServerForm,
       modalProps: {
         title: 'Create Virtual Server Template',
-        bsSize:'lg'
+        bsSize:'super'
       },
       connectOptions: {
         connectToValue: {
@@ -83,7 +83,7 @@ class VirtualServerForm extends React.Component {
       urlKeysConnect: [ 'virtual-server.name' ],
       modalProps: {
         title: 'Create Virtual Port',
-        bsSize:'lg'
+        bsSize:'super'
       },
       connectOptions: {
         connectToValue: {

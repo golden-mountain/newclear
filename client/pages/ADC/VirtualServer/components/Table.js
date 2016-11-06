@@ -32,7 +32,7 @@ class VirtualServerTable extends React.Component {
       componentClass: VirtualServerForm,
       modalProps: {
         title: 'Create Virtual Server',
-        bsSize:'lg'
+        bsSize:'super'
         // componentClassName: 'super-large-modal'
       },
       connectOptions: {

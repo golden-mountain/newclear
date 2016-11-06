@@ -229,7 +229,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/05.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">
@@ -248,7 +248,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/06.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">
@@ -267,7 +267,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/07.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">
@@ -286,7 +286,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/08.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">
@@ -312,7 +312,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/09.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">
@@ -331,7 +331,7 @@ class Offsidebar extends React.Component {
                   </span>
                   <span className="pull-left">
                            { /* Contact avatar */ }
-                           <img src="img/user/10.jpg" alt="Image" className="media-box-object img-circle thumb48" />
+                           <img src="" alt="Image" className="media-box-object img-circle thumb48" />
                           </span>
                   { /* Contact info */ }
                   <span className="media-box-body">

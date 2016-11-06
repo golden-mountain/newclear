@@ -4,9 +4,13 @@ import { Modal } from 'react-bootstrap';
 
 export default class ModalLayout extends Component {
   render() {
-    let { children, visible, title, ...props } = this.props;
+    let { children, visible, title, bsSize, dialogClassName, ...props } = this.props;
+    if (bsSize == 'super') {
+      dialogClassName='largest-modal';
+      bsSize='lg';
+    }
 
-    return (<Modal show={visible}  {...props}>
+    return (<Modal show={visible} bsSize={bsSize} dialogClassName={dialogClassName} {...props}>
       <Modal.Header>
         <Modal.Title>{ title }</Modal.Title>
       </Modal.Header>

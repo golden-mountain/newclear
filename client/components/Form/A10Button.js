@@ -73,8 +73,13 @@ class A10Button extends Component {
     }
 
     const ButtonClass = componentClass || Button;
+    let buttonProps = {};
+    if (bsClass) {
+      buttonProps.bsClass = bsClass;
+    }
+
     return (
-      <ButtonClass onClick={click} style={buttonStyle} bsClass={bsClass}>
+      <ButtonClass onClick={click} style={buttonStyle} {...buttonProps}>
         {children}
         { modalProps ?
           <ModalLayout visible={this.state.visible} {...modalProps} >

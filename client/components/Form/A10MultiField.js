@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Row, Col, Form, InputGroup, FormControl, Pagination } from 'react-bootstrap';
 // import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { forEach, isObject, upperFirst } from 'lodash';
 
@@ -55,35 +55,58 @@ class TableFields extends Component {
     // console.log('popup info:', popupInfo);
     return (
       <div>
-        <div className="pull-right">
-          <Button onClick={this._inlineCreate(fields, kids)} bsStyle="primary">
-            <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> New
-          </Button>
+        <Row>
+          <Col md={6} >
+            <Form horizontal>
+              <InputGroup>
+                <FormControl type="text" placeholder="Keywords" />
+                <InputGroup.Button>
+                  <Button bsStyle="default">Search</Button>
+                </InputGroup.Button>
+              </InputGroup>
+            </Form>
+          </Col>
+          <Col md={6} className="text-right">
+            <Button onClick={this._inlineCreate(fields, kids)} bsStyle="primary">
+              <span className="fa fa-plus" aria-hidden="true"></span> New
+            </Button>
 
-          { popupInfo && <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button> }
+            { popupInfo && <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button> }
 
-          {touched && error && <span>{error}</span>}
+            {touched && error && <span>{error}</span>}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={12}>
+            <Table responsive striped hover>
+              <thead>
+                <tr>
+                  { this._extractTitles(kids) }
+                </tr>
+              </thead>
+              <tbody>
+              {
+                fields.map((port, index) => {
+                  // console.log('port:', port, index);
+                  return (
+                    <tr key={index} >
+                    { kids.map(::this._mapKidsToCol(port)) }
+                  </tr>);
+                })
+              }
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+
+        <div className="panel-footer">
+            <Row>
+              <Col lg={ 12 } className="text-right">
+                <Pagination prev next items={3} maxButtons={3} bsSize="small" />
+              </Col>
+            </Row>
         </div>
-
-        <Table responsive>
-          <thead>
-            <tr>
-              { this._extractTitles(kids) }
-            </tr>
-          </thead>
-          <tbody>
-          {
-            fields.map((port, index) => {
-              // console.log('port:', port, index);
-              return (
-                <tr key={index} >
-                { kids.map(::this._mapKidsToCol(port)) }
-              </tr>);
-            })
-          }
-          </tbody>
-        </Table>
-        {touched && error && <span>{error}</span>}
       </div>
 
     );
