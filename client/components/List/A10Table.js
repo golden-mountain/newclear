@@ -1,21 +1,20 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
-import { Row, Col, Table, Pagination, Panel } from 'react-bootstrap';
+import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Form } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 import { values, get }  from 'lodash';
+import { UPDATE_TARGET_DATA } from 'configs/messages';
+import A10Button from 'components/Form/A10Button';
 
 export class A10TableColumn extends React.Component {
-
-
 }
 
 class A10Table extends React.Component {
   static displayName = 'A10Table'
 
-  refreshTable(props) {
-    const { schema, dispatch, env, params } = props; // eslint-disable-line
-    let path = props.path;
+  refreshTable() {
+    let { schema, dispatch, env, params, path } = this.props; // eslint-disable-line
     if (!path) {
       path = schema.axapi;
     }
@@ -26,8 +25,14 @@ class A10Table extends React.Component {
 
   componentWillMount() {
     if (this.props.loadOnInitial) {
-      this.refreshTable(this.props);
+      this.refreshTable();
     }
+  }
+
+  componentWillUpdate() {
+    this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
+      this.refreshTable();
+    });
   }
 
   tidyData(data) {
@@ -38,7 +43,8 @@ class A10Table extends React.Component {
   render() {
     let { 
       children, data=[], newLast, // eslint-disable-line
-      responsive, striped, hover, bordered
+      responsive, striped, hover, bordered,
+      actions: { create:popup }
     } = this.props; 
 
     let ths = [], tds = [];
@@ -90,7 +96,26 @@ class A10Table extends React.Component {
 
     return (
       <Panel>
-        <Table  {...{ responsive, striped, bordered, hover }}>
+        <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
+          <Row>
+            <Col md={6} >
+              <Form horizontal>
+                <InputGroup>
+                  <FormControl type="text" placeholder="Keywords" />
+                  <InputGroup.Button>
+                    <Button bsStyle="default">Search</Button>
+                  </InputGroup.Button>
+                </InputGroup>
+              </Form>
+            </Col>
+            <Col md={6} >
+              <A10Button bsClass="btn btn-labeled btn-success pull-right" popup={ popup } >
+                <span className="btn-label"><i className="fa fa-plus"></i></span> Create
+              </A10Button>
+            </Col>
+          </Row>
+        </div>
+        <Table  {...{ responsive, striped, bordered, hover }} >
           <thead>
             <tr>
               {ths}

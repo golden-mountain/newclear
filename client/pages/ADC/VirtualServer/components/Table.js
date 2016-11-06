@@ -20,11 +20,6 @@ class VirtualServerTable extends React.Component {
 
     };
 
-    const actions = {
-
-    };
-
-
     const options = {
 
     };
@@ -33,29 +28,37 @@ class VirtualServerTable extends React.Component {
       return cell.toUpperCase();
     };
 
-    const formatName = (cell) => {
-
-      const popupInfo = {
-        componentClass: VirtualServerForm,
-        urlParams: {
+    const popupInfo = {
+      componentClass: VirtualServerForm,
+      modalProps: {
+        title: 'Create Virtual Server',
+        bsSize:'lg'
+        // componentClassName: 'super-large-modal'
+      },
+      connectOptions: {
+        connectToValue: {
           'virtual-server': {
-            name: cell
-          }
-        },
-        edit: true,
-        modalProps: {
-          title: 'Edit Virtual Server',
-          bsSize:'lg'
-          // componentClassName: 'super-large-modal'
-        },
-        connectOptions: {
-          connectToValue: {
-            'virtual-server': {
-              'template-virtual-server': 'virtual-server.name'
-            }
+            'template-virtual-server': 'virtual-server.name'
           }
         }
+      }
+    };
+
+
+    const actions = {
+      create: Object.assign({}, popupInfo)
+    };
+
+    const formatName = (cell) => {
+      popupInfo.urlParams = {
+        'virtual-server': {
+          name: cell
+        }
       };
+
+      popupInfo.edit = true;
+      popupInfo.modalProps.title = 'Edit Virtual Server';
+      
       return <A10Button popup={ popupInfo } componentClass="a">{cell}</A10Button>;
       // return <Link to={`/adc/virtual-server/edit/${cell}`} >{cell}</Link>;
     };

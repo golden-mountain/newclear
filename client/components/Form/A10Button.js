@@ -50,7 +50,8 @@ class A10Button extends Component {
       componentClass,
       onClick,
       popup: { modalProps, componentClass:ModalComponent, ...componentProps },
-      parentPath
+      parentPath,
+      bsClass
     } = this.props;
     // const modalChildren = this.createModalChildren();
     // console.log(componentProps);
@@ -73,7 +74,7 @@ class A10Button extends Component {
 
     const ButtonClass = componentClass || Button;
     return (
-      <ButtonClass onClick={click} style={buttonStyle}>
+      <ButtonClass onClick={click} style={buttonStyle} bsClass={bsClass}>
         {children}
         { modalProps ?
           <ModalLayout visible={this.state.visible} {...modalProps} >
