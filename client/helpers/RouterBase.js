@@ -80,7 +80,7 @@ export default class RouterBase extends React.Component {
   render() {
     const { mm } = this.props;
     return (
-      <div>
+      <div className="router">
         {
           Object.entries(this.pages).map(([ pageName, PageComponent ]) => {
             const paths = this.buildPath(pageName);

@@ -1,6 +1,6 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
-import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Form } from 'react-bootstrap';
+import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 import { values, get }  from 'lodash';
@@ -41,11 +41,11 @@ class A10Table extends React.Component {
   }
 
   render() {
-    let { 
+    let {
       children, data=[], newLast, // eslint-disable-line
       responsive, striped, hover, bordered,
       actions: { create:popup }
-    } = this.props; 
+    } = this.props;
 
     let ths = [], tds = [];
 
@@ -87,7 +87,7 @@ class A10Table extends React.Component {
                     </label>
                 </div>
             );
-          } 
+          }
           return (<td key={key} {...props}>{formatedData}</td>);
         });
         return (<tr key={i}>{result}</tr>);
@@ -99,14 +99,12 @@ class A10Table extends React.Component {
         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
           <Row>
             <Col md={6} >
-              <Form horizontal>
-                <InputGroup>
-                  <FormControl type="text" placeholder="Keywords" />
-                  <InputGroup.Button>
-                    <Button bsStyle="default">Search</Button>
-                  </InputGroup.Button>
-                </InputGroup>
-              </Form>
+              <InputGroup>
+                <FormControl type="text" placeholder="Keywords" />
+                <InputGroup.Button>
+                  <Button bsStyle="default">Search</Button>
+                </InputGroup.Button>
+              </InputGroup>
             </Col>
             <Col md={6} >
               <A10Button bsClass="btn btn-labeled btn-success pull-right" popup={ popup } >
@@ -148,7 +146,7 @@ class A10Table extends React.Component {
             </Row>
         </div>
       </Panel>
-      
+
     );
   }
 }

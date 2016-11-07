@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 // import { Nav, Breadcrumb } from 'react-bootstrap';
 // import Loading from 'react-loading';
 
-// import Menu from 'components/Menu';
+import Menu from 'components/Menu';
 // import './scss/AppLayout.scss';
 import './sass/bootstrap.scss';
 import './sass/app.scss';
@@ -24,7 +24,7 @@ const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 
 
 import Header from './jsx/Layout/Header';
-import Sidebar from './jsx/Layout/Sidebar';
+// import Sidebar from './jsx/Layout/Sidebar';
 import Offsidebar from './jsx/Layout/Offsidebar';
 import Footer from './jsx/Layout/Footer';
 
@@ -113,7 +113,7 @@ class AppLayout extends Component {
       <div className="wrapper">
           <Header />
 
-          <Sidebar />
+          <Menu />
 
           <Offsidebar />
 

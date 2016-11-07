@@ -34,7 +34,7 @@ class Header extends React.Component {
     return (
       <header className="topnavbar-wrapper">
         { /* START Top Navbar */ }
-        <nav role="navigation" className="navbar topnavbar">
+        <nav role="navigation" className="navbar topnavbar" style={{ padding:0 }}>
           { /* START navbar header */ }
           <div className="navbar-header">
             <a href="#/" className="navbar-brand">

@@ -460,3 +460,10 @@ _:-ms-lang(x), .layout-fixed .wrapper > .aside > .aside-inner {
   }
 
 } // boxed
+
+#root {
+  height: 100%;
+  .page-router {
+    height: 100%;
+  }
+}
