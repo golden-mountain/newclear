@@ -378,7 +378,7 @@ class Offsidebar extends React.Component {
         </Tabs>
         { /* END Off Sidebar (right) */ }
       </aside>
-      );
+    );
   }
 
 }
