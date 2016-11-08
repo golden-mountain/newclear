@@ -8,7 +8,7 @@ class EditableCom extends React.Component {
 
   change(event) {
     console.log(event.target.value);
-    this.props.hold({ 'name': event.target.value });
+    this.props.hold({ [ this.props.meta.name ] : event.target.value });
   }
 
   save() {

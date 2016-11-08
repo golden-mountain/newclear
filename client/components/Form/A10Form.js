@@ -6,7 +6,7 @@ import { Map, List, fromJS } from 'immutable';
 import { toPath, has } from 'lodash';
 import { getAppValueStore } from 'helpers/stateHelper';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import Schema from 'helpers/Schema';
+import A10FormSchema from 'helpers/Schema/A10FormSchema';
 
 import { FORM_FIELD_KEY } from 'configs/appKeys';
 import { UPDATE_TARGET_DATA, HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from 'configs/messages';
@@ -30,7 +30,7 @@ class A10SchemaForm extends Component {
     const { schemas, removePrefix } = this.props;
     const { urlParams, edit } = this.context.props;
     this.isEdit = edit;
-    this.schemaHandler = new Schema({ schemas, edit, urlParams, removePrefix });
+    this.schemaHandler = new A10FormSchema({ schemas, edit, urlParams, removePrefix });
     // console.log(this.context.props, this.props);
   }
 

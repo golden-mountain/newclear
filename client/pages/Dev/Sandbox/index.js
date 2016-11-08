@@ -15,11 +15,31 @@ import EditableCom from './components/EditableCom';
 export default class Sandbox extends PageBase {
   render() {
     // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
-    const meta = {
-      endpoint: '/axapi/v3/slb/virtual-server/vs2',
-      schema: 'slb-virtual-server',
+    const metaWithEndpoint = {
+      endpoint: '/axapi/v3/slb/virtual-server/vs2', // pre
       name: 'slb.virtual-server.name'
     };
+
+    // const myRequire = (schema) => {
+    //   return require('schemas/' + schema + '.json');
+    // };
+
+    const metaWithSchema = {
+      schema: 'slb-virtual-server.port-list',
+      name: 'port-number',
+      urlParams: {
+        'name': 'vs2',
+        'port-number': 80,
+        'protocol': 'http'
+      }
+    };
+
+    // const testSchema = {
+    //   schema: myRequire('slb-virtual-service'),
+    //   name: 'slb.virtual-server.port.port-number'
+    // };
+    //
+    // console.log(metaWithSchema, testSchema);
 
     return (
       <Row>
@@ -27,9 +47,9 @@ export default class Sandbox extends PageBase {
           <StandardPageLayout title="Sandbox" description="Sandbox Page">
             <div>
               <h3> not editable component </h3>
-              <NotEditableCom meta={meta}/>
+              <NotEditableCom meta={metaWithEndpoint}/>
               <h3> Editable component </h3>
-              <EditableCom meta={meta}/>
+              <EditableCom meta={metaWithSchema}/>
             </div>
           </StandardPageLayout>
         </Col>

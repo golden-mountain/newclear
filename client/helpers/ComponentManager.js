@@ -87,36 +87,6 @@ export default class ComponentManager {
     mountNode.addChild(node);
   }
 
-  setModel(instancePath, values) {
-    const thisNode = this.getNode(instancePath);
-    thisNode.model = Object.assign({}, thisNode.model, values);
-  }
-
-  getModel(instancePath, key='') {
-    const thisNode = this.getNode(instancePath);
-    return key ? thisNode.model[key] : thisNode.model;
-  }
-
-  setValue(instancePath, value) {
-    this.setModel(instancePath, { value });
-  }
-
-  setInvalid(instancePath, invalid=true) {
-    this.setModel(instancePath, { invalid });
-  }
-
-  getMeta(instancePath) {
-    return this.getModel(instancePath, 'meta');
-  }
-
-  getValue(instancePath) {
-    return this.getModel(instancePath, 'value');
-  }
-
-  getInvalid(instancePath) {
-    return this.getModel(instancePath, 'invalid');
-  }
-
   unregisterComponent(instancePath) {
     if (instancePath) {
       const thisNode = this.getNode(instancePath);

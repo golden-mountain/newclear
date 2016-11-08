@@ -33,15 +33,15 @@ export default class ModelPlugin {
       {},
       previousProps,
       {
-        getModel: this.cm.getModel.bind(this.cm, this.instancePath),
-        getValue: this.cm.getValue.bind(this.cm, this.instancePath),
-        setValue: this.cm.setValue.bind(this.cm, this.instancePath),
-        getMeta: this.cm.getMeta.bind(this.cm, this.instancePath),
-        setDataInvalid: this.cm.setInvalid.bind(this.cm, this.instancePath, true),
-        setDataValid: this.cm.setInvalid.bind(this.cm, this.instancePath, false),
-        getDataInvalid: this.cm.getInvalid.bind(this.cm, this.instancePath),
+        getModel: this.model.getModel.bind(this.model, this.instancePath),
+        getValue: this.model.getValue.bind(this.model, this.instancePath),
+        setValue: this.model.setValue.bind(this.model, this.instancePath),
+        getMeta: this.model.getMeta.bind(this.model, this.instancePath),
+        setDataInvalid: this.model.setInvalid.bind(this.model, this.instancePath, true),
+        setDataValid: this.model.setInvalid.bind(this.model, this.instancePath, false),
+        getDataInvalid: this.model.getInvalid.bind(this.model, this.instancePath),
         save: this.model.save.bind(this.model, this.instancePath),
-        hold: this.cm.setValue.bind(this.cm, this.instancePath)
+        hold: this.model.setValue.bind(this.model, this.instancePath)
       }
     );
   }

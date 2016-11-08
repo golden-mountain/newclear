@@ -1,7 +1,7 @@
 /* ========================================================================
      Component: widget
  ========================================================================== */
- 
+
 //
 // Extras styles to use panel as widgets
 // -------------------------------------
@@ -17,7 +17,7 @@ $widget-margin: 20px;
   & .panel {
       overflow: hidden;
   }
-  
+
 
   .lateral-picture {
     position: relative;
@@ -35,5 +35,5 @@ $widget-margin: 20px;
 }
 
 .largest-modal {
-  width:90%;
+  width:80%;
 }
