@@ -124,7 +124,7 @@ class Header extends React.Component {
         </nav>
         { /* END Top Navbar */ }
       </header>
-      );
+    );
   }
 
 }

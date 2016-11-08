@@ -160,7 +160,7 @@ export default class MenuLayout extends React.Component {
           </div>
           { /* END Sidebar (left) */ }
       </aside>
-      );
+    );
   }
 
 }

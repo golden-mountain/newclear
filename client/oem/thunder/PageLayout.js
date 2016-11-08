@@ -15,7 +15,7 @@ class PageLayout extends React.Component {
         </h3>
         { children }
       </ContentWrapper>
-      );
+    );
   }
 
 }
