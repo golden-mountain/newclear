@@ -13,15 +13,14 @@ import DevRouter from 'pages/Dev';
 
 export default class App extends Component {
   render() {
-
     return (
       <Router>
         <div className="page-router">
           { AppRoutes }
-          <DevRouter />
           <AuthRouter />
-          <ADCRouter />
           <DashboardRouter />
+          <ADCRouter />
+          <DevRouter />
         </div>
       </Router>
     );

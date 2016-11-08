@@ -52,35 +52,28 @@ export default class ComponentManager {
     return instancePath.join(':');
   }
 
-  registerComponent(instancePath, parentInstancePath=[ 'root' ]) {
+  /**
+   * values could be any object
+   * but { meta, value } is welcome
+   */
+  registerComponent(instancePath, parentInstancePath=[ 'root' ], values={}) {
     let node = null;
-    if (typeof instancePath[0] == 'object') {
-      // list
-      instancePath.forEach((instance) => {
-        let n1 = this.componentTreeModel.parse({
-          id: this.getInstanceId(instance),
-          instance
-        });
-        if (node) {
-          node.addChild(n1);
-        } else {
-          node = n1;
-        }
-      });
-    } else if (instancePath[0]) {
+    if (instancePath[0]) {
       node = this.componentTreeModel.parse({
         id: this.getInstanceId(instancePath),
-        instancePath
+        instancePath,
+        ...values
       });
     } else {
       return false;
     }
     // console.log(node, '>>>>>>>>>>>>>>>>node');
 
-    const parentId = this.getInstanceId(parentInstancePath);
-    let mountNode = this.componentTree.first((node) => {
-      return node.model.id === parentId;
-    });
+    // const parentId = this.getInstanceId(parentInstancePath);
+    // let mountNode = this.componentTree.first((node) => {
+    //   return node.model.id === parentId;
+    // });
+    let mountNode = this.getNode(parentInstancePath);
 
     // let mountNodes = this.componentTree.all((node) => {
     //   return node.model.id === parentId;
@@ -94,28 +87,62 @@ export default class ComponentManager {
     mountNode.addChild(node);
   }
 
-  // unregisterComponent(instancePath) {
+  setModel(instancePath, values) {
+    const thisNode = this.getNode(instancePath);
+    thisNode.model = Object.assign({}, thisNode.model, values);
+  }
 
-  // }
+  getModel(instancePath, key='') {
+    const thisNode = this.getNode(instancePath);
+    return key ? thisNode.model[key] : thisNode.model;
+  }
 
-  printComponentTree() {
+  setValue(instancePath, value) {
+    this.setModel(instancePath, { value });
+  }
+
+  setInvalid(instancePath, invalid=true) {
+    this.setModel(instancePath, { invalid });
+  }
+
+  getMeta(instancePath) {
+    return this.getModel(instancePath, 'meta');
+  }
+
+  getValue(instancePath) {
+    return this.getModel(instancePath, 'value');
+  }
+
+  getInvalid(instancePath) {
+    return this.getModel(instancePath, 'invalid');
+  }
+
+  unregisterComponent(instancePath) {
+    if (instancePath) {
+      const thisNode = this.getNode(instancePath);
+      // console.log(thisNode);
+      thisNode && thisNode.drop();
+    }
+  }
+
+  printComponentTree(showMetaData=false) {
     console.log('--------------------------- Start Print Tree -------------------------------');
-    this.printComponentTree2(this.componentTree);
+    this.printComponentTree2(this.componentTree, showMetaData);
     console.log('--------------------------- End Print Tree -------------------------------');
   }
 
-  printComponentTree2(node, pad2=0) {
+  printComponentTree2(node, pad2=0, showMetaData=false) {
     let pad = pad2;
     let padder = repeat('*', pad);
     if (!node.model.instancePath[2]) {
-      console.log(padder, node.model.instancePath[1]);
+      console.log(padder, node.model.instancePath[1], showMetaData && node.model.value);
     } else {
-      console.log(padder, node.model.instancePath[3]);
+      console.log(padder, node.model.instancePath[3], showMetaData && node.model.value);
     }
     if (node.children.length) {
       pad += 2;
       for (var index in node.children) {
-        this.printComponentTree2(node.children[index], pad);
+        this.printComponentTree2(node.children[index], pad, showMetaData);
       }
     }
     return pad;
@@ -172,6 +199,13 @@ export default class ComponentManager {
     let result = path.slice(-2, -1)[0];
     // console.log(displayName, 'new result:',result);
     return result.model ? result.model.instancePath : [];
+  }
+
+  getNode(instancePath) {
+    const targetId = this.getInstanceId(instancePath);
+    return this.componentTree.first((node) => {
+      return node.model.id === targetId;
+    });
   }
 
 }

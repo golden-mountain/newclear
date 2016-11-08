@@ -40,9 +40,10 @@ export const widgetWrapper = ReduxDataConnector => {
         this.cm = this.context.cm;
 
         const { instancePath, pagePath } = this.context.props;
+        const { meta, value } = this.props;
         // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
-        this.cm.registerComponent(this.instancePath, instancePath || pagePath);
-        // this.cm.printComponentTree();
+        this.cm.registerComponent(this.instancePath, instancePath || pagePath, { meta, data:value });
+        // this.cm.printComponentTree(true);
         // this.cm.acceptBalls();
         this.executePluginMethod('onInitialize');
         // console.log(this.context.props);
@@ -68,7 +69,7 @@ export const widgetWrapper = ReduxDataConnector => {
         let result = props;
         this.plugins.forEach((plugin) => {
           if (plugin && plugin[methodName]) {
-            let _result = plugin[methodName].call(this, args, result);
+            let _result = plugin[methodName].call(this, result, args);
             if (!_result && plugin.name) {
               console.warn('No result returns from ', plugin.name );
             } else {
@@ -156,6 +157,8 @@ export const widgetWrapper = ReduxDataConnector => {
       componentWillUnmount() {
         this.executePluginMethod('onUnmount');
         this.cm.ballKicker.removeEvent(this.instancePath);
+        this.cm.unregisterComponent(this.instancePath);
+        // this.cm.printComponentTree();
       }
 
       componentWillReceiveProps(nextProps, nextState) {
@@ -193,7 +196,7 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       getNewProps() {
-        let pluginProps = this.executePluginMethod('onBeforeSetProps');
+        let pluginProps = this.executePluginMethod('onBeforeSetProps') || {};
         let props = Object.assign(
           {},
           this.props,
@@ -233,7 +236,7 @@ export const widgetWrapper = ReduxDataConnector => {
     if (ReduxDataConnector) {
       return connect(ReduxDataConnector)(Widget);
     } else {
-      return Widget;
+      return connect()(Widget);
     }
     // return ConnnectedWidget;
   };

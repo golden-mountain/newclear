@@ -27,3 +27,7 @@ export const AXAPI_REQUEST_FAIL = 'page/api/AXAPI_REQUEST_FAIL';
 export const AXAPI_REQUEST = 'page/api/AXAPI_REQUEST';
 export const AXAPI_CLEAR_LAST_ERROR = 'page/api/AXAPI_CLEAR_LAST_ERROR';
 
+// model action
+export const MODEL_SAVE = 'page/api/MODEL_SAVE';
+export const MODEL_HOLD_DATA = 'page/api/MODEL_HOLD_DATA';
+export const MODEL_HOLD_META = 'page/api/MODEL_HOLD_META';
