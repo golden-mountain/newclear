@@ -1,14 +1,14 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { FormControl, FormGroup, ControlLabel, Col, Button, Panel } from 'react-bootstrap';
+import { FormControl, FormGroup, ControlLabel, Col, Button } from 'react-bootstrap';
 
 class EditableCom extends React.Component {
   static displayName = 'EditableCom'
 
   change(event) {
-    console.log(event.target.value);
-    this.props.hold({ [ this.props.meta.name ] : event.target.value });
+    // console.log(event.target.value);
+    this.props.hold(event.target.value);
   }
 
   save() {
@@ -18,21 +18,23 @@ class EditableCom extends React.Component {
   }
 
   render() {
-
+    // console.log(this.props);
     return (
-      <Panel header="Editable Element">
+      <div >
+        <h5> editable component </h5>
         <FormGroup controlId="formHorizontalEmail">
           <Col componentClass={ControlLabel} sm={2}>
             Test Field
           </Col>
-          <Col sm={10}>
-            <FormControl type="text" placeholder="Test Input" onChange={::this.change}/>
+          <Col sm={6}>
+            <FormControl type="text" placeholder="Test Input" onChange={::this.change} value={this.props.activeData}/>
           </Col>
+          <Col sm={4}><Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button></Col>
         </FormGroup>
-        <Button bsStyle="primary" bsSize="large" onClick={::this.save}>Save me</Button>
-      </Panel>
+
+      </div>
     );
   }
 }
 
-export default widgetWrapper()(EditableCom);
+export default widgetWrapper([ 'app' ])(EditableCom);

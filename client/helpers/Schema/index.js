@@ -2,7 +2,7 @@
 // import { get } from 'lodash';
 export default class Schema {
 
-  constructor(schema, objectName, urlParams) {
+  constructor(schema, objectName) {
     // console.log(schema);
     if (typeof schema == 'string') {
       // require js
@@ -31,15 +31,17 @@ export default class Schema {
     this.schema = schema;
     // console.log(schema);
     this.objectName = objectName;
-    this.urlParams = urlParams || {};
   }
 
-  getAxapiURL() {
+  getAxapiURL(urlParams) {
     let axapiOrg = this.schema.axapi;
     if (axapiOrg) {
       const path = axapiOrg.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
-        const value = this.urlParams[words];
-        return value || '';
+        if (!urlParams) {
+          return '';
+        } else {
+          return urlParams[words] || '';
+        }
       });
       return path;
     } else {

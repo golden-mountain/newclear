@@ -105,10 +105,14 @@ export default class ComponentManager {
     let pad = pad2;
     let padder = repeat('*', pad);
     if (!node.model.instancePath[2]) {
-      console.log(padder, node.model.instancePath[1], showMetaData && node.model.value);
+      console.log(padder, node.model.instancePath[1]);
     } else {
-      console.log(padder, node.model.instancePath[3], showMetaData && node.model.value);
+      console.log(padder, node.model.instancePath[3]);
     }
+    // if (showMetaData) {
+    console.log('::::data & meta::::', node.model.meta, node.model.value);
+    // }
+
     if (node.children.length) {
       pad += 2;
       for (var index in node.children) {

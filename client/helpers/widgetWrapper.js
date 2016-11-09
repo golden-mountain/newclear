@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
 // import { getAppPageVar } from './stateHelper';
-import { uniqueId,  get } from 'lodash';
+import { uniqueId,  get, isArray } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 import { devPlugins, prodPlugins } from './WidgetPlugins';
 // import { Iterable } from 'immutable';
@@ -234,7 +234,23 @@ export const widgetWrapper = ReduxDataConnector => {
 
     // let ConnnectedWidget = null;
     if (ReduxDataConnector) {
-      return connect(ReduxDataConnector)(Widget);
+      let conn = ReduxDataConnector;
+      if (isArray(ReduxDataConnector)) {
+        conn = (state) => {
+          let result = {};
+          ReduxDataConnector.forEach((name) => {
+            let path = null;
+            if (isArray(name)) {
+              path = name;
+            } else {
+              path = [ name ];
+            }
+            result[name] = state.getIn(path);
+          });
+          return result;
+        };
+      }
+      return connect(conn)(Widget);
     } else {
       return connect()(Widget);
     }

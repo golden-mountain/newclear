@@ -2,7 +2,7 @@ import {
   REGISTER_COMPONENT_VISIBLE, REGISTER_COMPONENT_DATA
 } from 'redux/modules/actionTypes';
 // import { APP_CURRENT_PAGE } from 'configs/appKeys';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 const componentReducers = {
   // [ 'tst' ](state, { instancePath, payload }) {
@@ -10,9 +10,9 @@ const componentReducers = {
   //   return state;
   // },
   [ REGISTER_COMPONENT_DATA ](state, { instancePath, payload }) {
-    let result = state.getIn([ instancePath ]);
+    let result = state.getIn(instancePath, Map());
     result = result.mergeDeep(fromJS(payload));
-    return state.setIn([ instancePath ], result);
+    return state.setIn(instancePath, result);
   },
   [ REGISTER_COMPONENT_VISIBLE ](state, { instancePath, visible }) {
     return state.setIn([ ...instancePath, 'visible' ], visible);

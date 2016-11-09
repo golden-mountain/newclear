@@ -3,7 +3,7 @@ import { Iterable, List, Map, fromJS } from 'immutable';
 // axapi request import
 import moment from 'moment';
 import { get, isArray, uniqueId } from 'lodash';
-// import * as logger from 'helpers/logger';
+import { getResponseBody } from 'helpers/axapiHelper';
 
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import {
@@ -48,12 +48,7 @@ const apiReducers = {
     console.log('success  axapi request ......................................', resp);
     if (resp.length == 1) {
       let newResp = resp[0];
-      let body = null;
-      if (newResp.req.method === 'GET') {
-        body = newResp.body;
-      } else {
-        body = newResp.body.response || newResp.body.authresponse || newResp.body;
-      }
+      const body = getResponseBody(newResp);
 
       pushAxapiReqs({ data, result: body });
       if (isAuthUrl(data)) {
