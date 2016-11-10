@@ -79,9 +79,11 @@ export default class Sandbox extends PageBase {
             <ContainerWidget meta={containerSchema}>
               <h3> ADC Virtual Server Form Demo </h3>
               <EditableCom urlParams={urlParams} title="Name" name="virtual-server.name" />
-              <FieldCheckbox title="Wildcard" name="x.wildcard" value={false} checked />
-              <EditableCom name="virtual-server.ip-address" conditional={{ 'x.wildcard': true }}  title="IP Address"/>
-              <EditableCom name="virtual-server.netmask" conditional={{ 'x.wildcard': true }} title="Netmask" />
+              <FieldCheckbox title="Wildcard" name="x.wildcard" value={false} />
+              <FieldCheckbox title="IPv6 Type" name="x.ipAddressType" conditional={{ 'x.wildcard': false }}  value={true} />
+              <EditableCom name="virtual-server.ip-address" conditional={{ 'x.ipAddressType': false }}  title="IP Address"/>
+              <EditableCom name="virtual-server.netmask" conditional={{ 'x.ipAddressType': false }} title="Netmask" />
+              <EditableCom name="virtual-server.ipv6-address" conditional={{ 'x.ipAddressType': true }}  title="IPv6 Address"/>
             </ContainerWidget>
           </StandardPageLayout>
         </Col>

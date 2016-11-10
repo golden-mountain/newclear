@@ -64,25 +64,36 @@ export default class MetaParser {
       isVisible = true;
     }
 
-    // console.log(this.meta.name, isVisible);
-    // let initialState = { invalid: !isVisible, visible: isVisible };
-    // this.m.setModel(initialState, true);
-    // this.m._syncDataToRedux(initialState);
     this.m.setVisible(isVisible);
   }
 
   changeConditional() {
-    console.log('.....change conditional');
-    this.m.cm.componentTree.walk((node) => {
-      console.log(node);
-      const thisName = this.meta.name;
-      const nodeName = get(node, 'model.meta.name');
-      const condValue = get(node, `model.meta.conditional.${thisName}`);
-      if (thisName == nodeName) {
-        const visible = this._isElementVisible(this.model.value, condValue);
-        this.m.setVisible(visible);
-      }
-    });
+    const thisName = this.meta.name;
+
+    const traverseConditional = (root, parentName, parentIsVisible) => {
+      root.walk((node) => {
+        const conditional = get(node, 'model.meta.conditional');
+        if (conditional) {
+          const [ depName, depValue ] = Object.entries(conditional).pop();
+          if (parentName == depName) {
+            const instancePath = get(node, 'model.instancePath');
+            // console.log(parentIsVisible, this.m.getValue(), depValue);
+            const visible = parentIsVisible && this._isElementVisible(depValue, this.m.getValue());
+            if (visible !== get(node, 'model.visible')) {
+              this.m._setVisible(visible, instancePath);
+              const nodeName = get(node, 'model.meta.name');
+              // console.log(nodeName, visible);
+              if (nodeName) {
+                traverseConditional(root, nodeName, visible);
+              }
+            }
+          }
+        }
+
+      });
+    };
+
+    traverseConditional(this.m.cm.componentTree, thisName, true);
   }
 
 

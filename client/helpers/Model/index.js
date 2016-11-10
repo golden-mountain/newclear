@@ -52,7 +52,10 @@ export default class Model {
     if (model.meta && model.meta.initial) {
       initialState['active-data'] = model.meta.initial;
       model.value = model.meta.initial;
+    } else if (model.value) {
+      initialState['active-data'] = model.value;
     }
+
     this.dispatch(setComponentState(this.instancePath, initialState));
 
     if (get(model, 'meta.loadInitial', false)) {
