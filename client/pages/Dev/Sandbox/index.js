@@ -11,6 +11,7 @@ const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 import ContainerWidget from './components/ContainerWidget';
 import NotEditableCom from './components/NotEditableCom';
 import EditableCom from './components/EditableCom';
+import FieldCheckbox from './components/FieldCheckbox';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
 export default class Sandbox extends PageBase {
@@ -48,10 +49,10 @@ export default class Sandbox extends PageBase {
 
     const objectSchema = {
       // schema: slbVirtualServerSchema,
-      name: 'virtual-server.netmask',
+      name: 'virtual-server.netmask'
       // initial: '/24',
       // loadInitial: true,
-      urlParams
+      // urlParams
     };
 
     const noSchemaData = {
@@ -70,9 +71,17 @@ export default class Sandbox extends PageBase {
               <h3> Not editable component </h3>
               <NotEditableCom meta={metaWithEndpoint}/>
               <h3> Editable component </h3>
-              <EditableCom meta={metaWithSchema} urlParams={urlParams} title="Port"/>
-              <EditableCom meta={noSchemaData} urlParams={urlParams} title="IP Address"/>
+              <EditableCom meta={metaWithSchema} title="Port"/>
+              <EditableCom meta={noSchemaData} title="IP Address"/>
               <EditableCom meta={objectSchema} title="Netmask" />
+            </ContainerWidget>
+
+            <ContainerWidget meta={containerSchema}>
+              <h3> ADC Virtual Server Form Demo </h3>
+              <EditableCom urlParams={urlParams} title="Name" name="virtual-server.name" />
+              <FieldCheckbox title="Wildcard" name="x.wildcard" value={false} checked />
+              <EditableCom name="virtual-server.ip-address" conditional={{ 'x.wildcard': true }}  title="IP Address"/>
+              <EditableCom name="virtual-server.netmask" conditional={{ 'x.wildcard': true }} title="Netmask" />
             </ContainerWidget>
           </StandardPageLayout>
         </Col>

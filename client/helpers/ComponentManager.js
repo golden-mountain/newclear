@@ -110,7 +110,7 @@ export default class ComponentManager {
       console.log(padder, node.model.instancePath[3]);
     }
     // if (showMetaData) {
-    console.log('::::data & meta::::', node.model.meta, node.model.value);
+    console.log('::::meta', node.model.meta, ':::value::', node.model.value);
     // }
 
     if (node.children.length) {

@@ -41,9 +41,10 @@ export const widgetWrapper = ReduxDataConnector => {
         this.cm = this.context.cm;
 
         const { instancePath, pagePath } = this.context.props;
-        const { meta, value } = this.props;
+        const { meta, value, schema, name, conditional, validation, urlParams } = this.props;
         // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
-        this.cm.registerComponent(this.instancePath, instancePath || pagePath, { meta, data:value });
+        this.cm.registerComponent(this.instancePath, instancePath || pagePath,
+          { meta: { schema, name, conditional, validation, urlParams, ...meta }, value });
         // this.cm.printComponentTree(true);
         // this.cm.acceptBalls();
         this.executePluginMethod('onInitialize');
@@ -114,10 +115,11 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       get visible() {
-        return (
-        (this.props.app &&
-         this.props.app.getIn([ ...this.instancePath, 'visible' ], true))
-        || true);
+        if (this.props.app) {
+          return this.props.app.getIn([ ...this.instancePath, 'visible' ]);
+        } else {
+          return true;
+        }
       }
 
       get data() {
@@ -181,6 +183,9 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       checkWidgetDataUpdate(nextProps) {
+        if (!nextProps || !nextProps.app) {
+          return true;
+        }
         const thisComInstanceData = this.instanceData;
         const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
         // console.log(thisComInstanceData);

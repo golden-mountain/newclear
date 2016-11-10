@@ -21,19 +21,15 @@ class EditableCom extends React.Component {
     // console.log(this.props);
     const { title } = this.props;
     return (
-      <div >
-        <h5> editable component </h5>
-        <FormGroup controlId="formHorizontalEmail">
-          <Col componentClass={ControlLabel} sm={2}>
-            {title || 'Empty Title'}
-          </Col>
-          <Col sm={6}>
-            <FormControl type="text" placeholder="Test Input" onChange={::this.change} value={this.props.activeData}/>
-          </Col>
-          <Col sm={4}><Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button></Col>
-        </FormGroup>
-
-      </div>
+      <FormGroup>
+        <Col componentClass={ControlLabel} sm={2}>
+          {title || 'Empty Title'}
+        </Col>
+        <Col sm={6}>
+          <FormControl type="text" placeholder="Test Input" onChange={::this.change} value={this.props.activeData}/>
+        </Col>
+        <Col sm={4}><Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button></Col>
+      </FormGroup>
     );
   }
 }

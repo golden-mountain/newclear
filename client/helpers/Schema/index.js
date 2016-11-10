@@ -1,8 +1,8 @@
-// import { Map, List, fromJS } from 'immutable';
-// import { get } from 'lodash';
+import { get } from 'lodash';
+
 export default class Schema {
 
-  constructor(schema, objectName) {
+  constructor(schema) {
     // console.log(schema);
     if (typeof schema == 'string') {
       // require js
@@ -29,8 +29,7 @@ export default class Schema {
       }
     }
     this.schema = schema;
-    // console.log(schema);
-    this.objectName = objectName;
+    this.object = schema.properties || {};
   }
 
   getAxapiURL(urlParams) {
@@ -49,5 +48,17 @@ export default class Schema {
     }
   }
 
+  _getFieldProp(fieldName, prop, defaultValue='') {
+    return get(this.object, `${fieldName}.${prop}`, defaultValue);
+  }
+
+  getConditional(fieldName) {
+    const conditional = this._getFieldProp(fieldName, 'condition', '');
+    if (conditional) {
+      return { [ conditional ] : true };
+    } else {
+      return false;
+    }
+  }
 
 }

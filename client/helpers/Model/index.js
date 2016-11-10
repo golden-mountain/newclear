@@ -6,6 +6,7 @@ import { axapiRequest } from 'redux/modules/app/axapi';
 import Schema from 'helpers/Schema';
 import { setComponentState } from 'redux/modules/app/component';
 import { getResponseBody } from 'helpers/axapiHelper';
+import MetaParser from 'helpers/Model/MetaParser';
 
 /**
  * Model data stored at component manager's path tree
@@ -23,6 +24,25 @@ export default class Model {
     if (!this.node) {
       invariant(this.node, ' does not exists on component tree');
     }
+
+    if (this.node.modelmeta && this.node.meta.schema) {
+      this.node.model.schemaParser = new Schema(this.node.meta.schema);
+    } else {
+      // find parent schema parser
+      this.node.model.schemaParser = this._getParentSchemaParser(this.node);
+    }
+    this.metaParser = new MetaParser(this);
+  }
+
+  // only for constructor
+  _getParentSchemaParser(node) {
+    if (node.parent && node.parent.schemaParser) {
+      return node.parent.schemaParser;
+    } else if (node.parent) {
+      return this._getParentSchemaParser(node.parent);
+    } else {
+      return null;
+    }
   }
 
   initialize() {
@@ -38,10 +58,13 @@ export default class Model {
     if (get(model, 'meta.loadInitial', false)) {
       this.pullData();
     }
+
+    this.metaParser.initialize();
   }
 
-  _syncDataToRedux(data, instancePath) {
+  _syncDataToRedux(data, instancePath=null) {
     // console.log(this.instancePath, data);
+    if (!instancePath) instancePath = this.instancePath;
     this.dispatch(setComponentState(instancePath, data));
   }
 
@@ -49,12 +72,17 @@ export default class Model {
     this._setModel(values, this.instancePath, sync);
   }
 
-  _setModel(values, instancePath) {
+  _setModel(values, instancePath, sync=false) {
     const thisNode = this.cm.getNode(instancePath);
 
     thisNode.model = Object.assign({}, thisNode.model, values);
     if (values.initial) {
-      this._setValue(values.initial, instancePath);
+      // this._setValue(values.initial, instancePath);
+      values.value = values.initial;
+    }
+
+    if (sync) {
+      this._syncDataToRedux(values, instancePath);
     }
   }
 
@@ -68,8 +96,18 @@ export default class Model {
     this._syncDataToRedux({ 'active-data': value }, instancePath);
   }
 
-  setValue(value) {
+  setValue(value, checkConditional=true) {
     this._setValue(value, this.instancePath);
+    checkConditional && this.metaParser.changeConditional();
+  }
+
+  _setVisible(visible, instancePath, invalidValue=true) {
+    let initialState = { invalid: invalidValue && !visible, visible };
+    this._setModel(initialState, instancePath, true);
+  }
+
+  setVisible(visible, invalidValue=true) {
+    this._setVisible(visible, this.instancePath, invalidValue);
   }
 
   setInvalid(invalid=true) {
@@ -92,7 +130,9 @@ export default class Model {
   _parseBody(body) {
     let content = {};
     forEach(body, (data, key) => {
-      set(content, key, data);
+      if (key.indexOf('x.') !== 0) {
+        set(content, key, data);
+      }
     });
     return content;
   }
@@ -119,11 +159,11 @@ export default class Model {
           if (meta.endpoint) {
             url = meta.endpoint;
             name = meta.name;
-          } else if ( meta.schema  ) {
-            let { schema, name } = meta;
+          } else if ( n.model.schemaParser ) {
+            // let { schema } = meta;
             // console.log(meta);
-            const schemaObj = new Schema(schema, name);
-            url = schemaObj.getAxapiURL(meta.urlParams) || '';
+            // const schemaObj = new Schema(schema);
+            url = n.model.schemaParser.getAxapiURL(meta.urlParams) || '';
             name = meta.name;
           } else if (validParentUrl) {
             url = validParentUrl;
