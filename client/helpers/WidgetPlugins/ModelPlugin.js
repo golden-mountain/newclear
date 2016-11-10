@@ -42,7 +42,8 @@ export default class ModelPlugin {
         setDataValid: this.model.setInvalid.bind(this.model, false),
         getDataInvalid: this.model.getInvalid.bind(this.model),
         save: this.model.save.bind(this.model),
-        hold: this.model.setValue.bind(this.model)
+        hold: this.model.setValue.bind(this.model),
+        reset: this.model.initialize.bind(this.model)
       }
     );
   }

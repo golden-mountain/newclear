@@ -14,6 +14,7 @@ export const widgetWrapper = ReduxDataConnector => {
   return WrappedComponent => {
 
     const displayName = `Widget${WrappedComponent.displayName}`;
+    // console.log(uniqueId(displayName));
 
     class Widget extends Component {
       static displayName = displayName
@@ -96,7 +97,7 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       get instanceData() {
-        const data = this.props.page && this.props.page.getIn(this.instancePath);
+        const data = this.props.app && this.props.app.getIn(this.instancePath);
         if (data) {
           return data.toJS();
         } else {
@@ -171,15 +172,19 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       shouldComponentUpdate(nextProps, nextState) {
-        // console.log('Rendering at .............', WrappedComponent.displayName);
         let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+        if (result) {
+          result = this.checkWidgetDataUpdate(nextProps);
+        }
+        // console.log(result, this.instancePath);
         return result;
       }
 
       checkWidgetDataUpdate(nextProps) {
         const thisComInstanceData = this.instanceData;
-        const nextComInstanceData = nextProps.app.getIn(this.instancePath);
-        const needUpdateFields = [ 'data', 'active-data', 'visible' ];
+        const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
+        // console.log(thisComInstanceData);
+        const needUpdateFields = this.props.updateFields || [ 'data', 'active-data', 'visible' ];
         return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
       }
 
@@ -189,6 +194,7 @@ export const widgetWrapper = ReduxDataConnector => {
           const fieldName = needUpdateFields[i];
           const nextValue = get(nextProps, fieldName), thisValue = get(thisProps, fieldName);
           if (nextValue != thisValue) {
+            // console.log('field need update: ', fieldName, nextValue, thisValue );
             return true;
           }
         }

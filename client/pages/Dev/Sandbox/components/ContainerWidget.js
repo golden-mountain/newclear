@@ -17,12 +17,19 @@ class ContainerWidget extends React.Component {
     console.log('After saving, invalid:::', invalid);
   }
 
+  initialize() {
+    this.props.reset();
+    const invalid = this.props.getDataInvalid();
+    console.log('reinitialized...', invalid);
+  }
+
   render() {
 
     return (
       <Panel header="Editable Element">
         { this.props.children }
         <Button bsStyle="primary" bsSize="large" onClick={::this.save}>Save me</Button>
+        <Button bsStyle="default" bsSize="large" onClick={::this.initialize}>Reset</Button>
       </Panel>
     );
   }

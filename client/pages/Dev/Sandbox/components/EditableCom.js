@@ -19,12 +19,13 @@ class EditableCom extends React.Component {
 
   render() {
     // console.log(this.props);
+    const { title } = this.props;
     return (
       <div >
         <h5> editable component </h5>
         <FormGroup controlId="formHorizontalEmail">
           <Col componentClass={ControlLabel} sm={2}>
-            Test Field
+            {title || 'Empty Title'}
           </Col>
           <Col sm={6}>
             <FormControl type="text" placeholder="Test Input" onChange={::this.change} value={this.props.activeData}/>

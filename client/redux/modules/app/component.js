@@ -10,6 +10,7 @@ const componentReducers = {
   //   return state;
   // },
   [ REGISTER_COMPONENT_DATA ](state, { instancePath, payload }) {
+    // console.log(instancePath, payload);
     let result = state.getIn(instancePath, Map());
     result = result.mergeDeep(fromJS(payload));
     return state.setIn(instancePath, result);

@@ -105,6 +105,7 @@ export default apiReducers;
 
 // ----------------- AXAPI ------------------------
 export function axapiRequest(instancePath, data, notifiable=false) {
+  // console.log(instancePath, data, notifiable);
   let { page, pageId, componentName, componentId } = instancePath;
   const authHeaders = {
     'content-type': 'application/json'

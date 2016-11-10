@@ -37,7 +37,7 @@ class NotEditableCom extends React.Component {
       <div>
         <h5>Static Component</h5>
         <a href="#" onClick={::this.click}>Set Value</a>
-        <p>{ this.props.activeDate || 'not set' }</p>
+        <p>{ this.props.activeData }</p>
       </div>
     );
   }

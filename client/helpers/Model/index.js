@@ -26,11 +26,12 @@ export default class Model {
   }
 
   initialize() {
-    // console.log(this.node);
+    // console.log(this.node.model);
     const model = this.node.model;
     let initialState = { invalid: false, visible: true };
     if (model.meta && model.meta.initial) {
       initialState['active-data'] = model.meta.initial;
+      model.value = model.meta.initial;
     }
     this.dispatch(setComponentState(this.instancePath, initialState));
 
@@ -39,30 +40,21 @@ export default class Model {
     }
   }
 
-  _syncDataToRedux(data) {
+  _syncDataToRedux(data, instancePath) {
     // console.log(this.instancePath, data);
-    this.dispatch(setComponentState(this.instancePath, data));
+    this.dispatch(setComponentState(instancePath, data));
   }
 
   setModel(values, sync=false) {
-    this._setModel(values, null, sync);
+    this._setModel(values, this.instancePath, sync);
   }
 
-  _setModel(values, instancePath=null, sync=false) {
-    let thisNode = null;
-    if (!instancePath) {
-      thisNode = this.node;
-    } else {
-      thisNode = this.cm.getNode(instancePath);
-    }
+  _setModel(values, instancePath) {
+    const thisNode = this.cm.getNode(instancePath);
 
     thisNode.model = Object.assign({}, thisNode.model, values);
-    if (sync) {
-      this._syncDataToRedux(thisNode.model);
-    } else {
-      if (values.initial) {
-        this.setValue(values.initial);
-      }
+    if (values.initial) {
+      this._setValue(values.initial, instancePath);
     }
   }
 
@@ -71,14 +63,18 @@ export default class Model {
     return key ? this.node.model[key] : this.node.model;
   }
 
+  _setValue(value, instancePath) {
+    this._setModel({ value }, instancePath);
+    this._syncDataToRedux({ 'active-data': value }, instancePath);
+  }
+
   setValue(value) {
-    this._setModel({ value }, this.instancePath);
-    this._syncDataToRedux({ 'active-data': value });
+    this._setValue(value, this.instancePath);
   }
 
   setInvalid(invalid=true) {
     this.setModel({ invalid });
-    this._syncDataToRedux({ 'invalid': invalid });
+    this._syncDataToRedux({ 'invalid': invalid }, this.instancePath);
   }
 
   getMeta() {
@@ -108,45 +104,46 @@ export default class Model {
       return false;
     }
 
-    const NO_ENDPOINT = '__NO_END_POINT__';
     let requests = {};
-    const getRequest = (node) => {
+    const getRequest = (node, validParentUrl='') => {
       let nodes = node;
       if (!isArray(node)) {
         nodes = [ node ];
       }
       // if explictly provide endpoint
       nodes.forEach((n) => {
+        // console.log(n);
         if (n.model.meta) {
           let meta = n.model.meta, value = n.model.value;
-          // console.log(value, '..............');
-          let url = '';
+          let url = '', name = '';
           if (meta.endpoint) {
-            // payload = getPayload(meta.endpoint, method, value);
             url = meta.endpoint;
-          } else if ( meta.schema || meta.name.indexOf('.') > -1 ) {
+            name = meta.name;
+          } else if ( meta.schema  ) {
             let { schema, name } = meta;
-            if (!schema ) {
-              let objs = name.split('.');
-              schema = objs.shift();
-              name = objs.join('.');
-            }
+            // console.log(meta);
             const schemaObj = new Schema(schema, name);
-            // payload = getPayload(schema.getAxapiURL(), method, value);
-            url = schemaObj.getAxapiURL(meta.urlParams) || NO_ENDPOINT;
-          } else {
-            url = NO_ENDPOINT;
+            url = schemaObj.getAxapiURL(meta.urlParams) || '';
+            name = meta.name;
+          } else if (validParentUrl) {
+            url = validParentUrl;
+            value = n.model.value;
+            name = n.model.meta.name;
+            // console.log(value, url, name);
           }
-          // console.log(value);
-          if (requests[url] && requests[url][meta.name]) {
-            requests[url][meta.name] = value;
+
+          // console.log('url:', url, 'name:', name, ' value: ', value);
+          if (name && value !== undefined && requests[url]) {
+            requests[url] = Object.assign({}, requests[url], { [ name ] : value });
           } else {
-            requests[url] = { [ meta.name ] : value };
+            requests[url] = {};
           }
+          validParentUrl = url;
         }
 
         if (n.children.length) {
-          getRequest(n.children);
+          // console.log(n.children);
+          getRequest(n.children, validParentUrl);
         }
       });
     };
@@ -154,9 +151,11 @@ export default class Model {
 
     // parse requests as real request
     let finalRequests = [];
+    // console.log(requests);
+
     forEach(requests, (body, url) => {
       let payload = null;
-      if (body && url !== NO_ENDPOINT) {
+      if (body) {
         body = this._parseBody(body);
         payload = getPayload(url, method, body);
         finalRequests.push(payload);
@@ -168,6 +167,7 @@ export default class Model {
   }
 
   _pullDataToNode(body, node) {
+    // console.log(body, node);
     if (!body || !node)  return false;
 
     if (node.children.length) {
@@ -178,7 +178,7 @@ export default class Model {
       const value = get(body, node.model.meta.name);
       // console.log(value, node.model.meta.name);
       if (value !== undefined) {
-        this.setValue(value, node.model.instancePath);
+        this._setValue(value, node.model.instancePath);
       }
     }
   }
@@ -186,7 +186,9 @@ export default class Model {
   // pull data for inintial
   pullData() {
     let requests = this.getRequests('GET');
+    // console.log(requests);
     const setModel = (body) => {
+      // console.log(body, this.node.model.meta.name);
       // keep name same as redux component 'data'
       // active-data correspond model value
       this.setModel({ data: body });
@@ -203,25 +205,29 @@ export default class Model {
         }
         return !this._requestCache[req.path];
       });
-      const result = this.dispatch(axapiRequest(this.instancePath, validRequests, false));
-      result.then((resp) => {
-        const mapResp = (r) => {
-          // console.log(r);
-          const body = getResponseBody(r);
-          this._requestCache[r.req.url] = body;
-          // keep name same as redux component 'data'
-          // active-data correspond model value
-          // this.setModel({ data: body });
-          // this._pullDataToNode(body, this.node);
-          setModel(body);
-        };
 
-        if (isArray(resp)) {
-          resp.forEach(mapResp);
-        } else {
-          mapResp(resp);
-        }
-      });
+      if (validRequests.length) {
+        const result = this.dispatch(axapiRequest(this.instancePath, validRequests, false));
+        result.then((resp) => {
+          const mapResp = (r) => {
+            // console.log(r);
+            const body = getResponseBody(r);
+            this._requestCache[r.req.url] = body;
+            // keep name same as redux component 'data'
+            // active-data correspond model value
+            // this.setModel({ data: body });
+            // this._pullDataToNode(body, this.node);
+            setModel(body);
+          };
+
+          if (isArray(resp)) {
+            resp.forEach(mapResp);
+          } else {
+            mapResp(resp);
+          }
+        });
+      }
+
     }
   }
 
@@ -239,10 +245,10 @@ export default class Model {
     if (!requests.length) {
       console.error('cannot save because this element ', this.instancePath, ' is not set endpoint');
     } else {
-      const result = this.dispatch(axapiRequest(this.instancePath, requests, method));
+      const result = this.dispatch(axapiRequest(this.instancePath, requests, false));
       result.then(() => {
-        this.cm.setInvalid(true);
-        this.setInvalid();
+        this.setInvalid(true);
+        // this.setInvalid();
       });
     }
   }
