@@ -12,11 +12,11 @@ import {
 
 class A10FieldLayout extends Component {
   render() {
-    let { label, schema, description, layout, required, errorMsg, children } = this.props;
-    let status = {};
+    const { label, schema, description, layout, required, meta: { touched, error }, children } = this.props;
+    let status = {}, errorMsg = '';
 
-    if (errorMsg) {
-      errorMsg = <HelpBlock className="error">{errorMsg}</HelpBlock>;
+    if (touched && error) {
+      errorMsg = <HelpBlock className="error">{error}</HelpBlock>;
       status.validationState = 'error';
     }
 

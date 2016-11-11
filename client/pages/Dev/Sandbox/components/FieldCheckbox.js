@@ -18,7 +18,7 @@ class FieldCheckbox extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { title, value, checked } = this.props; // eslint-disable-line
     return (
         <FormGroup>

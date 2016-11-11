@@ -25,8 +25,8 @@ export default class Model {
       invariant(this.node, ' does not exists on component tree');
     }
 
-    if (this.node.modelmeta && this.node.meta.schema) {
-      this.node.model.schemaParser = new Schema(this.node.meta.schema);
+    if (get(this.node, 'model.meta.schema')) {
+      this.node.model.schemaParser = new Schema(this.node.model.meta.schema);
     } else {
       // find parent schema parser
       this.node.model.schemaParser = this._getParentSchemaParser(this.node);
@@ -36,8 +36,8 @@ export default class Model {
 
   // only for constructor
   _getParentSchemaParser(node) {
-    if (node.parent && node.parent.schemaParser) {
-      return node.parent.schemaParser;
+    if (node.parent && node.parent.model.schemaParser) {
+      return node.parent.model.schemaParser;
     } else if (node.parent) {
       return this._getParentSchemaParser(node.parent);
     } else {
@@ -99,9 +99,10 @@ export default class Model {
     this._syncDataToRedux({ 'active-data': value }, instancePath);
   }
 
-  setValue(value, checkConditional=true) {
+  setValue(value, checkConditional=true, checkValidation=true) {
     this._setValue(value, this.instancePath);
     checkConditional && this.metaParser.changeConditional();
+    checkValidation && this.metaParser.checkValidation();
   }
 
   _setVisible(visible, instancePath, invalidValue=true) {
@@ -163,9 +164,6 @@ export default class Model {
             url = meta.endpoint;
             name = meta.name;
           } else if ( n.model.schemaParser ) {
-            // let { schema } = meta;
-            // console.log(meta);
-            // const schemaObj = new Schema(schema);
             url = n.model.schemaParser.getAxapiURL(meta.urlParams) || '';
             name = meta.name;
           } else if (validParentUrl) {
@@ -288,7 +286,7 @@ export default class Model {
     if (!requests.length) {
       console.error('cannot save because this element ', this.instancePath, ' is not set endpoint');
     } else {
-      const result = this.dispatch(axapiRequest(this.instancePath, requests, false));
+      const result = this.dispatch(axapiRequest(this.instancePath, requests, true));
       result.then(() => {
         this.setInvalid(true);
         // this.setInvalid();

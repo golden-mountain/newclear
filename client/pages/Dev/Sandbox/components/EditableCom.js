@@ -1,7 +1,7 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { FormControl, FormGroup, ControlLabel, Col, Button } from 'react-bootstrap';
+import { FormControl, FormGroup, ControlLabel, Col, Button, HelpBlock } from 'react-bootstrap';
 
 class EditableCom extends React.Component {
   static displayName = 'EditableCom'
@@ -19,16 +19,19 @@ class EditableCom extends React.Component {
 
   render() {
     // console.log(this.props);
-    const { title } = this.props;
+    const { title, instanceData: { errorMsg } } = this.props;
     return (
       <FormGroup>
-        <Col componentClass={ControlLabel} sm={2}>
-          {title || 'Empty Title'}
-        </Col>
+        <Col componentClass={ControlLabel}  sm={2} title={title}>{title}</Col>
         <Col sm={6}>
           <FormControl type="text" placeholder="Test Input" onChange={::this.change} value={this.props.activeData}/>
+          <FormControl.Feedback />
         </Col>
-        <Col sm={4}><Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button></Col>
+        <Col sm={4}>
+          <Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button>
+          <HelpBlock className="error">{errorMsg}</HelpBlock>
+
+        </Col>
       </FormGroup>
     );
   }

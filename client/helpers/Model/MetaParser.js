@@ -5,6 +5,7 @@ export default class MetaParser {
   constructor(modelObject) {
     // Model Object instance
     this.m = modelObject;
+    // this.node = modelObject.node;
     // alias to parent node model
     this.model = modelObject.node.model;
     // alias to parent model meta
@@ -13,6 +14,7 @@ export default class MetaParser {
 
   initialize() {
     this.initialConditional();
+    // this.m.cm.printComponentTree(true);
   }
 
   getConditional() {
@@ -23,12 +25,21 @@ export default class MetaParser {
     if (!conditional && this.model.schemaParser) {
       conditional = this.model.schemaParser.getConditional(this.meta.name);
       if (!conditional) {
-        return true;
+        return false;
       }
     } else if (typeof conditional === 'string') {
       conditional = { [ conditional ] : true };
     }
-    return conditional;
+    return conditional || false;
+  }
+
+  getValidations(node) {
+    let { validation, name } = node.model.meta;
+    if (!validation && node.model.schemaParser) {
+      validation = node.model.schemaParser.getValidations(name);
+    }
+    // console.log('validation..........', validation, this.model.schemaParser);
+    return validation || false;
   }
 
   _isElementVisible(depValue, conditionalObjValue) {
@@ -47,10 +58,10 @@ export default class MetaParser {
       const depOnObjVisible = get(this.model.parent, 'model.visible', true);
       if (depOnObjVisible && depName) {
         const conditionalNode = this.m.cm.componentTree.first((node) => {
-          return node.model.meta && node.model.meta.name === depName;
+          return get(node.model, 'meta.name') === depName;
         });
-        const conditionalObjValue = conditionalNode.model.value;
-        // console.log(conditionalNode, depValue, conditionalObjValue);
+        const conditionalObjValue = get(conditionalNode, 'model.value');
+        // console.log(conditionalNode);
 
         if (typeof depValue == 'function') {
           isVisible = depValue.call(null, conditionalObjValue);
@@ -69,22 +80,25 @@ export default class MetaParser {
 
   changeConditional() {
     const thisName = this.meta.name;
+    const thisValue = this.m.getValue();
 
-    const traverseConditional = (root, parentName, parentIsVisible) => {
+    const traverseConditional = (root, parentName, parentValue, parentIsVisible) => {
       root.walk((node) => {
         const conditional = get(node, 'model.meta.conditional');
         if (conditional) {
           const [ depName, depValue ] = Object.entries(conditional).pop();
           if (parentName == depName) {
             const instancePath = get(node, 'model.instancePath');
-            // console.log(parentIsVisible, this.m.getValue(), depValue);
-            const visible = parentIsVisible && this._isElementVisible(depValue, this.m.getValue());
+            const visible = parentIsVisible && this._isElementVisible(depValue, parentValue);
             if (visible !== get(node, 'model.visible')) {
               this.m._setVisible(visible, instancePath);
               const nodeName = get(node, 'model.meta.name');
-              // console.log(nodeName, visible);
+              const nodeValue = get(node, 'model.value');
+              // console.log('depend on:', depName, ' depend value:', depValue,
+              // 'parentIsVisible:', parentIsVisible, ' parent Value', parentValue,
+              // ' this name:', nodeName, ' caculated visible:', visible);
               if (nodeName) {
-                traverseConditional(root, nodeName, visible);
+                traverseConditional(root, nodeName, nodeValue, visible);
               }
             }
           }
@@ -93,8 +107,36 @@ export default class MetaParser {
       });
     };
 
-    traverseConditional(this.m.cm.componentTree, thisName, true);
+    traverseConditional(this.m.cm.componentTree, thisName, thisValue, true);
+    // this.m.cm.printComponentTree(true);
   }
 
+  _checkValidation(node) {
+    const validations = this.getValidations(node);
+    if (validations) {
+      let msg = '';
+
+      const elementValue = node.model.value;
+      // console.log(validations);
+      const requiredFunc = validations['required'] || validations['object-key'];
+      if (requiredFunc) {
+        msg = requiredFunc(elementValue);
+        this.m._setModel({ errorMsg: msg }, node.model.instancePath, true);
+        return msg;
+      }
+
+      Object.entries(validations).forEach(([ k, func ]) => { // eslint-disable-line
+        // console.log(func, k, elementValue);
+        msg = func(elementValue, name);
+        // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue, ' rule:', k);
+        this.m._setModel({ errorMsg: msg }, node.model.instancePath, true);
+        return msg;
+      });
+    }
+  }
+
+  checkValidation() {
+    return this._checkValidation(this.m.node);
+  }
 
 }

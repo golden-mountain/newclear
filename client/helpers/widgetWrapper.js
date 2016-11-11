@@ -116,7 +116,7 @@ export const widgetWrapper = ReduxDataConnector => {
 
       get visible() {
         if (this.props.app) {
-          return this.props.app.getIn([ ...this.instancePath, 'visible' ]);
+          return this.props.app.getIn([ ...this.instancePath, 'visible' ], true);
         } else {
           return true;
         }

@@ -1,5 +1,7 @@
 import { get } from 'lodash';
 
+import createValidationFuncs from 'helpers/validations';
+
 export default class Schema {
 
   constructor(schema) {
@@ -29,7 +31,7 @@ export default class Schema {
       }
     }
     this.schema = schema;
-    this.object = schema.properties || {};
+    this.objectFields = schema.properties || {};
   }
 
   getAxapiURL(urlParams) {
@@ -48,8 +50,14 @@ export default class Schema {
     }
   }
 
+  _getFieldName(fieldName) {
+    const fieldNameSeg = fieldName.split('.');
+    return fieldNameSeg.pop();
+  }
+
   _getFieldProp(fieldName, prop, defaultValue='') {
-    return get(this.object, `${fieldName}.${prop}`, defaultValue);
+    const field = this._getFieldName(fieldName);
+    return get(this.objectFields, `${field}.${prop}`, defaultValue);
   }
 
   getConditional(fieldName) {
@@ -59,6 +67,24 @@ export default class Schema {
     } else {
       return false;
     }
+  }
+
+  getValidations(fieldName) {
+    const field = this._getFieldName(fieldName);
+    const fieldObj = get(this.objectFields, field);
+    let validations = {};
+    // console.log(fieldObj, this.objectFields, field);
+    if (fieldObj) {
+      const validationFuncs = createValidationFuncs(fieldObj);
+      Object.keys(fieldObj).forEach((key) => {
+        if (validationFuncs[key] !== undefined ) {
+          validations[key] = validationFuncs[key];
+        } else if (key === 'format' && validationFuncs[fieldObj[key]] !== undefined) {
+          validations[fieldObj[key]] = validationFuncs[fieldObj[key]];
+        }
+      });
+    }
+    return validations;
   }
 
 }
