@@ -48,7 +48,7 @@ export default class Model {
   initialize() {
     // console.log(this.node.model);
     const model = this.node.model;
-    let initialState = { invalid: false, visible: true };
+    let initialState = { invalid: model.meta.invalid || false, visible: true };
     if (model.meta && model.meta.initial) {
       initialState['active-data'] = model.meta.initial;
       model.value = model.meta.initial;
@@ -134,9 +134,9 @@ export default class Model {
   _parseBody(body) {
     let content = {};
     forEach(body, (data, key) => {
-      if (key.indexOf('x.') !== 0) {
-        set(content, key, data);
-      }
+      // if (key.indexOf('x.') !== 0 ) {
+      set(content, key, data);
+      // }
     });
     return content;
   }
@@ -161,24 +161,28 @@ export default class Model {
           let meta = n.model.meta, value = n.model.value;
           let url = '', name = '';
           if (meta.endpoint) {
+            // console.log('end point provided');
             url = meta.endpoint;
             name = meta.name;
-          } else if ( n.model.schemaParser ) {
+          } else if ( n.model.meta.schema ) {
+            // console.log('schema provided');
             url = n.model.schemaParser.getAxapiURL(meta.urlParams) || '';
             name = meta.name;
           } else if (validParentUrl) {
+            // console.log('attach to parent');
             url = validParentUrl;
             value = n.model.value;
             name = n.model.meta.name;
             // console.log(value, url, name);
           }
 
-          // console.log('url:', url, 'name:', name, ' value: ', value);
-          if (name && value !== undefined && requests[url]) {
+          if (!requests[url]) requests[url] = {};
+
+          if (name && name.indexOf('x.') !== 0 && value !== undefined && requests[url] && !n.model.invalid) {
+            // console.log('url:', url, 'name:', name, ' value: ', value);
             requests[url] = Object.assign({}, requests[url], { [ name ] : value });
-          } else {
-            requests[url] = {};
-          }
+          } 
+
           validParentUrl = url;
         }
 
