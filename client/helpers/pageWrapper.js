@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Redirect } from 'react-router';
 import { isEqual } from 'lodash';
+import { unmountComponent } from 'redux/modules/app/component';
 
 import { REDIRECT_ROUTE } from 'configs/messages';
 
@@ -43,6 +44,8 @@ const pageWrapper = (Page) => {
     componentWillUnmount() {
       // console.log('removed event from ', this.basePath);
       this.context.cm.ballKicker.removeEvent(this.basePath);
+      // console.log(this.context.props.pagePath, '........');
+      this.context.props.dispatch(unmountComponent(this.context.props.pagePath));
     }
 
     get basePath() {

@@ -4,7 +4,7 @@ import { isArray, forEach, set, get } from 'lodash';
 import { getPayload } from 'helpers/axapiHelper';
 import { axapiRequest } from 'redux/modules/app/axapi';
 import Schema from 'helpers/Schema';
-import { setComponentState } from 'redux/modules/app/component';
+import { setComponentState, unmountComponent } from 'redux/modules/app/component';
 import { getResponseBody } from 'helpers/axapiHelper';
 import MetaParser from 'helpers/Model/MetaParser';
 
@@ -32,6 +32,7 @@ export default class Model {
       this.node.model.schemaParser = this._getParentSchemaParser(this.node);
     }
     this.metaParser = new MetaParser(this);
+    // console.log(this.node.model);
   }
 
   // only for constructor
@@ -65,6 +66,10 @@ export default class Model {
     this.metaParser.initialize();
   }
 
+  unmountComponent() {
+    this.dispatch(unmountComponent(this.instancePath));
+  }
+
   _syncDataToRedux(data, instancePath=null) {
     // console.log(this.instancePath, data);
     if (!instancePath) instancePath = this.instancePath;
@@ -77,6 +82,7 @@ export default class Model {
 
   _setModel(values, instancePath, sync=false) {
     const thisNode = this.cm.getNode(instancePath);
+    if (!thisNode) return false;
 
     thisNode.model = Object.assign({}, thisNode.model, values);
     if (values.initial) {
@@ -115,7 +121,7 @@ export default class Model {
   }
 
   setInvalid(invalid=true) {
-    this.setModel({ invalid });
+    this.setModel({ invalid }); 
     this._syncDataToRedux({ 'invalid': invalid }, this.instancePath);
   }
 
@@ -171,15 +177,15 @@ export default class Model {
           } else if (validParentUrl) {
             // console.log('attach to parent');
             url = validParentUrl;
-            value = n.model.value;
-            name = n.model.meta.name;
+            name = meta.name;
             // console.log(value, url, name);
           }
 
           if (url && !requests[url]) requests[url] = {};
 
+          console.log('url:', url, 'name:', name, ' value: ', value);
+
           if (name && name.indexOf('x.') !== 0 && value !== undefined && requests[url] && !n.model.invalid) {
-            // console.log('url:', url, 'name:', name, ' value: ', value);
             requests[url] = Object.assign({}, requests[url], { [ name ] : value });
           } 
 

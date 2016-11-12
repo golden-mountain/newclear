@@ -13,6 +13,7 @@ export default class ModelPlugin {
 
   onUnmount() {
     // console.log('executed unmount  at ModelPlugin');
+    this.model.unmountComponent();
   }
 
   onReceiveProps() {

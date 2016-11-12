@@ -42,13 +42,21 @@ export const widgetWrapper = ReduxDataConnector => {
 
         const { instancePath, pagePath } = this.context.props;
         const { 
-          meta, value, schema, name, 
-          conditional, validation, urlParams,
-          invalid
+          meta, value, schema, name, initial,
+          conditional, validation, urlParams, 
+          invalid, action
         } = this.props;
+
+        const componentMeta = { 
+          meta: { 
+            endpoint:action, 
+            schema, name, initial,
+            conditional, validation, urlParams, invalid, ...meta 
+          }, 
+          value 
+        };
         // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
-        this.cm.registerComponent(this.instancePath, instancePath || pagePath,
-          { meta: { schema, name, conditional, validation, urlParams, invalid, ...meta }, value });
+        this.cm.registerComponent(this.instancePath, instancePath || pagePath, componentMeta);
         // this.cm.printComponentTree(true);
         // this.cm.acceptBalls();
         this.executePluginMethod('onInitialize');

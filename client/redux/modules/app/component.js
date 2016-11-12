@@ -1,5 +1,5 @@
 import {
-  REGISTER_COMPONENT_VISIBLE, REGISTER_COMPONENT_DATA
+  REGISTER_COMPONENT_VISIBLE, REGISTER_COMPONENT_DATA, UNMOUNT_COMPONENT
 } from 'redux/modules/actionTypes';
 // import { APP_CURRENT_PAGE } from 'configs/appKeys';
 import { fromJS, Map } from 'immutable';
@@ -17,6 +17,9 @@ const componentReducers = {
   },
   [ REGISTER_COMPONENT_VISIBLE ](state, { instancePath, visible }) {
     return state.setIn([ ...instancePath, 'visible' ], visible);
+  },
+  [ UNMOUNT_COMPONENT ](state, { instancePath }) {
+    return state.deleteIn(instancePath);
   }
 };
 
@@ -28,6 +31,10 @@ export const setComponentVisible = (instancePath, visible) => {
 
 export const setComponentState = (instancePath, payload) => {
   return { type: REGISTER_COMPONENT_DATA, instancePath, payload };
+};
+
+export const unmountComponent = (instancePath) => {
+  return { type: UNMOUNT_COMPONENT, instancePath };
 };
 
 // export const setComponentData = (instancePath, payload) => {

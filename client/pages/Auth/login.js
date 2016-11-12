@@ -3,9 +3,10 @@ import React from 'react';
 
 import LoginForm from './components/Form';
 import PageBase from 'helpers/PageBase';
+import pageWrapper from 'helpers/pageWrapper';
 
 
-export default class LoginPage extends PageBase {
+class LoginPage extends PageBase {
 
   render() {
     // console.log(this);
@@ -15,3 +16,5 @@ export default class LoginPage extends PageBase {
   }
 
 }
+
+export default pageWrapper(LoginPage);

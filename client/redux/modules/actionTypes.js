@@ -13,6 +13,7 @@ export const DESTROY_PAGE = 'page/DESTROY_PAGE';
 // component action
 export const REGISTER_COMPONENT_DATA = 'page/REGISTER_COMPONENT_DATA';
 export const REGISTER_COMPONENT_VISIBLE = 'page/REGISTER_COMPONENT_VISIBLE';
+export const UNMOUNT_COMPONENT = 'page/UNMOUNT_COMPONENT';
 
 // field action
 export const REGISTER_PAGE_FIELD = 'page/fields/REGISTER_PAGE_FIELD';
