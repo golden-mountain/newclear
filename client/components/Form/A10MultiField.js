@@ -50,7 +50,7 @@ class TableFields extends Component {
   }
 
   render() {
-    const { fields, meta: { touched, error }, popupInfo, kids } = this.props;
+    const { fields, errorMsg, popupInfo, kids } = this.props;
 
     // console.log('popup info:', popupInfo);
     return (
@@ -73,7 +73,7 @@ class TableFields extends Component {
 
             { popupInfo && <A10Button bsStyle="default" popup={ popupInfo }>Create...</A10Button> }
 
-            {touched && error && <span>{error}</span>}
+            {<span>{errorMsg}</span>}
           </Col>
         </Row>
 
@@ -86,26 +86,26 @@ class TableFields extends Component {
                 </tr>
               </thead>
               <tbody>
-              {
-                fields.map((port, index) => {
-                  // console.log('port:', port, index);
-                  return (
-                    <tr key={index} >
-                    { kids.map(::this._mapKidsToCol(port)) }
-                  </tr>);
-                })
-              }
+                {
+                  fields.map((port, index) => {
+                    // console.log('port:', port, index);
+                    return (
+                      <tr key={index} >
+                        { kids.map(::this._mapKidsToCol(port)) }
+                      </tr>);
+                  })
+                }
               </tbody>
             </Table>
           </Col>
         </Row>
 
         <div className="panel-footer">
-            <Row>
-              <Col lg={ 12 } className="text-right">
-                <Pagination prev next items={3} maxButtons={3} bsSize="small" />
-              </Col>
-            </Row>
+          <Row>
+            <Col lg={ 12 } className="text-right">
+              <Pagination prev next items={3} maxButtons={3} bsSize="small" />
+            </Col>
+          </Row>
         </div>
       </div>
 

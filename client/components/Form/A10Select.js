@@ -146,10 +146,4 @@ class A10Select extends Component {
   }
 }
 
-export default widgetWrapper((state) => {
-  return {
-    // env: getAppEnvVar(state),
-    app: state.getIn([ 'app' ]),
-    form: state.getIn([ 'form' ])
-  };
-})(A10Select);
+export default widgetWrapper([ 'app' ])(A10Select);

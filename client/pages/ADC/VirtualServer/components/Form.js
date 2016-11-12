@@ -6,7 +6,7 @@ import { fromJS } from 'immutable';
 // import { SubmissionError } from 'redux-form';
 // import A10Button from 'components/Form/A10Button';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-import { A10SchemaField } from 'components/Form/A10Field';
+import A10Field from 'components/Form/A10Field';
 import A10Form from 'components/Form/A10Form';
 import A10MultiField from 'components/Form/A10MultiField';
 // import FormManager from 'helpers/FormManager';
@@ -15,37 +15,37 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 
 // import * as logger from 'helpers/logger';
 import { isInt } from 'helpers/validations';
-import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
+// import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
 import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/components/Form';
 
 const makeError = (status=true, errMsg='') => ( status ? '' : errMsg );
 
-const ipv4 = (value) => {
-  const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
-  return makeError(reg.test(value), 'IPv4 Required');
-};
+// const ipv4 = (value) => {
+//   const reg = /^(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/;
+//   return makeError(reg.test(value), 'IPv4 Required');
+// };
 
 class VirtualServerForm extends React.Component {
   static displayName = 'VirtualServerForm'
 
 
-  handleSubmit(v) {
-    let values = fromJS(v);
-    const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
-    if (values.hasIn(pathWildcard) && values.getIn(pathWildcard) === true
-       && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
-      return {
-        'virtual-server': {
-          'ip-address': '0.0.0.0',
-          'netmask': '/24'
-        }
-      };
-    }
-
-    return {};
-  }
+  // handleSubmit(v) {
+  //   let values = fromJS(v);
+  //   const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
+  //   if (values.hasIn(pathWildcard) && values.getIn(pathWildcard) === true
+  //      && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
+  //     return {
+  //       'virtual-server': {
+  //         'ip-address': '0.0.0.0',
+  //         'netmask': '/24'
+  //       }
+  //     };
+  //   }
+  //
+  //   return {};
+  // }
 
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
@@ -101,99 +101,99 @@ class VirtualServerForm extends React.Component {
       }
     };
 
-    const onInitialize = (dataFromAPI) => {
-      // console.log(dataFromAPI);
-      const ipv4 = dataFromAPI.getIn([ 'virtual-server', 'ip-address' ], false);
-      if (ipv4) {
-        if( ipv4 === '0.0.0.0') {
-          dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], true);
-        } else {
-          dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
-        }
-
-        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '0');
-      } else {
-        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
-        dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '1');
-      }
-      return dataFromAPI;
-    };
+    // const onInitialize = (dataFromAPI) => {
+    //   // console.log(dataFromAPI);
+    //   const ipv4 = dataFromAPI.getIn([ 'virtual-server', 'ip-address' ], false);
+    //   if (ipv4) {
+    //     if( ipv4 === '0.0.0.0') {
+    //       dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], true);
+    //     } else {
+    //       dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
+    //     }
+    //
+    //     dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '0');
+    //   } else {
+    //     dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'wildcard' ], false);
+    //     dataFromAPI = dataFromAPI.setIn([ 'x', 'virtual-server', 'address-type' ], '1');
+    //   }
+    //   return dataFromAPI;
+    // };
 
     return (
-      <A10Form onInitialize={onInitialize} onBeforeSubmit={::this.handleSubmit} schemas={[ slbVirtualServerSchema ]} horizontal>
+      <A10Form schema='slb-virtual-server' horizontal>
         <Row>
           <Col xs={12} md={12} lg={6}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-              <A10SchemaField schema={elements['name']} name="virtual-server.name" required label="Name" />
-              <A10SchemaField  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
+              <A10Field name="virtual-server.name" required label="Name" />
+              <A10Field  name="x.virtual-server.wildcard" label="Wildcard" value={true}>
                 <Checkbox value={true} />
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField name="x.virtual-server.address-type" label="Address Type" required value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
+              <A10Field name="x.virtual-server.address-type" label="Address Type" required value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
                 <div>
                   <Radio value="0" inline> IPv4 </Radio>
                   <Radio value="1" inline> IPv6 </Radio>
                 </div>
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField schema={elements['ip-address']} name="virtual-server.ip-address" label="IPv4 Address" required validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
+              <A10Field name="virtual-server.ip-address" label="IPv4 Address" required validation={{ ipv4: ipv4 }} conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-              <A10SchemaField schema={elements['netmask']} name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
+              <A10Field name="virtual-server.netmask" label="Netmask"  conditional={{ 'x.virtual-server.address-type': '0' }} />
 
-              <A10SchemaField schema={elements['ipv6-address']} name="virtual-server.ipv6-address" label="IPv6 Address" required conditional={{ 'x.virtual-server.address-type': '1' }} />
-              <A10SchemaField schema={elements['ipv6-acl']} name="virtual-server.ipv6-acl" label="IPv6 ACL" />
+              <A10Field name="virtual-server.ipv6-address" label="IPv6 Address" required conditional={{ 'x.virtual-server.address-type': '1' }} />
+              <A10Field name="virtual-server.ipv6-acl" label="IPv6 ACL" />
 
             </Panel>
             {/* collapsible */}
             <Panel header={<h4>Virtual Server Advanced Fields</h4>} collapsible >
 
-              <A10SchemaField schema={elements['arp-disable']} name="virtual-server.arp-disable" label="Disable ARP" value={false}>
+              <A10Field name="virtual-server.arp-disable" label="Disable ARP" value={false}>
                 <Checkbox value={true} />
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField schema={elements['stats-data-action']} name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
+              <A10Field name="virtual-server.stats-data-action" label="Stats Data Action" value="stats-data-enable">
                 <div>
                   <Radio value="stats-data-enable" inline> Enable </Radio>
                   <Radio value="stats-data-disable" inline> Disable </Radio>
                 </div>
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField schema={elements['extended-stats']} name="virtual-server.extended-stats" label="Extended Stats" value={false}>
+              <A10Field name="virtual-server.extended-stats" label="Extended Stats" value={false}>
                 <Checkbox value={true} />
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField schema={elements['redistribution-flagged']} name="virtual-server.redistribution-flagged" label="Redistribution Flagged" value={false}>
+              <A10Field name="virtual-server.redistribution-flagged" label="Redistribution Flagged" value={false}>
                 <Checkbox value={true} />
-              </A10SchemaField>
+              </A10Field>
 
-              <A10SchemaField
-                schema={elements['vrid']}
+              <A10Field
+
                 name="virtual-server.vrid"
                 label="VRID"
                 description="Join a VRRP group (Specify a VRRP-A vrid)"
                 placeholder="Enter vrid."
                 conditional={true}
               />
-              <A10SchemaField schema={elements['template-virtual-server']} name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
-              <A10SchemaField schema={elements['template-logging']} name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
-              <A10SchemaField schema={elements['template-scaleout']} name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />
+              <A10Field name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={true} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
+              <A10Field name="virtual-server.template-logging" label="Policy Template" conditional={true}  />
+              <A10Field name="virtual-server.template-scaleout" label="Scaleout Template" conditional={true} />
 
-              <A10SchemaField schema={elements['description']} name="virtual-server.description" label="Description" />
+              <A10Field name="virtual-server.description" label="Description" />
             </Panel>
           </Col>
 
           <Col xs={12} md={12} lg={6}>
             <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
-              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} schema={elements['port-list']} >
-                <A10SchemaField layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
-                <A10SchemaField layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
+              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} >
+                <A10Field layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
+                <A10Field layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
 
-                <A10SchemaField layout={false} name="protocol" title="Protocol" >
+                <A10Field layout={false} name="protocol" title="Protocol" >
                   <FormControl componentClass="select">
                     <option value="tcp" selected>tcp</option>
                     <option value="udp">udp</option>
                   </FormControl>
-                </A10SchemaField>
+                </A10Field>
 
               </A10MultiField>
             </Panel>
