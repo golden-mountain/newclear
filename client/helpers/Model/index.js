@@ -176,7 +176,7 @@ export default class Model {
             // console.log(value, url, name);
           }
 
-          if (!requests[url]) requests[url] = {};
+          if (url && !requests[url]) requests[url] = {};
 
           if (name && name.indexOf('x.') !== 0 && value !== undefined && requests[url] && !n.model.invalid) {
             // console.log('url:', url, 'name:', name, ' value: ', value);
