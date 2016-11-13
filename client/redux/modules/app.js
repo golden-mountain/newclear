@@ -17,13 +17,13 @@ import componentReducers from './app/component';
 import pageReducers from './app/page';
 import themeReducers from './app/theme';
 import featureReducers from './app/feature';
-import formReducers from './app/form';
+// import formReducers from './app/form';
 
 const behaviors = {
   ...axapiReducers,  
   ...componentReducers,
   ...featureReducers,
-  ...formReducers,  
+  // ...formReducers,  
   ...pageReducers,
   ...themeReducers
 };

@@ -7,7 +7,7 @@ import A10Table, { A10TableColumn } from 'components/List/A10Table';
 // import AppManager from 'helpers/AppManager';
 // import BaseTable from 'pages/BaseTable';
 // import Link from 'react-router/Link';
-import A10Button from 'components/Form/A10Button';
+import A10Button from 'components/Field/A10Button';
 import VirtualServerForm from 'pages/ADC/VirtualServer/components/Form';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 import { widgetWrapper } from 'helpers/widgetWrapper';

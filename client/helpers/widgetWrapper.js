@@ -42,7 +42,7 @@ export const widgetWrapper = ReduxDataConnector => {
 
         const { instancePath, pagePath } = this.context.props;
         const { 
-          meta, value, schema, name, initial,
+          meta, value, schema, name, loadInitial,
           conditional, validation, urlParams, 
           invalid, action
         } = this.props;
@@ -50,10 +50,9 @@ export const widgetWrapper = ReduxDataConnector => {
         const componentMeta = { 
           meta: { 
             endpoint:action, 
-            schema, name, initial,
+            schema, name, value, loadInitial, 
             conditional, validation, urlParams, invalid, ...meta 
-          }, 
-          value 
+          }
         };
         // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
         this.cm.registerComponent(this.instancePath, instancePath || pagePath, componentMeta);
@@ -228,6 +227,7 @@ export const widgetWrapper = ReduxDataConnector => {
             instancePath: this.instancePath,
             parentPath: this.context.props.instancePath,
             data: this.data,
+            node: this.cm.getNode(this.instancePath),
             // initialValues: this.data || this.context.props.initialValues,
             visible: this.visible,
             activeData: this.activeData,

@@ -5,7 +5,7 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 import { values, get }  from 'lodash';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
-import A10Button from 'components/Form/A10Button';
+import A10Button from 'components/Field/A10Button';
 
 export class A10TableColumn extends React.Component {
 }
@@ -151,10 +151,4 @@ class A10Table extends React.Component {
   }
 }
 
-export default widgetWrapper((state) => {
-  return {
-    // env: getAppEnvVar(state),
-    app: state.getIn([ 'app' ])
-    // form: state.getIn([ 'form' ])
-  };
-})(A10Table);
+export default widgetWrapper([ 'app' ])(A10Table);

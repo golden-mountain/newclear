@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { FieldArray } from 'redux-form/immutable'; // imported Field
-import { Button, Table, Row, Col, Form, InputGroup, FormControl, Pagination } from 'react-bootstrap';
+// import { FieldArray } from 'redux-form/immutable'; // imported Field
+import { Button, Table, Row, Col, InputGroup, FormControl, Pagination } from 'react-bootstrap';
 // import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { forEach, isObject, upperFirst } from 'lodash';
 
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import A10Button from 'components/Form/A10Button';
+import A10Button from 'components/Field/A10Button';
 // import { A10SchemaField } from 'components/Form/A10Field';
 
 class TableFields extends Component {
@@ -50,21 +50,21 @@ class TableFields extends Component {
   }
 
   render() {
-    const { fields, errorMsg, popupInfo, kids } = this.props;
+    const { fields=[], errorMsg, popupInfo, kids } = this.props;
 
     // console.log('popup info:', popupInfo);
     return (
       <div>
         <Row>
           <Col md={6} >
-            <Form horizontal>
+            <div>
               <InputGroup>
                 <FormControl type="text" placeholder="Keywords" />
                 <InputGroup.Button>
                   <Button bsStyle="default">Search</Button>
                 </InputGroup.Button>
               </InputGroup>
-            </Form>
+            </div>
           </Col>
           <Col md={6} className="text-right">
             <Button onClick={this._inlineCreate(fields, kids)} bsStyle="primary">
@@ -131,7 +131,7 @@ class A10MultiField extends Component {
     }
 
     return (
-      <FieldArray component={component} kids={children} name={name} { ...rest } />
+      <TableFields kids={children} name={name} { ...rest } />
     );
   }
 }

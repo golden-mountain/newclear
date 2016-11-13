@@ -1,0 +1,112 @@
+import React from 'react';
+
+import { FormControl } from 'react-bootstrap';
+import { get, isEqual } from 'lodash';
+
+import A10Select from './A10Select';
+import A10Radios from './A10Radios';
+// import A10Checkboxs from './A10Checkboxs';
+// import A10Button from './A10Button';
+// import A10MultiField from './A10MultiField';
+
+export default class AutoField {
+  constructor(fieldSchema, schema) {
+    this.fieldSchema = fieldSchema;
+    this.schema = schema;
+    // this.fieldName = fieldName;
+  }
+
+  autoGenElement(props) {
+    const fieldProps = this.fieldSchema;
+    const { change: onChange, name, activeData, data } = props; //eslint-disable-line
+    const validProps = { onChange, name, data };
+    // console.log(fieldProps);
+    // console.log(value, name);
+    // generate by seq
+    const _has = (prop, ruleParam) => {
+      let result = get(fieldProps, prop, false);
+      if (ruleParam) {
+        return result === ruleParam;
+      } else {
+        return result !== false;
+      }
+    };
+
+    const _eq = (prop, expect) => {
+      const value = get(fieldProps, prop, '');
+      return isEqual(value, expect);
+    };
+
+    const _in = (prop, expects) => {
+      const value = get(fieldProps, prop, '');
+      return expects.indexOf(value) > -1;
+    };
+
+    const defaultAttrs = {
+      'example-default': 'value',
+      'default': 'value'
+    };
+
+    const fieldTypeMaps = [
+      { 
+        componentClass: A10Select, 
+        attrs: defaultAttrs,
+        depend: { rule: _has, prop: '$ref' }
+      },
+      {
+        componentClass: A10Radios,
+        attrs: { 'enumMap' : 'options', ...defaultAttrs },
+        depend: { rule: _eq, prop: 'enum', ruleParam: [ 'enable', 'disable' ] }
+      },
+      {
+        componentClass: FormControl,
+        type: 'select',
+        attrs: { 'enumMap' : 'options', ...defaultAttrs },
+        depend: { rule: _has, prop: 'enum' }
+      },
+      { 
+        componentClass: FormControl,
+        type: 'text',
+        attrs: defaultAttrs,
+        depend: { rule: _in, prop: 'type', ruleParam: [ 'number', 'string' ] }
+      },
+      { 
+        componentClass: FormControl,
+        type: 'textarea',
+        attrs: defaultAttrs,
+        depend: { rule: _has, prop: 'src-name', ruleParam: 'description' }
+      }    
+    ];
+
+    const mapAttrs = (attrs) => {
+      let props = {};
+      for (let prop in attrs) {
+        const mapTo = attrs[prop];
+        if (typeof mapTo === 'function') {
+          props = mapTo(prop);
+        } else if(get(fieldProps, prop)) {
+          // console.log(name, prop, mapTo, get(fieldProps, prop));
+          props[mapTo] = get(fieldProps, prop);
+        }
+      }
+      return props;
+    };
+
+   
+    // const rules = [ _has, _eq, _in ];
+    let ComponentClass = FormControl, elementProps = {};
+    for (let index in fieldTypeMaps) {
+      const { componentClass, depend: { rule, prop, ruleParam }, attrs, ...rest } = fieldTypeMaps[index];
+
+      if (rule(prop, ruleParam)) {
+        ComponentClass = componentClass;
+        elementProps = Object.assign({}, rest, mapAttrs(attrs));
+        break;
+      }
+    }
+     
+    const mergedProps = Object.assign({}, validProps, elementProps);
+    // console.log(mergedProps);
+    return (<ComponentClass {...mergedProps} />);
+  }
+}

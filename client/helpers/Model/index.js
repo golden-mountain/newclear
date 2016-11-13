@@ -50,11 +50,10 @@ export default class Model {
     // console.log(this.node.model);
     const model = this.node.model;
     let initialState = { invalid: model.meta.invalid || false, visible: true };
-    if (model.meta && model.meta.initial) {
-      initialState['active-data'] = model.meta.initial;
-      model.value = model.meta.initial;
-    } else if (model.value) {
-      initialState['active-data'] = model.value;
+    // console.log(model.meta);
+    if (model.meta && model.meta.value !== undefined) {
+      initialState['active-data'] = model.meta.value;
+      model.value = model.meta.value;
     }
 
     this.dispatch(setComponentState(this.instancePath, initialState));
@@ -85,6 +84,9 @@ export default class Model {
     if (!thisNode) return false;
 
     thisNode.model = Object.assign({}, thisNode.model, values);
+    // console.log(thisNode.model);
+    // console.log(values, instancePath, thisNode.model);
+
     if (values.initial) {
       // this._setValue(values.initial, instancePath);
       values.value = values.initial;
@@ -123,6 +125,11 @@ export default class Model {
   setInvalid(invalid=true) {
     this.setModel({ invalid }); 
     this._syncDataToRedux({ 'invalid': invalid }, this.instancePath);
+  }
+
+  setMeta(meta) {
+    let newMeta = Object.assign({}, this.getMeta(), meta);
+    this.setModel({ meta: newMeta }); 
   }
 
   getMeta() {
@@ -183,7 +190,7 @@ export default class Model {
 
           if (url && !requests[url]) requests[url] = {};
 
-          console.log('url:', url, 'name:', name, ' value: ', value);
+          // console.log('url:', url, 'name:', name, ' value: ', value);
 
           if (name && name.indexOf('x.') !== 0 && value !== undefined && requests[url] && !n.model.invalid) {
             requests[url] = Object.assign({}, requests[url], { [ name ] : value });

@@ -130,7 +130,6 @@
     "react-virtualized-select": "^2.0.0",
     "redbox-react": "^1.3.0",
     "redux": "^3.5.2",
-    "redux-form": "^6.0.5",
     "redux-immutable": "^3.0.8",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",

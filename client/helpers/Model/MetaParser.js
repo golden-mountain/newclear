@@ -13,23 +13,33 @@ export default class MetaParser {
   }
 
   initialize() {
-    this.initialConditional();
+    const conditional = this.initialConditional();
+    let validation = null;
+    if (this.meta && this.meta.name) {
+      validation = this.getValidations(this.m.node);
+    }
+    
+    // console.log(conditional, validation);
+    this.m.setMeta({ conditional, validation });
     // this.m.cm.printComponentTree(true);
   }
 
   getConditional() {
     let { conditional } = this.meta;
-    // console.log('conditional', conditional);
+    // console.log( this.model.schemaParser );
     // find meta to get conditional
     // find schema to get conditional if meta.conditional not exists
-    if (!conditional && this.model.schemaParser) {
+    if (!conditional && this.model.schemaParser && this.meta.name) {
       conditional = this.model.schemaParser.getConditional(this.meta.name);
+      // console.log(this.meta.name, conditional);
+
       if (!conditional) {
         return false;
       }
     } else if (typeof conditional === 'string') {
       conditional = { [ conditional ] : true };
     }
+
     return conditional || false;
   }
 
@@ -50,9 +60,9 @@ export default class MetaParser {
 
   initialConditional() {
     const conditional = this.getConditional();
+  
     let isVisible = true;
-
-    if (conditional) {
+    if (conditional && typeof conditional == 'object' ) {
       // register conditional
       const [ depName, depValue ] = Object.entries(conditional).pop();
       const depOnObjVisible = get(this.model.parent, 'model.visible', true);
@@ -62,7 +72,9 @@ export default class MetaParser {
         });
         const conditionalObjValue = get(conditionalNode, 'model.value');
         // console.log(conditionalNode);
-
+        // console.log('this node:', this.meta.name, 'depend on:', 
+        //   depName, 'depend value:', depValue, 
+        //   ' realtime value:', conditionalObjValue);
         if (typeof depValue == 'function') {
           isVisible = depValue.call(null, conditionalObjValue);
         } else {
@@ -76,17 +88,21 @@ export default class MetaParser {
     }
 
     this.m.setVisible(isVisible);
+
+    return conditional;
   }
 
   changeConditional() {
     const thisName = this.meta.name;
     const thisValue = this.m.getValue();
-
+    // console.log(thisName, thisValue);
     const traverseConditional = (root, parentName, parentValue, parentIsVisible) => {
       root.walk((node) => {
         const conditional = get(node, 'model.meta.conditional');
-        if (conditional) {
+        // console.log(conditional);
+        if (typeof conditional == 'object') {
           const [ depName, depValue ] = Object.entries(conditional).pop();
+          // console.log(parentName, parentValue, '::', depName, depValue);
           if (parentName == depName) {
             const instancePath = get(node, 'model.instancePath');
             const visible = parentIsVisible && this._isElementVisible(depValue, parentValue);
@@ -103,10 +119,10 @@ export default class MetaParser {
             }
           }
         }
-
       });
     };
 
+    // console.log(thisName, thisValue);
     traverseConditional(this.m.cm.componentTree, thisName, thisValue, true);
     // this.m.cm.printComponentTree(true);
   }

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
-import { reduxForm } from 'redux-form/immutable'; // imported Field
+// import { reduxForm } from 'redux-form/immutable'; // imported Field
 
 // import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'oem/PageLayout';
@@ -39,11 +39,6 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
     componentWillMount() {
       this.props.registerCurrentPage(Object.assign({}, this.props.env));
-      // if (this.props.visible === undefined || this.props.visible) {
-      //   this.props.setPageVisible(this.props.env.page, true, this.props.pageId);
-      // } else {
-      //   this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
-      // }
     }
 
     componentWillUnmount() {
@@ -60,36 +55,22 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     config.page = '404';
   }
 
-  if (!config.form) {
-    config.form = config.page;
-  }
+  // if (!config.form) {
+  //   config.form = config.page;
+  // }
 
-  let page = reduxForm({
-    form: config.form
-    // enableReinitialize: true
-  } )(Core);
-
-  // console.log(pagePath);
   const bindPageInstance = actionCreator => actionCreator.bind(null, pagePath);
   const boundAppAcs = mapValues(window.appActions, bindPageInstance);
 
-  page = connect(
+  let page = connect(
     () => {
       return {
-        // isLoading: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'isLoading' ], false),
-        // statusCode: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'statusCode' ]),
-        // errMsg: state.getIn([ 'app', LAST_PAGE_KEY, 'axapi', 'response', 'err', 'msg' ]),
-        // notifiable: state.getIn([ 'app', LAST_PAGE_KEY, 'axapiNeedNotify' ]),
-        // axapiUid: getAxapiUid(state),
-        // axapiResponse: getAxapiResponse(state, pagePath), // invalid on context
-        // initialValues: config.initialValues, // invalid on context
-        // page: getPageVar(state, pagePath), // invalid on context
         pagePath,
         env: config // valid on context
       };
     },
     (dispatch) => bindActionCreators(boundAppAcs, dispatch)
-  )(page);
+  )(Core);
 
   return page;
 };

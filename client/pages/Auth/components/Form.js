@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormControl } from 'react-bootstrap';
-import A10Field from 'components/Form/A10Field';
+import A10Field from 'components/Field';
 // import A10SubmitButtons from 'components/Form/A10SubmitButtons';
 import A10Form from 'components/Form/A10Form';
 import { required } from 'helpers/validations';

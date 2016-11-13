@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox, Radio, Col, Row, Panel } from 'react-bootstrap';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-import A10Field from 'components/Form/A10Field';
+import A10Field from 'components/Field';
 import A10Form from 'components/Form/A10Form';
 
 import { widgetWrapper } from 'helpers/widgetWrapper';
@@ -13,7 +13,7 @@ class TemplateVirtualServerForm extends React.Component {
 
   render() {
     const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
-    const elements = slbTemplateVirtualServerSchema.properties;
+    // const elements = slbTemplateVirtualServerSchema.properties;
 
     const panelFields = (
       <Panel header={<h4>Basic Field</h4>}>
@@ -108,7 +108,7 @@ class TemplateVirtualServerForm extends React.Component {
     );
 
     return (
-      <A10Form schemas={slbTemplateVirtualServerSchema} horizontal>
+      <A10Form schema={slbTemplateVirtualServerSchema} horizontal>
         <Row>
           <Col xs={12}>
             {panelFields}

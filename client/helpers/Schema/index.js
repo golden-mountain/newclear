@@ -55,6 +55,13 @@ export default class Schema {
     return fieldNameSeg.pop();
   }
 
+  _rebuildFieldName(orgName, name) {
+    const fieldNameSeg = orgName.split('.');
+    fieldNameSeg.pop();
+    fieldNameSeg.push(name);
+    return fieldNameSeg.join('.');
+  }
+
   _getFieldProp(fieldName, prop, defaultValue='') {
     const field = this._getFieldName(fieldName);
     return get(this.objectFields, `${field}.${prop}`, defaultValue);
@@ -63,7 +70,7 @@ export default class Schema {
   getConditional(fieldName) {
     const conditional = this._getFieldProp(fieldName, 'condition', '');
     if (conditional) {
-      return { [ conditional ] : true };
+      return { [ this._rebuildFieldName(fieldName, conditional) ] : true };
     } else {
       return false;
     }
@@ -85,6 +92,12 @@ export default class Schema {
       });
     }
     return validations;
+  }
+
+  getFieldProps(fieldName) {
+    const field = this._getFieldName(fieldName);
+    const fieldObj = get(this.objectFields, field);
+    return fieldObj;    
   }
 
 }

@@ -8,7 +8,7 @@ import 'react-virtualized-select/styles.css';
 // Then import the virtualized Select HOC
 import VirtualizedSelect from 'react-virtualized-select';
 
-import A10Button from 'components/Form/A10Button';
+import A10Button from 'components/Field/A10Button';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 

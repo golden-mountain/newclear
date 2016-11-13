@@ -13,7 +13,7 @@ import RootRouter from './routes';
 // import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import createMiddleware from './redux/middleware/clientMiddleware';
-import formMiddleware from './redux/middleware/formMiddleware';
+// import formMiddleware from './redux/middleware/formMiddleware';
 import reducer from './redux/modules/reducer';
 import { createDomElement } from 'helpers/dom';
 
@@ -29,7 +29,7 @@ window.appActions = appActions;
 const client = new ApiClient();
 
 // removed logger() because it's nonesense
-let middlewares = [ thunk,  createMiddleware(client), formMiddleware ];
+let middlewares = [ thunk,  createMiddleware(client) ];
 
 //webpack define plugin defined env
 if (__DEV__) { // eslint-disable-line
