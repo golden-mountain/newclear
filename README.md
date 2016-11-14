@@ -11,6 +11,7 @@ AXAPI_HOST=192.168.105.196 npm start
 2. LiveReload
 3. React Developer Tools
 4. Redux DevTools
+5. React Perf https://github.com/crysislinux/chrome-react-perf
 
 ## Module Manager
 - Module Visible: license, oem

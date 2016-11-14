@@ -48,7 +48,7 @@ class A10Field extends React.Component {
 
     // console.log(name, activeData);
     const callback = (child) => {
-      let inputOptions = { name, onChange, value: activeData };
+      let inputOptions = { name, onChange };
 
       // only support React Bootstrap
       // to set value and checked for inputs
@@ -57,6 +57,9 @@ class A10Field extends React.Component {
         const elementValue = child.props.value || true;
         const value = activeData === undefined ? true : activeData;
         inputOptions['checked'] = elementValue.toString() == value.toString();
+      } else {
+        // checkbox and radios can't set value, it will cause can't checked
+        inputOptions['value'] = activeData;
       }
 
       // console.log(inputOptions);
