@@ -314,13 +314,20 @@ export default class Model {
       const submitErrors = this.metaParser.getSubmitErrors();
       if (!submitErrors.length) {
         const result = this.dispatch(axapiRequest(this.instancePath, requests, true));
-        result.then((data) => {
+        result.then((r) => {
           if (clearValues) {
-            console.log(' will remove all old datas');
+            console.log(' TODO: will remove all old datas');
             this.resetComponent(this.node);
           }
-          if (typeof onSuccess === 'function') {
-            onSuccess.call(this, data);
+
+          try {
+            const resp = r.pop();
+            const body = getResponseBody(resp);
+            if (typeof onSuccess === 'function') {
+              onSuccess.call(this, body);
+            }
+          } catch (e) {
+            console.warn(e.message);
           }
         });
         return result;

@@ -58,18 +58,16 @@ class VirtualServerForm extends React.Component {
         title: 'Create Virtual Server Template',
         bsSize:'super'
       },
-      connectOptions: {
-        connectToValue: {
-          'virtual-server': {
-            'template-virtual-server': 'virtual-server.name'
-          }
-        }
-      }
+      connectTo: 'virtual-server.name'
     };
 
     const tplVirtualServerLoadOptions = {
       // url: elements['template-virtual-server']['$ref'],
       loadOnMount: true,
+      params: {
+        start:0,
+        count:10000
+      },
       map: {
         name: 'name',
         label: 'name',

@@ -48,7 +48,7 @@ class A10Field extends React.Component {
 
     // console.log(name, activeData);
     const callback = (child) => {
-      let inputOptions = { name, onChange };
+      let inputOptions = { name, onChange, value: activeData };
 
       // only support React Bootstrap
       // to set value and checked for inputs

@@ -219,7 +219,7 @@ export const widgetWrapper = ReduxDataConnector => {
         return false;
       }
 
-      getNewProps() {
+      getNewProps(overideProps={}) {
         let pluginProps = this.executePluginMethod('onBeforeSetProps') || {};
         let props = Object.assign(
           {},
@@ -244,6 +244,7 @@ export const widgetWrapper = ReduxDataConnector => {
             catchBall: this.cm.ballKicker.accept.bind(this.cm.ballKicker, this.instancePath),
             registerBalls: this.cm.listener.registerStandardBalls.bind(this.cm.listener, this.instancePath)
           },
+          overideProps,
           pluginProps
         );
 

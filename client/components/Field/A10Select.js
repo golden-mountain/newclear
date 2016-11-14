@@ -14,7 +14,7 @@ import { getPayload } from 'helpers/axapiHelper';
 
 import { values, get, isArray } from 'lodash';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
-
+import { COMPONENT_PAGE_SIZE } from 'configs/app';
 // import FieldConnector from 'helpers/FieldConnector';
 
 
@@ -34,7 +34,15 @@ export default class A10Select extends Component {
   // }
 
   componentWillUpdate() {
-    this.context.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
+    const { instancePath, catchBall, setValue } = this.context.props;
+    const { popupInfo={} } = this.props.widgetProps || {};
+    // console.log(popupInfo.connectTo);
+    catchBall(UPDATE_TARGET_DATA, (from, to, body) => { //eslint-disable-line
+      if (popupInfo.connectTo) {
+        const value = get(body, popupInfo.connectTo);
+        setValue(value);
+        // console.log('triggled::::::::::::::::', body, value);
+      }
       // const { popupInfo: { connectOptions } } = this.props;
       // console.log(params, connectOptions);
       // const connect = (connectOptions, params) => {
@@ -45,12 +53,13 @@ export default class A10Select extends Component {
       this.getOptions();
       // this.newValue = 'a1';
       // fieldConnector.connectToValues(params);
-    });
+    }, instancePath);
   }
 
   formatOptions(data) {
+    const { loadOptions } = this.props.widgetProps || {};
     let json = [];
-    if ( !data || !this.props.loadOptions) {
+    if ( !data || !loadOptions) {
       return json;
     }
     let list = values(data).pop();
@@ -59,7 +68,7 @@ export default class A10Select extends Component {
       list = [ list ];
     }
 
-    let { map: { name, label, reform } } = this.props.loadOptions;
+    let { map: { name, label, reform } } = loadOptions;
 
     if (!name) {
       name = 'name';
@@ -80,14 +89,16 @@ export default class A10Select extends Component {
   }
 
   getOptions() {
-    //BUG: switch from other page, can't refresh the list??
-    const { loadOptions } = this.props;
-    const asyncNeeded = loadOptions && loadOptions.url && true;
-
-    if (asyncNeeded) {
-      const { params } = loadOptions;
-      const payload = getPayload(loadOptions.url, 'GET', params);
-      this.props.comAxapiRequest(payload, false);
+    const { loadOptions={} } = this.props.widgetProps || {};
+    let url = loadOptions.url;
+    if (!url) {
+      const fieldProps = this.context.props.getFieldProps();
+      if (fieldProps) url = fieldProps['$ref'];
+    }
+    if (url) {
+      const { params={ start:0, count:COMPONENT_PAGE_SIZE } } = loadOptions;
+      const payload = getPayload(url, 'GET', params);
+      this.context.props.comAxapiRequest(payload, false);
     }
   }
 
@@ -107,8 +118,8 @@ export default class A10Select extends Component {
   // }
 
   componentWillMount() {
-    // const { loadOptions: { loadOnMount } } = this.props;
-    if ( this.props.loadOptions && this.props.loadOptions.loadOnMount ) {
+    const { loadOptions={} } = this.props.widgetProps || {};
+    if ( loadOptions.loadOnMount ) {
       this.getOptions();
     }
   }
@@ -121,24 +132,21 @@ export default class A10Select extends Component {
   // }
 
   render() {
-    let { value, data, onChange, popupInfo } = this.props;
+    let { value, data, onChange, widgetProps={} } = this.props;
+    const { popupInfo } = widgetProps;
     const formattedOptions = this.formatOptions(data);
-    // console.log(data);
-    // const asyncNeeded = loadOptions && loadOptions.url && true;
-    // let setValue = this.newValue || value;
-    // console.log('set to VirtualizedSelect value', setValue);
     const loadAttr = { value, onChange, options: formattedOptions, simpleValue: true };
 
-    // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
-    // set(popupInfo, 'id', 'default');
+    const { instancePath } = this.context.props;
+    // console.log(this.props);
+    // console.log(value, '..................value...............');
 
-    // console.log(loadAttr, popupInfo);
     return (
       popupInfo ?
       <InputGroup>
         <VirtualizedSelect {...loadAttr}/>
         <InputGroup.Addon>
-          <A10Button popup={ popupInfo } componentClass="a" edit={false} ><em className="fa fa-plus"/></A10Button>
+          <A10Button popup={ popupInfo } componentClass="a" edit={false} parentPath={instancePath} ><em className="fa fa-plus"/></A10Button>
         </InputGroup.Addon>
       </InputGroup>
       :

@@ -35,6 +35,7 @@ export default class ModelPlugin {
       {},
       previousProps,
       {
+        model: this.model,
         getModel: this.model.getModel.bind(this.model),
         getValue: this.model.getValue.bind(this.model),
         setValue: this.model.setValue.bind(this.model),
@@ -62,13 +63,15 @@ export default class ModelPlugin {
         hold: this.model.setValue.bind(this.model),
         reset: this.model.initialize.bind(this.model),
         change: (event) => {
-          let value = event.target.value;
-          // console.log(value);
-
-          const types = [ 'checkbox', 'radio' ], values = [ 'true' , 'false' ];
-
-          if (types.indexOf(event.target.type) > -1  && values.indexOf(value) > -1) {
-            value = event.target.checked;
+          let value;
+          try {
+            value = event.target.value;
+            const types = [ 'checkbox', 'radio' ], values = [ 'true' , 'false' ];
+            if (types.indexOf(event.target.type) > -1  && values.indexOf(value) > -1) {
+              value = event.target.checked;
+            }
+          } catch (e) {
+            value = event;
           }
 
           this.model.setValue(value);

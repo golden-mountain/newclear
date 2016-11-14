@@ -10,6 +10,7 @@ import { mapValues } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 import ComponentManager from 'helpers/ComponentManager';
 // import A10Modal from 'components/Modal';
+// import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -39,6 +40,9 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
     componentWillMount() {
       this.props.registerCurrentPage(Object.assign({}, this.props.env));
+      // this.cm.ballKicker.accept([], REDIRECT_ROUTE, () => {
+      //
+      // });
     }
 
     componentWillUnmount() {

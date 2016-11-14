@@ -31,7 +31,7 @@ class A10Button extends Component {
   // }
 
   componentWillUpdate(nextProps, nextState) { // eslint-disable-line
-    console.log('updating....');
+    // console.log('updating....');
     if (nextState.visible) {
       this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
         this.setState({ visible: false });

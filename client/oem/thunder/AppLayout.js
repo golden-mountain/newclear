@@ -55,9 +55,9 @@ class AppLayout extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { statusCode, errMsg, error, notifiable, axapiUid } = nextProps;
+    const { statusCode, errMsg, error, notifiable } = nextProps;
 
-    if (notifiable && axapiUid != this.props.axapiUid) {
+    if (notifiable) {
       let bsClass = 'success', info = 'Success';
       let _notify = {
         title: 'Hi, Something Wrong!!',

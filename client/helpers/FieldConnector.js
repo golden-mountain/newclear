@@ -1,25 +1,7 @@
 import { toPath, set } from 'lodash';
 import { fromJS, List } from 'immutable';
-// import { axapiGet } from 'helpers/axapiHelper';
-import { change } from 'redux-form/immutable'; // imported Field
 
 export default class FieldConnector {
-  constructor(options, formData, env, onChange=null) {
-    this.options = options;
-    this._formData = formData;
-    this._env = env;
-    if (typeof onChange === 'function') {
-      this._change = onChange;
-    } else {
-      this._change = (objectName, values) => {
-        return change(env.form, objectName, values);
-      };
-    }
-  }
-
-  getOptions() {
-    return this.options || {};
-  }
 
   connectTo(connectTo, values) {
     let valuePath = [ this._env.form, 'values' ];
@@ -91,14 +73,4 @@ export default class FieldConnector {
     return promise;
   }
 
-  connectToApiStore(apiData) {
-    let result = [];
-    apiData.forEach((data) => {
-      data.forEach((req) => {
-        result.push(req.toJS());
-      });
-    });
-
-    return result;
-  }
 }

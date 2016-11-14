@@ -18,7 +18,7 @@ export default class AutoField {
 
   autoGenElement(props) {
     const fieldProps = this.fieldSchema;
-    const { change: onChange, name, activeData, data } = props;
+    const { change: onChange, name, activeData, data, widgetProps } = props;
     const validProps = { onChange, name, data, value: activeData };
     // console.log(fieldProps);
     // console.log(value, name);
@@ -51,11 +51,13 @@ export default class AutoField {
       {
         com: A10Select,
         attrs: defaultAttrs,
+        widgetProps: widgetProps,
         depend: { rule: _has, prop: '$ref' }
       },
       {
         com: A10Radios,
         attrs: { 'enumMap' : 'options', ...defaultAttrs },
+        widgetProps: widgetProps || {},
         depend: { rule: _eq, prop: 'enum', ruleParam: [ 'enable', 'disable' ] }
       },
       {
