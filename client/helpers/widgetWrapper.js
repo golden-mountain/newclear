@@ -41,17 +41,17 @@ export const widgetWrapper = ReduxDataConnector => {
         this.cm = this.context.cm;
 
         const { instancePath, pagePath } = this.context.props;
-        const { 
+        const {
           meta, value, schema, name, loadInitial,
-          conditional, validation, urlParams, 
+          conditional, validation, urlParams,
           invalid, action
         } = this.props;
 
-        const componentMeta = { 
-          meta: { 
-            endpoint:action, 
-            schema, name, value, loadInitial, 
-            conditional, validation, urlParams, invalid, ...meta 
+        const componentMeta = {
+          meta: {
+            endpoint:action,
+            schema, name, value, loadInitial,
+            conditional, validation, urlParams, invalid, ...meta
           }
         };
         // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
@@ -171,7 +171,8 @@ export const widgetWrapper = ReduxDataConnector => {
       componentWillUnmount() {
         this.executePluginMethod('onUnmount');
         this.cm.ballKicker.removeEvent(this.instancePath);
-        this.cm.unregisterComponent(this.instancePath);
+        // Comment reason: some times we need keep data , example, window popup
+        // this.cm.unregisterComponent(this.instancePath);
         // this.cm.printComponentTree();
       }
 
@@ -200,7 +201,8 @@ export const widgetWrapper = ReduxDataConnector => {
         const thisComInstanceData = this.instanceData;
         const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
         // console.log(thisComInstanceData);
-        const needUpdateFields = this.props.updateFields || [ 'data', 'active-data', 'visible' ];
+        const defaultCheckFields = [ 'data', 'active-data', 'visible', 'errorMsg', 'invalid', 'submitErrors' ];
+        const needUpdateFields = this.props.updateFields || defaultCheckFields;
         return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
       }
 

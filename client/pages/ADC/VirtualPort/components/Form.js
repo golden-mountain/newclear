@@ -21,13 +21,13 @@ class VirtualPort extends React.Component {
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>}>
               <A10Field name="port.name" label="Name" />
+              <A10Field name="port.port-number" label="Port" />
               <A10Field name="port.protocol" label="Port Protocol" value="udp" >
                 <FormControl componentClass="select">
                   <option value="tcp">tcp</option>
                   <option value="udp">udp</option>
                 </FormControl>
-              </A10Field>
-              <A10Field name="port.port-number" label="Port" />
+              </A10Field>              
               <A10Field name="port.alternate-port" label="Alternate Port" >
                 <Checkbox value={true} />
               </A10Field>

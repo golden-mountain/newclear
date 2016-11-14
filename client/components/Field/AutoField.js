@@ -18,8 +18,8 @@ export default class AutoField {
 
   autoGenElement(props) {
     const fieldProps = this.fieldSchema;
-    const { change: onChange, name, activeData, data } = props; //eslint-disable-line
-    const validProps = { onChange, name, data };
+    const { change: onChange, name, activeData, data } = props;
+    const validProps = { onChange, name, data, value: activeData };
     // console.log(fieldProps);
     // console.log(value, name);
     // generate by seq
@@ -48,34 +48,34 @@ export default class AutoField {
     };
 
     const fieldTypeMaps = [
-      { 
-        componentClass: A10Select, 
+      {
+        com: A10Select,
         attrs: defaultAttrs,
         depend: { rule: _has, prop: '$ref' }
       },
       {
-        componentClass: A10Radios,
+        com: A10Radios,
         attrs: { 'enumMap' : 'options', ...defaultAttrs },
         depend: { rule: _eq, prop: 'enum', ruleParam: [ 'enable', 'disable' ] }
       },
       {
-        componentClass: FormControl,
-        type: 'select',
+        com: FormControl,
+        componentClass: 'select',
         attrs: { 'enumMap' : 'options', ...defaultAttrs },
         depend: { rule: _has, prop: 'enum' }
       },
-      { 
-        componentClass: FormControl,
+      {
+        com: FormControl,
         type: 'text',
         attrs: defaultAttrs,
         depend: { rule: _in, prop: 'type', ruleParam: [ 'number', 'string' ] }
       },
-      { 
-        componentClass: FormControl,
-        type: 'textarea',
+      {
+        com: FormControl,
+        componentClass: 'textarea',
         attrs: defaultAttrs,
         depend: { rule: _has, prop: 'src-name', ruleParam: 'description' }
-      }    
+      }
     ];
 
     const mapAttrs = (attrs) => {
@@ -92,21 +92,21 @@ export default class AutoField {
       return props;
     };
 
-   
+
     // const rules = [ _has, _eq, _in ];
     let ComponentClass = FormControl, elementProps = {};
     for (let index in fieldTypeMaps) {
-      const { componentClass, depend: { rule, prop, ruleParam }, attrs, ...rest } = fieldTypeMaps[index];
+      const { com, depend: { rule, prop, ruleParam }, attrs,  ...rest } = fieldTypeMaps[index];
 
       if (rule(prop, ruleParam)) {
-        ComponentClass = componentClass;
+        ComponentClass = com;
         elementProps = Object.assign({}, rest, mapAttrs(attrs));
         break;
       }
     }
-     
-    const mergedProps = Object.assign({}, validProps, elementProps);
-    // console.log(mergedProps);
+
+    const mergedProps = Object.assign({}, elementProps, validProps);
+    // console.log(ComponentClass.displayName, mergedProps);
     return (<ComponentClass {...mergedProps} />);
   }
 }

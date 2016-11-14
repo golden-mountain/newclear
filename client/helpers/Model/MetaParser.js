@@ -18,7 +18,7 @@ export default class MetaParser {
     if (this.meta && this.meta.name) {
       validation = this.getValidations(this.m.node);
     }
-    
+
     // console.log(conditional, validation);
     this.m.setMeta({ conditional, validation });
     // this.m.cm.printComponentTree(true);
@@ -26,13 +26,11 @@ export default class MetaParser {
 
   getConditional() {
     let { conditional } = this.meta;
-    // console.log( this.model.schemaParser );
     // find meta to get conditional
     // find schema to get conditional if meta.conditional not exists
-    if (!conditional && this.model.schemaParser && this.meta.name) {
+    if (conditional !== false && !conditional && this.model.schemaParser && this.meta.name) {
       conditional = this.model.schemaParser.getConditional(this.meta.name);
       // console.log(this.meta.name, conditional);
-
       if (!conditional) {
         return false;
       }
@@ -45,7 +43,7 @@ export default class MetaParser {
 
   getValidations(node) {
     let { validation, name } = node.model.meta;
-    if (!validation && node.model.schemaParser) {
+    if (!validation && node.model.schemaParser && name) {
       validation = node.model.schemaParser.getValidations(name);
     }
     // console.log('validation..........', validation, this.model.schemaParser);
@@ -60,7 +58,7 @@ export default class MetaParser {
 
   initialConditional() {
     const conditional = this.getConditional();
-  
+
     let isVisible = true;
     if (conditional && typeof conditional == 'object' ) {
       // register conditional
@@ -72,8 +70,8 @@ export default class MetaParser {
         });
         const conditionalObjValue = get(conditionalNode, 'model.value');
         // console.log(conditionalNode);
-        // console.log('this node:', this.meta.name, 'depend on:', 
-        //   depName, 'depend value:', depValue, 
+        // console.log('this node:', this.meta.name, 'depend on:',
+        //   depName, 'depend value:', depValue,
         //   ' realtime value:', conditionalObjValue);
         if (typeof depValue == 'function') {
           isVisible = depValue.call(null, conditionalObjValue);
@@ -128,31 +126,60 @@ export default class MetaParser {
   }
 
   _checkValidation(node) {
-    const validations = this.getValidations(node);
-    if (validations) {
-      let msg = '';
+    if (!node.model.visible) {
+      // this.m._setModel({ errorMsg: '' }, node.model.instancePath, true);
+      return '';
+    }
 
+    const validations = this.getValidations(node);
+    let msg = '';
+    if (validations) {
       const elementValue = node.model.value;
       // console.log(validations);
       const requiredFunc = validations['required'] || validations['object-key'];
       if (requiredFunc) {
         msg = requiredFunc(elementValue);
-        this.m._setModel({ errorMsg: msg }, node.model.instancePath, true);
-        return msg;
+        if (msg) {
+          this.m._setModel({ errorMsg: msg, invalid: !!msg }, node.model.instancePath, true);
+          return msg;
+        }
+      } else if (elementValue === undefined || elementValue === '') {
+        this.m._setModel({ errorMsg: '', invalid: true }, node.model.instancePath, true);
+        return '';
       }
 
-      Object.entries(validations).forEach(([ k, func ]) => { // eslint-disable-line
+      Object.entries(validations).find(([ k, func ]) => { // eslint-disable-line
         // console.log(func, k, elementValue);
-        msg = func(elementValue, name);
+        try {
+          msg = func(elementValue, name);
+        } catch (e) {
+          console.error(e.message);
+        }
         // console.log('msg', msg, 'for element:', name, 'element value is:', elementValue, ' rule:', k);
-        this.m._setModel({ errorMsg: msg }, node.model.instancePath, true);
-        return msg;
+        this.m._setModel({ errorMsg: msg, invalid: !!msg }, node.model.instancePath, true);
+        return msg || false;
       });
     }
+    return msg;
   }
 
   checkValidation() {
     return this._checkValidation(this.m.node);
+  }
+
+  /**
+   * Check all sub elements valdation,
+   * once has one element invalid, then stop submit
+   */
+  getSubmitErrors() {
+    let errors = [];
+    this.m.node.all((node) => {
+      const errorMsg = this._checkValidation(node);
+      if (errorMsg) {
+        errors.push(`${node.model.meta.name} Catched Error, ${errorMsg}`);
+      }
+    });
+    return  errors;
   }
 
 }

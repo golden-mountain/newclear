@@ -42,7 +42,7 @@ export default class ModelPlugin {
         setDataInvalid: this.model.setInvalid.bind(this.model, true),
         setDataValid: this.model.setInvalid.bind(this.model, false),
         getDataInvalid: this.model.getInvalid.bind(this.model),
-        getFieldProps: () => { 
+        getFieldProps: () => {
           const model = this.model.node.model;
           if (model.schemaParser && model.meta.name) {
             return model.schemaParser.getFieldProps(model.meta.name);
@@ -56,14 +56,14 @@ export default class ModelPlugin {
             return model.schemaParser.schema;
           } else {
             return {};
-          }          
+          }
         },
         save: this.model.save.bind(this.model),
         hold: this.model.setValue.bind(this.model),
         reset: this.model.initialize.bind(this.model),
         change: (event) => {
           let value = event.target.value;
-          // console.log(event.target);
+          // console.log(value);
 
           const types = [ 'checkbox', 'radio' ], values = [ 'true' , 'false' ];
 

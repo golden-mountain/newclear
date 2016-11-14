@@ -12,14 +12,14 @@ import {
 
 class A10FieldLayout extends Component {
   render() {
-    let { label, schema, description, layout, required, errorMsg, children } = this.props;
+    let { label, schema, description, layout, required, instanceData: { errorMsg }, children } = this.props;
     let status = {};
 
     if (errorMsg) {
       errorMsg = <HelpBlock className="error">{errorMsg}</HelpBlock>;
       status.validationState = 'error';
     }
-
+    // console.log(this.props);
     let defineDescription = '';
     description
     ? (defineDescription = description)

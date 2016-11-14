@@ -10,7 +10,10 @@ class Router extends RouterBase {
   path = 'template-virtual-server'
 
   pages = {
-    edit: TemplatesVirtualServerPage
+    edit: {
+      component: TemplatesVirtualServerPage,
+      menuPath: [ 'ADC', 'Templates', 'Virtual Server', 'Edit' ]
+    }
     // list: VirtualServerListPage
   }
 

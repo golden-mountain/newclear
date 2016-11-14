@@ -9,7 +9,7 @@ import 'react-virtualized-select/styles.css';
 import VirtualizedSelect from 'react-virtualized-select';
 
 import A10Button from 'components/Field/A10Button';
-import { widgetWrapper } from 'helpers/widgetWrapper';
+// import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from 'helpers/axapiHelper';
 
 import { values, get, isArray } from 'lodash';
@@ -18,7 +18,7 @@ import { UPDATE_TARGET_DATA } from 'configs/messages';
 // import FieldConnector from 'helpers/FieldConnector';
 
 
-class A10Select extends Component {
+export default class A10Select extends Component {
   static displayName = 'A10Select'
 
   static contextTypes = {
@@ -28,13 +28,13 @@ class A10Select extends Component {
 
   newValue = ''
 
-  constructor(props, context) {
-    super(props, context);
-    // console.log(this.context.props, this.props);
-  }
+  // constructor(props, context) {
+  //   super(props, context);
+  //   // console.log(this.context.props, this.props);
+  // }
 
   componentWillUpdate() {
-    this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
+    this.context.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
       // const { popupInfo: { connectOptions } } = this.props;
       // console.log(params, connectOptions);
       // const connect = (connectOptions, params) => {
@@ -132,6 +132,7 @@ class A10Select extends Component {
     // set(popupInfo, 'connectOptions.onLoad', this.getOnloadPopupOptions());
     // set(popupInfo, 'id', 'default');
 
+    // console.log(loadAttr, popupInfo);
     return (
       popupInfo ?
       <InputGroup>
@@ -146,4 +147,4 @@ class A10Select extends Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(A10Select);
+// export default widgetWrapper([ 'app' ])(A10Select);

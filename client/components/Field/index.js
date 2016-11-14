@@ -15,6 +15,9 @@ const FieldLayout = require('oem/' + OEM + '/FieldLayout').default;
 class A10Field extends React.Component {
   static displayName =  'A10Field'
 
+  registeredMVInputs = [ 'Checkbox', 'Radio', 'checkbox', 'radio' ];
+  registeredInputs = this.registeredMVInputs.concat([ 'FormControl', 'input', 'select', 'textarea' ]);
+
   static contextTypes = {
     props: PropTypes.object,
     // context: PropTypes.object,
@@ -28,7 +31,8 @@ class A10Field extends React.Component {
 
   findInputElements(children, allowedTypes, callback) {
     return React.Children.map(children, child => {
-      if (has(child, 'type.name') && allowedTypes.indexOf(child.type.name) > -1) {
+      if ((has(child, 'type.name') && allowedTypes.indexOf(child.type.name) > -1)
+        || (has(child, 'type') && this.registeredInputs.indexOf(child.type) > -1)) {
         return callback(child);
       } else if (has(child, 'props.children')) {
         let newChild = this.findInputElements(child.props.children, allowedTypes, callback);
@@ -42,16 +46,13 @@ class A10Field extends React.Component {
   render() {
     let { children, change: onChange, activeData, name,  ...fieldOptions } = this.props; //eslint-disable-line
 
-    const registeredMVInputs = [ 'Checkbox', 'Radio' ];
-    const registeredInputs = registeredMVInputs.concat([ 'FormControl' ]);
-
     // console.log(name, activeData);
     const callback = (child) => {
       let inputOptions = { name, onChange };
 
       // only support React Bootstrap
       // to set value and checked for inputs
-      if (registeredMVInputs.indexOf(child.type.name) > -1) {
+      if (this.registeredMVInputs.indexOf(child.type.name) > -1) {
         // console.log(child.type.name);
         const elementValue = child.props.value || true;
         const value = activeData === undefined ? true : activeData;
@@ -65,9 +66,10 @@ class A10Field extends React.Component {
     if (!children) {
       children = this.autoField.autoGenElement(this.props);
     } else {
-      children = this.findInputElements(children, registeredInputs, callback);
+      children = this.findInputElements(children, this.registeredInputs, callback);
     }
 
+    // console.log(fieldOptions);
     return (
       <FieldLayout {...fieldOptions} > {children} </FieldLayout>
     );

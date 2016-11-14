@@ -48,21 +48,26 @@ export default class Model {
 
   initialize() {
     // console.log(this.node.model);
-    const model = this.node.model;
-    let initialState = { invalid: model.meta.invalid || false, visible: true };
-    // console.log(model.meta);
-    if (model.meta && model.meta.value !== undefined) {
-      initialState['active-data'] = model.meta.value;
-      model.value = model.meta.value;
-    }
-
-    this.dispatch(setComponentState(this.instancePath, initialState));
-
-    if (get(model, 'meta.loadInitial', false)) {
+    this.resetComponent(this.node, { visible: true });
+    if (get(this.node.model, 'meta.loadInitial', false)) {
       this.pullData();
     }
 
     this.metaParser.initialize();
+  }
+
+  resetComponent(node, attrs={}) {
+    node.walk((n) => {
+      const model = n.model;
+      let initialState = { invalid: model.meta.invalid || false, errorMsg: '', submitErrors: [], ...attrs };
+      // console.log(model.meta);
+      // if (model.meta && model.meta.value !== undefined) {
+      initialState['active-data'] = model.meta.value;
+      model.value = model.meta.value;
+      // }
+      // console.log(model.meta.value);
+      this.dispatch(setComponentState(n.model.instancePath, initialState));
+    });
   }
 
   unmountComponent() {
@@ -83,16 +88,18 @@ export default class Model {
     const thisNode = this.cm.getNode(instancePath);
     if (!thisNode) return false;
 
+    // if (values.initial && !thisNode.model.value) {
+    //   // this._setValue(values.initial, instancePath);
+    //   values.value = values.initial;
+    // }
+
     thisNode.model = Object.assign({}, thisNode.model, values);
-    // console.log(thisNode.model);
     // console.log(values, instancePath, thisNode.model);
 
-    if (values.initial) {
-      // this._setValue(values.initial, instancePath);
-      values.value = values.initial;
-    }
-
     if (sync) {
+      // console.log(values);
+      // only sync some of model value:  value, invalid, visible, and other
+      // important values
       this._syncDataToRedux(values, instancePath);
     }
   }
@@ -102,15 +109,15 @@ export default class Model {
     return key ? this.node.model[key] : this.node.model;
   }
 
-  _setValue(value, instancePath) {
+  _setValue(value, instancePath, checkConditional=true, checkValidation=true) {
     this._setModel({ value }, instancePath);
     this._syncDataToRedux({ 'active-data': value }, instancePath);
+    checkConditional && this.metaParser.changeConditional();
+    checkValidation && this.metaParser.checkValidation();
   }
 
   setValue(value, checkConditional=true, checkValidation=true) {
-    this._setValue(value, this.instancePath);
-    checkConditional && this.metaParser.changeConditional();
-    checkValidation && this.metaParser.checkValidation();
+    this._setValue(value, this.instancePath, checkConditional, checkValidation);
   }
 
   _setVisible(visible, instancePath, invalidValue=true) {
@@ -123,13 +130,13 @@ export default class Model {
   }
 
   setInvalid(invalid=true) {
-    this.setModel({ invalid }); 
+    this.setModel({ invalid });
     this._syncDataToRedux({ 'invalid': invalid }, this.instancePath);
   }
 
   setMeta(meta) {
     let newMeta = Object.assign({}, this.getMeta(), meta);
-    this.setModel({ meta: newMeta }); 
+    this.setModel({ meta: newMeta });
   }
 
   getMeta() {
@@ -194,7 +201,7 @@ export default class Model {
 
           if (name && name.indexOf('x.') !== 0 && value !== undefined && requests[url] && !n.model.invalid) {
             requests[url] = Object.assign({}, requests[url], { [ name ] : value });
-          } 
+          }
 
           validParentUrl = url;
         }
@@ -296,18 +303,31 @@ export default class Model {
   /**
    * Save data to end point
    */
-  save(method='POST') {
+  save(onSuccess=null, method='POST', clearValues=true) {
     // try to find self meta to see if it savable
     let requests = this.getRequests(method);
     // console.log(requests, '.............................');
     if (!requests.length) {
       console.error('cannot save because this element ', this.instancePath, ' is not set endpoint');
     } else {
-      const result = this.dispatch(axapiRequest(this.instancePath, requests, true));
-      result.then(() => {
-        this.setInvalid(true);
-        // this.setInvalid();
-      });
+      // this.resetComponent(this.node);
+      const submitErrors = this.metaParser.getSubmitErrors();
+      if (!submitErrors.length) {
+        const result = this.dispatch(axapiRequest(this.instancePath, requests, true));
+        result.then((data) => {
+          if (clearValues) {
+            console.log(' will remove all old datas');
+            this.resetComponent(this.node);
+          }
+          if (typeof onSuccess === 'function') {
+            onSuccess.call(this, data);
+          }
+        });
+        return result;
+      } else {
+        console.log('some error happened:::', submitErrors);
+        this.setModel({ submitErrors });
+      }
     }
   }
 

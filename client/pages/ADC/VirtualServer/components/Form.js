@@ -172,9 +172,9 @@ class VirtualServerForm extends React.Component {
                 description="Join a VRRP group (Specify a VRRP-A vrid)"
                 placeholder="Enter vrid."
               />
-              <A10Field name="virtual-server.template-virtual-server" label="Virtual Server Template" widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
-              <A10Field name="virtual-server.template-logging" label="Policy Template"  />
-              <A10Field name="virtual-server.template-scaleout" label="Scaleout Template" />
+              <A10Field name="virtual-server.template-virtual-server" label="Virtual Server Template" conditional={false} widgetProps={ { popupInfo: tplVirtualServerPopupInfo, loadOptions: tplVirtualServerLoadOptions } } />
+              <A10Field name="virtual-server.template-logging" label="Policy Template" conditional={false}  />
+              <A10Field name="virtual-server.template-scaleout" label="Scaleout Template" conditional={false} />
 
               <A10Field name="virtual-server.description" label="Description" />
             </Panel>
