@@ -327,7 +327,7 @@ export default class Model {
               onSuccess.call(this, body);
             }
           } catch (e) {
-            console.warn(e.message);
+            console.error(e);
           }
         });
         return result;

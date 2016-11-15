@@ -18,7 +18,7 @@ class A10Form extends Component {
     event.preventDefault();
 
     const onSuccess = () => {
-      const { data, kickBall } = this.props;
+      const { data, kickBall, redirect } = this.props;
       const { modal, targetInstancePath, parentPath: parentInstancePath } = this.context.props;
       if (data && data.signature && modal) {
         // console.log(data);
@@ -28,7 +28,7 @@ class A10Form extends Component {
         kickBall(UPDATE_TARGET_DATA, data, targetInstancePath );
         kickBall(HIDE_COMPONENT_MODAL, null, parentInstancePath);
       } else {
-        kickBall(REDIRECT_ROUTE, { path: 'list' });
+        kickBall(REDIRECT_ROUTE, redirect || '/');
       }
     };
     this.props.save(onSuccess.bind(this));

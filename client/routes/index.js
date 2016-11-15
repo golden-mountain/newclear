@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import Router from 'react-router/BrowserRouter';
 
 import AppRoutes from './app';
-// import AuthRouter from './auth';
-// import ADCRouters from './adc';
 import ADCRouter from 'pages/ADC';
 import AuthRouter from 'pages/Auth';
 import DashboardRouter from 'pages/Dashboard';
 import DevRouter from 'pages/Dev';
-
-// import ApiTestToolRouters from './tool';
 
 export default class App extends Component {
   render() {

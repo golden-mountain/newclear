@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 // import { reduxForm } from 'redux-form/immutable'; // imported Field
+import { Redirect } from 'react-router';
 
 // import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'oem/PageLayout';
@@ -10,7 +11,7 @@ import { mapValues } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 import ComponentManager from 'helpers/ComponentManager';
 // import A10Modal from 'components/Modal';
-// import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
+import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
@@ -24,6 +25,11 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
     static contextTypes = {
       store: PropTypes.object
+    }
+
+    state={
+      path: '',
+      params: {}
     }
 
     //cm == component manager
@@ -40,18 +46,45 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
 
     componentWillMount() {
       this.props.registerCurrentPage(Object.assign({}, this.props.env));
-      // this.cm.ballKicker.accept([], REDIRECT_ROUTE, () => {
-      //
-      // });
+      this.cm.ballKicker.accept([], REDIRECT_ROUTE, (from, to, pathParams) => { // eslint-disable-line
+        // console.log(from, to, pathParams);
+        let path='', params={};
+        if (typeof pathParams === 'string') {
+          path = pathParams;
+        } else {
+          path = pathParams.path;
+          params = pathParams.params;
+        }
+        // console.log(this.getRedirectPath(path), params);
+        this.setState({ path: this.getRedirectPath(path), params });
+      }, pagePath);
+    }
+
+    getRedirectPath(suffix) {
+      if (suffix.indexOf('/') > -1) {
+        return suffix;
+      } else {
+        const paths = config.page.split('/').filter(path => path);
+        paths.pop();
+        paths.push(suffix);
+        // console.log(paths);
+        return '/' + paths.join('/');
+      }
     }
 
     componentWillUnmount() {
       // this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
       this.props.destroyPage();
+      this.cm.ballKicker.removeEvent(pagePath);
+      this.props.unmountComponent(pagePath);
     }
 
     render() {
-      return <Layout> <WrappedElement {...WrappedProps} /> </Layout>;
+      return (this.state.path ? (<Redirect to={{
+        pathname: this.state.path,
+        params: this.state.params,
+        state: { from: config.page }
+      }} />) : (<Layout> <WrappedElement {...WrappedProps} /> </Layout>));
     }
   }
 
