@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
 // import { getAppPageVar } from './stateHelper';
-import { uniqueId,  get, isArray } from 'lodash';
+import { uniqueId,  get, isArray, isEqual } from 'lodash';
 import { buildInstancePath } from 'helpers/actionHelper';
 import { devPlugins, prodPlugins } from './WidgetPlugins';
 // import { Iterable } from 'immutable';
@@ -211,7 +211,7 @@ export const widgetWrapper = ReduxDataConnector => {
         for (let i in needUpdateFields) {
           const fieldName = needUpdateFields[i];
           const nextValue = get(nextProps, fieldName), thisValue = get(thisProps, fieldName);
-          if (nextValue != thisValue) {
+          if (!isEqual(nextValue, thisValue)) {
             // console.log('field need update: ', fieldName, nextValue, thisValue );
             return true;
           }

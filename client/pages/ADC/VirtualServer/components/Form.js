@@ -118,7 +118,7 @@ class VirtualServerForm extends React.Component {
     // };
 
     return (
-      <A10Form schema='slb-virtual-server' horizontal>
+      <A10Form schema='slb-virtual-server' redirect={{ path: 'list' }} horizontal>
         <Row>
           <Col xs={12} md={12} lg={6}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
@@ -126,7 +126,7 @@ class VirtualServerForm extends React.Component {
               <A10Field name="x.virtual-server.wildcard" label="Wildcard" value={false}>
                 <Checkbox value={true} />
               </A10Field>
-
+              
               <A10Field name="x.virtual-server.address-type" label="Address Type" value="1" conditional={{ 'x.virtual-server.wildcard': false }}>
                 <div>
                   <Radio value="0" inline> IPv4 </Radio>

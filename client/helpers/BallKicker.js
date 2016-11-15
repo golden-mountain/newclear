@@ -80,7 +80,7 @@ export default class BallKicker {
   }
 
   kick(from, event, params=null, to=[]) {
-    console.log('kicked event:', event, to);
+    // console.log('kicked event:', event, to);
     // find from event tree by match all to path
     const eventTree = this.eventTree[event];
     if (eventTree) {

@@ -1,5 +1,6 @@
 // import { axapiRequest } from 'redux/modules/app/axapi';
 // import { APP_CURRENT_PAGE } from 'configs/appKeys';
+import { COMPONENT_PAGE_SIZE } from 'configs/app';
 
 export const getPayload = (path, method, body) => {
   if (method.toLowerCase() == 'get') {
@@ -29,4 +30,12 @@ export const getResponseBody =(resp) => {
     console.log(e.message);
   }
   return body;
+};
+
+
+export  const getPaginationParam = (start=0, size=COMPONENT_PAGE_SIZE) => {
+  return {
+    start,
+    count: size
+  };
 };

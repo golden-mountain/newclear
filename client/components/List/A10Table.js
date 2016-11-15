@@ -1,8 +1,8 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
-import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Collapse } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { getPayload } from 'helpers/axapiHelper';
+import { getPayload, getPaginationParam } from 'helpers/axapiHelper';
 import { values, get }  from 'lodash';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
 import A10Button from 'components/Field/A10Button';
@@ -13,34 +13,57 @@ export class A10TableColumn extends React.Component {
 class A10Table extends React.Component {
   static displayName = 'A10Table'
 
+  state = {
+    newElement: null
+  }
+
   refreshTable() {
-    let { schema, dispatch, env, params, path } = this.props; // eslint-disable-line
+    let { schema, dispatch, env, params=getPaginationParam(), path } = this.props; // eslint-disable-line
     if (!path) {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
     // axapiGet(path, params, env, dispatch);
-    this.props.comAxapiRequest(getPayload(path, 'GET'));
+    this.props.comAxapiRequest(getPayload(path, 'GET', params));
   }
 
   componentWillMount() {
+    // console.log(this.props.instancePath);
     if (this.props.loadOnInitial) {
       this.refreshTable();
     }
-  }
-
-  componentWillUpdate() {
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
       this.refreshTable();
-    });
+      // console.log(params);
+      const record = values(params).pop() || [];
+      const newElement = this.renderData(record, 'new_1', 'success');
+      this.setState({ newElement });
+    }, this.props.instancePath);
   }
 
-  tidyData(data) {
-    let result = data;
-    return result;
+  renderData(data, index=10000, rowClass='') {
+    let result = this.props.children.map((child, key) => {
+      const { dataField, dataFormat, checkbox, ...props } = child.props;
+      const dataCol = get(data, dataField);
+      let formatedData = dataFormat ? dataFormat(dataCol, data) : dataCol;
+      if (checkbox) {
+        formatedData = (
+            <div className="checkbox c-checkbox">
+              <label>
+                <input type="checkbox" />
+                <em className="fa fa-check"></em>
+              </label>
+            </div>
+        );
+      }
+      return (<td key={key} {...props}>{formatedData}</td>);
+    });
+    return (<tr key={index} className={rowClass}>{result}</tr>);
   }
+
 
   render() {
+    // console.log('rendering at a10table>>>>>>>>>>>>>>>>>>>>>>>>>>>', this.props.data);
     let {
       children, data=[], newLast, // eslint-disable-line
       responsive, striped, hover, bordered,
@@ -62,10 +85,10 @@ class A10Table extends React.Component {
         if (child.props.checkbox) {
           children = (
             <div data-toggle="tooltip" data-title="Check All" className="checkbox c-checkbox">
-                <label>
-                  <input type="checkbox" />
-                  <em className="fa fa-check"></em>
-                </label>
+              <label>
+                <input type="checkbox" />
+                <em className="fa fa-check"></em>
+              </label>
             </div>
           );
         }
@@ -73,25 +96,7 @@ class A10Table extends React.Component {
       });
 
       // TODO: hookup checkbox data
-      tds = list.map((d, i) => {
-        let result = children.map((child, key) => {
-          const { dataField, dataFormat, checkbox, ...props } = child.props;
-          const dataCol = get(d, dataField);
-          let formatedData = dataFormat ? dataFormat(dataCol, d) : dataCol;
-          if (checkbox) {
-            formatedData = (
-                <div className="checkbox c-checkbox">
-                    <label>
-                        <input type="checkbox" />
-                        <em className="fa fa-check"></em>
-                    </label>
-                </div>
-            );
-          }
-          return (<td key={key} {...props}>{formatedData}</td>);
-        });
-        return (<tr key={i}>{result}</tr>);
-      });
+      tds = list.map(::this.renderData);
     }
 
     return (
@@ -120,6 +125,12 @@ class A10Table extends React.Component {
             </tr>
           </thead>
 
+          <Collapse in={!!this.state.newElement} transitionAppear={true} timeout={3000}>
+            <tbody>
+              { this.state.newElement }
+            </tbody>
+          </Collapse>
+
           <tbody>
             {tds || 'loading...' }
           </tbody>
@@ -135,8 +146,8 @@ class A10Table extends React.Component {
                             <option value="3">Export</option>
                         </select>
                         <span className="input-group-btn">
-                                  <button className="btn btn-sm btn-default">Apply</button>
-                               </span>
+                          <button className="btn btn-sm btn-default">Apply</button>
+                        </span>
                     </div>
                 </Col>
                 <Col lg={ 8 }></Col>

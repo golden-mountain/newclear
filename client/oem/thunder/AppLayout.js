@@ -110,7 +110,10 @@ class AppLayout extends Component {
     // const animationName = 'rag-fadeIn';
 
     return (
-      <div className="wrapper">
+      <div>
+        <NotificationSystem ref="notificationSystem" />
+
+        <div className="wrapper">
           <Header />
 
           <Menu />
@@ -123,37 +126,23 @@ class AppLayout extends Component {
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}
           > */}
-            {/* {React.cloneElement(this.props.children, {
-              key: Math.random()
-            })} */}
+          {/* {React.cloneElement(this.props.children, {
+            key: Math.random()
+          })} */}
           <section>
             {this.props.children}
           </section>
           {/* </ReactCSSTransitionGroup> */}
 
           <Footer />
-          <NotificationSystem ref="notificationSystem" />
 
 
           <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
             <LoginForm modal />
           </ModalLayout>
+        </div>
       </div>
     );
-
-
-    //
-    //     {/* <Breadcrumb>
-    //       <Breadcrumb.Item href="#">
-    //         Home
-    //       </Breadcrumb.Item>
-    //       <Breadcrumb.Item href="#">
-    //         Library
-    //       </Breadcrumb.Item>
-    //       <Breadcrumb.Item active>
-    //         Data
-    //       </Breadcrumb.Item>
-    //     </Breadcrumb> */}
 
   }
 }
