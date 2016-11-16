@@ -35,9 +35,11 @@ class A10Table extends React.Component {
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
       this.refreshTable();
       // console.log(params);
-      const record = values(params).pop() || [];
-      const newElement = this.renderData(record, 'new_1', 'success');
-      this.setState({ newElement });
+      const record = values(params).pop() || null;
+      if (record) {
+        const newElement = this.renderData(record, 'new_1', 'success');
+        this.setState({ newElement });
+      }
     }, this.props.instancePath);
   }
 
@@ -45,7 +47,7 @@ class A10Table extends React.Component {
     let result = this.props.children.map((child, key) => {
       const { dataField, dataFormat, checkbox, ...props } = child.props;
       const dataCol = get(data, dataField);
-      let formatedData = dataFormat ? dataFormat(dataCol, data) : dataCol;
+      let formatedData = typeof dataFormat == 'function' ? dataFormat(dataCol, data) : dataCol;
       if (checkbox) {
         formatedData = (
             <div className="checkbox c-checkbox">
@@ -56,6 +58,7 @@ class A10Table extends React.Component {
             </div>
         );
       }
+
       return (<td key={key} {...props}>{formatedData}</td>);
     });
     return (<tr key={index} className={rowClass}>{result}</tr>);
@@ -97,6 +100,8 @@ class A10Table extends React.Component {
 
       // TODO: hookup checkbox data
       tds = list.map(::this.renderData);
+    } else {
+      data = [];
     }
 
     return (
@@ -137,23 +142,23 @@ class A10Table extends React.Component {
         </Table>
         <div className="panel-footer">
             <Row>
-                <Col lg={ 2 }>
-                    <div className="input-group pull-right">
-                        <select className="input-sm form-control">
-                            <option value="0">Bulk action</option>
-                            <option value="1">Delete</option>
-                            <option value="2">Clone</option>
-                            <option value="3">Export</option>
-                        </select>
-                        <span className="input-group-btn">
-                          <button className="btn btn-sm btn-default">Apply</button>
-                        </span>
-                    </div>
-                </Col>
-                <Col lg={ 8 }></Col>
-                <Col lg={ 2 } className="text-right">
-                  <Pagination prev next items={data.length} maxButtons={3} bsSize="small" />
-                </Col>
+              <Col lg={ 2 }>
+                <div className="input-group pull-right">
+                  <select className="input-sm form-control">
+                      <option value="0">Bulk action</option>
+                      <option value="1">Delete</option>
+                      <option value="2">Clone</option>
+                      <option value="3">Export</option>
+                  </select>
+                  <span className="input-group-btn">
+                    <button className="btn btn-sm btn-default">Apply</button>
+                  </span>
+                </div>
+              </Col>
+              <Col lg={ 8 }></Col>
+              <Col lg={ 2 } className="text-right">
+                <Pagination prev next items={data.length} maxButtons={3} bsSize="small" />
+              </Col>
             </Row>
         </div>
       </Panel>

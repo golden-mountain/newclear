@@ -11,7 +11,6 @@ import configApp from 'configs/app';
 const OEM = configApp.OEM;
 const FieldLayout = require('oem/' + OEM + '/FieldLayout').default;
 
-
 class A10Field extends React.Component {
   static displayName =  'A10Field'
 

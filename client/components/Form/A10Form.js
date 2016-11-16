@@ -34,16 +34,16 @@ class A10Form extends Component {
     this.props.save(onSuccess.bind(this));
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const { data, modal } = nextProps;
-  //   if (data && data.signature && modal) {
-  //     // everything need update if logined
-  //     this.props.kickBall(UPDATE_TARGET_DATA);
-  //     return false;
-  //   }
-  //
-  //   return true;
-  // }
+  componentWillUpdate() {
+    // console.log('mount.......');
+    const { initial } = this.context.props;
+    // console.log('Parent Path:', node.model.instancePath, 'A10Form path:', this.props.node.model.instancePath);
+    if (initial) {
+      this.props.initializeChildren(initial);
+    } else {
+      // TODO: load from URL
+    }
+  }
 
   render() {
     let {
@@ -57,10 +57,8 @@ class A10Form extends Component {
     } = this.props;
 
     if (!onSubmit) onSubmit = ::this.onSubmit;
-    // const { modal } = this.context.props;
     // console.log(this.context.props);
 
-    // console.log('.......................................', children);
     const formProps = { bsClass, componentClass, horizontal, inline, onSubmit };
     return (
       <Form { ...formProps }>

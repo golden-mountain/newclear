@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react';
+// import { isEqual } from 'lodash';
 import { Button } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 import configApp from 'configs/app';
+
+import { getResponseBody } from 'helpers/axapiHelper';
+// import { getInfo } from 'helpers/axapiHelper';
 
 const OEM = configApp.OEM;
 const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
@@ -39,35 +43,46 @@ class A10Button extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
-    // console.log(nextProps, nextState);
-    return this.state.visible !== nextState.visible;
-  }
+  // shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
+  //   // console.log(nextProps, nextState);
+  //   return !isEqual(this.state, nextState);
+  // }
 
   render() {
     const {
       children,
       componentClass,
       onClick,
-      popup: { modalProps, componentClass:ModalComponent, ...componentProps },
+      popup: { endpoint, modalProps, componentClass:ModalComponent, ...componentProps },
       parentPath,
       bsClass
     } = this.props;
     // const modalChildren = this.createModalChildren();
-    // console.log(componentProps);
+    // console.log(this.props);
     let buttonStyle = {
       cursor: 'pointer'
     };
-
+    // console.log('.................................fetched data .......................');
+    // console.log(this.props.data);
     let click = () => {};
     if (typeof onClick == 'function') {
       click = onClick;
     } else if (modalProps) {
       click = () => {
-        // console.log('click.................');
-        // kick to wrapper, wrapper know how to do
-        // event.topPropagation();
-        this.setState({ visible: true });
+        let data = {};
+        if (endpoint) {
+          // console.log('.................................before getting.......................');
+          const result = this.props.comAxapiGet(endpoint);
+          // console.log('.................................send getting.......................');
+          result.then((d) => {
+            // console.log(getResponseBody(data.pop()));
+            data = getResponseBody(d.pop());
+            this.setState({ visible: true, data });
+            // console.log('.................................finished getting.......................');
+          });
+        } else {
+          this.setState({ visible: true });
+        }
         return false;
       };
     }
@@ -79,11 +94,11 @@ class A10Button extends Component {
     }
 
     return (
-      <ButtonClass onClick={click} style={buttonStyle} {...buttonProps}>
+      <ButtonClass onClick={click.bind(this)} style={buttonStyle} {...buttonProps}>
         {children}
         { modalProps ?
           <ModalLayout visible={this.state.visible} {...modalProps} >
-            <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} />
+            <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} initial={this.state.data} />
           </ModalLayout>
         : null}
       </ButtonClass>);

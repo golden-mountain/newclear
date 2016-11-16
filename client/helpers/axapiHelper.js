@@ -8,7 +8,9 @@ export const getPayload = (path, method, body) => {
       let query = Object.entries(body).map(([ key, value ]) => {
         return `${key}=${value}`;
       });
-      path += '?' + query.join('&');
+      if (query.length) {
+        path += '?' + query.join('&');
+      }
     }
   }
   return { path, method, body };

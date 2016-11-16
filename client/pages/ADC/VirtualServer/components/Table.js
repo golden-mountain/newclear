@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 // import { TableHeaderColumn } from 'react-bootstrap-table';  // in ECMAScript 6
+import { cloneDeep } from 'lodash';
 
 import A10Table, { A10TableColumn } from 'components/List/A10Table';
 
@@ -11,6 +12,7 @@ import A10Button from 'components/Field/A10Button';
 import VirtualServerForm from 'pages/ADC/VirtualServer/components/Form';
 import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 import { widgetWrapper } from 'helpers/widgetWrapper';
+import Schema from 'helpers/Schema';
 
 class VirtualServerTable extends React.Component {
   static displayName = 'VirtualServerTable'
@@ -25,7 +27,7 @@ class VirtualServerTable extends React.Component {
     };
 
     const formatStat = (cell) => {
-      return cell.toUpperCase();
+      return cell && cell.toUpperCase();
     };
 
     const popupInfo = {
@@ -50,16 +52,12 @@ class VirtualServerTable extends React.Component {
     };
 
     const formatName = (cell) => {
-      popupInfo.urlParams = {
-        'virtual-server': {
-          name: cell
-        }
-      };
+      let pop = cloneDeep(popupInfo);
+      pop.endpoint = Schema.getAxapiURL(slbVirtualServerSchema.axapi, { name: cell });
+      pop.edit = true;
+      pop.modalProps.title = 'Edit Virtual Server';
 
-      popupInfo.edit = true;
-      popupInfo.modalProps.title = 'Edit Virtual Server';
-      
-      return <A10Button popup={ popupInfo } componentClass="a">{cell}</A10Button>;
+      return <A10Button popup={ pop } componentClass="a">{cell}</A10Button>;
       // return <Link to={`/adc/virtual-server/edit/${cell}`} >{cell}</Link>;
     };
 

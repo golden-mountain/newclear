@@ -48,7 +48,7 @@ class VirtualServerForm extends React.Component {
   // }
 
   render() {
-    const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
+    // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
     // const elements = slbVirtualServerSchema.properties;
     // console.log(TemplateVirtualServerForm);
 
@@ -117,6 +117,10 @@ class VirtualServerForm extends React.Component {
     //   return dataFromAPI;
     // };
 
+    // const onIpInitialize = (data) => {
+    //
+    // };
+
     return (
       <A10Form schema='slb-virtual-server' redirect={{ path: 'list' }} horizontal>
         <Row>
@@ -126,7 +130,7 @@ class VirtualServerForm extends React.Component {
               <A10Field name="x.virtual-server.wildcard" label="Wildcard" value={false}>
                 <Checkbox value={true} />
               </A10Field>
-              
+
               <A10Field name="x.virtual-server.address-type" label="Address Type" value="1" conditional={{ 'x.virtual-server.wildcard': false }}>
                 <div>
                   <Radio value="0" inline> IPv4 </Radio>
@@ -196,7 +200,7 @@ class VirtualServerForm extends React.Component {
           </Col>
         </Row>
 
-        <A10SubmitButtons {...rest}/>
+        <A10SubmitButtons {...this.props}/>
 
       </A10Form>
     );

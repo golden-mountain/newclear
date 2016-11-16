@@ -234,18 +234,25 @@ export default class Model {
   _pullDataToNode(body, node) {
     // console.log(body, node);
     if (!body || !node)  return false;
-
-    if (node.children.length) {
-      node.children.forEach((n) => {
-        this._pullDataToNode(body, n);
-      });
-    } else {
+    if (node.model.meta.name) {
       const value = get(body, node.model.meta.name);
-      // console.log(value, node.model.meta.name);
+
       if (value !== undefined) {
         this._setValue(value, node.model.instancePath);
       }
     }
+
+    if (node.children.length) {
+      node.children.forEach((n) => {
+        // console.log(n);
+        this._pullDataToNode(body, n);
+      });
+    }
+  }
+
+  initializeChildren(body) {
+    // console.log(body, this.node.children.length);
+    return this._pullDataToNode(body, this.node);
   }
 
   // pull data for inintial

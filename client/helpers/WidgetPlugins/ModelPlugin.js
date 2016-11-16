@@ -43,6 +43,7 @@ export default class ModelPlugin {
         setDataInvalid: this.model.setInvalid.bind(this.model, true),
         setDataValid: this.model.setInvalid.bind(this.model, false),
         getDataInvalid: this.model.getInvalid.bind(this.model),
+        initializeChildren: this.model.initializeChildren.bind(this.model),
         getFieldProps: () => {
           const model = this.model.node.model;
           if (model.schemaParser && model.meta.name) {

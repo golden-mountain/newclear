@@ -34,10 +34,9 @@ export default class Schema {
     this.objectFields = schema.properties || {};
   }
 
-  getAxapiURL(urlParams) {
-    let axapiOrg = this.schema.axapi;
-    if (axapiOrg) {
-      const path = axapiOrg.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
+  static getAxapiURL(url, urlParams={}) {
+    if (url) {
+      const path = url.replace(/\{(.*?)\}/g, (matches, words) => { // eslint-disable-line
         if (!urlParams) {
           return '';
         } else {
@@ -48,6 +47,10 @@ export default class Schema {
     } else {
       return '';
     }
+  }
+
+  getAxapiURL(urlParams) {
+    return Schema.getAxapiURL(this.schema.axapi, urlParams);
   }
 
   _getFieldName(fieldName) {
@@ -97,7 +100,7 @@ export default class Schema {
   getFieldProps(fieldName) {
     const field = this._getFieldName(fieldName);
     const fieldObj = get(this.objectFields, field);
-    return fieldObj;    
+    return fieldObj;
   }
 
 }

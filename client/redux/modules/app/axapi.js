@@ -3,7 +3,7 @@ import { Iterable, List, Map, fromJS } from 'immutable';
 // axapi request import
 import moment from 'moment';
 import { get, isArray, uniqueId } from 'lodash';
-import { getResponseBody } from 'helpers/axapiHelper';
+import { getResponseBody, getPayload } from 'helpers/axapiHelper';
 
 import { LAST_PAGE_KEY } from 'configs/appKeys';
 import {
@@ -65,6 +65,7 @@ const apiReducers = {
       result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
       result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
       //return result.setIn([ page, 'axapi' ], responseData);
+      console.log(instancePath, body);
       result = result.setIn([ ...instancePath, 'data' ], body);
       return result;
     } else {
@@ -164,6 +165,25 @@ export function axapiRequest(instancePath, data, notifiable=false) {
   return request;
 }
 
+export function axapiGet(instancePath, url, params={}, notifiable=false) {
+  const payload = getPayload(url, 'GET', params);
+  return axapiRequest(instancePath, payload, notifiable);
+}
+
+export function axapiPut(instancePath, url, params={}, notifiable=false) {
+  const payload = getPayload(url, 'PUT', params);
+  return axapiRequest(instancePath, payload, notifiable);
+}
+
+export function axapiPost(instancePath, url, params={}, notifiable=false) {
+  const payload = getPayload(url, 'POST', params);
+  return axapiRequest(instancePath, payload, notifiable);
+}
+
+export function axapiDelete(instancePath, url, params={}, notifiable=false) {
+  const payload = getPayload(url, 'DELETE', params);
+  return axapiRequest(instancePath, payload, notifiable);
+}
 
 // export function clearAxapiLastError() {
 //   console.log('clear last error');

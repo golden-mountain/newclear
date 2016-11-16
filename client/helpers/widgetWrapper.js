@@ -118,11 +118,13 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       get pageId() {
-        return this.context.props.pagePath[1] || 'UNKNOWN-PAGE-ID';
+        const { pagePath=[] } = this.context.props;
+        return pagePath[1] || 'UNKNOWN-PAGE-ID';
       }
 
       get pageName() {
-        return this.context.props.pagePath[0] || 'UNKNOWN-PAGE';
+        const { pagePath=[] } = this.context.props;
+        return pagePath[0] || 'UNKNOWN-PAGE';
       }
 
       get visible() {
@@ -134,7 +136,7 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       get data() {
-        // console.log(this.props, this.instancePath);
+        // console.log(this.props.app && this.props.app.getIn([ ...this.instancePath, 'data' ]));
         return this.props.app && this.props.app.getIn([ ...this.instancePath, 'data' ]);
       }
 
@@ -160,7 +162,7 @@ export const widgetWrapper = ReduxDataConnector => {
           this.getNewProps()
         );
         // console.log(props);
-        return { props: props, cm: this.context.cm };
+        return { props, cm: this.context.cm };
       }
 
       componentWillMount() {
