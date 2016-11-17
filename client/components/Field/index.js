@@ -25,7 +25,7 @@ class A10Field extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.autoField = new AutoField(this.props.getFieldProps(), this.props.getSchema() );
+    this.autoField = new AutoField(this.props.modelGetFieldProps(), this.props.modelGetSchema() );
   }
 
   findInputElements(children, allowedTypes, callback) {
@@ -43,7 +43,7 @@ class A10Field extends React.Component {
   }
 
   render() {
-    let { children, change: onChange, activeData, name,  ...fieldOptions } = this.props; //eslint-disable-line
+    let { children, modelChange: onChange, activeData, name,  ...fieldOptions } = this.props; //eslint-disable-line
 
     // console.log(name, activeData);
     const callback = (child) => {

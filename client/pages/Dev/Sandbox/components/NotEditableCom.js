@@ -13,21 +13,21 @@ class NotEditableCom extends React.Component {
   click(event) {
     event.preventDefault();
     console.log('clicking... set ip address to ::9999');
-    this.props.hold('::9999');
+    this.props.modelHold('::9999');
     // this.context.cm.printComponentTree(true);
 
-    // const meta = this.props.getMeta();
-    // const model = this.props.getModel();
+    // const meta = this.props.modelGetMeta();
+    // const model = this.props.modelGetModel();
     // this.props.setDataInvalid();
-    // let invalid = this.props.getDataInvalid();
+    // let invalid = this.props.modelGetDataInvalid();
     // // this.setState({ ip: '::8999' });
     // console.log(' model:::', model, ' meta:::', meta, ' value:::', value, ' invalid:::', invalid);
     // this.props.setDataValid();
-    // invalid = this.props.getDataInvalid();
+    // invalid = this.props.modelGetDataInvalid();
     // console.log('Invalid:::', invalid);
     //
-    // this.props.save();
-    // invalid = this.props.getDataInvalid();
+    // this.props.modelSave();
+    // invalid = this.props.modelGetDataInvalid();
     // console.log('After saving, invalid:::', invalid);
   }
 

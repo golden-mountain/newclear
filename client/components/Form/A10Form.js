@@ -31,7 +31,7 @@ class A10Form extends Component {
         kickBall(REDIRECT_ROUTE, redirect || '/');
       }
     };
-    this.props.save(onSuccess.bind(this));
+    this.props.modelSave(onSuccess.bind(this));
   }
 
   componentWillUpdate() {
@@ -39,7 +39,7 @@ class A10Form extends Component {
     const { initial } = this.context.props;
     // console.log('Parent Path:', node.model.instancePath, 'A10Form path:', this.props.node.model.instancePath);
     if (initial) {
-      this.props.initializeChildren(initial);
+      this.props.modelInitializeChildren(initial);
     } else {
       // TODO: load from URL
     }

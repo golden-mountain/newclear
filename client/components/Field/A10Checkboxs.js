@@ -7,7 +7,7 @@ export default class A10Checkboxs extends Component {
   static displayName = 'A10Checkboxs'
 
   render() {
-    const { options, change } = this.props;
+    const { options, modelChange } = this.props;
 
     // console.log(value);
 
@@ -16,7 +16,7 @@ export default class A10Checkboxs extends Component {
       {
         options.map(({ label, value:optionValue }, index) => {
           return (
-            <Checkbox key={index} value={optionValue} name={name} onChange={change} inline>
+            <Checkbox key={index} value={optionValue} name={name} onChange={modelChange} inline>
             {label.replace('"', '')}
             </Checkbox>
           );
@@ -24,7 +24,7 @@ export default class A10Checkboxs extends Component {
       }
       </FormGroup>
     );
-    
+
   }
 }
 

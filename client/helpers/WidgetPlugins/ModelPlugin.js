@@ -36,15 +36,20 @@ export default class ModelPlugin {
       previousProps,
       {
         model: this.model,
-        getModel: this.model.getModel.bind(this.model),
-        getValue: this.model.getValue.bind(this.model),
-        setValue: this.model.setValue.bind(this.model),
-        getMeta: this.model.getMeta.bind(this.model),
-        setDataInvalid: this.model.setInvalid.bind(this.model, true),
-        setDataValid: this.model.setInvalid.bind(this.model, false),
-        getDataInvalid: this.model.getInvalid.bind(this.model),
-        initializeChildren: this.model.initializeChildren.bind(this.model),
-        getFieldProps: () => {
+        modelGetModel: this.model.getModel.bind(this.model),
+        modelGetValue: this.model.getValue.bind(this.model),
+        modelSetValue: this.model.setValue.bind(this.model),
+        modelGetMeta: this.model.getMeta.bind(this.model),
+        modelSetDataInvalid: this.model.setInvalid.bind(this.model, true),
+        modelSetDataValid: this.model.setInvalid.bind(this.model, false),
+        modelGetDataInvalid: this.model.getInvalid.bind(this.model),
+        modelInitializeChildren: (data) => {
+          this.model.initializeChildren(data);
+          if (typeof this.props.onInitialize == 'function') {
+            this.props.onInitialize(data, this.model.node);
+          }
+        },
+        modelGetFieldProps: () => {
           const model = this.model.node.model;
           if (model.schemaParser && model.meta.name) {
             return model.schemaParser.getFieldProps(model.meta.name);
@@ -52,7 +57,7 @@ export default class ModelPlugin {
             return {};
           }
         },
-        getSchema: () => {
+        modelGetSchema: () => {
           const model = this.model.node.model;
           if (model.schemaParser) {
             return model.schemaParser.schema;
@@ -60,10 +65,10 @@ export default class ModelPlugin {
             return {};
           }
         },
-        save: this.model.save.bind(this.model),
-        hold: this.model.setValue.bind(this.model),
-        reset: this.model.initialize.bind(this.model),
-        change: (event) => {
+        modelSave: this.model.save.bind(this.model),
+        modelHold: this.model.setValue.bind(this.model),
+        modelReset: this.model.initialize.bind(this.model),
+        modelChange: (event) => {
           let value;
           try {
             value = event.target.value;

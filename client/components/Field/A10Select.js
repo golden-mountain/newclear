@@ -34,13 +34,13 @@ export default class A10Select extends Component {
   // }
 
   componentWillUpdate() {
-    const { instancePath, catchBall, setValue } = this.context.props;
+    const { instancePath, catchBall, modelSetValue } = this.context.props;
     const { popupInfo={} } = this.props.widgetProps || {};
     // console.log(popupInfo.connectTo);
     catchBall(UPDATE_TARGET_DATA, (from, to, body) => { //eslint-disable-line
       if (popupInfo.connectTo) {
         const value = get(body, popupInfo.connectTo);
-        setValue(value);
+        modelSetValue(value);
         // console.log('triggled::::::::::::::::', body, value);
       }
       // const { popupInfo: { connectOptions } } = this.props;
@@ -92,7 +92,7 @@ export default class A10Select extends Component {
     const { loadOptions={} } = this.props.widgetProps || {};
     let url = loadOptions.url;
     if (!url) {
-      const fieldProps = this.context.props.getFieldProps();
+      const fieldProps = this.context.props.modelGetFieldProps();
       if (fieldProps) url = fieldProps['$ref'];
     }
     if (url) {

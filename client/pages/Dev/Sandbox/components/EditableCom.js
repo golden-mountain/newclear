@@ -8,12 +8,12 @@ class EditableCom extends React.Component {
 
   change(event) {
     // console.log(event.target.value);
-    this.props.hold(event.target.value);
+    this.props.modelHold(event.target.value);
   }
 
   save() {
-    this.props.save();
-    const invalid = this.props.getDataInvalid();
+    this.props.modelSave();
+    const invalid = this.props.modelGetDataInvalid();
     console.log('After saving, invalid:::', invalid);
   }
 

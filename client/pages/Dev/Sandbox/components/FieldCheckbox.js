@@ -8,12 +8,12 @@ class FieldCheckbox extends React.Component {
 
   change(event) {
     // console.log(event.target.checked);
-    this.props.hold(event.target.checked);
+    this.props.modelHold(event.target.checked);
   }
 
   save() {
-    this.props.save();
-    const invalid = this.props.getDataInvalid();
+    this.props.modelSave();
+    const invalid = this.props.modelGetDataInvalid();
     console.log('After saving, invalid:::', invalid);
   }
 

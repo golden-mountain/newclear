@@ -131,7 +131,7 @@ class VirtualServerForm extends React.Component {
                 <Checkbox value={true} />
               </A10Field>
 
-              <A10Field name="x.virtual-server.address-type" label="Address Type" value="1" conditional={{ 'x.virtual-server.wildcard': false }}>
+              <A10Field name="x.virtual-server.address-type" label="Address Type" value="0" conditional={{ 'x.virtual-server.wildcard': false }}>
                 <div>
                   <Radio value="0" inline> IPv4 </Radio>
                   <Radio value="1" inline> IPv6 </Radio>

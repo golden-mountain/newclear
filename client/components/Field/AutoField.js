@@ -18,7 +18,7 @@ export default class AutoField {
 
   autoGenElement(props) {
     const fieldProps = this.fieldSchema;
-    const { change: onChange, name, activeData, data, widgetProps } = props;
+    const { modelChange: onChange, name, activeData, data, widgetProps } = props;
     const validProps = { onChange, name, data, value: activeData };
     // console.log(fieldProps);
     // console.log(value, name);

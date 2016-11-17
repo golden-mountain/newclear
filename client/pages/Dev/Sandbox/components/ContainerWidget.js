@@ -8,18 +8,18 @@ class ContainerWidget extends React.Component {
 
   change(event) {
     console.log(event.target.value);
-    this.props.hold(event.target.value);
+    this.props.modelHold(event.target.value);
   }
 
   save() {
-    this.props.save();
-    const invalid = this.props.getDataInvalid();
+    this.props.modelSave();
+    const invalid = this.props.modelgetDataInvalid();
     console.log('After saving, invalid:::', invalid);
   }
 
   initialize() {
     this.props.reset();
-    const invalid = this.props.getDataInvalid();
+    const invalid = this.props.modelGetDataInvalid();
     console.log('reinitialized...', invalid);
   }
 
