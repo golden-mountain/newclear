@@ -8,7 +8,7 @@ export default class A10Radios extends Component {
 
   render() {
     const { options, name, onChange } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
 
     return (
       <FormGroup>
@@ -25,7 +25,7 @@ export default class A10Radios extends Component {
       }
       </FormGroup>
     );
-    
+
   }
 }
 

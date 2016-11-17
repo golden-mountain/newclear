@@ -5,9 +5,6 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 import { HIDE_COMPONENT_MODAL } from 'configs/messages';
 import configApp from 'configs/app';
 
-import { getResponseBody } from 'helpers/axapiHelper';
-// import { getInfo } from 'helpers/axapiHelper';
-
 const OEM = configApp.OEM;
 const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 
@@ -27,13 +24,6 @@ class A10Button extends Component {
     this.contentInstancePath = this.props.createInstancePath('A10ButtonModal');
   }
 
-  // componentWillMount() {
-  //   console.log('mount....');
-  //   this.props.catchBall(HIDE_COMPONENT_MODAL, (from, to, params) => { // eslint-disable-line
-  //     this.setState({ visible: false });
-  //   }, this.contentInstancePath);
-  // }
-
   componentWillUpdate(nextProps, nextState) { // eslint-disable-line
     // console.log('updating....');
     if (nextState.visible) {
@@ -42,11 +32,6 @@ class A10Button extends Component {
       }, this.contentInstancePath);
     }
   }
-
-  // shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line
-  //   // console.log(nextProps, nextState);
-  //   return !isEqual(this.state, nextState);
-  // }
 
   render() {
     const {
@@ -62,23 +47,17 @@ class A10Button extends Component {
     let buttonStyle = {
       cursor: 'pointer'
     };
-    // console.log('.................................fetched data .......................');
-    // console.log(this.props.data);
+
     let click = () => {};
     if (typeof onClick == 'function') {
       click = onClick;
     } else if (modalProps) {
       click = () => {
-        let data = {};
+        // let data = {};
         if (endpoint) {
-          // console.log('.................................before getting.......................');
-          const result = this.props.comAxapiGet(endpoint);
-          // console.log('.................................send getting.......................');
-          result.then((d) => {
-            // console.log(getResponseBody(data.pop()));
-            data = getResponseBody(d.pop());
-            this.setState({ visible: true, data });
-            // console.log('.................................finished getting.......................');
+          let result = this.props.comAxapiGet(endpoint);
+          result.then(() => {
+            this.setState({ visible: true });
           });
         } else {
           this.setState({ visible: true });
@@ -98,11 +77,11 @@ class A10Button extends Component {
         {children}
         { modalProps ?
           <ModalLayout visible={this.state.visible} {...modalProps} >
-            <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} initial={this.state.data} />
+            <ModalComponent modal {...componentProps} targetInstancePath={parentPath} _instancePath={this.contentInstancePath} initial={this.props.data} />
           </ModalLayout>
         : null}
       </ButtonClass>);
   }
 }
 
-export default widgetWrapper()(A10Button);
+export default widgetWrapper([ 'app' ])(A10Button);
