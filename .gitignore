@@ -6,3 +6,5 @@ static
 coverage
 __nogit
 .idea
+.tmp
+builds

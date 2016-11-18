@@ -11,12 +11,13 @@
     "start-dev": "better-npm-run start-dev",
     "lint": "eslint --fix -c .eslintrc client",
     "build": "better-npm-run build",
-    "test": "better-npm-run test"
+    "test": "better-npm-run test",
+    "test:watch": "better-npm-run test:watch"
   },
   "license": "MIT",
   "betterScripts": {
     "start-dev": {
-      "command": "webpack-dev-server --history-api-fallback --inline --hot --progress --port 3000",
+      "command": "webpack-dev-server --config webpack/webpack.config.js --history-api-fallback --inline --hot --progress --port 3000",
       "env": {
         "NODE_ENV": "development"
       }
@@ -35,7 +36,13 @@
       }
     },
     "test": {
-      "command": "karma start",
+      "command": "mocha-webpack --colors  --webpack-config webpack/webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "test:watch": {
+      "command": "mocha-webpack --colors  --watch  --webpack-config webpack/webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
       "env": {
         "NODE_ENV": "development"
       }
@@ -61,9 +68,12 @@
     "better-npm-run": "0.0.11",
     "bootstrap-loader": "^1.2.0-beta.1",
     "bootstrap-sass": "^3.3.7",
+    "chai": "^3.5.0",
+    "chai-enzyme": "^0.6.0",
     "clean-webpack-plugin": "^0.1.10",
     "concurrently": "^2.2.0",
     "css-loader": "^0.23.1",
+    "enzyme": "^2.6.0",
     "es6-promise-polyfill": "^1.2.0",
     "es6-promise-promise": "^1.0.0",
     "eslint": "^3.4.0",
@@ -71,25 +81,35 @@
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.0",
+    "expect": "^1.20.2",
+    "expect-element": "^1.1.1",
+    "expect-immutable": "0.0.3",
+    "expect-predicate": "^1.0.0",
     "expose-loader": "^0.7.1",
     "extract-text-webpack-plugin": "^2.0.0-beta",
     "file-loader": "^0.8.5",
     "font-awesome-webpack": "0.0.4",
     "html-webpack-plugin": "^2.22.0",
     "immutable-devtools": "0.0.7",
+    "jsdom": "^9.8.3",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "mocha": "^3.1.2",
+    "mocha-webpack": "^0.7.0",
     "node-sass": "^3.5.0-beta.1",
     "postcss-loader": "^0.13.0",
     "precss": "^1.4.0",
     "react-addons-perf": "^15.3.2",
+    "react-addons-test-utils": "^15.4.0",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^3.1.2",
+    "source-map-support": "^0.4.6",
     "style-loader": "^0.13.0",
     "underscore-template-loader": "^0.7.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.1.0-beta",
-    "webpack-dev-server": "^2.1.0-beta"
+    "webpack-dev-server": "^2.1.0-beta",
+    "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
     "compression": "^1.6.2",
@@ -106,6 +126,7 @@
     "json-loader": "^0.5.4",
     "jsoneditor": "^5.5.6",
     "keymirror": "^0.1.1",
+    "loadash": "0.0.1",
     "lodash": "^4.15.0",
     "moment": "^2.14.1",
     "pretty-error": "^2.0.0",
@@ -113,11 +134,10 @@
     "react": "^15.3.2",
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
-    "react-addons-test-utils": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
     "react-bootstrap": "^0.30.2",
     "react-bootstrap-table": "^2.5.5",
-    "react-dom": "^15.0.0-rc.1",
+    "react-dom": "^15.4.0",
     "react-helmet": "^3.1.0",
     "react-json-inspector": "^7.0.0",
     "react-loading": "0.0.9",
