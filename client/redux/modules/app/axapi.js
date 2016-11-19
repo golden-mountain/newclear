@@ -9,7 +9,7 @@ import { LAST_PAGE_KEY } from 'configs/appKeys';
 import {
   AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL,
   AXAPI_REQUEST, AXAPI_CLEAR_LAST_ERROR
-} from 'redux/modules/actionTypes';
+} from '../actionTypes';
 
 const isAuthUrl = (data) => data.path.toLowerCase().indexOf('/axapi/v3/auth') > -1;
 

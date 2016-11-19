@@ -1,7 +1,7 @@
 import {
     REGISTER_PAGE_VAR, REGISTER_PAGE_TITLE , REGISTER_PAGE_BREADCRUMB, UPDATE_CURRENT_PAGE, REGISTER_PAGE_VISIBLE, // eslint-disable-line
     REGISTER_CURRENT_PAGE,  DESTROY_PAGE
-} from 'redux/modules/actionTypes';
+} from '../actionTypes';
 
 import { APP_CURRENT_PAGE } from 'configs/appKeys';
 import { fromJS, List } from 'immutable';

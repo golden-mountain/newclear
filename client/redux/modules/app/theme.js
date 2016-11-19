@@ -1,5 +1,5 @@
 // theme action
-import { REGISTER_THEME_LAYOUT, REGISTER_THEME_STYLE } from 'redux/modules/actionTypes';
+import { REGISTER_THEME_LAYOUT, REGISTER_THEME_STYLE } from '../actionTypes';
 
 const themeReducers = {
   [ REGISTER_THEME_LAYOUT ](state, { layout }) {

@@ -1,6 +1,6 @@
 import {
   REGISTER_COMPONENT_VISIBLE, REGISTER_COMPONENT_DATA, UNMOUNT_COMPONENT
-} from 'redux/modules/actionTypes';
+} from '../actionTypes';
 // import { APP_CURRENT_PAGE } from 'configs/appKeys';
 import { fromJS, Map } from 'immutable';
 

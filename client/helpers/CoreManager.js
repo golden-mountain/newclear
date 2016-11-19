@@ -15,6 +15,7 @@ import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
 
 // Page Connector
 const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
+
   const pagePath = buildInstancePath(config.page, 'default' );
 
   class Core extends React.Component {

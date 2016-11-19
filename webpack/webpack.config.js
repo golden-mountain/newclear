@@ -28,7 +28,7 @@ base.output = {
 base.module.loaders =  base.module.loaders.concat([
   {
     test: /\.(html|ejs)$/,
-    loader: 'file',
+    loader: 'file-loader',
     query: {
       name: '[name].[ext]'
     }

@@ -18,20 +18,20 @@ module.exports = {
       },
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: 'json-loader'
       },
       {
         test: /\.(js|jsx)$/,
         include: path.join(__dirname, CONTENT_BASE),
         loaders: [
           {
-            loader: 'babel',
+            loader: 'babel-loader',
             query: {
               cacheDirectory: true
             }
           },
           {
-            loader: 'eslint'
+            loader: 'eslint-loader'
           }
         ]
       },
@@ -41,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.(gif|png|jpg|jpeg|ttf|eot|svg?)(\?[a-z0-9]+)?$/,
-        loader: 'file'
+        loader: 'file-loader'
       }
     ]
   },
