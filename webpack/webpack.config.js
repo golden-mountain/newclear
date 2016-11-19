@@ -3,7 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
-const config = require ('../client/configs/app');
+// const config = require ('../client/configs/app');
 
 const CONTENT_BASE = '../client';
 var base = require('./base');
@@ -42,7 +42,11 @@ base.module.loaders =  base.module.loaders.concat([
 
 base.plugins = base.plugins.concat([
   // new LayoutModuleReplacementPlugin(/layouts\/(.*)/,  './layouts/' + config.OEM + '/$1', path.resolve(CONTENT_BASE)),
-  // new CleanPlugin('../builds'),
+  new CleanPlugin([ 'builds' ], {
+    root: path.join(__dirname, '../'),
+    verbose: true,
+    dry: false
+  }),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
@@ -51,7 +55,7 @@ base.plugins = base.plugins.concat([
   }),
   new webpack.LoaderOptionsPlugin({
     minimize: false,
-    debug: true,
+    debug: true
     // options: {
     //   postcss: [ autoprefixer ],
     //   // cleaner:  [autoprefixer({ browsers: [] })],
@@ -87,7 +91,7 @@ base.devServer = {
     '/axapi/*': {
       target: 'https://' + ( process.env.AXAPI_HOST || '192.168.105.196' ),
       secure: false,
-      rewrite: function(req, res) {
+      rewrite: function(req, res) { // eslint-disable-line
         console.log(req, 'this is request');
       }
     }

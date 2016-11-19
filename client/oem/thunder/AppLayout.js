@@ -11,7 +11,7 @@ import './sass/bootstrap.scss';
 import './sass/app.scss';
 
 //issue:LOAD font awesome: https://github.com/gowravshekar/font-awesome-webpack/issues/20
-import 'style!css!less!font-awesome-webpack/font-awesome-styles.loader!font-awesome-webpack/font-awesome.config.js';
+import 'style-loader!css-loader!less-loader!font-awesome-webpack/font-awesome-styles.loader!font-awesome-webpack/font-awesome.config.js';
 
 import LoginForm from 'pages/Auth/components/Form';
 import { LAST_PAGE_KEY } from 'configs/appKeys';
