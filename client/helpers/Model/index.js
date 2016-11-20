@@ -2,9 +2,9 @@ import invariant from 'invariant';
 import { isArray, forEach, set, get } from 'lodash';
 
 import { getPayload } from 'helpers/axapiHelper';
-import { axapiRequest } from 'redux/modules/app/axapi';
+import { axapiRequest } from '../../redux/modules/app/axapi';
 import Schema from 'helpers/Schema';
-import { setComponentState, unmountComponent } from 'redux/modules/app/component';
+import { setComponentState, unmountComponent } from '../../redux/modules/app/component';
 import { getResponseBody } from 'helpers/axapiHelper';
 import MetaParser from 'helpers/Model/MetaParser';
 

@@ -3,18 +3,18 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import Immutable from 'immutable';
 import { createStore, applyMiddleware, compose } from 'redux';
+// import TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
+// import chai from 'chai';
+// import chaiEnzyme from 'chai-enzyme';
+// chai.use(chaiEnzyme());
 
-// import RootRouter from 'routes';
 import ApiClient from 'helpers/ApiClient';
 import createMiddleware from '../redux/middleware/clientMiddleware';
 import reducer from '../redux/modules/reducer';
 
-// if not import here, found we can't dispatch things
-// maybe things will bound twice
 import appActions from '../redux/modules/app/index';
 
-
-// import React, { Component } from 'react';
 import CoreManager from 'helpers/CoreManager';
 const EmptyLayout = require('oem/thunder/EmptyLayout').default;
 
@@ -48,40 +48,29 @@ if (!global.document) {
 }
 
 
-export const createDom = (children) => {
+export const createWidget = (Widget, extraProps={}) => {
   const client = new ApiClient();
   let middlewares = [ thunk,  createMiddleware(client) ];
   const composeEnhancers = compose;
 
-  const initialState = Immutable.Map(); // eslint-disable-line ignore it
+  const initialState = Immutable.Map();
   const store = createStore(
     reducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
 
-  return (
+  const Layout = EmptyLayout;
+  const LayoutWrapper = CoreManager({
+    page: 'test',
+    pageId: 'default'
+  })(Layout, Widget, extraProps);
+
+  return mount(
     <Provider store={store} key="provider">
-      <div>{children}</div>
+      <LayoutWrapper />
     </Provider>
   );
+
 };
 
-export const createWidgetRunningEnv = (Widget, extraProps={}) => {
-
-  class EnvComponent extends React.Component {
-
-    render() {
-      const Layout = EmptyLayout;
-      const LayoutWrapper = CoreManager({
-        page: 'test',
-        pageId: 'default'
-      })(Layout, Widget, extraProps);
-
-      return createDom(LayoutWrapper);
-    }
-
-  }
-
-  return EnvComponent;
-};

@@ -81,6 +81,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     render() {
+      console.log('update at CoreManager');
       return (this.state.path ? (<Redirect to={{
         pathname: this.state.path,
         params: this.state.params,
