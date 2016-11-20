@@ -22,7 +22,7 @@ base.entry = {
 base.output = {
   path: path.join(__dirname, '../builds'),
   filename: 'bundle.js',
-  publicPath: '/builds/'
+  publicPath: '/'
 };
 
 base.module.loaders =  base.module.loaders.concat([
@@ -76,8 +76,10 @@ base.plugins = base.plugins.concat([
 
   new HtmlWebpackPlugin({  // Also generate a test.html
     filename: 'index.html',
-    title: 'A10 TPS GUI',
-    template: 'index.ejs'
+    // title: 'A10 TPS GUI',
+    templateContent: function () {
+      return '<html><head><title>A10 TPS GUI</title></head><body><div id="root"></div></body></html>';
+    }
   })
 ]);
 

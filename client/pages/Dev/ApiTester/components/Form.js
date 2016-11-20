@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Field } from 'redux-form/immutable'; // imported Field
-import { Form, FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
+// import { A10Field } from 'redux-form/immutable'; // imported Field
+import { FormGroup, FormControl, ControlLabel, Button, Col, Row, ButtonToolbar, ButtonGroup, Panel } from 'react-bootstrap';
 import Helmet from 'react-helmet';
 
 import Inspector from 'react-json-inspector';
@@ -9,6 +9,9 @@ import JSONEditor from 'components/JSONEditor';
 
 import auth from 'helpers/auth';
 import { widgetWrapper } from 'helpers/widgetWrapper';
+
+import A10Field from 'components/Field';
+import A10Form from 'components/Form/A10Form';
 
 const initialValues = {
   path: '/axapi/v3/auth',
@@ -66,7 +69,7 @@ class AxapiForm extends React.Component {
   render() {
     // console.log(this);
     const { submitting, reset, pristine } = this.props;
-    const { axapiRequest, axapiResponse, handleSubmit } = this.context.props;
+    const { axapiResponse } = this.context.props;
     const historyData = this.fetchHistory();
     // console.log(axapiResponse);
     // console.log(this.context, '>>>>>>>>>>>>>props');
@@ -82,7 +85,7 @@ class AxapiForm extends React.Component {
             <Col xs={5}>
               <h4>Request </h4>
               <Panel>
-                <Form onSubmit={handleSubmit(axapiRequest)} horizontal>
+                <A10Form endpoint="/axapi/v3/auth" horizontal>
                   <FormGroup controlId="formHorizontalEmail">
                     <Col componentClass={ControlLabel} sm={2}>
                       Session
@@ -98,19 +101,19 @@ class AxapiForm extends React.Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Path</Col>
                     <Col sm={10}>
-                      <Field name="path" component='input' type="text" placeholder="path without prefix" className="form-control"/>
+                      <A10Field name="path" placeholder="path without prefix" className="form-control"/>
                     </Col>
                   </FormGroup>
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Method</Col>
                     <Col sm={10}>
-                      <Field component="select" name="method" className="form-control">
+                      <A10Field name="method" className="form-control">
                         <option value="GET">GET</option>
                         <option value="POST">POST</option>
                         <option value="DELETE">DELETE</option>
                         <option value="PUT">PUT</option>
-                      </Field>
+                      </A10Field>
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -119,7 +122,9 @@ class AxapiForm extends React.Component {
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={2}>Body</Col>
                     <Col sm={10}>
-                      <Field component={JSONEditor} className="form-control" name="body"  />
+                      <A10Field className="form-control" name="body" >
+                        <JSONEditor />
+                      </A10Field>
                     </Col>
                     <FormControl.Feedback />
                   </FormGroup>
@@ -138,7 +143,7 @@ class AxapiForm extends React.Component {
                       </ButtonToolbar>
                       </Col>
                   </FormGroup>
-                </Form>
+                </A10Form>
               </Panel>
             </Col>
             <Col xs={5}>
