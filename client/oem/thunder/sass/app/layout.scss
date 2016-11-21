@@ -50,7 +50,7 @@ html, body, #app {
   width: 100%;
   height: auto;
   min-height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   &.ng-leave {
     display: none;
   }

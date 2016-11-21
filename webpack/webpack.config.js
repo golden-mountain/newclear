@@ -100,5 +100,5 @@ base.devServer = {
   }
 };
 
-console.log(base);
+// console.log(base);
 module.exports = base;

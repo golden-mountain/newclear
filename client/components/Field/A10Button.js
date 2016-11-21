@@ -38,7 +38,7 @@ class A10Button extends Component {
       children,
       componentClass,
       onClick,
-      popup: { endpoint, modalProps, componentClass:ModalComponent, ...componentProps },
+      popup: { endpoint='', modalProps, componentClass:ModalComponent, ...componentProps },
       parentPath,
       bsClass
     } = this.props;

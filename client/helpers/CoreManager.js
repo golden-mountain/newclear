@@ -42,7 +42,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     getChildContext() {
-      return {  props: this.props, cm: this.cm };
+      return {  props: Object.assign({}, this.props, WrappedProps ), cm: this.cm };
     }
 
     componentWillMount() {
@@ -81,7 +81,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     }
 
     render() {
-      console.log('update at CoreManager');
+      // console.log('update at CoreManager');
       return (this.state.path ? (<Redirect to={{
         pathname: this.state.path,
         params: this.state.params,

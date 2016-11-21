@@ -18,13 +18,6 @@ class VirtualServerTable extends React.Component {
   static displayName = 'VirtualServerTable'
 
   render() {
-    const fieldMap = {
-
-    };
-
-    const options = {
-
-    };
 
     const formatStat = (cell) => {
       return cell && cell.toUpperCase();
@@ -66,7 +59,7 @@ class VirtualServerTable extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <A10Table fieldMap={fieldMap} actions={actions} options={options} schema={slbVirtualServerSchema} responsive striped hover newLast loadOnInitial >
+          <A10Table actions={actions} schema={slbVirtualServerSchema} responsive striped hover newLast loadOnInitial >
             <A10TableColumn dataField="name" checkbox style={{ width:'20px' }}  />
             <A10TableColumn dataField="enable-disable-action" style={{ width:'80px' }} dataFormat={formatStat} >Enable</A10TableColumn>
             <A10TableColumn dataField="name" style={{ width:'30%' }} dataFormat={formatName}>Name</A10TableColumn>

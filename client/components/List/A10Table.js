@@ -1,14 +1,18 @@
 import React from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
-import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Collapse } from 'react-bootstrap';
+// import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Collapse } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { getPayload, getPaginationParam } from 'helpers/axapiHelper';
+import { getPayload, getPaginationParam, getStartPage } from 'helpers/axapiHelper';
 import { values, get }  from 'lodash';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
-import A10Button from 'components/Field/A10Button';
+// import A10Button from 'components/Field/A10Button';
 
-export class A10TableColumn extends React.Component {
-}
+import configApp from 'configs/app';
+const OEM = configApp.OEM;
+const TableLayout = require('oem/' + OEM + '/TableLayout').default;
+
+// A Place holder stands for one Col inside A10Table
+export class A10TableColumn extends React.Component {}
 
 class A10Table extends React.Component {
   static displayName = 'A10Table'
@@ -18,13 +22,19 @@ class A10Table extends React.Component {
   }
 
   refreshTable() {
-    let { schema, dispatch, env, params=getPaginationParam(), path } = this.props; // eslint-disable-line
+    let { schema, pagination={ size: configApp.COMPONENT_PAGE_SIZE }, path, location } = this.props;
     if (!path) {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
     // axapiGet(path, params, env, dispatch);
-    this.props.comAxapiRequest(getPayload(path, 'GET', params));
+    // console.log(this.context.props, this.props);
+    const params = getPaginationParam(getStartPage(location)*pagination.size, pagination.size);
+    const fullRequests = [
+      getPayload(path, 'GET', { total: true }),
+      getPayload(path, 'GET', params)
+    ];
+    this.props.comAxapiRequest(fullRequests);
   }
 
   componentWillMount() {
@@ -68,20 +78,18 @@ class A10Table extends React.Component {
   render() {
     // console.log('rendering at a10table>>>>>>>>>>>>>>>>>>>>>>>>>>>', this.props.data);
     let {
-      children, data=[], newLast, // eslint-disable-line
+      children, data=[],
       responsive, striped, hover, bordered,
-      actions: { create:popup }
+      actions={},
+      pagination={ size: configApp.COMPONENT_PAGE_SIZE, total: 0, items: 0 },
+      ...tableOptions
     } = this.props;
 
     let ths = [], tds = [];
 
-    if (data) {
-      let list = values(data).pop() || [];
-      // if (newLast && list.length) {
-      //   const item = list.pop();
-      //   list.unshift(item);
-      //   // console.log(item, list);
-      // }
+    // refreshTable fetched data
+    if (data && data[0] && data[0]['total-count']) {
+      let list = values(data[1]).pop() || [];
 
       ths = children.map((child, key) => {
         let { children } = child.props;
@@ -100,69 +108,20 @@ class A10Table extends React.Component {
 
       // TODO: hookup checkbox data
       tds = list.map(::this.renderData);
-    } else {
-      data = [];
+      pagination.total = data[0]['total-count'];
+      pagination.items = Math.ceil(data[0]['total-count']/pagination.size);
     }
 
     return (
-      <Panel>
-        <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-          <Row>
-            <Col md={6} >
-              <InputGroup>
-                <FormControl type="text" placeholder="Keywords" />
-                <InputGroup.Button>
-                  <Button bsStyle="default">Search</Button>
-                </InputGroup.Button>
-              </InputGroup>
-            </Col>
-            <Col md={6} >
-              <A10Button bsClass="btn btn-labeled btn-success pull-right" popup={ popup } >
-                <span className="btn-label"><i className="fa fa-plus"></i></span> Create
-              </A10Button>
-            </Col>
-          </Row>
-        </div>
-        <Table  {...{ responsive, striped, bordered, hover }} >
-          <thead>
-            <tr>
-              {ths}
-            </tr>
-          </thead>
-
-          <Collapse in={!!this.state.newElement} transitionAppear={true} timeout={3000}>
-            <tbody>
-              { this.state.newElement }
-            </tbody>
-          </Collapse>
-
-          <tbody>
-            {tds || 'loading...' }
-          </tbody>
-        </Table>
-        <div className="panel-footer">
-            <Row>
-              <Col lg={ 2 }>
-                <div className="input-group pull-right">
-                  <select className="input-sm form-control">
-                      <option value="0">Bulk action</option>
-                      <option value="1">Delete</option>
-                      <option value="2">Clone</option>
-                      <option value="3">Export</option>
-                  </select>
-                  <span className="input-group-btn">
-                    <button className="btn btn-sm btn-default">Apply</button>
-                  </span>
-                </div>
-              </Col>
-              <Col lg={ 8 }></Col>
-              <Col lg={ 2 } className="text-right">
-                <Pagination prev next items={data.length} maxButtons={3} bsSize="small" />
-              </Col>
-            </Row>
-        </div>
-      </Panel>
-
+      <TableLayout
+        tableAttrs={{ responsive, striped, bordered, hover }}
+        actions={actions}
+        pagination={pagination}
+        tableOptions={tableOptions}
+        tds={tds}
+        ths={ths}
+        newTd={this.state.newElement}
+      />
     );
   }
 }

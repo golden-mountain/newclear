@@ -43,36 +43,48 @@ const apiReducers = {
     console.log('loading......................................');
     return result;
   },
-  [ AXAPI_REQUEST_SUCCESS ](state, { resp, data, instancePath, notifiable }) {
+  [ AXAPI_REQUEST_SUCCESS ](state, { resp, data, instancePath, notifiable, cacheToData }) {
+    console.log(resp);
     // console.log('notifiable::::::', notifiable);
     console.log('success  axapi request ......................................', resp);
-    if (resp.length == 1) {
-      let newResp = resp[0];
-      const body = getResponseBody(newResp);
+    let responseBodys = [];
+    const convertResponse = (resp) => {
+      return resp.map((newResp) => {
+        let body = getResponseBody(newResp);
+        pushAxapiReqs({ data, result: body });
+        if (isAuthUrl(data)) {
+          sessionStorage.setItem('token', body.signature);
+        }
 
-      pushAxapiReqs({ data, result: body });
-      if (isAuthUrl(data)) {
-        sessionStorage.setItem('token', body.signature);
-      }
-
-      const responseData = fromJS({
-        error: newResp.error,
-        statusCode: newResp.status,
-        response: body
+        responseBodys.push(body);
+        return {
+          error: newResp.error,
+          statusCode: newResp.status,
+          response: body
+        };
       });
+    };
 
-      let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
-      result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
-      result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
-      //return result.setIn([ page, 'axapi' ], responseData);
-      console.log(instancePath, body);
-      result = result.setIn([ ...instancePath, 'data' ], body);
-      return result;
-    } else {
-      console.log('More than one request', resp);
+    let responseData = convertResponse(resp), body = responseBodys;
+
+    if (responseData.length == 1) {
+      body = responseBodys.pop();
+      responseData = responseData.pop();
     }
+
+    let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], fromJS(responseData));
+    result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
+    result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
+    //return result.setIn([ page, 'axapi' ], responseData);
+    console.log(instancePath, responseBodys);
+    if (cacheToData) {
+      result = result.setIn([ ...instancePath, 'data' ], body);
+    }
+    // console.log(result.toJS(), '................');
+
+    return result;
   },
-  [ AXAPI_REQUEST_FAIL ](state, { resp, data, instancePath, notifiable }) {
+  [ AXAPI_REQUEST_FAIL ](state, { resp, data, instancePath, notifiable, cacheToData }) {
     // console.log('notifiable::::::', notifiable);
     console.log('failed  axapi request ......................................', resp);
     // let newResp = resp;
@@ -93,7 +105,9 @@ const apiReducers = {
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi' ], responseData);
     result = result.setIn([ LAST_PAGE_KEY, 'axapiNeedNotify' ], notifiable);
     result = result.setIn([ LAST_PAGE_KEY, 'axapiUid' ], getUid());
-    result = result.setIn([ ...instancePath, 'data' ], body);
+    if (cacheToData) {
+      result = result.setIn([ ...instancePath, 'data' ], body);
+    }
     return result;
   },
   [ AXAPI_CLEAR_LAST_ERROR ](state) {
@@ -105,7 +119,7 @@ const apiReducers = {
 export default apiReducers;
 
 // ----------------- AXAPI ------------------------
-export function axapiRequest(instancePath, data, notifiable=false) {
+export function axapiRequest(instancePath, data, notifiable=false, cacheToData=true) {
   // console.log(instancePath, data, notifiable);
   let { page, pageId, componentName, componentId } = instancePath;
   const authHeaders = {
@@ -157,6 +171,7 @@ export function axapiRequest(instancePath, data, notifiable=false) {
     data:primaryData,
     instancePath,
     notifiable,
+    cacheToData,
     types: [ AXAPI_REQUEST, AXAPI_REQUEST_SUCCESS, AXAPI_REQUEST_FAIL ],
     promises: promiseFuncs
   };
@@ -165,24 +180,24 @@ export function axapiRequest(instancePath, data, notifiable=false) {
   return request;
 }
 
-export function axapiGet(instancePath, url, params={}, notifiable=false) {
+export function axapiGet(instancePath, url, params={}, cacheToData=true) {
   const payload = getPayload(url, 'GET', params);
-  return axapiRequest(instancePath, payload, notifiable);
+  return axapiRequest(instancePath, payload, true, cacheToData);
 }
 
-export function axapiPut(instancePath, url, params={}, notifiable=false) {
+export function axapiPut(instancePath, url, params={}, notifiable=false, cacheToData=true) {
   const payload = getPayload(url, 'PUT', params);
-  return axapiRequest(instancePath, payload, notifiable);
+  return axapiRequest(instancePath, payload, notifiable, cacheToData);
 }
 
-export function axapiPost(instancePath, url, params={}, notifiable=false) {
+export function axapiPost(instancePath, url, params={}, notifiable=false, cacheToData=true) {
   const payload = getPayload(url, 'POST', params);
-  return axapiRequest(instancePath, payload, notifiable);
+  return axapiRequest(instancePath, payload, notifiable, cacheToData);
 }
 
-export function axapiDelete(instancePath, url, params={}, notifiable=false) {
+export function axapiDelete(instancePath, url, params={}, notifiable=false, cacheToData=true) {
   const payload = getPayload(url, 'DELETE', params);
-  return axapiRequest(instancePath, payload, notifiable);
+  return axapiRequest(instancePath, payload, notifiable, cacheToData);
 }
 
 // export function clearAxapiLastError() {

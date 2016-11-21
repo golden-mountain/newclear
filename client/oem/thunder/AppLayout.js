@@ -23,10 +23,10 @@ const OEM = configApp.OEM;
 const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 
 
-import Header from './jsx/Layout/Header';
-// import Sidebar from './jsx/Layout/Sidebar';
-import Offsidebar from './jsx/Layout/Offsidebar';
-import Footer from './jsx/Layout/Footer';
+import Header from './Libs/App/Header';
+// import Sidebar from './Libs/App/Sidebar';
+import Offsidebar from './Libs/App/Offsidebar';
+import Footer from './Libs/App/Footer';
 
 class AppLayout extends Component {
   static propTypes = {

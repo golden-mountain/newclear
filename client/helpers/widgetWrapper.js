@@ -232,6 +232,7 @@ export const widgetWrapper = ReduxDataConnector => {
             parentPath: this.context.props.instancePath,
             data: this.data,
             node: this.cm.getNode(this.instancePath),
+            location: this.context.props.location,
             // initialValues: this.data || this.context.props.initialValues,
             visible: this.visible,
             activeData: this.activeData,
@@ -254,6 +255,7 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       render() {
+        // console.log(this.context.props);
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
         return (this.visible ? <WrappedComponent  {...newProps} /> : null);

@@ -1,12 +1,12 @@
 var OEM = 'thunder';
-var LAYOUT = OEM;
-var THEME = OEM;
-var COMPONENT_PAGE_SIZE = 25;
+// var LAYOUT = OEM;
+// var THEME = OEM;
+// var COMPONENT_PAGE_SIZE = 25;
 var APP_CONFIGS =  {
-  OEM,
-  LAYOUT,
-  THEME,
-  COMPONENT_PAGE_SIZE
+  OEM: OEM,
+  LAYOUT: OEM,
+  THEME: 'default',
+  COMPONENT_PAGE_SIZE: 15
 };
 
 module.exports = APP_CONFIGS;

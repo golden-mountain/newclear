@@ -41,3 +41,7 @@ export  const getPaginationParam = (start=0, size=COMPONENT_PAGE_SIZE) => {
     count: size
   };
 };
+
+export const getStartPage = (location={ query: { page: 1 } }) => {
+  return location.query.page > 0 ? location.query.page-1 : location.query.page;
+};
