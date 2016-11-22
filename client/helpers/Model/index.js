@@ -62,7 +62,7 @@ export default class Model {
       let initialState = { invalid: model.meta.invalid || false, errorMsg: '', submitErrors: [], ...attrs };
       // console.log(model.meta);
       // if (model.meta && model.meta.value !== undefined) {
-      initialState['active-data'] = model.meta.value;
+      initialState['activeData'] = model.meta.value;
       model.value = model.meta.value;
       // }
       // console.log(model.meta.value);
@@ -111,7 +111,7 @@ export default class Model {
 
   _setValue(value, instancePath, checkConditional=true, checkValidation=true) {
     this._setModel({ value }, instancePath);
-    this._syncDataToRedux({ 'active-data': value }, instancePath);
+    this._syncDataToRedux({ 'activeData': value }, instancePath);
     checkConditional && this.metaParser.changeConditional();
     checkValidation && this.metaParser.checkValidation();
   }
@@ -262,7 +262,7 @@ export default class Model {
     const setModel = (body) => {
       // console.log(body, this.node.model.meta.name);
       // keep name same as redux component 'data'
-      // active-data correspond model value
+      // activeData correspond model value
       this.setModel({ data: body });
       this._pullDataToNode(body, this.node);
     };
@@ -286,7 +286,7 @@ export default class Model {
             const body = getResponseBody(r);
             this._requestCache[r.req.url] = body;
             // keep name same as redux component 'data'
-            // active-data correspond model value
+            // activeData correspond model value
             // this.setModel({ data: body });
             // this._pullDataToNode(body, this.node);
             setModel(body);

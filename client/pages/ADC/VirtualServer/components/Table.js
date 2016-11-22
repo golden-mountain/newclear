@@ -49,9 +49,8 @@ class VirtualServerTable extends React.Component {
       pop.endpoint = Schema.getAxapiURL(slbVirtualServerSchema.axapi, { name: cell });
       pop.edit = true;
       pop.modalProps.title = 'Edit Virtual Server';
-
-      return <A10Button popup={ pop } componentClass="a">{cell}</A10Button>;
-      // return <Link to={`/adc/virtual-server/edit/${cell}`} >{cell}</Link>;
+      // console.log(cell, '..........');
+      return (<A10Button popup={ pop } componentClass="a" data={cell}>{cell}</A10Button>);
     };
 
     const formatIp = (cell, row) => row['netmask'] ? `${cell} ${row['netmask']}` : cell;
@@ -59,7 +58,7 @@ class VirtualServerTable extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <A10Table actions={actions} schema={slbVirtualServerSchema} responsive striped hover newLast loadOnInitial >
+          <A10Table actions={actions} schema={slbVirtualServerSchema} pageMode responsive striped hover newLast loadOnInitial >
             <A10TableColumn dataField="name" checkbox style={{ width:'20px' }}  />
             <A10TableColumn dataField="enable-disable-action" style={{ width:'80px' }} dataFormat={formatStat} >Enable</A10TableColumn>
             <A10TableColumn dataField="name" style={{ width:'30%' }} dataFormat={formatName}>Name</A10TableColumn>

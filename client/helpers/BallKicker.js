@@ -70,7 +70,7 @@ export default class BallKicker {
           remove(storedEvents, (obj, n) => {
             return n === index;
           });
-          console.log('removed event:', event, to);
+          // console.log('removed event:', event, to);
           this.eventTree[event] = storedEvents;
         }
       });
@@ -87,7 +87,7 @@ export default class BallKicker {
       // to: [page, id, class, id] or [ page, id, class ] or []
       eventTree.forEach((componentAtEvent) => {
         if (this._isSubsetComponent(to, componentAtEvent.to)) {
-          console.log('triggled event:', event, componentAtEvent);
+          // console.log('triggled event:', event, componentAtEvent);
           componentAtEvent.listener.apply(null, [ from, to, params ]);
         }
       });
@@ -110,7 +110,7 @@ export default class BallKicker {
     });
 
     if (!finded) {
-      console.log('registering from:', event, from, ' to:', to);
+      // console.log('registering from:', event, from, ' to:', to);
       this.eventTree[event].push({ from, to, listener });
       // this.dumpEventTree();
     }

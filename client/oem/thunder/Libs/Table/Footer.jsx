@@ -2,25 +2,12 @@ import React, { Component } from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { Row, Col, Pagination } from 'react-bootstrap';
 
-import { getStartPage } from 'helpers/axapiHelper';
-
 // import A10Button from 'components/Field/A10Button';
 
 class TableFooter extends Component {
 
-  state = {
-    activePage: getStartPage(this.props.location)+1
-  }
-
-  handleSelect(eventKey) {
-    // TODO: redirect ? or refreshTable only?
-    this.setState({
-      activePage: eventKey
-    });
-  }
-
   render() {
-    const { pagination: { items=0 } } = this.props;
+    const { pagination: { items=5, paginate, activePage } } = this.props;
     // console.log(total);
     return (
       <div className="panel-footer">
@@ -42,8 +29,8 @@ class TableFooter extends Component {
           <Col lg={ 2 } className="text-right">
             <Pagination prev next ellipsis first last boundaryLinks
               items={items} maxButtons={5} bsSize="small"
-              activePage={this.state.activePage}
-              onSelect={::this.handleSelect}
+              activePage={activePage}
+              onSelect={paginate}
             />
           </Col>
         </Row>

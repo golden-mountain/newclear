@@ -10,7 +10,7 @@ import TableFooter from './Libs/Table/Footer';
 class TableLayout extends Component {
   render() {
     const { tableAttrs, actions, pagination, tableOptions, ths, tds, newTd } = this.props;
-
+    // console.log(tableOptions);
     return (
       <div>
         <TableHeader actions={actions} pagination={pagination} tableOptions={tableOptions} />

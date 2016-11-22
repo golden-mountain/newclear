@@ -135,13 +135,13 @@ export const widgetWrapper = ReduxDataConnector => {
         }
       }
 
-      get data() {
+      getData(name='default') {
         // console.log(this.props.app && this.props.app.getIn([ ...this.instancePath, 'data' ]));
-        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'data' ]);
+        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'data', name ]);
       }
 
       get activeData() {
-        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'active-data' ]);
+        return this.props.app && this.props.app.getIn([ ...this.instancePath, 'activeData' ]);
       }
 
       get instancePath() {
@@ -203,7 +203,7 @@ export const widgetWrapper = ReduxDataConnector => {
         const thisComInstanceData = this.instanceData;
         const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
         // console.log(thisComInstanceData);
-        const defaultCheckFields = [ 'data', 'active-data', 'visible', 'errorMsg', 'invalid', 'submitErrors' ];
+        const defaultCheckFields = [ 'data', 'activeData', 'visible', 'errorMsg', 'invalid', 'submitErrors', 'children' ];
         const needUpdateFields = this.props.updateFields || defaultCheckFields;
         return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
       }
@@ -230,9 +230,10 @@ export const widgetWrapper = ReduxDataConnector => {
           {
             instancePath: this.instancePath,
             parentPath: this.context.props.instancePath,
-            data: this.data,
+            data: this.getData(),
+            getData: this.getData.bind(this),
             node: this.cm.getNode(this.instancePath),
-            location: this.context.props.location,
+            location: this.props.location || this.context.props.location ,
             // initialValues: this.data || this.context.props.initialValues,
             visible: this.visible,
             activeData: this.activeData,
@@ -250,7 +251,7 @@ export const widgetWrapper = ReduxDataConnector => {
           overideProps,
           pluginProps
         );
-
+        // console.log(this.context.props.location);
         return props;
       }
 

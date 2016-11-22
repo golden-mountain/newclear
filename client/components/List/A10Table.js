@@ -1,11 +1,12 @@
 import React from 'react';
+import { values, get }  from 'lodash';
+
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 // import { Row, Col, Table, Pagination, Panel, Button, FormControl, InputGroup, Collapse } from 'react-bootstrap';
 import { widgetWrapper } from 'helpers/widgetWrapper';
-import { getPayload, getPaginationParam, getStartPage } from 'helpers/axapiHelper';
-import { values, get }  from 'lodash';
+import { getPayload, getPaginationParam, getStartPage, getNextPageURL } from 'helpers/axapiHelper';
 import { UPDATE_TARGET_DATA } from 'configs/messages';
-// import A10Button from 'components/Field/A10Button';
+import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
 
 import configApp from 'configs/app';
 const OEM = configApp.OEM;
@@ -21,15 +22,31 @@ class A10Table extends React.Component {
     newElement: null
   }
 
-  refreshTable() {
-    let { schema, pagination={ size: configApp.COMPONENT_PAGE_SIZE }, path, location } = this.props;
+  constructor(props, context) {
+    super(props, context);
+    if (this.props.pageMode) {
+      this.state = {
+        activePage: getStartPage(location)+1
+      };
+    } else {
+      this.state = {
+        activePage: 1
+      };
+    }
+  }
+
+  refreshTable(pageNo=0) {
+    let { schema, pagination={ size: configApp.COMPONENT_PAGE_SIZE }, path } = this.props;
     if (!path) {
       path = schema.axapi;
     }
     path = path.replace(/\/[^\/]+?$/, '');
-    // axapiGet(path, params, env, dispatch);
-    // console.log(this.context.props, this.props);
-    const params = getPaginationParam(getStartPage(location)*pagination.size, pagination.size);
+
+    let params;
+    if (pageNo) {
+      params = getPaginationParam((pageNo-1)*pagination.size, pagination.size);
+    }
+
     const fullRequests = [
       getPayload(path, 'GET', { total: true }),
       getPayload(path, 'GET', params)
@@ -40,10 +57,10 @@ class A10Table extends React.Component {
   componentWillMount() {
     // console.log(this.props.instancePath);
     if (this.props.loadOnInitial) {
-      this.refreshTable();
+      this.refreshTable(this.state.activePage);
     }
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
-      this.refreshTable();
+      this.refreshTable(this.state.activePage);
       // console.log(params);
       const record = values(params).pop() || null;
       if (record) {
@@ -54,10 +71,12 @@ class A10Table extends React.Component {
   }
 
   renderData(data, index=10000, rowClass='') {
+    // console.log(data);
     let result = this.props.children.map((child, key) => {
       const { dataField, dataFormat, checkbox, ...props } = child.props;
       const dataCol = get(data, dataField);
       let formatedData = typeof dataFormat == 'function' ? dataFormat(dataCol, data) : dataCol;
+      // console.log(dataField, dataCol);
       if (checkbox) {
         formatedData = (
             <div className="checkbox c-checkbox">
@@ -74,6 +93,17 @@ class A10Table extends React.Component {
     return (<tr key={index} className={rowClass}>{result}</tr>);
   }
 
+  paginate(pageNo) {
+    this.setState({
+      activePage: pageNo
+    });
+    // console.log(this.props);
+    if (this.props.pageMode) {
+      this.props.kickBall(REDIRECT_ROUTE, getNextPageURL(location, pageNo));
+    } else {
+      this.refreshTable(pageNo);
+    }
+  }
 
   render() {
     // console.log('rendering at a10table>>>>>>>>>>>>>>>>>>>>>>>>>>>', this.props.data);
@@ -107,7 +137,10 @@ class A10Table extends React.Component {
       });
 
       // TODO: hookup checkbox data
+      // console.log('------------------------start---------------------');
       tds = list.map(::this.renderData);
+      // console.log('-------------------------end--------------------');
+      // console.log(tds);
       pagination.total = data[0]['total-count'];
       pagination.items = Math.ceil(data[0]['total-count']/pagination.size);
     }
@@ -116,7 +149,7 @@ class A10Table extends React.Component {
       <TableLayout
         tableAttrs={{ responsive, striped, bordered, hover }}
         actions={actions}
-        pagination={pagination}
+        pagination={{ paginate: ::this.paginate, activePage: this.state.activePage, ...pagination }}
         tableOptions={tableOptions}
         tds={tds}
         ths={ths}
