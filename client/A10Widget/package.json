@@ -1,16 +1,19 @@
 {
-  "name": "a10-gui-5x",
+  "name": "a10-gui-widget",
   "version": "0.0.1",
   "private": true,
-  "description": "A10 GUI",
+  "description": "A10 GUI Widget Library",
   "author": "Zuoping Li",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "start": "concurrent --kill-others \"npm run start-dev\" \"npm run start-proxy\"",
-    "start-proxy": "node dev",
-    "start-dev": "better-npm-run start-dev",
-    "lint": "eslint --fix -c .eslintrc client",
     "build": "better-npm-run build",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/a10widget.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/a10widget.min.js",
+    "clean": "rimraf dist lib",
+    "example:simple": "node examples/simple/devServer.js",
+    "prepublish": "npm run clean && npm run build",
+    "lint": "eslint --fix -c .eslintrc client",
     "test": "better-npm-run test",
     "test:watch": "better-npm-run test:watch"
   },
@@ -30,19 +33,19 @@
       }
     },
     "build": {
-      "command": "webpack --config webpack/webpack.config.js ",
+      "command": "webpack --config webpack.config.js ",
       "env": {
         "NODE_ENV": "production"
       }
     },
     "test": {
-      "command": "mocha-webpack --colors  --webpack-config webpack/webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
+      "command": "mocha-webpack --colors  --webpack-config webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
       "env": {
         "NODE_ENV": "development"
       }
     },
     "test:watch": {
-      "command": "mocha-webpack --colors  --watch  --webpack-config webpack/webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
+      "command": "mocha-webpack --colors  --watch  --webpack-config webpack.config.test.js \"client/**/__tests__/*.spec.js\"",
       "env": {
         "NODE_ENV": "development"
       }
@@ -86,21 +89,26 @@
     "expect-immutable": "0.0.3",
     "expect-predicate": "^1.0.0",
     "expose-loader": "^0.7.1",
-    "extract-text-webpack-plugin": "^2.0.0-beta",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "file-loader": "^0.8.5",
     "font-awesome-webpack": "0.0.4",
+    "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
     "immutable-devtools": "0.0.7",
     "jsdom": "^9.8.3",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "markdown-loader": "^0.1.7",
     "mocha": "^3.1.2",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^3.5.0-beta.1",
     "postcss-loader": "^0.13.0",
     "precss": "^1.4.0",
+    "raw-loader": "^0.5.1",
     "react-addons-perf": "^15.3.2",
     "react-addons-test-utils": "^15.4.0",
+    "redbox-react": "^1.3.3",
+    "redux-form-website-template": "0.0.39",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^3.1.2",
     "sinon": "^1.17.6",
@@ -158,5 +166,25 @@
     "scroll-behavior": "^0.8.1",
     "superagent": "^2.1.0",
     "tree-model": "^1.0.4"
-  }
+  },
+  "peerDependencies": {
+    "react": "^15.3.2",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-immutable": "^3.0.8",
+    "jquery": "^3.1.1"
+  },
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "npmName": "a10-gui-widget",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
 }

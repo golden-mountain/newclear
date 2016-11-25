@@ -1,6 +1,4 @@
-# Reactjs based AX GUI Widget
-## Thanks Fong given the suggestion to isolate this package
-
+# Reactjs based AX GUI Framework
 ## TODO:
 1. Follow airbnb as eslint rules
 

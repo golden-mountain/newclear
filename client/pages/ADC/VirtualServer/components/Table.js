@@ -50,7 +50,7 @@ class VirtualServerTable extends React.Component {
       pop.edit = true;
       pop.modalProps.title = 'Edit Virtual Server';
       // console.log(cell, '..........');
-      return (<A10Button popup={ pop } componentClass="a" data={cell}>{cell}</A10Button>);
+      return (<A10Button popup={ pop } componentClass="a" >{cell}</A10Button>);
     };
 
     const formatIp = (cell, row) => row['netmask'] ? `${cell} ${row['netmask']}` : cell;

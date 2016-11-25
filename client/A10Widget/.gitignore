@@ -1,0 +1,11 @@
+.DS_STORE
+node_modules
+static
+.module-cache
+*.log*
+coverage
+__nogit
+.idea
+.tmp
+builds
+dist
