@@ -1,0 +1,15 @@
+.properties-content-normal {
+    right: -500px;
+    position: absolute;
+    z-index: 2000;
+    transition-duration: 0.8s;
+    width: 400px;
+}
+
+.properties-content-show {
+    right: -18px;
+    position: absolute;
+    z-index: 2000;
+    transition-duration: 0.8s;
+    width: 400px;
+}
