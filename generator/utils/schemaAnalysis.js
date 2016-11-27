@@ -1,20 +1,25 @@
 
-import FieldConvert from './fieldConvert';
+import ConvertField from './convertField';
+
 
 class SchemaAnalysis {
 
-  constructor(schema) {
+  constructor(schemaName, schema) {
+    this.schemaName = schemaName;
     this.schema = schema;
     this.fields = [];
   }
 
-  setFieldConvert() {
-    const name = this.getName();
-    name && (this.fieldConvert = new FieldConvert(name, this.getProperties()));
-  }
-
   getName() {
     return 'obj-name' in this.schema && this.schema['obj-name'];
+  }
+
+  getFullName() {
+    return this.schema['obj-lineage-full'];
+  }
+
+  getSchemaName() {
+    return this.schemaName;
   }
 
   getProperties() {
@@ -22,13 +27,22 @@ class SchemaAnalysis {
   }
 
   setFields() {
-
     const properties = this.getProperties();
+    const domain = this.getName();
     if (properties) {
       for (var name in properties) {
-        this.fields.push(new FieldConvert(name, properties[name]));
+        this.fields.push(new ConvertField(this, domain, name, properties[name]));
       }
     }
+  }
+
+  checkConditional(conditional) {
+    const conditionalSchema = this.schema.properties[conditional];
+    console.log('conditionalSchema ----------------->', conditionalSchema);
+  }
+
+  toString() {
+    return this.schema;
   }
 
   props() {
@@ -40,12 +54,11 @@ class SchemaAnalysis {
   }
 
   render() {
-    this.setFields();
     return this.fields.map((field) => {
       return field.render();
     });
+    // return _.join(this.fields, '\n');
   }
-
 }
 
 export default SchemaAnalysis;

@@ -27,7 +27,7 @@ class VirtualPort extends React.Component {
                   <option value="tcp">tcp</option>
                   <option value="udp">udp</option>
                 </FormControl>
-              </A10Field>              
+              </A10Field>
               <A10Field name="port.alternate-port" label="Alternate Port" >
                 <Checkbox value={true} />
               </A10Field>
