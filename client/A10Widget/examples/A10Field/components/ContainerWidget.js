@@ -13,7 +13,7 @@ class ContainerWidget extends React.Component {
 
   save() {
     this.props.modelSave();
-    const invalid = this.props.modelgetDataInvalid();
+    const invalid = this.props.modelGetDataInvalid();
     console.log('After saving, invalid:::', invalid);
   }
 

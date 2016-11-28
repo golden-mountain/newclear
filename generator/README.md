@@ -1,3 +1,12 @@
+
+## Steps
+
+* Generate <A10Field ... /> by field in properties.
+* Generate <A10Form ... /> by schema
+* Generate Edit.js by A10Form
+* Generate Router.js
+
+
 # UI Auto Generator
 ## Usage
 > npm run uigen

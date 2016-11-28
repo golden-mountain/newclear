@@ -7,6 +7,7 @@ module.exports = {
   // context: path.join(__dirname, '../../'),
   devtool: 'source-map',
   entry: [
+    'bootstrap-loader',
     'babel-polyfill',
     // 'eventsource-polyfill', // necessary for hot reloading with IE
     'webpack-hot-middleware/client',
@@ -24,6 +25,12 @@ module.exports = {
     new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
+    }),
+    new webpack.ProvidePlugin({
+      Promise: 'es6-promise-promise', // works as expected
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
     })
   ],
   resolve: {

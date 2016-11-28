@@ -279,25 +279,29 @@ export default class Model {
       });
 
       if (validRequests.length) {
-        const result = this.dispatch(axapiRequest(this.instancePath, validRequests, false));
-        result.then((resp) => {
-          const mapResp = (r) => {
-            // console.log(r);
-            const body = getResponseBody(r);
-            this._requestCache[r.req.url] = body;
-            // keep name same as redux component 'data'
-            // activeData correspond model value
-            // this.setModel({ data: body });
-            // this._pullDataToNode(body, this.node);
-            setModel(body);
-          };
+        try {
+          const result = this.dispatch(axapiRequest(this.instancePath, validRequests, false));
+          result.then((resp) => {
+            const mapResp = (r) => {
+              // console.log(r);
+              const body = getResponseBody(r);
+              this._requestCache[r.req.url] = body;
+              // keep name same as redux component 'data'
+              // activeData correspond model value
+              // this.setModel({ data: body });
+              // this._pullDataToNode(body, this.node);
+              setModel(body);
+            };
 
-          if (isArray(resp)) {
-            resp.forEach(mapResp);
-          } else {
-            mapResp(resp);
-          }
-        });
+            if (isArray(resp)) {
+              resp.forEach(mapResp);
+            } else {
+              mapResp(resp);
+            }
+          });
+        } catch(e) {
+          console.error(e);
+        }
       }
 
     }

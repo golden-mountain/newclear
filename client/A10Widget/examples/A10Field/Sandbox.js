@@ -10,7 +10,7 @@ import FieldCheckbox from './components/FieldCheckbox';
 
 export default class Sandbox extends React.Component {
   render() {
-    console.log('test');
+    // console.log('test');
     // const myRequire = (schema) => {
     //   return require('schemas/' + schema + '.json');
     // };
@@ -35,7 +35,8 @@ export default class Sandbox extends React.Component {
     };
 
     const containerSchema = {
-      schema: 'slb-virtual-server',
+      // schema: 'slb-virtual-server',
+      endpoint: '/axapi/v3/slb/virtual-server/',
       name: 'virtual-server.description',
       initial: 'test description',
       loadInitial: true,

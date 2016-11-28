@@ -1,21 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-// import { combineReducers } from 'redux-immutable';
-import { Map } from 'immutable';
 
-import { reducer } from 'WidgetExport';
-// console.log(reducers);
-import { App, Code, Markdown, Values, generateExampleBreadcrumbs } from 'redux-form-website-template';
+import { Provider } from 'react-redux';
+// import { createStore, applyMiddleware, compose  } from 'redux';
+// import { combineReducers } from 'redux-immutable';
+// import thunk from 'redux-thunk';
+
+// import { Map } from 'immutable';
+import {  Code, Markdown, Values } from 'redux-form-website-template';
+
+import { createWidgetStore } from 'WidgetExport';
+
+// import A10Widget Plugins
+// import ApiClient from 'utils/ApiClient';
+// import createMiddleware from 'middlewares/clientMiddleware';
+// const client = new ApiClient();
+// removed logger() because it's nonesense
+// let middlewares = [ thunk,  createMiddleware(client) ];
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const appReducer = combineReducers( { reducer } );
+// const initialState = Map(); // eslint-disable-line ignore it
+
+// const store = createStore(
+//   appReducer,
+//   initialState,
+//   composeEnhancers(applyMiddleware(...middlewares))
+// );
+
+const store = createWidgetStore('app');
 
 const dest = document.getElementById('content');
-
-// const reducer = combineReducers(reducers);
-const initialState = Map(); // eslint-disable-line ignore it
-
-const store =
-  (window.devToolsExtension ? window.devToolsExtension()(createStore) : createStore)(reducer, initialState);
 
 let render = () => {
   const Sandbox = require('./Sandbox').default;
@@ -24,14 +38,7 @@ let render = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App
-        /**
-        * This <App/> component only provides the site wrapper.
-        * Remove it on your dev server if you wish. It will not affect the functionality.
-        */
-        version="6.0.1"
-        path="/examples/simple"
-        breadcrumbs={generateExampleBreadcrumbs('simple', 'Simple Form Example', '6.0.1')}>
+      <div>
 
         <Markdown content={readme}/>
 
@@ -47,7 +54,7 @@ let render = () => {
 
         <Code source={raw}/>
 
-      </App>
+      </div>
     </Provider>,
     dest
   );
@@ -56,23 +63,23 @@ let render = () => {
 if (module.hot) {
   // Support hot reloading of components
   // and display an overlay for runtime errors
-  // const renderApp = render;
-  // const renderError = (error) => {
-  //   const RedBox = require('redbox-react');
-  //   ReactDOM.render(
-  //     <RedBox error={error} className="redbox"/>,
-  //     dest
-  //   );
-  // };
-  //
-  // render = () => {
-  //   try {
-  //     renderApp();
-  //   } catch (error) {
-  //     renderError(error);
-  //   }
-  // };
-  //
+  const renderApp = render;
+  const renderError = (error) => {
+    const RedBox = require('redbox-react');
+    ReactDOM.render(
+      <RedBox error={error} className="redbox"/>,
+      dest
+    );
+  };
+
+  render = () => {
+    try {
+      renderApp();
+    } catch (error) {
+      renderError(error);
+    }
+  };
+
   const rerender = () => {
     setTimeout(render);
   };

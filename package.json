@@ -12,7 +12,8 @@
     "lint": "eslint --fix -c .eslintrc client",
     "build": "better-npm-run build",
     "test": "better-npm-run test",
-    "test:watch": "better-npm-run test:watch"
+    "test:watch": "better-npm-run test:watch",
+    "uigen": "better-npm-run uigen"
   },
   "license": "MIT",
   "betterScripts": {
@@ -46,6 +47,9 @@
       "env": {
         "NODE_ENV": "development"
       }
+    },
+    "uigen": {
+      "command": "babel-node generator/index.js"
     }
   },
   "devDependencies": {

@@ -43,13 +43,13 @@ const apiReducers = {
   [ AXAPI_REQUEST ](state) {
     let result = state.setIn([ LAST_PAGE_KEY, 'axapi', 'isLoading' ], true);
     // result = result.setIn([ APP_CURRENT_PAGE,  'pages', page, pageId, componentName, componentId, 'data', 'isLoading' ], true);
-    // console.log('loading......................................');
+    console.log('loading......................................');
     return result;
   },
   [ AXAPI_REQUEST_SUCCESS ](state, { resp, data, instancePath, notifiable, requestName, cacheToData }) {
     // console.log(resp);
     // console.log('notifiable::::::', notifiable);
-    // console.log('success  axapi request ......................................', resp);
+    console.log('success  axapi request ......................................', resp);
     let responseBodys = [];
     const convertResponse = (resp) => {
       return resp.map((newResp) => {
@@ -89,7 +89,7 @@ const apiReducers = {
   },
   [ AXAPI_REQUEST_FAIL ](state, { resp, data, instancePath, notifiable, requestName, cacheToData }) {
     // console.log('notifiable::::::', notifiable);
-    // console.log('failed  axapi request ......................................', resp);
+    console.log('failed  axapi request ......................................', resp);
     // let newResp = resp;
     let newResp = resp ? resp : { body: '' };
 
@@ -123,7 +123,7 @@ export default apiReducers;
 
 // ----------------- AXAPI ------------------------
 export function axapiRequest(instancePath, data, notifiable=false, requestName='default', cacheToData=true) {
-  // console.log(instancePath, data, notifiable);
+  console.log(instancePath, data, notifiable);
   let { page, pageId, componentName, componentId } = instancePath;
   const authHeaders = {
     'content-type': 'application/json'
