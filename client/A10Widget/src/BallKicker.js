@@ -19,8 +19,8 @@ export default class BallKicker {
   //   str = str.replace(/[\s|\/]/g, '-');
   //   return instancePath.length ? str : event;
   // }
-  // constructor(componentTree) {
-  //   this.componentTree = componentTree;
+  // constructor(widgetTree) {
+  //   this.widgetTree = widgetTree;
   // }
 
   // kick(from, event, params=null, to=[]) {

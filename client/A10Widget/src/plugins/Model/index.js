@@ -2,9 +2,9 @@ import invariant from 'invariant';
 import { isArray, forEach, set, get } from 'lodash';
 
 import { getPayload, getResponseBody } from '../../utils';
-import { axapiRequest } from '../../redux/api';
+import { axapiRequest } from '../../modules/api';
 // import Schema from 'helpers/Schema';
-import { setComponentState, unmountComponent } from '../../redux/widget';
+import { setComponentState, unmountComponent } from '../../modules/widget';
 // import { getResponseBody } from 'helpers/axapiHelper';
 import MetaParser from '../Model/MetaParser';
 
@@ -14,12 +14,12 @@ import MetaParser from '../Model/MetaParser';
 export default class Model {
   _requestCache = {}
 
-  constructor(cm, instancePath, dispatch) {
+  constructor(wm, instancePath, dispatch) {
     // save cm manager as all other cm
-    this.cm = cm;
+    this.wm = wm;
     this.dispatch = dispatch;
     this.instancePath = instancePath;
-    this.node = this.cm.getNode(this.instancePath);
+    this.node = this.wm.getNode(this.instancePath);
     // this._initialize();
     if (!this.node) {
       invariant(this.node, ' does not exists on component tree');
@@ -85,7 +85,7 @@ export default class Model {
   }
 
   _setModel(values, instancePath, sync=false) {
-    const thisNode = this.cm.getNode(instancePath);
+    const thisNode = this.wm.getNode(instancePath);
     if (!thisNode) return false;
 
     // if (values.initial && !thisNode.model.value) {
@@ -105,7 +105,7 @@ export default class Model {
   }
 
   getModel(key='') {
-    // const this.node = this.cm.getNode(this.instancePath);
+    // const this.node = this.wm.getNode(this.instancePath);
     return key ? this.node.model[key] : this.node.model;
   }
 
@@ -163,7 +163,7 @@ export default class Model {
 
   getRequests(method) {
     // try to find self meta to see if it savable
-    // const this.node = this.cm.getNode(this.instancePath);
+    // const this.node = this.wm.getNode(this.instancePath);
     if (!this.node.model.meta) {
       return false;
     }

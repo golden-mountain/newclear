@@ -5,7 +5,7 @@ var LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 module.exports = {
   // context: path.join(__dirname, '../../'),
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
     'babel-polyfill',
     // 'eventsource-polyfill', // necessary for hot reloading with IE
@@ -21,7 +21,10 @@ module.exports = {
     // new webpack.optimize.OccurenceOrderPlugin(),
     new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true })
+    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
+    })
   ],
   resolve: {
     extensions: [ '.json', '.js', '.jsx' ],

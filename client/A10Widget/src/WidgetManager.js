@@ -38,8 +38,8 @@ export default class WidgetManager {
 
   widgetTreeModel = new TreeModel()
 
-  constructor(props) {
-    this.dispatch = props.dispatch;
+  constructor(dispatch) {
+    this.dispatch = dispatch;
     this.ballKicker = new BallKicker();
     // this.listener = new WidgetListener(this.dispatch, this.ballKicker);
     this.widgetTree = this.widgetTreeModel.parse({
@@ -96,13 +96,13 @@ export default class WidgetManager {
     }
   }
 
-  printComponentTree(showMetaData=false) {
+  printwidgetTree(showMetaData=false) {
     console.log('--------------------------- Start Print Tree -------------------------------');
-    this.printComponentTree2(this.widgetTree, showMetaData);
+    this.printwidgetTree2(this.widgetTree, showMetaData);
     console.log('--------------------------- End Print Tree -------------------------------');
   }
 
-  printComponentTree2(node, pad2=0, showMetaData=false) {
+  printwidgetTree2(node, pad2=0, showMetaData=false) {
     let pad = pad2;
     let padder = repeat('*', pad);
     if (!node.model.instancePath[2]) {
@@ -117,7 +117,7 @@ export default class WidgetManager {
     if (node.children.length) {
       pad += 2;
       for (var index in node.children) {
-        this.printComponentTree2(node.children[index], pad, showMetaData);
+        this.printwidgetTree2(node.children[index], pad, showMetaData);
       }
     }
     return pad;

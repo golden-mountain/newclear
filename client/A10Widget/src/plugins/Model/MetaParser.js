@@ -21,7 +21,7 @@ export default class MetaParser {
 
     // console.log(conditional, validation);
     this.m.setMeta({ conditional, validation });
-    // this.m.cm.printComponentTree(true);
+    // this.m.wm.printwidgetTree(true);
   }
 
   getConditional() {
@@ -65,7 +65,7 @@ export default class MetaParser {
       const [ depName, depValue ] = Object.entries(conditional).pop();
       const depOnObjVisible = get(this.model.parent, 'model.visible', true);
       if (depOnObjVisible && depName) {
-        const conditionalNode = this.m.cm.componentTree.first((node) => {
+        const conditionalNode = this.m.wm.widgetTree.first((node) => {
           return get(node.model, 'meta.name') === depName;
         });
         const conditionalObjValue = get(conditionalNode, 'model.value');
@@ -121,8 +121,8 @@ export default class MetaParser {
     };
 
     // console.log(thisName, thisValue);
-    traverseConditional(this.m.cm.componentTree, thisName, thisValue, true);
-    // this.m.cm.printComponentTree(true);
+    traverseConditional(this.m.wm.widgetTree, thisName, thisValue, true);
+    // this.m.wm.printwidgetTree(true);
   }
 
   _checkValidation(node) {

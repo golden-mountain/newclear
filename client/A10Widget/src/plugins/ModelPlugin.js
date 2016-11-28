@@ -3,7 +3,7 @@ import Model from './Model';
 export default class ModelPlugin {
   onInitialize() {
     // console.log('executed initial at ModelPlugin', this.props, this.context);
-    this.model = new Model(this.cm, this.instancePath, this.props.dispatch);
+    this.model = new Model(this.wm, this.instancePath, this.props.dispatch);
   }
 
   onMount() {

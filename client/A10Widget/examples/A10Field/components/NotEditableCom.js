@@ -7,7 +7,7 @@ import { widgetWrapper } from 'widgetWrapper';
 class NotEditableCom extends React.Component {
   static displayName = 'NotEditableCom'
   static contextTypes = {
-    cm: PropTypes.object
+    wm: PropTypes.object
   }
 
   click(event) {

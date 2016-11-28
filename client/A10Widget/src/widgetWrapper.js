@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react'; //PropTypes
 import { connect } from 'react-redux';
-// import { getAppPageVar } from './stateHelper';
 import { uniqueId,  get, isArray, isEqual } from 'lodash';
 
 import { buildInstancePath } from './utils';
 import { devPlugins, prodPlugins } from './plugins';
-// import { Iterable } from 'immutable';
+import WidgetManager from './WidgetManager';
 
 // wrapper for widgets, add a wrapper to get state
 export const widgetWrapper = ReduxDataConnector => {
@@ -20,16 +19,20 @@ export const widgetWrapper = ReduxDataConnector => {
     class Widget extends Component {
       static displayName = displayName
 
+      static propTypes = {
+
+      }
+
       static contextTypes = {
         props: PropTypes.object,
         // context: PropTypes.object,
-        cm: PropTypes.object
+        wm: PropTypes.object
       }
 
       static childContextTypes = {
         props: PropTypes.object,
         // context: PropTypes.object,
-        cm: PropTypes.object
+        wm: PropTypes.object
       }
 
       _componentId = uniqueId(displayName + '-')
@@ -38,9 +41,8 @@ export const widgetWrapper = ReduxDataConnector => {
         super(props, context);
         this.plugins = [];
         this.registerPlugins();
-        this.cm = this.context.cm;
+        this.wm = new WidgetManager(this.props.dispatch);
 
-        const { instancePath, pagePath } = this.context.props;
         const {
           meta, value, schema, name, loadInitial,
           conditional, validation, urlParams,
@@ -54,10 +56,14 @@ export const widgetWrapper = ReduxDataConnector => {
             conditional, validation, urlParams, invalid, ...meta
           }
         };
-        // this.context.cm.registerComponent(this.instancePath, instancePath || pagePath);
-        this.cm.registerComponent(this.instancePath, instancePath || pagePath, componentMeta);
-        // this.cm.printComponentTree(true);
-        // this.cm.acceptBalls();
+
+        this.parentInstancePath = this.defaultPageInstancePath;
+        if (this.context && this.context.props) {
+          this.parentInstancePath = this.context.props.instancePath;
+        }
+        this.wm.registerComponent(this.instancePath, this.parentInstancePath, componentMeta);
+        // this.wm.printwidgetTree(true);
+        // this.wm.acceptBalls();
         this.executePluginMethod('onInitialize');
         // console.log(this.context.props);
       }
@@ -100,6 +106,10 @@ export const widgetWrapper = ReduxDataConnector => {
         return buildInstancePath(this.pageName, this.pageId, prefix, uniqueId(prefix + '-') );
       }
 
+      get defaultPageInstancePath() {
+        return [ location.pathname, 'default' ];
+      }
+
       get componentName() {
         return displayName;
       }
@@ -118,13 +128,14 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       get pageId() {
-        const { pagePath=[] } = this.context.props;
-        return pagePath[1] || 'UNKNOWN-PAGE-ID';
+        // const { pagePath=[] } = this.context.props;
+        return this.parentInstancePath[1];
       }
 
       get pageName() {
-        const { pagePath=[] } = this.context.props;
-        return pagePath[0] || 'UNKNOWN-PAGE';
+        // const { pagePath=[] } = this.context.props;
+        // return pagePath[0] || 'UNKNOWN-PAGE';
+        return this.parentInstancePath[0];
       }
 
       get visible() {
@@ -162,7 +173,7 @@ export const widgetWrapper = ReduxDataConnector => {
           this.getNewProps()
         );
         // console.log(props);
-        return { props, cm: this.context.cm };
+        return { props, wm: this.context.wm };
       }
 
       componentWillMount() {
@@ -172,10 +183,10 @@ export const widgetWrapper = ReduxDataConnector => {
 
       componentWillUnmount() {
         this.executePluginMethod('onUnmount');
-        this.cm.ballKicker.removeEvent(this.instancePath);
+        this.wm.ballKicker.removeEvent(this.instancePath);
         // Comment reason: some times we need keep data , example, window popup
-        // this.cm.unregisterComponent(this.instancePath);
-        // this.cm.printComponentTree();
+        // this.wm.unregisterComponent(this.instancePath);
+        // this.wm.printwidgetTree();
       }
 
       componentWillReceiveProps(nextProps, nextState) {
@@ -229,11 +240,11 @@ export const widgetWrapper = ReduxDataConnector => {
           // this.getNewMethods(this.instancePath),
           {
             instancePath: this.instancePath,
-            parentPath: this.context.props.instancePath,
+            parentPath: this.parentInstancePath,
             data: this.getData(),
             getData: this.getData.bind(this),
-            node: this.cm.getNode(this.instancePath),
-            location: this.props.location || this.context.props.location ,
+            node: this.wm.getNode(this.instancePath),
+            location: this.props.location || location ,
             // initialValues: this.data || this.context.props.initialValues,
             visible: this.visible,
             activeData: this.activeData,
@@ -241,12 +252,12 @@ export const widgetWrapper = ReduxDataConnector => {
             checkComponentNeedUpdate: this.checkComponentNeedUpdate.bind(this),
             checkWidgetDataUpdate: this.checkWidgetDataUpdate.bind(this),
             createInstancePath: this.createInstancePath.bind(this),
-            findParent: this.cm.findParent.bind(this.cm, this.instancePath),
-            findTargetByName: this.cm.findTargetByComponentName.bind(this.cm),
-            findBallReceiver: this.cm.findTargetReceiver.bind(this.cm, this.instancePath),
-            kickBall: this.cm.ballKicker.kick.bind(this.cm.ballKicker, this.instancePath),
-            catchBall: this.cm.ballKicker.accept.bind(this.cm.ballKicker, this.instancePath),
-            registerBalls: this.cm.listener.registerStandardBalls.bind(this.cm.listener, this.instancePath)
+            findParent: this.wm.findParent.bind(this.wm, this.instancePath),
+            findTargetByName: this.wm.findTargetByComponentName.bind(this.wm),
+            findBallReceiver: this.wm.findTargetReceiver.bind(this.wm, this.instancePath),
+            kickBall: this.wm.ballKicker.kick.bind(this.wm.ballKicker, this.instancePath),
+            catchBall: this.wm.ballKicker.accept.bind(this.wm.ballKicker, this.instancePath)
+            // registerBalls: this.wm.listener.registerStandardBalls.bind(this.wm.listener, this.instancePath)
           },
           overideProps,
           pluginProps

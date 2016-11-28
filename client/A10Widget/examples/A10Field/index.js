@@ -2,15 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { combineReducers } from 'redux-immutable';
+// import { combineReducers } from 'redux-immutable';
 import { Map } from 'immutable';
 
-import { reducers } from 'WidgetExport';
+import { reducer } from 'WidgetExport';
+// console.log(reducers);
 import { App, Code, Markdown, Values, generateExampleBreadcrumbs } from 'redux-form-website-template';
 
 const dest = document.getElementById('content');
 
-const reducer = combineReducers(reducers);
+// const reducer = combineReducers(reducers);
 const initialState = Map(); // eslint-disable-line ignore it
 
 const store =
@@ -55,23 +56,23 @@ let render = () => {
 if (module.hot) {
   // Support hot reloading of components
   // and display an overlay for runtime errors
-  const renderApp = render;
-  const renderError = (error) => {
-    const RedBox = require('redbox-react');
-    ReactDOM.render(
-      <RedBox error={error} className="redbox"/>,
-      dest
-    );
-  };
-
-  render = () => {
-    try {
-      renderApp();
-    } catch (error) {
-      renderError(error);
-    }
-  };
-
+  // const renderApp = render;
+  // const renderError = (error) => {
+  //   const RedBox = require('redbox-react');
+  //   ReactDOM.render(
+  //     <RedBox error={error} className="redbox"/>,
+  //     dest
+  //   );
+  // };
+  //
+  // render = () => {
+  //   try {
+  //     renderApp();
+  //   } catch (error) {
+  //     renderError(error);
+  //   }
+  // };
+  //
   const rerender = () => {
     setTimeout(render);
   };
