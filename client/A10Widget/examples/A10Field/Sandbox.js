@@ -66,7 +66,7 @@ export default class Sandbox extends React.Component {
             <NotEditableCom meta={metaWithEndpoint}/>
             <h3> Editable component </h3>
             <EditableCom meta={metaWithSchema} title="Port"/>
-            <EditableCom meta={noSchemaData} title="IP Address"/>
+            <EditableCom meta={noSchemaData} title="IP Address" validation={{ 'ipv6-address': () => 'error IPv6' }} />
             <EditableCom meta={objectSchema} title="Netmask" />
           </ContainerWidget>
 

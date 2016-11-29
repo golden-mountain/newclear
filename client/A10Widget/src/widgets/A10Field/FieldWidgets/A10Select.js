@@ -1,18 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { InputGroup } from 'react-bootstrap';
+import { values, get, isArray } from 'lodash';
+import VirtualizedSelect from 'react-virtualized-select';
 
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
 
-// Then import the virtualized Select HOC
-import VirtualizedSelect from 'react-virtualized-select';
-
 import A10Button from './A10Button';
-// import { widgetWrapper } from 'helpers/widgetWrapper';
 import { getPayload } from '../../../utils';
 
-import { values, get, isArray } from 'lodash';
 import { UPDATE_TARGET_DATA } from '../../../consts/messages';
 // import { COMPONENT_PAGE_SIZE } from 'configs/app';
 // import FieldConnector from 'helpers/FieldConnector';
@@ -28,11 +25,6 @@ export default class A10Select extends Component {
 
   newValue = ''
 
-  // constructor(props, context) {
-  //   super(props, context);
-  //   // console.log(this.context.props, this.props);
-  // }
-
   componentWillUpdate() {
     const { instancePath, catchBall, modelSetValue } = this.context.props;
     const { popupInfo={} } = this.props.widgetProps || {};
@@ -41,18 +33,8 @@ export default class A10Select extends Component {
       if (popupInfo.connectTo) {
         const value = get(body, popupInfo.connectTo);
         modelSetValue(value);
-        // console.log('triggled::::::::::::::::', body, value);
       }
-      // const { popupInfo: { connectOptions } } = this.props;
-      // console.log(params, connectOptions);
-      // const connect = (connectOptions, params) => {
-      //
-      // };
-      // const fieldConnector = new FieldConnector(connectOptions, this.props.form, this.context.props.env);
-      // console.log(connectOptions, from, to, params);
       this.getOptions();
-      // this.newValue = 'a1';
-      // fieldConnector.connectToValues(params);
     }, instancePath);
   }
 
@@ -102,34 +84,12 @@ export default class A10Select extends Component {
     }
   }
 
-  // getOnloadPopupOptions() {
-  //   const { popupInfo } = this.props;
-  //   let onLoad = get(popupInfo, 'connectOptions.onLoad');
-  //   if (!onLoad) {
-  //     onLoad = (value) => {
-  //       let formattedOptions = this.formatOptions(value);
-  //       let allOptions = this.state.options;
-  //       allOptions = allOptions.concat(formattedOptions);
-  //       this.setState( { options: allOptions });
-  //       return formattedOptions;
-  //     };
-  //   }
-  //   return onLoad;
-  // }
-
   componentWillMount() {
     const { loadOptions={} } = this.props.widgetProps || {};
     if ( loadOptions.loadOnMount ) {
       this.getOptions();
     }
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (!isEqual(nextProps.data, this.props.data )) {
-  //     const formattedOptions = this.formatOptions(nextProps.data);
-  //     this.setState( { options: formattedOptions });
-  //   }
-  // }
 
   render() {
     let { value, data, onChange, widgetProps={} } = this.props;

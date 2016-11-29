@@ -8,10 +8,10 @@ import { Map } from 'immutable';
 import ApiClient from 'utils/ApiClient';
 import createMiddleware from 'middlewares/clientMiddleware';
 
-export const createWidgetStore = (rootName, restReducers={}) => {
+export const createWidgetStore = (rootName, restReducers={}, restMiddleWares=[]) => {
   const client = new ApiClient();
   // removed logger() because it's nonesense
-  let middlewares = [ thunk,  createMiddleware(client) ];
+  let middlewares = [ thunk,  createMiddleware(client), ...restMiddleWares ];
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const appReducer = combineReducers( { [rootName] : reducer, ...restReducers } );
   const initialState = Map(); // eslint-disable-line ignore it

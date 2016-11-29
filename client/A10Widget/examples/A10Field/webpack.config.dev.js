@@ -7,10 +7,10 @@ module.exports = {
   // context: path.join(__dirname, '../../'),
   devtool: 'source-map',
   entry: [
+    'webpack-hot-middleware/client?reload=true',
     'bootstrap-loader',
     'babel-polyfill',
     // 'eventsource-polyfill', // necessary for hot reloading with IE
-    'webpack-hot-middleware/client',
     './index'
   ],
   output: {
@@ -22,6 +22,7 @@ module.exports = {
     // new webpack.optimize.OccurenceOrderPlugin(),
     new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
@@ -63,7 +64,10 @@ module.exports = {
             query: {
               cacheDirectory: true
             }
-          }
+          },
+          // {
+          //   loader: 'react-hot-loader'// trap: if put this line down to babel-loader, will cause
+          // },
         ]
       },
       {

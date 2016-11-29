@@ -35,6 +35,7 @@ import BallKicker from './BallKicker';
 // }
 
 export default class WidgetManager {
+  static widgetTree = null
 
   widgetTreeModel = new TreeModel()
 
@@ -42,11 +43,14 @@ export default class WidgetManager {
     this.dispatch = dispatch;
     this.ballKicker = new BallKicker();
     // this.listener = new WidgetListener(this.dispatch, this.ballKicker);
-    this.widgetTree = this.widgetTreeModel.parse({
-      id:'root',
-      instancePath: [ 'root', 'default' ],
-      children: []
-    });
+    if (!WidgetManager.widgetTree) {
+      WidgetManager.widgetTree = this.widgetTreeModel.parse({
+        id:'root',
+        instancePath: [ 'root', 'default' ],
+        children: []
+      });
+    }
+    this.widgetTree = WidgetManager.widgetTree;
   }
 
   getInstanceId(instancePath) {

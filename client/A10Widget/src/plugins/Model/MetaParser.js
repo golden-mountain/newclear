@@ -37,7 +37,7 @@ export default class MetaParser {
     } else if (typeof conditional === 'string') {
       conditional = { [ conditional ] : true };
     }
-
+    // console.log(conditional);
     return conditional || false;
   }
 

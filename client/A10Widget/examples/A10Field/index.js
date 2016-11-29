@@ -1,31 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { Provider } from 'react-redux';
-// import { createStore, applyMiddleware, compose  } from 'redux';
-// import { combineReducers } from 'redux-immutable';
-// import thunk from 'redux-thunk';
+import { Row, Col } from 'react-bootstrap';
 
-// import { Map } from 'immutable';
-import {  Code, Markdown, Values } from 'redux-form-website-template';
-
+import {  Code, Markdown } from 'redux-form-website-template';
 import { createWidgetStore } from 'WidgetExport';
 
-// import A10Widget Plugins
-// import ApiClient from 'utils/ApiClient';
-// import createMiddleware from 'middlewares/clientMiddleware';
-// const client = new ApiClient();
-// removed logger() because it's nonesense
-// let middlewares = [ thunk,  createMiddleware(client) ];
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-// const appReducer = combineReducers( { reducer } );
-// const initialState = Map(); // eslint-disable-line ignore it
-
-// const store = createStore(
-//   appReducer,
-//   initialState,
-//   composeEnhancers(applyMiddleware(...middlewares))
-// );
 
 const store = createWidgetStore('app');
 
@@ -38,23 +18,23 @@ let render = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <div>
+      <main>
+        <Row>
 
-        <Markdown content={readme}/>
+          <Markdown content={readme}/>
 
-        <h2>Form</h2>
+          <Col xs={7}>  <Sandbox /></Col>
 
-        <Sandbox />
+          <Col xs={5}>
+            <h2>Code</h2>
 
-        <Values form="simple"/>
+            <h4>Sandbox.js</h4>
 
-        <h2>Code</h2>
+            <Code source={raw}/>
+          </Col>
 
-        <h4>Sandbox.js</h4>
-
-        <Code source={raw}/>
-
-      </div>
+        </Row>
+      </main>
     </Provider>,
     dest
   );
@@ -84,6 +64,7 @@ if (module.hot) {
     setTimeout(render);
   };
 
+  module.hot.accept(rerender);
   module.hot.accept('./Sandbox', rerender);
   module.hot.accept('./Readme.md', rerender);
   module.hot.accept('!!raw!./Sandbox', rerender);

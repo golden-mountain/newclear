@@ -268,7 +268,7 @@ export default class Model {
     };
     // console.log(requests, '.............................');
     if (!requests.length) {
-      console.error('cannot PULL Data because this element ', this.instancePath, ' is not set endpoint');
+      console.error('Can not PULL Data because this element ', this.instancePath, ' is not set endpoint');
     } else {
       let validRequests = requests.filter((req) => {
         // TODO: unit test with cache data
