@@ -5,8 +5,8 @@ import thunk from 'redux-thunk';
 import { Map } from 'immutable';
 
 // import A10Widget Plugins
-import ApiClient from 'utils/ApiClient';
-import createMiddleware from 'middlewares/clientMiddleware';
+import ApiClient from './ApiClient';
+import createMiddleware from '../middlewares/clientMiddleware';
 
 export const createWidgetStore = (rootName, restReducers={}, restMiddleWares=[]) => {
   const client = new ApiClient();
