@@ -14,7 +14,7 @@ const dest = document.getElementById('content');
 let render = () => {
   const Sandbox = require('./Sandbox').default;
   const readme = require('./Readme.md');
-  const raw = require('!!raw!./Sandbox');
+  const raw = require('!!raw-loader!./Sandbox');
 
   ReactDOM.render(
     <Provider store={store}>
@@ -67,7 +67,7 @@ if (module.hot) {
   module.hot.accept(rerender);
   module.hot.accept('./Sandbox', rerender);
   module.hot.accept('./Readme.md', rerender);
-  module.hot.accept('!!raw!./Sandbox', rerender);
+  module.hot.accept('!!raw-loader!./Sandbox', rerender);
 }
 
 render();
