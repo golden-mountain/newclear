@@ -11,25 +11,14 @@
 
 // module.exports = reducers;
 
-import * as axapiActions from './axapi';
-import * as componentActions from './component';
-import * as featureActions from './feature';
-import * as formActions from './form';
 import * as pageActions from './page';
 import * as themeActions from './theme';
 
 
-delete axapiActions.default;
 delete pageActions.default;
 delete themeActions.default;
-delete featureActions.default;
-delete formActions.default;
-delete componentActions.default;
+
 const appActions = {
-  ...axapiActions,
-  ...componentActions,
-  ...featureActions,
-  ...formActions,
   ...pageActions,
   ...themeActions
 };

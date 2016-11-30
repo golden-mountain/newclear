@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 // const config = require ('../client/configs/app');
 
-const CONTENT_BASE = '../client';
+// const CONTENT_BASE = '../client';
 var base = require('./base');
 
 base.entry = {
@@ -85,10 +85,13 @@ base.plugins = base.plugins.concat([
 
 // base.devtool = 'source-map';
 base.devServer = {
-  contentBase: CONTENT_BASE,
+  // contentBase: CONTENT_BASE,
   noInfo: true,
   hot: true,
   inline: true,
+  stats: {
+    colors: true
+  },
   proxy: {
     '/axapi/*': {
       target: 'https://' + ( process.env.AXAPI_HOST || '192.168.105.196' ),

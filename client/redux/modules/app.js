@@ -1,6 +1,6 @@
 /** app reducer data structure **/
 /*
-APP  
+APP
   Theme
      Effective
     Layout
@@ -12,18 +12,10 @@ APP
 
 /* eslint-disable */
 import { Map, fromJS } from 'immutable';
-import axapiReducers from './app/axapi';
-import componentReducers from './app/component';
 import pageReducers from './app/page';
 import themeReducers from './app/theme';
-import featureReducers from './app/feature';
-// import formReducers from './app/form';
 
 const behaviors = {
-  ...axapiReducers,  
-  ...componentReducers,
-  ...featureReducers,
-  // ...formReducers,  
   ...pageReducers,
   ...themeReducers
 };

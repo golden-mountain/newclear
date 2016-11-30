@@ -1,11 +1,11 @@
 const webpack = require('webpack');
-const path = require('path');
+// const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const CONTENT_BASE = '../client';
+// const CONTENT_BASE = '../client';
 
 module.exports = {
-  context: path.join(__dirname, CONTENT_BASE),
+  // context: path.join(__dirname, CONTENT_BASE),
   module: {
     loaders: [
       {
@@ -22,7 +22,8 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        include: path.join(__dirname, CONTENT_BASE),
+        // include: path.join(__dirname, CONTENT_BASE),
+        exclude: /node_modules/,
         loaders: [
           {
             loader: 'babel-loader',
@@ -48,7 +49,9 @@ module.exports = {
   resolve: {
     extensions: [ '.js', '.jsx' ],
     modules: [
-      path.resolve('client'),
+      // path.resolve('client'),
+      'client',
+      'schemas',
       'node_modules'
     ]
   },
