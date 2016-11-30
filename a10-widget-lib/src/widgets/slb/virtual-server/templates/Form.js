@@ -1,13 +1,12 @@
 import React from 'react';
 import { Checkbox, Radio, Col, Row, Panel } from 'react-bootstrap';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-// import A10Field from 'components/Field';
-// import A10Form from 'components/Form/A10Form';
+import A10Field from 'components/Field';
+import A10Form from 'components/Form/A10Form';
 
-// import { widgetWrapper } from 'helpers/widgetWrapper';
-import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
+import { widgetWrapper } from 'helpers/widgetWrapper';
 
-import slbTemplateVirtualServerSchema from 'slb-template-virtual-server.json';
+import slbTemplateVirtualServerSchema from 'schemas/slb-template-virtual-server.json';
 
 class TemplateVirtualServerForm extends React.Component {
   static displayName = 'TemplateVirtualServerForm'

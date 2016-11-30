@@ -4,3 +4,4 @@ export * from './BallKicker';
 export * from './modules';
 export * from './widgets';
 export * from './utils';
+export * from './plugins';

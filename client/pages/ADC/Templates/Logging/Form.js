@@ -11,7 +11,7 @@ import BaseForm from 'pages/BaseForm';
 
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 
-import slbTemplateLoggingSchema from 'schemas/slb-template-logging.json';
+import slbTemplateLoggingSchema from 'slb-template-logging.json';
 
 
 class SlbTemplateLoggingForm extends BaseForm {

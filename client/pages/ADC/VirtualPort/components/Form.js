@@ -1,11 +1,12 @@
 import React from 'react';
 import { Col, Row, Panel, FormControl, Checkbox } from 'react-bootstrap';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-import A10Field from 'components/Field';
-import A10Form from 'components/Form/A10Form';
-import { widgetWrapper } from 'helpers/widgetWrapper';
+// import A10Field from 'components/Field';
+// import A10Form from 'components/Form/A10Form';
+// import { widgetWrapper } from 'helpers/widgetWrapper';
+import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
 
-import slbVirtualPortSchema from 'schemas/slb-virtual-service.json';
+import slbVirtualPortSchema from 'slb-virtual-service.json';
 
 class VirtualPort extends React.Component {
   static displayName = 'VirtualPort'

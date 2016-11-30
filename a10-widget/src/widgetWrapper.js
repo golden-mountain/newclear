@@ -4,7 +4,7 @@ import { uniqueId,  get, isArray, isEqual } from 'lodash';
 
 import { buildInstancePath } from './utils';
 import { devPlugins, prodPlugins } from './plugins';
-import WidgetManager from './WidgetManager';
+import { getWidgetManager } from './WidgetManager';
 
 // wrapper for widgets, add a wrapper to get state
 export const widgetWrapper = ReduxDataConnector => {
@@ -44,7 +44,7 @@ export const widgetWrapper = ReduxDataConnector => {
         super(props, context);
         this.plugins = [];
         this.registerPlugins();
-        this.wm = new WidgetManager(this.props.dispatch);
+        this.wm = getWidgetManager(this.props.dispatch);
 
         const {
           meta, value, schema, name, loadInitial,

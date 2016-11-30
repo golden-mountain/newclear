@@ -9,7 +9,7 @@ import { HIDE_COMPONENT_MODAL } from '../../../consts/messages';
 // const ModalLayout = require('oem/' + OEM + '/ModalLayout').default;
 import ModalLayout from '../../../layouts/ModalLayout';
 
-class A10Button extends Component {
+class _A10Button extends Component {
   static displayName = 'A10Button'
   static contextTypes = {
     props: PropTypes.object,
@@ -85,4 +85,4 @@ class A10Button extends Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(A10Button);
+export const A10Button = widgetWrapper([ 'app' ])(_A10Button);

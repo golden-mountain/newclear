@@ -1,15 +1,15 @@
 {
-  "name": "A10Widget",
+  "name": "a10-widget",
   "version": "0.0.1",
   "private": true,
   "description": "A10 GUI Widget Library",
   "author": "Zuoping Li",
-  "main": "./dist/A10Widget.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "better-npm-run build",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/A10Widget.js",
-    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/A10Widget.min.js",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/index.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/index.min.js",
     "clean": "rimraf dist lib",
     "example:A10Field": "node examples/A10Field/devServer.js",
     "prepublish": "npm run clean && npm run build",
@@ -173,13 +173,13 @@
     "README.md",
     "dist"
   ],
-  "npmName": "A10Widget",
+  "npmName": "a10-widget",
   "npmFileMap": [
     {
       "basePath": "/dist/",
       "files": [
         "*.js",
-        "*.js"
+        "*.css"
       ]
     }
   ]

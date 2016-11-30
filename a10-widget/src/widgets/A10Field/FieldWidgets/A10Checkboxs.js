@@ -3,7 +3,7 @@ import { FormGroup, Checkbox } from 'react-bootstrap';
 
 // import { widgetWrapper } from 'helpers/widgetWrapper';
 
-export default class A10Checkboxs extends Component {
+export class A10Checkboxs extends Component {
   static displayName = 'A10Checkboxs'
 
   render() {

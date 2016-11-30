@@ -77,9 +77,9 @@ var config = {
   ],
   output: {
     path: __dirname + '/dist',
-    filename: 'A10Widget.js',
+    filename: 'index.js',
     umdNamedDefine: true,
-    library: 'A10Widget',
+    library: 'a10-widget',
     libraryTarget: 'umd'
   },
   resolve: {

@@ -188,3 +188,13 @@ export default class WidgetManager {
   }
 
 }
+
+let wm = null;
+export const getWidgetManager = (dispatch) => {
+  if (!wm) {
+    return new WidgetManager(dispatch);
+  } else {
+    return wm;
+  }
+
+};

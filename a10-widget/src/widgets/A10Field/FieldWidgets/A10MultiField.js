@@ -4,8 +4,8 @@ import { Button, Table, Row, Col, InputGroup, FormControl, Pagination } from 're
 // import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { forEach, isObject, upperFirst } from 'lodash';
 
-import { widgetWrapper } from 'helpers/widgetWrapper';
-import A10Button from 'components/Field/A10Button';
+import { widgetWrapper } from '../../../widgetWrapper';
+import { A10Button } from './A10Button';
 // import { A10SchemaField } from 'components/Form/A10Field';
 
 class TableFields extends Component {
@@ -114,7 +114,7 @@ class TableFields extends Component {
 }
 
 
-class A10MultiField extends Component {
+class _A10MultiField extends Component {
   static displayName = 'A10MultiField'
 
   constructor(props, context) {
@@ -136,4 +136,4 @@ class A10MultiField extends Component {
   }
 }
 
-export default widgetWrapper()(A10MultiField);
+export const A10MultiField = widgetWrapper()(_A10MultiField);

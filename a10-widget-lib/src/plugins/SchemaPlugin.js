@@ -1,7 +1,8 @@
+export Schema from './Schema';
 import Schema from './Schema';
 import { get } from 'lodash';
 
-export default class SchemaPlugin {
+export class SchemaPlugin {
   _node = null
 
   onInitialize() {

@@ -3,7 +3,7 @@ import { FormGroup, Radio } from 'react-bootstrap';
 
 // import { widgetWrapper } from 'helpers/widgetWrapper';
 
-export default class A10Radios extends Component {
+export class A10Radios extends Component {
   static displayName = 'A10Radios'
 
   render() {

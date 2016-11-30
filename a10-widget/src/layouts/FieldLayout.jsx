@@ -12,14 +12,14 @@ import {
 
 class A10FieldLayout extends Component {
   render() {
-    const { label, schema, description, layout, required, meta: { touched, error }, children } = this.props;
-    let status = {}, errorMsg = '';
+    let { label, schema, description, layout, required, instanceData: { errorMsg }, children } = this.props;
+    let status = {};
 
-    if (touched && error) {
-      errorMsg = <HelpBlock className="error">{error}</HelpBlock>;
+    if (errorMsg) {
+      errorMsg = <HelpBlock className="error">{errorMsg}</HelpBlock>;
       status.validationState = 'error';
     }
-
+    // console.log(this.props);
     let defineDescription = '';
     description
     ? (defineDescription = description)
@@ -35,7 +35,7 @@ class A10FieldLayout extends Component {
         </Col>
       </FormGroup>
       :
-      <FormGroup bsClass="no-layout" {...status}>
+      <FormGroup bsClass="form-group" {...status}>
         {children}
         <FormControl.Feedback />
         {errorMsg}

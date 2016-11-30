@@ -9,9 +9,11 @@ import RootRouter from './routes';
 import reducer from './redux/modules/reducer';
 import { createDomElement } from 'helpers/dom';
 
-import { createWidgetStore } from 'A10Widget';
+import { createWidgetStore, registerWidgetPlugins } from 'a10-widget';
+// console.log(registerWidgetPlugins, createWidgetStore);
 
-// Immutable js
+import { SchemaPlugin } from 'a10-widget-lib';
+registerWidgetPlugins([ SchemaPlugin ]);
 import './index.ejs';
 
 // if not import here, found we can't dispatch things
@@ -19,26 +21,7 @@ import './index.ejs';
 import appActions from './redux/modules/app/index';
 window.appActions = appActions;
 
-// removed logger() because it's nonesense
-// let middlewares = [ thunk,  createMiddleware(client) ];
-
-//webpack define plugin defined env
 if (__DEV__) { // eslint-disable-line
-  // logger middleware
-  // const transformer = (state) => {
-  //   if (Iterable.isIterable(state)) return state.toJS();
-  //   else return state;
-  // };
-  // const logger = createLogger({
-  //   stateTransformer: transformer,
-  //   actionTransformer: transformer,
-  //   collapsed: true,
-  //   diff: true,
-  //   duration : true
-  // });
-
-  // middlewares.push(logger);
-
   installDevTools(Immutable);
 
   window.Perf = Perf;

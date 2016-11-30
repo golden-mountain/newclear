@@ -5,13 +5,14 @@ import Helmet from 'react-helmet';
 
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
-import JSONEditor from 'components/JSONEditor';
+// import JSONEditor from 'components/JSONEditor';
 
 import auth from 'helpers/auth';
-import { widgetWrapper } from 'helpers/widgetWrapper';
+// import { widgetWrapper } from 'helpers/widgetWrapper';
+import { A10Field, A10Form, A10JSONEditor, widgetWrapper } from 'a10-widget';
 
-import A10Field from 'components/Field';
-import A10Form from 'components/Form/A10Form';
+// import A10Field from 'components/Field';
+// import A10Form from 'components/Form/A10Form';
 
 const initialValues = {
   path: '/axapi/v3/auth',
@@ -123,7 +124,7 @@ class AxapiForm extends React.Component {
                     <Col componentClass={ControlLabel} sm={2}>Body</Col>
                     <Col sm={10}>
                       <A10Field className="form-control" name="body" >
-                        <JSONEditor />
+                        <A10JSONEditor />
                       </A10Field>
                     </Col>
                     <FormControl.Feedback />

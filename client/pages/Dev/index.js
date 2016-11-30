@@ -1,7 +1,7 @@
 // import React, { Component } from 'react';
 import ModuleBase from 'helpers/ModuleBase';
 import ApiTesterRouter from './ApiTester/Router';
-import SandboxRouter from './Sandbox/Router';
+// import SandboxRouter from './Sandbox/Router';
 
 
 class DevModule extends ModuleBase {
@@ -14,8 +14,8 @@ class DevModule extends ModuleBase {
   }
 
   routers = [
-    ApiTesterRouter,
-    SandboxRouter
+    ApiTesterRouter
+    // SandboxRouter
   ]
 }
 

@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { FormControl } from 'react-bootstrap';
-import A10Field from 'components/Field';
+import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
 // import A10SubmitButtons from 'components/Form/A10SubmitButtons';
-import A10Form from 'components/Form/A10Form';
+// import A10Form from 'components/Form/A10Form';
 import { required } from 'helpers/validations';
-import { widgetWrapper } from 'helpers/widgetWrapper';
+// import { widgetWrapper } from 'helpers/widgetWrapper';
 // import auth from 'helpers/auth';
 // import { getPayload } from 'helpers/axapiHelper';
 // import { UPDATE_TARGET_DATA } from 'configs/messages';

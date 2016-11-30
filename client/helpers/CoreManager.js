@@ -8,8 +8,8 @@ import { Redirect } from 'react-router';
 // import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'oem/PageLayout';
 // import { LAST_PAGE_KEY } from 'configs/appKeys';
-import { buildInstancePath } from 'helpers/actionHelper';
-import ComponentManager from 'helpers/ComponentManager';
+import { buildInstancePath, getWidgetManager } from 'a10-widget';
+// import ComponentManager from 'helpers/ComponentManager';
 // import A10Modal from 'components/Modal';
 import { REDIRECT_ROUTE } from 'configs/messages'; // eslint-disable-line
 
@@ -37,7 +37,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     constructor(props, context) {
       super(props, context);
       // console.log(props, this.context);
-      this.cm = new ComponentManager(this.props);
+      this.cm = getWidgetManager(this.props.dispatch);
       this.cm.registerComponent(pagePath);
     }
 
@@ -105,6 +105,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     () => {
       return {
         pagePath,
+        instancePath: pagePath,
         env: config // valid on context
       };
     },

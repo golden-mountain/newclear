@@ -10,7 +10,7 @@ export default class Schema {
       // require js
       try {
         const schemas = schema.split('.');
-        schema = require('schemas/' + schemas[0] + '.json');
+        schema = require(schemas[0] + '.json');
         const getSchema = (objectSchema, schemas) => {
           const currentNode = schemas[0];
           if (objectSchema.properties[currentNode]) {

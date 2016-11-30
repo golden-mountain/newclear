@@ -15,7 +15,7 @@ import { UPDATE_TARGET_DATA } from '../../../consts/messages';
 // import FieldConnector from 'helpers/FieldConnector';
 const COMPONENT_PAGE_SIZE = 25;
 
-export default class A10Select extends Component {
+export class A10Select extends Component {
   static displayName = 'A10Select'
 
   static contextTypes = {

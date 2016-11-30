@@ -13,10 +13,10 @@ export let prodPlugins = [
 
 
 // need register plugin at initialize level
-export const registerWidgetPlugin = (pluginClass, dev=false) => { // eslint-disable-line
+export const registerWidgetPlugins = (pluginClass, dev=false) => { // eslint-disable-line
   if (dev) {
-    devPlugins.push(pluginClass);
+    devPlugins.concat(pluginClass);
   } else {
-    prodPlugins.push(pluginClass);
+    prodPlugins.concat(pluginClass);
   }
 };
