@@ -1,10 +1,10 @@
 {
-  "name": "a10-gui-widget",
+  "name": "a10Widget",
   "version": "0.0.1",
   "private": true,
   "description": "A10 GUI Widget Library",
   "author": "Zuoping Li",
-  "main": "./lib/index.js",
+  "main": "./dist/A10Widget.js",
   "scripts": {
     "build": "better-npm-run build",
     "build:lib": "babel src --out-dir lib",
@@ -23,13 +23,6 @@
       "command": "webpack-dev-server --config webpack/webpack.config.js --history-api-fallback --inline --hot --progress --port 3000",
       "env": {
         "NODE_ENV": "development"
-      }
-    },
-    "start-dev-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_ENV": "development",
-        "APIPORT": 3030
       }
     },
     "build": {
@@ -180,11 +173,12 @@
     "README.md",
     "dist"
   ],
-  "npmName": "a10-gui-widget",
+  "npmName": "a10Widget",
   "npmFileMap": [
     {
       "basePath": "/dist/",
       "files": [
+        "*.js",
         "*.js"
       ]
     }
