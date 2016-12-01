@@ -7,7 +7,35 @@ import NotEditableCom from './components/NotEditableCom';
 import EditableCom from './components/EditableCom';
 import FieldCheckbox from './components/FieldCheckbox';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext as dragDropContext } from 'react-dnd'; 
 
+import jsonToReactComponent from '../../../src/plugins/Editable/jsonToReactComponent';
+
+const reactSchema = {
+  componentId: 'root',
+  component: 'Form',
+  className: 'form-horizontal',
+  style: {
+    minHeight: 100
+  },
+  componentChildren: [
+    {
+      componentId: 'exampleA',
+      component: 'Button',
+      bsStyle: 'primary',
+      componentChildren: 'OK'
+    },
+    {
+      componentId: 'exampleB',
+      component: 'Button',
+      bsStyle: 'danger',
+      componentChildren: 'Cancel'
+    }
+  ]
+};
+
+@dragDropContext(HTML5Backend)
 export default class Sandbox extends React.Component {
   render() {
     // console.log('test');
@@ -79,6 +107,10 @@ export default class Sandbox extends React.Component {
             <EditableCom name="virtual-server.netmask" conditional={{ 'x.ipAddressType': false }} title="Netmask" />
             <EditableCom name="virtual-server.ipv6-address" conditional={{ 'x.ipAddressType': true }}  title="IPv6 Address"/>
           </ContainerWidget>
+
+          {
+            jsonToReactComponent(reactSchema, true)
+          }
         </Col>
       </Row>
     );

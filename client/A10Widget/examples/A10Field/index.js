@@ -6,7 +6,6 @@ import { Row, Col } from 'react-bootstrap';
 import {  Code, Markdown } from 'redux-form-website-template';
 import { createWidgetStore } from 'WidgetExport';
 
-
 const store = createWidgetStore('app');
 
 const dest = document.getElementById('content');
