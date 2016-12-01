@@ -7,11 +7,11 @@ const pageWrapper = (Page) => {
     static contextTypes = {
       props: PropTypes.object,
       // context: PropTypes.object,
-      cm: PropTypes.object
+      wm: PropTypes.object
     }
 
     // componentWillUnmount() {
-    //   this.context.cm.ballKicker.removeEvent(this.basePath);
+    //   this.context.wm.ballKicker.removeEvent(this.basePath);
     //   this.context.props.unmountComponent(this.context.props.pagePath);
     // }
 

@@ -2,6 +2,7 @@ import ModelPlugin from './ModelPlugin';
 
 // dev plugins: works under __DEV__ is true
 import EditablePropsInjector from './Editable';
+import ActionPropsInjector from './ActionPropsInjector';
 
 export class WidgetPlugin {
   static devPlugins =  [
@@ -9,7 +10,8 @@ export class WidgetPlugin {
   ]
 
   static prodPlugins = [
-    ModelPlugin
+    ModelPlugin,
+    ActionPropsInjector
   ]
 }
 

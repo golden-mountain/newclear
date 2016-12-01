@@ -21,7 +21,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
   class Core extends React.Component {
     static childContextTypes = {
       props: PropTypes.object,
-      cm: PropTypes.object
+      wm: PropTypes.object
     }
 
     static contextTypes = {
@@ -33,21 +33,21 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
       params: {}
     }
 
-    //cm == component manager
+    //wm == component manager
     constructor(props, context) {
       super(props, context);
       // console.log(props, this.context);
-      this.cm = getWidgetManager(this.props.dispatch);
-      this.cm.registerComponent(pagePath);
+      this.wm = getWidgetManager(this.props.dispatch);
+      this.wm.registerComponent(pagePath);
     }
 
     getChildContext() {
-      return {  props: Object.assign({}, this.props, WrappedProps ), cm: this.cm };
+      return {  props: Object.assign({}, this.props, WrappedProps ), wm: this.wm };
     }
 
     componentWillMount() {
       this.props.registerCurrentPage(Object.assign({}, this.props.env));
-      this.cm.ballKicker.accept([], REDIRECT_ROUTE, (from, to, pathParams) => { // eslint-disable-line
+      this.wm.ballKicker.accept([], REDIRECT_ROUTE, (from, to, pathParams) => { // eslint-disable-line
         // console.log(from, to, pathParams);
         let path='', params={};
         if (typeof pathParams === 'string') {
@@ -76,7 +76,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     componentWillUnmount() {
       // this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
       this.props.destroyPage();
-      this.cm.ballKicker.removeEvent(pagePath);
+      this.wm.ballKicker.removeEvent(pagePath);
       this.props.unmountComponent(pagePath);
     }
 

@@ -3,8 +3,8 @@ import React from 'react';
 import { FormControl } from 'react-bootstrap';
 import { get, isEqual } from 'lodash';
 
-import A10Select from './A10Select';
-import A10Radios from './A10Radios';
+import { A10Select } from './A10Select';
+import { A10Radios } from './A10Radios';
 // import A10Checkboxs from './A10Checkboxs';
 // import A10Button from './A10Button';
 // import A10MultiField from './A10MultiField';
@@ -47,6 +47,7 @@ export default class AutoField {
       'default': 'value'
     };
 
+    // console.log(A10Select, A10Radios);
     const fieldTypeMaps = [
       {
         com: A10Select,
@@ -99,8 +100,8 @@ export default class AutoField {
     let ComponentClass = FormControl, elementProps = {};
     for (let index in fieldTypeMaps) {
       const { com, depend: { rule, prop, ruleParam }, attrs,  ...rest } = fieldTypeMaps[index];
-
       if (rule(prop, ruleParam)) {
+        // console.log('........', prop, ruleParam, '..................');
         ComponentClass = com;
         elementProps = Object.assign({}, rest, mapAttrs(attrs));
         break;
@@ -108,7 +109,6 @@ export default class AutoField {
     }
 
     const mergedProps = Object.assign({}, elementProps, validProps);
-    // console.log(ComponentClass.displayName, mergedProps);
     return (<ComponentClass {...mergedProps} />);
   }
 }

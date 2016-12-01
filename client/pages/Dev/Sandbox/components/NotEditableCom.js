@@ -7,14 +7,14 @@ import { widgetWrapper } from 'helpers/widgetWrapper';
 class NotEditableCom extends React.Component {
   static displayName = 'NotEditableCom'
   static contextTypes = {
-    cm: PropTypes.object
+    wm: PropTypes.object
   }
 
   click(event) {
     event.preventDefault();
     console.log('clicking... set ip address to ::9999');
     this.props.modelHold('::9999');
-    // this.context.cm.printComponentTree(true);
+    // this.context.wm.printComponentTree(true);
 
     // const meta = this.props.modelGetMeta();
     // const model = this.props.modelGetModel();

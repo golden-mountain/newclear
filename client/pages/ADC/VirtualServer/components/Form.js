@@ -16,7 +16,7 @@ import { A10Field, A10MultiField, A10Form, widgetWrapper } from 'a10-widget';
 // console.log(A10Field, A10MultiField, A10Form);
 // import * as logger from 'helpers/logger';
 import { isInt } from 'helpers/validations';
-// import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
+import slbVirtualServerSchema from 'slb-virtual-server.json';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
 import TemplateVirtualServerForm from 'pages/ADC/Templates/VirtualServer/components/Form';
@@ -123,7 +123,7 @@ class VirtualServerForm extends React.Component {
     // };
 
     return (
-      <A10Form schema='slb-virtual-server' redirect={{ path: 'list' }} horizontal>
+      <A10Form schema={slbVirtualServerSchema} redirect={{ path: 'list' }} horizontal>
         <Row>
           <Col xs={12} md={12} lg={6}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>

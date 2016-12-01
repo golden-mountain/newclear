@@ -22,7 +22,7 @@ class AppLayout extends Component {
 
   static contextTypes = {
     props: PropTypes.object.isRequired,
-    cm: PropTypes.object.isRequired
+    wm: PropTypes.object.isRequired
   }
 
   state = {
@@ -32,7 +32,7 @@ class AppLayout extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.context.cm.ballKicker.accept([], HIDE_COMPONENT_MODAL, (from, to, params) => { //eslint-disable-line
+    this.context.wm.ballKicker.accept([], HIDE_COMPONENT_MODAL, (from, to, params) => { //eslint-disable-line
       this.setState({ showLogin: false });
     }, [ 'app', 'default', 'modal', 'instance' ]);
   }

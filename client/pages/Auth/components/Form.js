@@ -12,7 +12,7 @@ import { required } from 'helpers/validations';
 class LoginForm extends React.Component {
   static contextTypes = {
     props: PropTypes.object.isRequired,
-    cm: PropTypes.object.isRequired
+    wm: PropTypes.object.isRequired
   }
 
   static displayName = 'LoginForm'

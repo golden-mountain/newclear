@@ -7,7 +7,7 @@ import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
 
-import A10Button from './A10Button';
+import { A10Button } from './A10Button';
 import { getPayload } from '../../../utils';
 
 import { UPDATE_TARGET_DATA } from '../../../consts/messages';
@@ -71,6 +71,7 @@ export class A10Select extends Component {
   }
 
   getOptions() {
+    console.log(this.context.props);
     const { loadOptions={} } = this.props.widgetProps || {};
     let url = loadOptions.url;
     if (!url) {

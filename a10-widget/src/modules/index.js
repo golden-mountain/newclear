@@ -1,8 +1,8 @@
 
 export actionTypes from './actionTypes';
 import { Map } from 'immutable';
-import apiReducers, { apiActions } from './api';
-import widgetReducers, { widgetActions } from './widget';
+import apiReducers, * as apiActions from './api';
+import widgetReducers, * as widgetActions  from './widget';
 
 // const behaviors = ;
 const createReducer = (behaviors) => {
@@ -16,4 +16,8 @@ const createReducer = (behaviors) => {
 };
 
 export const reducer = createReducer({ ...apiReducers, ...widgetReducers });
+// const { default, ...apiActions } = apiModule; // eslint-disable-line
+// const { default, ...widgetActions } = widgetModule; // eslint-disable-line
+delete apiActions.default;
+delete widgetActions.default;
 export const actions = { ...apiActions, ...widgetActions };
