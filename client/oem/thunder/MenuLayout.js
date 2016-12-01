@@ -72,17 +72,14 @@ export default class MenuLayout extends React.Component {
 
   toggleItemCollapse(stateName) {
     // var newCollapseState = {};
-    for (let c in this.state.collapse) {
-      if (this.state.collapse[c] === true && c !== stateName) {
-        this.state.collapse[c] = false;
-      }
-    }
+    let collapse = Object.assign({}, this.state.collapse);
+
+    collapse[stateName] = !collapse[stateName];
 
     this.setState({
-      collapse: {
-        [ stateName ]: !this.state.collapse[ stateName ]
-      }
+      collapse
     });
+
   }
 
   generateMenu(menus, prefix='root') {

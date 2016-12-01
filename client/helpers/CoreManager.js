@@ -77,7 +77,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
       // this.props.setPageVisible(this.props.env.page, false, this.props.pageId);
       this.props.destroyPage();
       this.cm.ballKicker.removeEvent(pagePath);
-      this.props.unmountComponent(pagePath);
+      // this.props.unmountComponent(pagePath);
     }
 
     render() {
