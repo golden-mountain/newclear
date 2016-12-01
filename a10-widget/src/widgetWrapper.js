@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { uniqueId,  get, isArray, isEqual } from 'lodash';
 
 import { buildInstancePath } from './utils';
-import { devPlugins, prodPlugins } from './plugins';
+import { WidgetPlugin } from './plugins';
 import { getWidgetManager } from './WidgetManager';
 
 // wrapper for widgets, add a wrapper to get state
@@ -20,11 +20,7 @@ export const widgetWrapper = ReduxDataConnector => {
       static displayName = displayName
 
       static propTypes = {
-
       }
-
-      static devPlugins = devPlugins
-      static prodPlugins = prodPlugins
 
       static contextTypes = {
         props: PropTypes.object,
@@ -73,14 +69,14 @@ export const widgetWrapper = ReduxDataConnector => {
 
       registerPlugins() {
         if (__DEV__) { // eslint-disable-line
-          this.plugins = Widget.devPlugins.map((Plugin) => {
+          this.plugins = WidgetPlugin.devPlugins.map((Plugin) => {
             if (Plugin.name) {
               return new Plugin();
             }
           });
         }
 
-        this.plugins = this.plugins.concat(Widget.prodPlugins.map((Plugin) => {
+        this.plugins = this.plugins.concat(WidgetPlugin.prodPlugins.map((Plugin) => {
           if (Plugin && Plugin.name) {
             return new Plugin();
           }

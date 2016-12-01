@@ -13,11 +13,21 @@ export class SchemaPlugin {
       this._node.model.schemaParser = new Schema(this._node.model.meta.schema);
     } else {
       // find parent schema parser
-      this._node.model.schemaParser = this._getParentSchemaParser(this._node);
+      const _getParentSchemaParser = (node) => {
+        if (node.parent && node.parent.model.schemaParser) {
+          return node.parent.model.schemaParser;
+        } else if (node.parent) {
+          return _getParentSchemaParser(node.parent);
+        } else {
+          return null;
+        }
+      };
+
+      this._node.model.schemaParser = _getParentSchemaParser(this._node);
     }
 
-    if (this._node.model.schemaParser) {
-      const conditional = this._node.model.schemaParser.getConditional(this._node.meta.meta.name);
+    if (this._node.model.schemaParser && this._node.model.meta.name) {
+      const conditional = this._node.model.schemaParser.getConditional(this._node.model.meta.name);
       // console.log(this.meta.name, conditional);
       if (conditional) {
         this._node.model.meta.conditional = conditional;
@@ -27,17 +37,9 @@ export class SchemaPlugin {
       this._node.model.meta.validation = validation;
     }
 
+    // console.log(this._node.model);
   }
 
-  _getParentSchemaParser(node) {
-    if (node.parent && node.parent.model.schemaParser) {
-      return node.parent.model.schemaParser;
-    } else if (node.parent) {
-      return this._getParentSchemaParser(node.parent);
-    } else {
-      return null;
-    }
-  }
 
   onBeforeSetProps(previousProps) {
     // console.log('executed before set props at ModelPlugin', previousProps);
