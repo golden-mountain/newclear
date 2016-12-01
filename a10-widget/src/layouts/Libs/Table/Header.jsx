@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap';
 
-import A10Button from '../../../widgets/A10Field/FieldWidgets/A10Button';
+import { A10Button } from '../../../widgets/A10Field/FieldWidgets/A10Button';
 
 class TableHeader extends Component {
   render() {

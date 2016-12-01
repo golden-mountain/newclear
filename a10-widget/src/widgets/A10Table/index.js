@@ -14,7 +14,7 @@ import TableLayout from '../../layouts/TableLayout';
 export class A10TableColumn extends React.Component {}
 
 const COMPONENT_PAGE_SIZE = 25;
-class A10Table extends React.Component {
+class _A10Table extends React.Component {
   static displayName = 'A10Table'
 
   state = {
@@ -158,4 +158,4 @@ class A10Table extends React.Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(A10Table);
+export const A10Table = widgetWrapper([ 'app' ])(_A10Table);
