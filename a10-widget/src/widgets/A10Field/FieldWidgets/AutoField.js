@@ -101,7 +101,6 @@ export default class AutoField {
     for (let index in fieldTypeMaps) {
       const { com, depend: { rule, prop, ruleParam }, attrs,  ...rest } = fieldTypeMaps[index];
       if (rule(prop, ruleParam)) {
-        // console.log('........', prop, ruleParam, '..................');
         ComponentClass = com;
         elementProps = Object.assign({}, rest, mapAttrs(attrs));
         break;
@@ -109,6 +108,12 @@ export default class AutoField {
     }
 
     const mergedProps = Object.assign({}, elementProps, validProps);
+
+    // patch : Warning: FormControl is changing an uncontrolled input of type
+    if (mergedProps.value === undefined) {
+      mergedProps.value = '';
+    }
+
     return (<ComponentClass {...mergedProps} />);
   }
 }

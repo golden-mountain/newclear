@@ -1,22 +1,6 @@
-# Reactjs based AX GUI Framework
-## TODO:
-1. Follow airbnb as eslint rules
+# Pure widgets
 
-## DEV START COMMAND
-Startup and switch AXAPI HOST:
-AXAPI_HOST=192.168.105.196 npm start
+This library not concerns of A10 business, we can use it anywhere , even not at A10 projects
 
-## Recommend install Chrome plugins
-1. Immutable.js Object Formatter , see http://www.mattzeunert.com/2016/02/19/custom-chrome-devtools-object-formatters.html
-2. LiveReload
-3. React Developer Tools
-4. Redux DevTools
-5. React Perf https://github.com/crysislinux/chrome-react-perf
+The library contains general widgets like A10Select, A10Button, A10Table something
 
-## Module Manager
-- Module Visible: license, oem
-- Page switch: transition
-
-
-# Editable schema
-Each component if with schema props, will register to schema field

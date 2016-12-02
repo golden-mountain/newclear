@@ -1,20 +1,8 @@
 import React from 'react';
-// import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
-// import { isEqual } from 'lodash';
-// import { fromJS } from 'immutable';
-// import { SubmissionError } from 'redux-form';
-// import A10Button from 'components/Form/A10Button';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
-// import A10Field from 'components/Field';
-// import A10Form from 'components/Form/A10Form';
-// import A10MultiField from 'components/Field/A10MultiField';
-// import FormManager from 'helpers/FormManager';
-// import BaseForm from 'pages/BaseForm';
-// import { widgetWrapper } from 'helpers/widgetWrapper';
+
 import { A10Field, A10MultiField, A10Form, widgetWrapper } from 'a10-widget';
-// console.log(A10Field, A10MultiField, A10Form);
-// import * as logger from 'helpers/logger';
 import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'slb-virtual-server.json';
 
@@ -32,26 +20,7 @@ class VirtualServerForm extends React.Component {
   static displayName = 'VirtualServerForm'
 
 
-  // handleSubmit(v) {
-  //   let values = fromJS(v);
-  //   const pathWildcard = [ 'x', 'virtual-server','wildcard' ];
-  //   if (values.hasIn(pathWildcard) && values.getIn(pathWildcard) === true
-  //      && values.getIn([ 'x', 'virtual-server', 'address-type' ]) === '0') {
-  //     return {
-  //       'virtual-server': {
-  //         'ip-address': '0.0.0.0',
-  //         'netmask': '/24'
-  //       }
-  //     };
-  //   }
-  //
-  //   return {};
-  // }
-
   render() {
-    // const { handleSubmit,  ...rest } = this.props; // eslint-disable-line
-    // const elements = slbVirtualServerSchema.properties;
-    // console.log(TemplateVirtualServerForm);
 
     const tplVirtualServerPopupInfo = {
       componentClass: TemplateVirtualServerForm,

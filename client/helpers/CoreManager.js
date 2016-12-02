@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { mapValues } from 'lodash';
 // import { reduxForm } from 'redux-form/immutable'; // imported Field
 import { Redirect } from 'react-router';
+import appActions from '../redux/modules/app/index';
+import { actions } from 'a10-widget';
 
 // import { getAxapiResponse, getPageVar, getAxapiUid } from 'helpers/stateHelper';
 // import PageLayout from 'oem/PageLayout';
@@ -99,7 +101,7 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
   // }
 
   const bindPageInstance = actionCreator => actionCreator.bind(null, pagePath);
-  const boundAppAcs = mapValues(window.appActions, bindPageInstance);
+  const boundAppAcs = mapValues({ ...appActions, ...actions }, bindPageInstance);
 
   let page = connect(
     () => {

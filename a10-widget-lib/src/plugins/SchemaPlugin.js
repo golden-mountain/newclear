@@ -27,14 +27,18 @@ export class SchemaPlugin {
     }
 
     if (this._node.model.schemaParser && this._node.model.meta.name) {
-      const conditional = this._node.model.schemaParser.getConditional(this._node.model.meta.name);
-      // console.log(this.meta.name, conditional);
-      if (conditional) {
-        this._node.model.meta.conditional = conditional;
+      if (!this._node.model.meta.conditional) {
+        const conditional = this._node.model.schemaParser.getConditional(this._node.model.meta.name);
+        // console.log(this.meta.name, conditional);
+        if (conditional) {
+          this._node.model.meta.conditional = conditional;
+        }        
       }
-
-      const validation = this._node.model.schemaParser.getValidations(name);
-      this._node.model.meta.validation = validation;
+      
+      if (!this._node.model.meta.validation) {
+        const validation = this._node.model.schemaParser.getValidations(name);
+        this._node.model.meta.validation = validation;
+      }
     }
 
     // console.log(this._node.model);

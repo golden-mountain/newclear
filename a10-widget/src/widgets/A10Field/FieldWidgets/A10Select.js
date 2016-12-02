@@ -71,7 +71,7 @@ export class A10Select extends Component {
   }
 
   getOptions() {
-    console.log(this.context.props);
+    // console.log(this.context.props);
     const { loadOptions={} } = this.props.widgetProps || {};
     let url = loadOptions.url;
     if (!url) {

@@ -73,7 +73,12 @@ export default class Schema {
   getConditional(fieldName) {
     const conditional = this._getFieldProp(fieldName, 'condition', '');
     if (conditional) {
-      return { [ this._rebuildFieldName(fieldName, conditional) ] : true };
+      // try see if conditional object exists
+      if (this._getFieldProp(conditional, 'type', '') === 'dummy') {
+        return false;
+      } else {
+        return { [ this._rebuildFieldName(fieldName, conditional) ] : true };
+      }      
     } else {
       return false;
     }
