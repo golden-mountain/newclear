@@ -198,14 +198,14 @@ export const widgetWrapper = ReduxDataConnector => {
         return this.executePluginMethod('onBeforeUpdate', nextProps, nextState) || true;
       }
 
-      shouldComponentUpdate(nextProps, nextState) {
-        let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
-        if (result) {
-          result = this.checkWidgetDataUpdate(nextProps);
-        }
-        // console.log(result, this.instancePath);
-        return result;
-      }
+      // shouldComponentUpdate(nextProps, nextState) {
+      //   let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+      //   if (result) {
+      //     result = this.checkWidgetDataUpdate(nextProps);
+      //   }
+      //   // console.log(result, this.instancePath);
+      //   return result;
+      // }
 
       checkWidgetDataUpdate(nextProps) {
         if (!nextProps || !nextProps.app) {

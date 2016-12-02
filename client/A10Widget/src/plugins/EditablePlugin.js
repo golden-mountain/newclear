@@ -1,4 +1,4 @@
-import connectToWrap from './Editable';
+// import connectToWrap from './Editable';
 
 export default class EditablePlugin {
   onInitialize() {
@@ -12,7 +12,8 @@ export default class EditablePlugin {
   onRender(props, args) {
     // return connectToWrap()(originComponent);
     const originComponent = args ? args[0] : null;
-    return connectToWrap()(originComponent);
+    // return connectToWrap()(originComponent);
+    return originComponent;
   }
 
   onUnmount() {
