@@ -23,7 +23,7 @@ module.exports = {
     new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin({ filename: 'A10Widget.css',  allChunks: true }),
+    new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')
     }),
