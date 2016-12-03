@@ -3,7 +3,7 @@ import { FormControl } from 'react-bootstrap';
 import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
 // import A10SubmitButtons from 'components/Form/A10SubmitButtons';
 // import A10Form from 'components/Form/A10Form';
-import { required } from 'helpers/validations';
+import { required } from 'a10-widget-lib';
 // import { widgetWrapper } from 'helpers/widgetWrapper';
 // import auth from 'helpers/auth';
 // import { getPayload } from 'helpers/axapiHelper';

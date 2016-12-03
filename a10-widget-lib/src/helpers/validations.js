@@ -30,7 +30,7 @@ export const netmask = (value) => {
 
 const createValidFunc = (defaultValue, func) => (value) => func.call(null, value, defaultValue);
 
-const createValidationFuncs = (schema) => {
+export const createValidationFuncs = (schema) => {
   const validationFuncs = { 
     'required': createValidFunc(null, required),
     'object-key': createValidFunc(null, required),

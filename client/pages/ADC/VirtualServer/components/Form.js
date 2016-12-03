@@ -3,7 +3,7 @@ import { Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
 import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 
 import { A10Field, A10MultiField, A10Form, widgetWrapper } from 'a10-widget';
-import { isInt } from 'helpers/validations';
+// import { isInt } from 'helpers/validations';
 import slbVirtualServerSchema from 'slb-virtual-server.json';
 
 import VirtualPortForm from 'pages/ADC/VirtualPort/components/Form';
@@ -155,7 +155,7 @@ class VirtualServerForm extends React.Component {
           <Col xs={12} md={12} lg={6}>
             <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
               <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} >
-                <A10Field layout={false} name="port-number" validation={{ isInt: isInt }} title="Port Number" />
+                <A10Field layout={false} name="port-number"  title="Port Number" />
                 <A10Field layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
 
                 <A10Field layout={false} name="protocol" title="Protocol" >

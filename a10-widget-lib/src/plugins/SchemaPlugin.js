@@ -36,7 +36,7 @@ export class SchemaPlugin {
       }
       
       if (!this._node.model.meta.validation) {
-        const validation = this._node.model.schemaParser.getValidations(name);
+        const validation = this._node.model.schemaParser.getValidations(this._node.model.meta.name);
         this._node.model.meta.validation = validation;
       }
     }
