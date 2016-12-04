@@ -1,39 +1,52 @@
 
 import _ from 'lodash';
 
+import { basicField, innerField } from '../templates/field';
 
-class ConvertForm {
 
-  constructor(schema, domain, name, options) {
-    this.schema = schema;
+class ConvertField {
+
+  constructor(schemaAnalysis, domain, name, options) {
+    this.schemaAnalysis = schemaAnalysis;
     this.domain = domain;
     this.name = name;
     this.options = options;
   }
 
-  attributeName() {
-    return `name="${this.domain}.${this.name}"`;
-  }
-
-  attributeValue() {
-    return `value="${this.options.default}"`;
-  }
-
-  attributeLabel() {
-    return `label="${_.startCase(this.name)}"`;
-  }
-
-  attributeConditional() {
-    return `conditional={{ '${this.name}': false }}`;
+  jsonToAttribute(attributes) {
+    var attr = [];
+    // _.forEach(attributes, (value, key) => {
+    //   attr.push(`${key}="${value}"`);
+    // });
+    attributes.name && attr.push(`name="${attributes.name}"`);
+    attributes.label && attr.push(`name="${attributes.label}"`);
+    attributes.value && attr.push(`name="${attributes.value}"`);
+    return attr;
   }
 
   attributes() {
-    let attributes = [ this.attributeName(), this.attributeLabel() ];
+    let attributes = {
+      name: `${this.domain}.${this.name}`,
+      label: _.startCase(this.name)
+    };
 
-    this.options.default && attributes.push(this.attributeValue());
-    this.options.conditional && attributes.push(this.attributeConditional());
+    this.options.default
+    && (attributes.value = this.options.default);
 
-    return _.join(attributes, ' ');
+    this.options.conditional
+    && (attributes.conditional = this.options.conditional);
+
+    this.options.enumMap
+    && (() => {
+      attributes.options = {};
+      this.options.enumMap.map((options) => {
+        _.forEach(options, (value, key) => {
+          value = value.replace(/\"/, '');
+          attributes.options[key] = value;
+        });
+      });
+    })();
+    return attributes;
   }
 
   childRadio() {
@@ -44,15 +57,32 @@ class ConvertForm {
 
   }
 
-  template() {
-    const attributes = this.attributes();
+  gen() {
+    this.isGen = true;
+    this.fieldSchema = this.attributes();
+    const attributes = _.join(this.jsonToAttribute(this.fieldSchema), ' ');
+    if (this.fieldSchema.options) {
+      this.schemaAnalysis.setFormControlOption();
+      this.fieldTemplate = innerField(attributes, this.fieldSchema.options);
+    } else {
+      this.fieldTemplate = basicField(attributes);
+    }
 
-    return `<A10Field ${attributes} />`;
   }
 
-  render() {
-    return this.template();
+  template() {
+    if (!this.isGen) {
+      this.gen();
+    }
+    return this.fieldTemplate;
+  }
+
+  toJson() {
+    if (!this.isGen) {
+      this.gen();
+    }
+    return this.fieldSchema;
   }
 }
 
-export default ConvertForm;
+export default ConvertField;

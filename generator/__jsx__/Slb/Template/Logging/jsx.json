@@ -1,0 +1,63 @@
+[
+    {
+        "name": "logging.name",
+        "label": "Name"
+    },
+    {
+        "name": "logging.format",
+        "label": "Format"
+    },
+    {
+        "name": "logging.local-logging",
+        "label": "Local Logging",
+        "value": "0"
+    },
+    {
+        "name": "logging.service-group",
+        "label": "Service Group"
+    },
+    {
+        "name": "logging.pcre-mask",
+        "label": "Pcre Mask"
+    },
+    {
+        "name": "logging.mask",
+        "label": "Mask",
+        "value": "X"
+    },
+    {
+        "name": "logging.keep-end",
+        "label": "Keep End",
+        "value": "0"
+    },
+    {
+        "name": "logging.keep-start",
+        "label": "Keep Start",
+        "value": "0"
+    },
+    {
+        "name": "logging.template",
+        "label": "Template"
+    },
+    {
+        "name": "logging.tcp-proxy",
+        "label": "Tcp Proxy",
+        "value": "default"
+    },
+    {
+        "name": "logging.source-nat",
+        "label": "Source Nat"
+    },
+    {
+        "name": "logging.pool",
+        "label": "Pool"
+    },
+    {
+        "name": "logging.auto",
+        "label": "Auto",
+        "value": "auto",
+        "options": {
+            "auto": "Configure auto NAT for logging, default is auto enabled"
+        }
+    }
+]

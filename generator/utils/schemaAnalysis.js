@@ -7,6 +7,7 @@ class SchemaAnalysis {
   constructor(schemaName, schema) {
     this.schemaName = schemaName;
     this.schema = schema;
+    this.options = {};
     this.fields = [];
   }
 
@@ -41,6 +42,10 @@ class SchemaAnalysis {
     console.log('conditionalSchema ----------------->', conditionalSchema);
   }
 
+  setFormControlOption() {
+    this.options.formControl = true;
+  }
+
   toString() {
     return this.schema;
   }
@@ -55,10 +60,16 @@ class SchemaAnalysis {
 
   render() {
     return this.fields.map((field) => {
-      return field.render();
+      return field.template();
     });
-    // return _.join(this.fields, '\n');
   }
+
+  toJson() {
+    return this.fields.map(field => {
+      return field.toJson();
+    });
+  }
+
 }
 
 export default SchemaAnalysis;
