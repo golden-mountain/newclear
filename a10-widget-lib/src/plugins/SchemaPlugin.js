@@ -39,6 +39,12 @@ export class SchemaPlugin {
         const validation = this._node.model.schemaParser.getValidations(this._node.model.meta.name);
         this._node.model.meta.validation = validation;
       }
+
+      if (!this._node.model.meta.endpoint) {
+        const endpoint = this._node.model.schemaParser.getAxapiURL(this._node.model.meta.urlParams);
+        this._node.model.meta.endpoint = endpoint;
+      }
+
     }
 
     // console.log(this._node.model);

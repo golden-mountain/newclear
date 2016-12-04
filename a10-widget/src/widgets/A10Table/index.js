@@ -115,25 +115,24 @@ class _A10Table extends React.Component {
     } = this.props;
 
     let ths = [], tds = [];
+    ths = children.map((child, key) => {
+      let { children } = child.props;
+      if (child.props.checkbox) {
+        children = (
+          <div data-toggle="tooltip" data-title="Check All" className="checkbox c-checkbox">
+            <label>
+              <input type="checkbox" />
+              <em className="fa fa-check"></em>
+            </label>
+          </div>
+        );
+      }
+      return (<th key={key}>{children}</th>);
+    });
 
     // refreshTable fetched data
     if (data && data[0] && data[0]['total-count']) {
       let list = values(data[1]).pop() || [];
-
-      ths = children.map((child, key) => {
-        let { children } = child.props;
-        if (child.props.checkbox) {
-          children = (
-            <div data-toggle="tooltip" data-title="Check All" className="checkbox c-checkbox">
-              <label>
-                <input type="checkbox" />
-                <em className="fa fa-check"></em>
-              </label>
-            </div>
-          );
-        }
-        return (<th key={key}>{children}</th>);
-      });
 
       // TODO: hookup checkbox data
       // console.log('------------------------start---------------------');

@@ -133,7 +133,6 @@ export default class MetaParser {
     }
 
     const validations = this.getValidations(node);
-    console.log('validationsm...', validations);
     let msg = '';
     if (validations) {
       const elementValue = node.model.value;
