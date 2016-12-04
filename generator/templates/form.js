@@ -1,6 +1,11 @@
 
 import _ from 'lodash';
 
+/*
+ * @param objectName  -  schema file name
+ * @param options     -  bootstrap options
+ * @param formContent -  render return form content
+ */
 export const formStandard = (objectName, options={}, formContent) => {
   formContent = formContent.replace(/\n/g, '\n      ');
   const classNameInstance = _.camelCase(objectName) + 'Form';
@@ -31,7 +36,12 @@ export default widgetWrapper()(${className});
 `;
 };
 
-export const renderTemplate = (filename, fields=[], submitButton='') => {
+/*
+ * @param filename    -  schema file name
+ * @param fields      -  array, all fields in one form
+ * @param submitField -  submit field
+ */
+export const renderTemplate = (filename, fields=[], submitField='') => {
   let fieldContent = _.join(fields, '\n');
   fieldContent = fieldContent.replace(/\n/g, '\n      ');
   return `<A10Form schema="${filename}" horizontal>
@@ -40,6 +50,6 @@ export const renderTemplate = (filename, fields=[], submitButton='') => {
       ${fieldContent}
     </Col>
   </Row>
-  ${submitButton}
+  ${submitField}
 </A10Form>`;
 };
