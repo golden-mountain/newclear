@@ -5,10 +5,12 @@ const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 
 import WizardForm from './components/WizardForm';
-import PageBase from 'helpers/PageBase';
-import pageWrapper from 'helpers/pageWrapper';
+// import PageBase from 'helpers/PageBase';
+// import pageWrapper from 'helpers/pageWrapper';
 
-class SSLiWizard extends PageBase {
+import { widgetWrapper } from 'a10-widget';
+
+class SSLiWizard extends React.Component {
 
   render() {
 
@@ -20,4 +22,4 @@ class SSLiWizard extends PageBase {
   }
 }
 
-export default pageWrapper(SSLiWizard);
+export default widgetWrapper()(SSLiWizard);

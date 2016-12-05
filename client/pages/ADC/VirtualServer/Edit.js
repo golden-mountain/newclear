@@ -5,10 +5,10 @@ const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 
 import VirtualServerForm from './components/Form';
-import PageBase from 'helpers/PageBase';
-import pageWrapper from 'helpers/pageWrapper';
 
-class VirtualServerEdit extends PageBase {
+import { widgetWrapper } from 'a10-widget';
+
+class VirtualServerEdit extends React.Component {
 
   render() {
 
@@ -20,4 +20,4 @@ class VirtualServerEdit extends PageBase {
   }
 }
 
-export default pageWrapper(VirtualServerEdit);
+export default widgetWrapper()(VirtualServerEdit);

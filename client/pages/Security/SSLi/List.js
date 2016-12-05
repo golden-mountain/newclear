@@ -4,11 +4,12 @@ import VirtualServerTable from './components/Table';
 import configApp from 'configs/app';
 const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
+//
+// import PageBase from 'helpers/PageBase';
+// import pageWrapper from 'helpers/pageWrapper';
+import { widgetWrapper } from 'a10-widget';
 
-import PageBase from 'helpers/PageBase';
-import pageWrapper from 'helpers/pageWrapper';
-
-class VirtualServerListPage extends PageBase {
+class VirtualServerListPage extends React.Component {
 
   render() {
 
@@ -20,4 +21,4 @@ class VirtualServerListPage extends PageBase {
   }
 }
 
-export default pageWrapper(VirtualServerListPage);
+export default widgetWrapper()(VirtualServerListPage);

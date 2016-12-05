@@ -3,9 +3,11 @@ import React, { PropTypes } from 'react';
 import auth from 'helpers/auth';
 // import { withRouter } from 'react-router';
 import Redirect from 'react-router/Redirect';
-import PageBase from 'helpers/PageBase';
+// import PageBase from 'helpers/PageBase';
 
-class Logout extends PageBase {
+// import { widgetWrapper } from 'a10-widget';
+
+class Logout extends React.Component {
   static propTypes = {
     children: PropTypes.node
   }
