@@ -39,20 +39,16 @@ class EditableCom extends React.Component {
           <Col sm={4}>
             <Button bsStyle="default" bsSize="large" onClick={::this.save}>Apply</Button>
             <HelpBlock className="error">{errorMsg}</HelpBlock>
-
           </Col>
         </Row>
-        
       </FormGroup>
     );
   }
 }
 
-
-export default Object.assign(widgetWrapper([ 'app' ])(EditableCom), { 
+export default widgetWrapper([ 'app' ])(EditableCom, {
   editableProps : { 
     title: PropTypes.string,
-    number: PropTypes.number,
-    answer: PropTypes.bool
+    invalid: PropTypes.bool
   }
 });
