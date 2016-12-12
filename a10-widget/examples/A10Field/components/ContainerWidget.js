@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'widgetWrapper';
 import { Button, Panel } from 'react-bootstrap';
@@ -35,4 +35,20 @@ class ContainerWidget extends React.Component {
   }
 }
 
-export default widgetWrapper()(ContainerWidget);
+export default widgetWrapper()(ContainerWidget, {
+  editableProps : { 
+    title: PropTypes.string,
+    invalid: PropTypes.bool
+  },
+  candidateMeta: {
+    iconClassName: 'fa fa-square-o',
+    type: 'basic',
+    name: 'ContainerWidget',
+    component: 'ContainerWidget',
+    description: '',
+    defaultProps: {
+      title: 'test',
+      invalid: true
+    }
+  }
+});

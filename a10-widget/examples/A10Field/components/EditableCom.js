@@ -50,5 +50,15 @@ export default widgetWrapper([ 'app' ])(EditableCom, {
   editableProps : { 
     title: PropTypes.string,
     invalid: PropTypes.bool
+  },
+  candidateMeta: {
+    iconClassName: 'fa fa-square-o',
+    type: 'basic',
+    name: 'EditableCom',
+    component: 'EditableCom',
+    description: '',
+    defaultProps: {
+      title: 'EditableCom'
+    }
   }
 });

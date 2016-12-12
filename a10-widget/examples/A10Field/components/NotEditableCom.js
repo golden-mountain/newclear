@@ -43,4 +43,19 @@ class NotEditableCom extends React.Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(NotEditableCom);
+export default widgetWrapper([ 'app' ])(NotEditableCom, {
+  editableProps : { 
+    title: PropTypes.string,
+    invalid: PropTypes.bool
+  },
+  candidateMeta: {
+    iconClassName: 'fa fa-square-o',
+    type: 'basic',
+    name: 'NotEditableCom',
+    component: 'NotEditableCom',
+    description: '',
+    defaultProps: {
+      title: 'NotEditableCom'
+    }
+  }
+});

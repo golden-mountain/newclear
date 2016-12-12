@@ -12,13 +12,17 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext as dragDropContext } from 'react-dnd'; 
 
 import editableUtils from '../../../generator/Editable/editableUtils';
+import componentCandidate from '../../../generator/Editable/componentCandidate';
 
-editableUtils.registerComponents({
+const allComponents = {
   ContainerWidget,
   NotEditableCom,
   EditableCom,
   FieldCheckbox
-});
+};
+
+editableUtils.registerComponents(allComponents);
+const ComponentCandidate = componentCandidate(allComponents);
 
 const urlParams = {
   'name': 'vs2',
@@ -149,28 +153,30 @@ export default class Sandbox extends React.Component {
       editingComponentPropTypes
     } = this.state;
 
+    const Widgets = Object.values(allComponents).map(item=>item.candidateMeta);
+
     return (
       <Row>
-        <Col xs={12}>
-          <ContainerWidget meta={containerSchema}>
-            <h3> Not editable component </h3>
-            <NotEditableCom meta={metaWithEndpoint}/>
-            <h3> Editable component </h3>
-            <EditableCom meta={metaWithSchema} title="Port"/>
-            <EditableCom meta={noSchemaData} title="IP Address" validation={{ 'ipv6-address': () => 'error IPv6' }} />
-            <EditableCom meta={objectSchema} title="Netmask" />
-          </ContainerWidget>
-
-          <ContainerWidget meta={containerSchema}>
-            <h3> ADC Virtual Server Form Demo </h3>
-            <EditableCom urlParams={urlParams} title="Name" name="virtual-server.name" invalid />
-            <FieldCheckbox title="Wildcard" name="x.wildcard" value={false} />
-            <FieldCheckbox title="IPv6 Type" name="x.ipAddressType" conditional={{ 'x.wildcard': false }}  value={true} />
-            <EditableCom name="virtual-server.ip-address" conditional={{ 'x.ipAddressType': false }}  title="IP Address"/>
-            <EditableCom name="virtual-server.netmask" conditional={{ 'x.ipAddressType': false }} title="Netmask" />
-            <EditableCom name="virtual-server.ipv6-address" conditional={{ 'x.ipAddressType': true }}  title="IPv6 Address"/>
-          </ContainerWidget>
-          <h3> 123 Drag and Drop Demo </h3>
+        <Col xs={4}>
+          <h3>Component Candidates</h3>
+          <div>
+          {
+            Widgets.map((item, index)=>{
+              return (
+                <ComponentCandidate
+                  key={index}
+                  name={item.name}
+                  component={item.component}
+                  iconClassName={item.iconClassName}
+                  isContainer={item.isContainer === true}
+                />
+              );
+            })
+          }
+          </div>
+        </Col>
+        <Col xs={8}>
+          <h3> Drag and Drop Demo </h3>
 
           {
             editableUtils.jsonToComponent(reactSchema, true, { editingComponentId }, {
