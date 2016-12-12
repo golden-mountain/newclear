@@ -1,0 +1,531 @@
+{
+    "obj-name": "sip",
+    "obj-help": "SIP Template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "sip",
+    "obj-disp-after": "slb.service-group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.sip",
+    "axapi": "/axapi/v3/slb/template/sip/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "SIP Template Name",
+            "src-name": "name"
+        },
+        "alg-source-nat": {
+            "type": "number",
+            "format": "flag",
+            "description": "Translate source IP to NAT IP in SIP message when source NAT is used",
+            "src-name": "alg-source-nat"
+        },
+        "alg-dest-nat": {
+            "type": "number",
+            "format": "flag",
+            "description": "Translate VIP to real server IP in SIP message when destination NAT is used",
+            "src-name": "alg-dest-nat"
+        },
+        "call-id-persist-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable call-ID persistence",
+            "src-name": "call-id-persist-disable"
+        },
+        "client-keep-alive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Respond client keep-alive packet directly instead of forwarding to server",
+            "src-name": "client-keep-alive"
+        },
+        "pstn-gw": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "configure pstn gw host name for tel: uri translate to sip: uri (Hostname String, default is \"pstn\")",
+            "default": "\"pstn\"",
+            "src-name": "pstn-gw"
+        },
+        "client-request-header": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Modify the toppest header from client request",
+            "maxItems": "8",
+            "properties": [
+                {
+                    "client-request-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "client-request-header",
+                        "description": "Erase a SIP header (Header Name)",
+                        "alias": "client-request-header-erase",
+                        "src-name": "erase"
+                    }
+                },
+                {
+                    "client-request-erase-all": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "client-request-header-erase",
+                        "description": "Erase all headers",
+                        "alias": "client-request-erase-all",
+                        "src-name": "all"
+                    }
+                },
+                {
+                    "client-request-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "condition": "client-request-header",
+                        "description": "Insert a SIP header (Header Content (Format: \"name: value\"))",
+                        "alias": "client-request-header-insert",
+                        "src-name": "insert"
+                    }
+                },
+                {
+                    "insert-condition-client-request": {
+                        "type": "string",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "client-request-header-insert",
+                        "alias": "insert-condition-client-request",
+                        "format": "enum",
+                        "src-name": "insert-condition"
+                    }
+                }
+            ],
+            "src-name": "client-request-header"
+        },
+        "client-response-header": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Modify the toppest header from client response",
+            "maxItems": "8",
+            "properties": [
+                {
+                    "client-response-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "client-response-header",
+                        "description": "Erase a SIP header (Header Name)",
+                        "alias": "client-response-header-erase",
+                        "src-name": "erase"
+                    }
+                },
+                {
+                    "client-response-erase-all": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "client-response-header-erase",
+                        "description": "Erase all headers",
+                        "alias": "client-response-erase-all",
+                        "src-name": "all"
+                    }
+                },
+                {
+                    "client-response-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "condition": "client-response-header",
+                        "description": "Insert a SIP header (Header Content (Format: \"name: value\"))",
+                        "alias": "client-response-header-insert",
+                        "src-name": "insert"
+                    }
+                },
+                {
+                    "insert-condition-client-response": {
+                        "type": "string",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "client-response-header-insert",
+                        "alias": "insert-condition-client-response",
+                        "format": "enum",
+                        "src-name": "insert-condition"
+                    }
+                }
+            ],
+            "src-name": "client-response-header"
+        },
+        "exclude-translation": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Exclude all translations in SIP message",
+            "maxItems": "6",
+            "properties": [
+                {
+                    "translation-value": {
+                        "type": "string",
+                        "condition": "exclude-translation",
+                        "multi-field-key": true,
+                        "enum": [
+                            "start-line",
+                            "header",
+                            "body"
+                        ],
+                        "enumMap": [
+                            {
+                                "start-line": "\"SIP request line or status line"
+                            },
+                            {
+                                "header": "\"SIP message headers"
+                            },
+                            {
+                                "body": "\"SIP message body"
+                            }
+                        ],
+                        "description": "'start-line': \"SIP request line or status line;'header': \"SIP message headers;'body': \"SIP message body;",
+                        "format": "enum",
+                        "src-name": "translation-value"
+                    }
+                },
+                {
+                    "header-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "disabled": "start-line,body",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "condition": "translation-value",
+                        "description": "SIP header name",
+                        "src-name": "header-string"
+                    }
+                }
+            ],
+            "src-name": "exclude-translation"
+        },
+        "failed-client-selection": {
+            "type": "number",
+            "format": "flag",
+            "description": "Define action when select client fail",
+            "src-name": "failed-client-selection"
+        },
+        "drop-when-client-fail": {
+            "type": "number",
+            "format": "flag",
+            "condition": "failed-client-selection",
+            "description": "Drop current SIP message when select client fail",
+            "alias": "drop-when-client-fail",
+            "src-name": "drop"
+        },
+        "failed-client-selection-message": {
+            "type": "string",
+            "format": "string-rlx",
+            "m-exclusion": "drop-when-client-fail",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "failed-client-selection",
+            "description": "Send SIP message (includs status code) to server when select client fail(Format: 3 digits(1XX~6XX) space reason)",
+            "alias": "failed-client-selection-message",
+            "src-name": "message"
+        },
+        "failed-server-selection": {
+            "type": "number",
+            "format": "flag",
+            "description": "Define action when select server fail",
+            "src-name": "failed-server-selection"
+        },
+        "drop-when-server-fail": {
+            "type": "number",
+            "format": "flag",
+            "condition": "failed-server-selection",
+            "description": "Drop current SIP message when select server fail",
+            "alias": "drop-when-server-fail",
+            "src-name": "drop"
+        },
+        "failed-server-selection-message": {
+            "type": "string",
+            "format": "string-rlx",
+            "m-exclusion": "drop-when-server-fail",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "failed-server-selection",
+            "description": "Send SIP message (includs status code) to client when select server fail(Format: 3 digits(1XX~6XX) space reason)",
+            "alias": "failed-server-selection-message",
+            "src-name": "message"
+        },
+        "insert-client-ip": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert Client IP address into SIP header",
+            "src-name": "insert-client-ip"
+        },
+        "keep-server-ip-if-match-acl": {
+            "type": "number",
+            "format": "flag",
+            "description": "Use Real Server IP for addresses matching the ACL for a Call-Id",
+            "src-name": "keep-server-ip-if-match-acl"
+        },
+        "acl-id": {
+            "type": "number",
+            "minimum": "100",
+            "maximum": "199",
+            "description": "ACL id",
+            "condition": "keep-server-ip-if-match-acl",
+            "obj-lineage-full": "access-list.standard,access-list.extended",
+            "$ref": "/axapi/v3/access-list/standard,access-list/extended",
+            "format": "number",
+            "src-name": "acl-id"
+        },
+        "acl-name-key": {
+            "type": "dummy",
+            "description": "Access List name",
+            "condition": "keep-server-ip-if-match-acl",
+            "alias": "acl-name-key",
+            "format": "dummy",
+            "src-name": "name"
+        },
+        "acl-name-value": {
+            "type": "string",
+            "m-exclusion": "acl-id",
+            "minLength": "1",
+            "maxLength": "16",
+            "description": "IPv4 Access List Name",
+            "condition": "acl-name-key",
+            "obj-lineage-full": "ip.access-list",
+            "$ref": "/axapi/v3/ip/access-list",
+            "format": "string",
+            "src-name": "acl-name-value"
+        },
+        "registrar": {
+            "type": "dummy",
+            "description": "Registrar server configuration",
+            "format": "dummy",
+            "src-name": "registrar"
+        },
+        "service-group": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "registrar",
+            "description": "service group name (Name)",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "src-name": "service-group"
+        },
+        "server-keep-alive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send server keep-alive packet for every persist connection when enable conn-reuse",
+            "src-name": "server-keep-alive"
+        },
+        "interval": {
+            "type": "number",
+            "condition": "server-keep-alive",
+            "default": "30",
+            "minimum": "5",
+            "maximum": "300",
+            "description": "The interval of keep-alive packet for each persist connection (second)",
+            "format": "number",
+            "src-name": "interval"
+        },
+        "server-request-header": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Modify the toppest header from server request",
+            "maxItems": "8",
+            "properties": [
+                {
+                    "server-request-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "server-request-header",
+                        "description": "Erase a SIP header (Header Name)",
+                        "alias": "server-request-header-erase",
+                        "src-name": "erase"
+                    }
+                },
+                {
+                    "server-request-erase-all": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "server-request-header-erase",
+                        "description": "Erase all headers",
+                        "alias": "server-request-erase-all",
+                        "src-name": "all"
+                    }
+                },
+                {
+                    "server-request-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "condition": "server-request-header",
+                        "description": "Insert a SIP header (Header Content (Format: \"name: value\"))",
+                        "alias": "server-request-header-insert",
+                        "src-name": "insert"
+                    }
+                },
+                {
+                    "insert-condition-server-request": {
+                        "type": "string",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "server-request-header-insert",
+                        "alias": "insert-condition-server-request",
+                        "format": "enum",
+                        "src-name": "insert-condition"
+                    }
+                }
+            ],
+            "src-name": "server-request-header"
+        },
+        "server-response-header": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Modify the toppest header from server response",
+            "maxItems": "8",
+            "properties": [
+                {
+                    "server-response-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "condition": "server-response-header",
+                        "description": "Erase a SIP header (Header Name)",
+                        "alias": "server-response-header-erase",
+                        "src-name": "erase"
+                    }
+                },
+                {
+                    "server-response-erase-all": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "server-response-header-erase",
+                        "description": "Erase all headers",
+                        "alias": "server-response-erase-all",
+                        "src-name": "all"
+                    }
+                },
+                {
+                    "server-response-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "server-response-header",
+                        "description": "Insert a SIP header (Header Content (Format: \"name: value\"))",
+                        "alias": "server-response-header-insert",
+                        "src-name": "insert"
+                    }
+                },
+                {
+                    "insert-condition-server-response": {
+                        "type": "string",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "server-response-header-insert",
+                        "alias": "insert-condition-server-response",
+                        "format": "enum",
+                        "src-name": "insert-condition"
+                    }
+                }
+            ],
+            "src-name": "server-response-header"
+        },
+        "smp-call-id-rtp-session": {
+            "type": "number",
+            "format": "flag",
+            "description": "Create the across cpu call-id rtp session",
+            "src-name": "smp-call-id-rtp-session"
+        },
+        "server-selection-per-request": {
+            "type": "number",
+            "format": "flag",
+            "description": "Force server selection on every SIP request",
+            "src-name": "server-selection-per-request"
+        },
+        "timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "250",
+            "description": "Time in minutes SIP timeout value (default 30 minutes) (in minutes)",
+            "default": "30",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "dialog-aware": {
+            "type": "number",
+            "format": "flag",
+            "description": "Permit system processes dialog session",
+            "src-name": "dialog-aware"
+        }
+    }
+}

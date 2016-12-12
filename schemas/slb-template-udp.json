@@ -1,0 +1,87 @@
+{
+    "obj-name": "udp",
+    "obj-help": "L4 UDP switch config",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "l4 udp",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.udp",
+    "axapi": "/axapi/v3/slb/template/udp/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Fast UDP Template Name",
+            "src-name": "name"
+        },
+        "idle-timeout": {
+            "type": "number",
+            "default": "120",
+            "minimum": "1",
+            "maximum": "2097151",
+            "description": "Idle Timeout value (Interval of 60 seconds), default 120 seconds (idle timeout in second, default 120)",
+            "round-off": "(60,30,60)",
+            "format": "number",
+            "src-name": "idle-timeout"
+        },
+        "qos": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "description": "QOS level (number)",
+            "format": "number",
+            "src-name": "qos"
+        },
+        "stateless-conn-timeout": {
+            "type": "number",
+            "minimum": "5",
+            "maximum": "120",
+            "description": "Stateless Current Connection Timeout value (5 - 120 seconds) (idle timeout in second, default 120)",
+            "default": "120",
+            "format": "number",
+            "src-name": "stateless-conn-timeout"
+        },
+        "aging": {
+            "type": "dummy",
+            "description": "Aging Control",
+            "format": "dummy",
+            "src-name": "aging"
+        },
+        "immediate": {
+            "type": "number",
+            "format": "flag",
+            "condition": "aging",
+            "description": "Immediate Removal after Transaction",
+            "src-name": "immediate"
+        },
+        "short": {
+            "type": "number",
+            "format": "flag",
+            "condition": "aging",
+            "m-exclusion": "immediate",
+            "description": "Short lived session",
+            "src-name": "short"
+        },
+        "age": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "condition": "short",
+            "description": "age",
+            "format": "number",
+            "src-name": "age"
+        },
+        "re-select-if-server-down": {
+            "type": "number",
+            "format": "flag",
+            "description": "re-select another server if service port is down",
+            "src-name": "re-select-if-server-down"
+        }
+    }
+}

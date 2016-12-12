@@ -1,0 +1,12 @@
+{
+    "obj-name": "http-proxy",
+    "obj-help": "Show HTTP Proxy global Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "5",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.http-proxy",
+    "axapi": "/axapi/v3/slb/http-proxy",
+    "properties": {}
+}

@@ -1,0 +1,12 @@
+{
+    "obj-name": "switch",
+    "obj-help": "Show slb switch statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "25",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.switch",
+    "axapi": "/axapi/v3/slb/switch",
+    "properties": {}
+}

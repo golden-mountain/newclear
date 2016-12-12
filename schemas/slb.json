@@ -1,0 +1,1229 @@
+{
+    "obj-name": "slb",
+    "obj-help": "SLB related commands",
+    "obj-lineage": "cmroot",
+    "obj-counter": true,
+    "obj-occurences": "intermediate",
+    "obj-indexing": "none",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb",
+    "axapi": "/axapi/v3/slb",
+    "properties": {
+        "common": {
+            "obj-name": "common",
+            "obj-help": "SLB related commands",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-module": true,
+            "obj-auto-create": true,
+            "obj-module-name": "slb-common",
+            "obj-lineage-full": "slb.common",
+            "axapi": "/axapi/v3/slb/common",
+            "properties": {
+                "extended-stats": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable global slb extended statistics",
+                    "src-name": "extended-stats"
+                },
+                "stats-data-disable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Disable global slb data statistics",
+                    "src-name": "stats-data-disable"
+                },
+                "graceful-shutdown-enable": {
+                    "type": "number",
+                    "format": "flag",
+                    "alias": "graceful-shutdown-enable",
+                    "description": "Enable graceful shutdown",
+                    "cr-not-allowed-in-norm": true,
+                    "src-name": "graceful-shutdown"
+                },
+                "graceful-shutdown": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "graceful-shutdown-enable",
+                    "description": "1-65535, in unit of seconds",
+                    "format": "number",
+                    "src-name": "graceful-shutdown"
+                },
+                "entity": {
+                    "type": "string",
+                    "enum": [
+                        "server",
+                        "virtual-server"
+                    ],
+                    "enumMap": [
+                        {
+                            "server": "\"Graceful shutdown server/port only"
+                        },
+                        {
+                            "virtual-server": "\"Graceful shutdown virtual server/port only"
+                        }
+                    ],
+                    "description": "Graceful shutdown 'server': \"Graceful shutdown server/port only;'virtual-server': \"Graceful shutdown virtual server/port only;",
+                    "condition": "graceful-shutdown",
+                    "link-next-fwd": "after-disable",
+                    "format": "enum",
+                    "src-name": "entity"
+                },
+                "after-disable": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "graceful-shutdown",
+                    "description": "Graceful shutdown after disable server/port and/or virtual server/port",
+                    "src-name": "after-disable"
+                },
+                "rate-limit-logging": {
+                    "type": "number",
+                    "format": "flag",
+                    "default": "0",
+                    "description": "Configure rate limit logging",
+                    "cr-not-allowed-in-norm": true,
+                    "src-name": "rate-limit-logging"
+                },
+                "max-local-rate": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "100",
+                    "default": "32",
+                    "description": "Set maximum local rate (Maximum local rate)",
+                    "format": "number",
+                    "src-name": "max-local-rate"
+                },
+                "max-remote-rate": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "1000000",
+                    "default": "15000",
+                    "description": "Set maximum remote rate (Maximum remote rate)",
+                    "format": "number",
+                    "src-name": "max-remote-rate"
+                },
+                "exclude-destination": {
+                    "type": "string",
+                    "enum": [
+                        "local",
+                        "remote"
+                    ],
+                    "enumMap": [
+                        {
+                            "local": "\"Maximum local rate"
+                        },
+                        {
+                            "remote": "\"Maximum remote rate"
+                        }
+                    ],
+                    "description": "Exclude sending log to local logging facility or remote logging host 'local': \"Maximum local rate;'remote': \"Maximum remote rate; (Maximum rates)",
+                    "format": "enum",
+                    "src-name": "exclude-destination"
+                },
+                "auto-translate-port": {
+                    "type": "number",
+                    "format": "flag",
+                    "hide-help": true,
+                    "description": "Auto Translate Port range",
+                    "cr-not-allowed-in-norm": true,
+                    "src-name": "auto-translate-port"
+                },
+                "range": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "3",
+                    "condition": "auto-translate-port",
+                    "description": "auto translate port range",
+                    "format": "number",
+                    "src-name": "range"
+                },
+                "range-start": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "65535",
+                    "condition": "range",
+                    "description": "port range start",
+                    "format": "number",
+                    "src-name": "range-start"
+                },
+                "range-end": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "65535",
+                    "condition": "range-start",
+                    "description": "port range end",
+                    "format": "number",
+                    "src-name": "range-end"
+                },
+                "dsr-health-check-enable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable dsr-health-check (direct server return health check)",
+                    "src-name": "dsr-health-check-enable"
+                },
+                "override-port": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "dsr-health-check-enable",
+                    "description": "Enable override port in DSR health check mode",
+                    "src-name": "override-port"
+                },
+                "reset-stale-session": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Send reset if session in delete queue receives a SYN packet",
+                    "src-name": "reset-stale-session"
+                },
+                "dns-cache-enable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable DNS cache",
+                    "src-name": "dns-cache-enable"
+                },
+                "response-type": {
+                    "type": "string",
+                    "enum": [
+                        "single-answer",
+                        "round-robin"
+                    ],
+                    "enumMap": [
+                        {
+                            "single-answer": "\"Only cache DNS response with single answer"
+                        },
+                        {
+                            "round-robin": "\"Round robin"
+                        }
+                    ],
+                    "description": "Response type 'single-answer': \"Only cache DNS response with single answer;'round-robin': \"Round robin;",
+                    "condition": "dns-cache-enable",
+                    "link-next-fwd": "ttl-threshold",
+                    "format": "enum",
+                    "src-name": "response-type"
+                },
+                "ttl-threshold": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "10000000",
+                    "condition": "dns-cache-enable",
+                    "description": "Only cache DNS response with longer TTL (TTL)",
+                    "format": "number",
+                    "src-name": "ttl-threshold"
+                },
+                "dns-cache-age": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "1000000",
+                    "description": "Set DNS cache entry age, default is 300 seconds (1-1000000 seconds, default is 300 seconds)",
+                    "default": "300",
+                    "format": "number",
+                    "src-name": "dns-cache-age"
+                },
+                "compress-block-size": {
+                    "type": "number",
+                    "minimum": "6000",
+                    "maximum": "131008",
+                    "description": "Set compression block size (Compression block size in bytes)",
+                    "format": "number",
+                    "src-name": "compress-block-size"
+                },
+                "dns-cache-entry-size": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "4096",
+                    "default": "256",
+                    "description": "Set DNS cache entry size, default is 256 bytes (1-4096 bytes, default is 256 bytes)",
+                    "format": "number",
+                    "src-name": "dns-cache-entry-size"
+                },
+                "dns-vip-stateless": {
+                    "type": "number",
+                    "format": "flag",
+                    "plat-neg-list": "non-fpga,soft-ax",
+                    "description": "Enable DNS VIP stateless mode",
+                    "src-name": "dns-vip-stateless"
+                },
+                "honor-server-response-ttl": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Honor the server reponse TTL",
+                    "src-name": "honor-server-response-ttl"
+                },
+                "buff-thresh": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Set buffer threshold",
+                    "src-name": "buff-thresh"
+                },
+                "buff-thresh-hw-buff": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "2147483647",
+                    "condition": "buff-thresh",
+                    "alias": "buff-thresh-hw-buff",
+                    "not-allowed-in-no": true,
+                    "description": "Set hardware buffer threshold (Hardware buffer threshold)",
+                    "format": "number",
+                    "src-name": "hw-buff"
+                },
+                "buff-thresh-relieve-thresh": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "2147483647",
+                    "condition": "buff-thresh-hw-buff",
+                    "alias": "buff-thresh-relieve-thresh",
+                    "not-allowed-in-no": true,
+                    "description": "Relieve threshold (Relieve threshold)",
+                    "format": "number",
+                    "src-name": "relieve-thresh"
+                },
+                "buff-thresh-sys-buff-low": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "2147483647",
+                    "condition": "buff-thresh-relieve-thresh",
+                    "alias": "buff-thresh-sys-buff-low",
+                    "not-allowed-in-no": true,
+                    "description": "Set low water mark of system buffer (Low water mark of system buffer)",
+                    "format": "number",
+                    "src-name": "sys-buff-low"
+                },
+                "buff-thresh-sys-buff-high": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "2147483647",
+                    "condition": "buff-thresh-sys-buff-low",
+                    "alias": "buff-thresh-sys-buff-high",
+                    "not-allowed-in-no": true,
+                    "description": "Set high water mark of system buffer (High water mark of system buffer)",
+                    "format": "number",
+                    "src-name": "sys-buff-high"
+                },
+                "max-buff-queued-per-conn": {
+                    "type": "number",
+                    "minimum": "128",
+                    "maximum": "4096",
+                    "description": "Set per connection buffer threshold (Buffer value range 128-4096)",
+                    "default": "1000",
+                    "format": "number",
+                    "src-name": "max-buff-queued-per-conn"
+                },
+                "gateway-health-check": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable gateway health check",
+                    "src-name": "gateway-health-check"
+                },
+                "interval": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "180",
+                    "condition": "gateway-health-check",
+                    "default": "5",
+                    "description": "Specify the healthcheck interval, default is 5 seconds (Interval Value, in seconds (default 5))",
+                    "format": "number",
+                    "src-name": "interval"
+                },
+                "timeout": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "360",
+                    "condition": "interval",
+                    "default": "15",
+                    "description": "Specify the healthcheck timeout value, default is 15 seconds (Timeout Value, in seconds (default 15))",
+                    "format": "number",
+                    "src-name": "timeout"
+                },
+                "msl-time": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "40",
+                    "default": "2",
+                    "description": "Configure maximum session life, default is 2 seconds (1-40 seconds, default is 2 seconds)",
+                    "format": "number",
+                    "src-name": "msl-time"
+                },
+                "fast-path-disable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Disable fast path in SLB processing",
+                    "src-name": "fast-path-disable"
+                },
+                "http-fast-enable": {
+                    "type": "number",
+                    "format": "flag",
+                    "hide-help": true,
+                    "description": "Enable Http Fast in SLB processing",
+                    "src-name": "http-fast-enable"
+                },
+                "l2l3-trunk-lb-disable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Disable L2/L3 trunk LB",
+                    "src-name": "l2l3-trunk-lb-disable"
+                },
+                "snat-gwy-for-l3": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Use source NAT gateway for L3 traffic",
+                    "src-name": "snat-gwy-for-l3"
+                },
+                "disable-server-auto-reselect": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Disable auto reselection of server",
+                    "src-name": "disable-server-auto-reselect"
+                },
+                "enable-l7-req-acct": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable L7 request accounting",
+                    "src-name": "enable-l7-req-acct"
+                },
+                "enable-ddos": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable DDoS protection",
+                    "feat-license": "ddos",
+                    "src-name": "enable-ddos"
+                },
+                "disable-adaptive-resource-check": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Disable adaptive resource check based on buffer usage",
+                    "src-name": "disable-adaptive-resource-check"
+                },
+                "ddos-pkt-size-thresh": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "256",
+                    "default": "64",
+                    "hide-help": true,
+                    "description": "Set data packet size threshold for DDOS, default is 64 bytes (Data packet size threshold for DDOS, default is 64 bytes)",
+                    "format": "number",
+                    "src-name": "ddos-pkt-size-thresh"
+                },
+                "ddos-pkt-count-thresh": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "256",
+                    "default": "100",
+                    "hide-help": true,
+                    "description": "Set packet count threshold for DDOS, default is 100 (Packet count threshold for DDOS, default is 100)",
+                    "format": "number",
+                    "src-name": "ddos-pkt-count-thresh"
+                },
+                "snat-on-vip": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable source NAT traffic against VIP",
+                    "src-name": "snat-on-vip"
+                },
+                "mss-table": {
+                    "type": "number",
+                    "minimum": "128",
+                    "maximum": "750",
+                    "default": "536",
+                    "description": "Set MSS table (128-750, default is 536)",
+                    "format": "number",
+                    "src-name": "mss-table"
+                },
+                "no-auto-up-on-aflex": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Don't automatically mark vport up when aFleX is bound",
+                    "src-name": "no-auto-up-on-aflex"
+                },
+                "hw-compression": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Use hardware compression",
+                    "src-name": "hw-compression"
+                },
+                "hw-syn-rr": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "500000",
+                    "description": "Configure hardware SYN round robin (range 1-500000)",
+                    "value-not-allowed-in-no": true,
+                    "format": "number",
+                    "src-name": "hw-syn-rr"
+                },
+                "max-http-header-count": {
+                    "type": "number",
+                    "minimum": "90",
+                    "maximum": "255",
+                    "default": "90",
+                    "description": "Set maximum number of HTTP headers allowed",
+                    "format": "number",
+                    "src-name": "max-http-header-count"
+                },
+                "scale-out": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable SLB scale out",
+                    "src-name": "scale-out"
+                },
+                "sort-res": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable SLB sorting of resource names",
+                    "src-name": "sort-res"
+                },
+                "use-mss-tab": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Use MSS based on internal table for SLB processing",
+                    "src-name": "use-mss-tab"
+                },
+                "auto-nat-no-ip-refresh": {
+                    "type": "string",
+                    "not-allowed-in-no": true,
+                    "enum": [
+                        "enable",
+                        "disable"
+                    ],
+                    "enumMap": [
+                        {
+                            "enable": "\"enable"
+                        },
+                        {
+                            "disable": "\"disable"
+                        }
+                    ],
+                    "description": "disable auto-nat ip refresh with route change or server state UP 'enable': \"enable;'disable': \"disable;",
+                    "default": "enable",
+                    "format": "enum",
+                    "src-name": "auto-nat-no-ip-refresh"
+                },
+                "ssl-module": {
+                    "type": "dummy",
+                    "hide-help": true,
+                    "description": "SSL Module",
+                    "format": "dummy",
+                    "src-name": "ssl-module"
+                },
+                "software": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "ssl-module",
+                    "description": "Software",
+                    "src-name": "software"
+                },
+                "drop-icmp-to-vip-when-vip-down": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Drop ICMP to VIP when VIP down",
+                    "src-name": "drop-icmp-to-vip-when-vip-down"
+                },
+                "player-id-check-enable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Enable the Player id check",
+                    "src-name": "player-id-check-enable"
+                },
+                "conn-rate-limit": {
+                    "obj-name": "conn-rate-limit",
+                    "obj-help": "Set rate limiting on virtual ports",
+                    "obj-lineage": "cmroot.slb.common",
+                    "obj-occurences": "intermediate",
+                    "obj-indexing": "none",
+                    "obj-lineage-full": "slb.common.conn-rate-limit",
+                    "axapi": "/axapi/v3/slb/common/conn-rate-limit",
+                    "properties": {
+                        "src-ip-list": {
+                            "obj-name": "src-ip",
+                            "obj-help": "Set connection limit based on source IP address",
+                            "obj-lineage": "cmroot.slb.common.conn-rate-limit",
+                            "obj-occurences": "multi",
+                            "obj-json-suffix": "-list",
+                            "obj-indexing": "string",
+                            "obj-lineage-full": "slb.common.conn-rate-limit.src-ip",
+                            "axapi": "/axapi/v3/slb/common/conn-rate-limit/src-ip/{protocol}",
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "object-key": true,
+                                    "enum": [
+                                        "tcp",
+                                        "udp"
+                                    ],
+                                    "enumMap": [
+                                        {
+                                            "tcp": "\"Set TCP connection rate limit"
+                                        },
+                                        {
+                                            "udp": "\"Set UDP packet rate limit"
+                                        }
+                                    ],
+                                    "description": "'tcp': \"Set TCP connection rate limit;'udp': \"Set UDP packet rate limit;",
+                                    "format": "enum",
+                                    "src-name": "protocol"
+                                },
+                                "limit": {
+                                    "type": "number",
+                                    "minimum": "1",
+                                    "maximum": "1000000",
+                                    "condition": "protocol",
+                                    "not-allowed-in-no": true,
+                                    "description": "Set max connections per period",
+                                    "format": "number",
+                                    "src-name": "limit"
+                                },
+                                "per": {
+                                    "type": "dummy",
+                                    "condition": "limit",
+                                    "not-allowed-in-no": true,
+                                    "description": "per",
+                                    "format": "dummy",
+                                    "src-name": "per"
+                                },
+                                "limit-period": {
+                                    "type": "string",
+                                    "enum": [
+                                        "100",
+                                        "1000"
+                                    ],
+                                    "enumMap": [
+                                        {
+                                            "100": "\"100 ms"
+                                        },
+                                        {
+                                            "1000": "\"1000 ms"
+                                        }
+                                    ],
+                                    "description": "'100': \"100 ms;'1000': \"1000 ms;",
+                                    "condition": "per",
+                                    "format": "enum",
+                                    "src-name": "limit-period"
+                                },
+                                "shared": {
+                                    "type": "number",
+                                    "format": "flag",
+                                    "condition": "limit-period",
+                                    "link-next-fwd": "exceed-action",
+                                    "not-allowed-in-no": true,
+                                    "description": "Set threshold shared amongst all virtual ports",
+                                    "src-name": "shared"
+                                },
+                                "exceed-action": {
+                                    "type": "number",
+                                    "format": "flag",
+                                    "condition": "limit-period",
+                                    "link-next-fwd": "log",
+                                    "not-allowed-in-no": true,
+                                    "description": "Set action if threshold exceeded",
+                                    "src-name": "exceed-action"
+                                },
+                                "log": {
+                                    "type": "number",
+                                    "format": "flag",
+                                    "condition": "exceed-action",
+                                    "link-next-fwd": "lock-out",
+                                    "not-allowed-in-no": true,
+                                    "description": "Send log if threshold exceeded",
+                                    "src-name": "log"
+                                },
+                                "lock-out": {
+                                    "type": "number",
+                                    "minimum": "1",
+                                    "maximum": "3600",
+                                    "condition": "exceed-action",
+                                    "not-allowed-in-no": true,
+                                    "description": "Set lockout period in seconds if threshold exceeded (Lockout period in seconds if threshold exceeded)",
+                                    "format": "number",
+                                    "src-name": "lock-out"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "ssl-expire-check": {
+            "obj-name": "ssl-expire-check",
+            "obj-help": "SSL certificate expiration check",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-backend": "system",
+            "obj-lineage-full": "slb.ssl-expire-check",
+            "axapi": "/axapi/v3/slb/ssl-expire-check",
+            "properties": {
+                "ssl-expire-email-address": {
+                    "type": "string",
+                    "format": "email-addr",
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "alias": "ssl-expire-email-address",
+                    "description": "Config Email address for certificate expiration check (Email address for certificate expiration check)",
+                    "src-name": "email-address"
+                },
+                "expire-address1": {
+                    "type": "string",
+                    "format": "email-addr",
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "condition": "ssl-expire-email-address",
+                    "link-next-fwd": "before",
+                    "description": "Email address for certificate expiration check",
+                    "src-name": "expire-address1"
+                },
+                "before": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "60",
+                    "condition": "ssl-expire-email-address",
+                    "description": "The number of days in advance notice before expiration, default is 5 (The number of days in advance notice before expiration, default is 5)",
+                    "default": "5",
+                    "format": "number",
+                    "src-name": "before"
+                },
+                "interval-days": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "5",
+                    "condition": "before",
+                    "description": "The interval of days notice after expiration, default is 2 (The interval of days notice after expiration, default is 2)",
+                    "alias": "interval-days",
+                    "default": "2",
+                    "format": "number",
+                    "src-name": "interval"
+                },
+                "exception": {
+                    "obj-name": "exception",
+                    "obj-help": "Config the exception which will not be checked",
+                    "obj-lineage": "cmroot.slb.ssl-expire-check",
+                    "obj-occurences": "single",
+                    "obj-indexing": "none",
+                    "obj-backend": "system",
+                    "obj-head-node-options": "<operation; not-allowed-in-no>",
+                    "obj-lineage-full": "slb.ssl-expire-check.exception",
+                    "axapi": "/axapi/v3/slb/ssl-expire-check/exception",
+                    "properties": {
+                        "certificate-name": {
+                            "type": "string",
+                            "minLength": "1",
+                            "maxLength": "255",
+                            "condition": "action",
+                            "description": "The certificate name",
+                            "disabled": "clean",
+                            "format": "string",
+                            "src-name": "certificate-name"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "svm-source-nat": {
+            "obj-name": "svm-source-nat",
+            "obj-help": "Configure SVM Source-NAT Pool",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-auto-create": true,
+            "obj-lineage-full": "slb.svm-source-nat",
+            "axapi": "/axapi/v3/slb/svm-source-nat",
+            "properties": {
+                "pool": {
+                    "type": "string",
+                    "format": "string-rlx",
+                    "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
+                    "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
+                    "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
+                    "example-default": "ip.nat.pool",
+                    "src-name": "pool"
+                }
+            },
+            "type": "object"
+        },
+        "resource-usage": {
+            "obj-name": "resource-usage",
+            "obj-help": "Configure SLB Resource Usage",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-visibility": "shared",
+            "obj-auto-create": true,
+            "obj-stats-oid": "323",
+            "obj-lineage-full": "slb.resource-usage",
+            "axapi": "/axapi/v3/slb/resource-usage",
+            "properties": {
+                "client-ssl-template-count": {
+                    "type": "number",
+                    "minimum": "^cssltemplatemin",
+                    "maximum": "^cssltemplatemax",
+                    "default": "^cssltemplatedefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Client SSL Templates in the System",
+                    "format": "number",
+                    "src-name": "client-ssl-template-count"
+                },
+                "conn-reuse-template-count": {
+                    "type": "number",
+                    "minimum": "^connreusetemplatemin",
+                    "maximum": "^connreusetemplatemax",
+                    "default": "^connreusetemplatedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Connection reuse Templates in the System",
+                    "format": "number",
+                    "src-name": "conn-reuse-template-count"
+                },
+                "fast-tcp-template-count": {
+                    "type": "number",
+                    "minimum": "^fasttcptemplatemin",
+                    "maximum": "^fasttcptemplatemax",
+                    "default": "^fasttcptemplatedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Fast TCP Templates in the System",
+                    "format": "number",
+                    "src-name": "fast-tcp-template-count"
+                },
+                "fast-udp-template-count": {
+                    "type": "number",
+                    "minimum": "^fastudptemplatemin",
+                    "maximum": "^fastudptemplatemax",
+                    "default": "^fastudptemplatedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Fast UDP Templates in the System",
+                    "format": "number",
+                    "src-name": "fast-udp-template-count"
+                },
+                "http-template-count": {
+                    "type": "number",
+                    "minimum": "^httptemplatemin",
+                    "maximum": "^httptemplatemax",
+                    "default": "^httptemplatedefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable HTTP Templates in the System",
+                    "format": "number",
+                    "src-name": "http-template-count"
+                },
+                "nat-pool-addr-count": {
+                    "type": "number",
+                    "minimum": "^natpoolmin",
+                    "maximum": "^natpoolmax",
+                    "default": "^natpooldefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable NAT Pool addresses in the System",
+                    "format": "number",
+                    "src-name": "nat-pool-addr-count"
+                },
+                "persist-cookie-template-count": {
+                    "type": "number",
+                    "minimum": "^persistcookiemin",
+                    "maximum": "^persistcookiemax",
+                    "default": "^persistcookiedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Persistent cookie Templates in the System",
+                    "format": "number",
+                    "src-name": "persist-cookie-template-count"
+                },
+                "persist-srcip-template-count": {
+                    "type": "number",
+                    "minimum": "^persistsrcipmin",
+                    "maximum": "^persistsrcipmax",
+                    "default": "^persistsrcipdef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Source IP Persistent Templates in the System",
+                    "format": "number",
+                    "src-name": "persist-srcip-template-count"
+                },
+                "proxy-template-count": {
+                    "type": "number",
+                    "minimum": "^proxytemplatemin",
+                    "maximum": "^proxytemplatemax",
+                    "default": "^proxytemplatemindef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Proxy Templates in the System",
+                    "format": "number",
+                    "src-name": "proxy-template-count"
+                },
+                "real-port-count": {
+                    "type": "number",
+                    "minimum": "^rportmin",
+                    "maximum": "^rportmax",
+                    "default": "^rportdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Real Server Ports in the System",
+                    "format": "number",
+                    "src-name": "real-port-count"
+                },
+                "real-server-count": {
+                    "type": "number",
+                    "minimum": "^rservermin",
+                    "maximum": "^rservermax",
+                    "default": "^rserverdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Real Servers in the System",
+                    "format": "number",
+                    "src-name": "real-server-count"
+                },
+                "server-ssl-template-count": {
+                    "type": "number",
+                    "minimum": "^sssltemplatemin",
+                    "maximum": "^sssltemplatemax",
+                    "default": "^sssltemplatedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Server SSL Templates in the System",
+                    "format": "number",
+                    "src-name": "server-ssl-template-count"
+                },
+                "service-group-count": {
+                    "type": "number",
+                    "minimum": "^svcgroupmin",
+                    "maximum": "^svcgroupmax",
+                    "default": "^svcgroupdef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Service Groups in the System",
+                    "format": "number",
+                    "src-name": "service-group-count"
+                },
+                "stream-template-count": {
+                    "type": "number",
+                    "minimum": "^streamtemplatemin",
+                    "maximum": "^streamtemplatemax",
+                    "default": "^streamtemplatedef",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total configurable Streaming media in the System",
+                    "format": "number",
+                    "src-name": "stream-template-count"
+                },
+                "virtual-port-count": {
+                    "type": "number",
+                    "minimum": "^vportmin",
+                    "maximum": "^vportmax",
+                    "default": "^vportdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Virtual Server Ports in the System",
+                    "format": "number",
+                    "src-name": "virtual-port-count"
+                },
+                "virtual-server-count": {
+                    "type": "number",
+                    "minimum": "^vservermin",
+                    "maximum": "^vservermax",
+                    "default": "^vserverdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Virtual Servers in the System",
+                    "format": "number",
+                    "src-name": "virtual-server-count"
+                },
+                "gslb-site-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbsitemin",
+                    "maximum": "^gslbsitemax",
+                    "default": "^gslbsitedefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB sites in the System",
+                    "format": "number",
+                    "src-name": "gslb-site-count"
+                },
+                "gslb-device-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbdevmin",
+                    "maximum": "^gslbdevmax",
+                    "default": "^gslbdevdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB devices in the System",
+                    "format": "number",
+                    "src-name": "gslb-device-count"
+                },
+                "gslb-service-ip-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbsvcipmin",
+                    "maximum": "^gslbsvcipmax",
+                    "default": "^gslbsvcipdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB service-ip in the System",
+                    "format": "number",
+                    "src-name": "gslb-service-ip-count"
+                },
+                "gslb-service-port-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbsvcportmin",
+                    "maximum": "^gslbsvcportmax",
+                    "default": "^gslbsvcportdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB service-port in the System",
+                    "format": "number",
+                    "src-name": "gslb-service-port-count"
+                },
+                "gslb-zone-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbznmin",
+                    "maximum": "^gslbznmax",
+                    "default": "^gslbzndefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB zones in the System",
+                    "format": "number",
+                    "src-name": "gslb-zone-count"
+                },
+                "gslb-service-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbsvcmin",
+                    "maximum": "^gslbsvcmax",
+                    "default": "^gslbsvcdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB services in the System",
+                    "format": "number",
+                    "src-name": "gslb-service-count"
+                },
+                "gslb-policy-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbplcymin",
+                    "maximum": "^gslbplcymax",
+                    "default": "^gslbplcydefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB policies in the System",
+                    "format": "number",
+                    "src-name": "gslb-policy-count"
+                },
+                "gslb-geo-location-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbgeolocmin",
+                    "maximum": "^gslbgeolocmax",
+                    "default": "^gslbgeolocdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB geo-location in the System",
+                    "format": "number",
+                    "src-name": "gslb-geo-location-count"
+                },
+                "gslb-ip-list-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbipmin",
+                    "maximum": "^gslbipmax",
+                    "default": "^gslbipdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB ip-list in the System",
+                    "format": "number",
+                    "src-name": "gslb-ip-list-count"
+                },
+                "gslb-template-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbtemplatemin",
+                    "maximum": "^gslbtemplatemax",
+                    "default": "^gslbtemplatedefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB templates in the System",
+                    "format": "number",
+                    "src-name": "gslb-template-count"
+                },
+                "gslb-svc-group-count": {
+                    "type": "number",
+                    "hide-help": true,
+                    "minimum": "^gslbobjgrpmin",
+                    "maximum": "^gslbobjgrpmax",
+                    "default": "^gslbobjgrpdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total GSLB services in the System",
+                    "format": "number",
+                    "src-name": "gslb-svc-group-count"
+                },
+                "health-monitor-count": {
+                    "type": "number",
+                    "minimum": "^healthmonitormin",
+                    "maximum": "^healthmonitormax",
+                    "default": "^healthmonitordefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total Health Monitors in the System",
+                    "format": "number",
+                    "src-name": "health-monitor-count"
+                },
+                "pbslb-subnet-count": {
+                    "type": "number",
+                    "minimum": "^pbslbsubnetmin",
+                    "maximum": "^pbslbsubnetmax",
+                    "default": "^pbslbsubnetdefault",
+                    "value-not-allowed-in-no": true,
+                    "description": "Total PBSLB Subnets in the System",
+                    "format": "number",
+                    "src-name": "pbslb-subnet-count"
+                }
+            },
+            "type": "object"
+        },
+        "ssl-cert": {
+            "obj-name": "ssl-cert",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-backend": "system",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "43",
+            "obj-lineage-full": "slb.ssl-cert",
+            "axapi": "/axapi/v3/slb/ssl-cert",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-ca-cert": {
+            "obj-name": "ssl-ca-cert",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-backend": "system",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "317",
+            "obj-lineage-full": "slb.ssl-ca-cert",
+            "axapi": "/axapi/v3/slb/ssl-ca-cert",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-cert-expire-check": {
+            "obj-name": "ssl-cert-expire-check",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-backend": "system",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "66",
+            "obj-lineage-full": "slb.ssl-cert-expire-check",
+            "axapi": "/axapi/v3/slb/ssl-cert-expire-check",
+            "properties": {},
+            "type": "object"
+        },
+        "health-check-summary": {
+            "obj-name": "health-check-summary",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "315",
+            "obj-lineage-full": "slb.health-check-summary",
+            "axapi": "/axapi/v3/slb/health-check-summary",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-stats": {
+            "obj-name": "ssl-stats",
+            "obj-help": "SSL Statistics",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "320",
+            "obj-lineage-full": "slb.ssl-stats",
+            "axapi": "/axapi/v3/slb/ssl-stats",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-counters": {
+            "obj-name": "ssl-counters",
+            "obj-help": "SSL Vport Statistics",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "402",
+            "obj-lineage-full": "slb.ssl-counters",
+            "axapi": "/axapi/v3/slb/ssl-counters",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-cert-revoke": {
+            "obj-name": "ssl-cert-revoke",
+            "obj-help": "Show ssl-cert-revoke-stats",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "string",
+            "obj-stats-oid": "500",
+            "obj-auto-create": true,
+            "obj-lineage-full": "slb.ssl-cert-revoke",
+            "axapi": "/axapi/v3/slb/ssl-cert-revoke",
+            "properties": {},
+            "type": "object"
+        },
+        "perf": {
+            "obj-name": "perf",
+            "obj-help": "SLB performance stats",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-auto-create": true,
+            "obj-stats-oid": "390",
+            "obj-control-plane-counter-obj": true,
+            "obj-lineage-full": "slb.perf",
+            "axapi": "/axapi/v3/slb/perf",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-ocsp": {
+            "obj-name": "ssl-ocsp",
+            "obj-help": "SSL Online Certificate Status Protocol",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-backend": "system",
+            "obj-stats-oid": "400",
+            "obj-lineage-full": "slb.ssl-ocsp",
+            "axapi": "/axapi/v3/slb/ssl-ocsp",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-forward-proxy-cert": {
+            "obj-name": "ssl-forward-proxy-cert",
+            "obj-help": "Show hashed certificates",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-backend": "system",
+            "obj-stats-oid": "401",
+            "obj-lineage-full": "slb.ssl-forward-proxy-cert",
+            "axapi": "/axapi/v3/slb/ssl-forward-proxy-cert",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-crl": {
+            "obj-name": "ssl-crl",
+            "obj-help": "Retrieved Certificate Revocation List",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-backend": "system",
+            "obj-indexing": "none",
+            "obj-head-node-options": "<hide-help; operation>",
+            "obj-auto-create": true,
+            "obj-stats-oid": "403",
+            "obj-lineage-full": "slb.ssl-crl",
+            "axapi": "/axapi/v3/slb/ssl-crl",
+            "properties": {},
+            "type": "object"
+        },
+        "ssl-forward-proxy": {
+            "obj-name": "ssl-forward-proxy",
+            "obj-help": "SSL forward proxy stats info",
+            "obj-lineage": "cmroot.slb",
+            "obj-occurences": "single",
+            "obj-indexing": "string",
+            "obj-stats-oid": "499",
+            "obj-auto-create": true,
+            "obj-lineage-full": "slb.ssl-forward-proxy",
+            "axapi": "/axapi/v3/slb/ssl-forward-proxy",
+            "properties": {},
+            "type": "object"
+        }
+    }
+}

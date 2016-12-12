@@ -1,0 +1,12 @@
+{
+    "obj-name": "aflow",
+    "obj-help": "Show aFlow statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "23",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.aflow",
+    "axapi": "/axapi/v3/slb/aflow",
+    "properties": {}
+}

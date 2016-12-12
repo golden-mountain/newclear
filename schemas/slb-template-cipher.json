@@ -1,0 +1,185 @@
+{
+    "obj-name": "cipher",
+    "obj-help": "SSL Cipher Template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "cipher",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.cipher",
+    "axapi": "/axapi/v3/slb/template/cipher/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "name",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Cipher Template Name",
+            "src-name": "name"
+        },
+        "cipher-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "cipher-suite": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "maxItems": "32",
+                        "enum": [
+                            "SSL3_RSA_DES_192_CBC3_SHA",
+                            "SSL3_RSA_DES_40_CBC_SHA",
+                            "SSL3_RSA_DES_64_CBC_SHA",
+                            "SSL3_RSA_RC4_128_MD5",
+                            "SSL3_RSA_RC4_128_SHA",
+                            "SSL3_RSA_RC4_40_MD5",
+                            "TLS1_RSA_AES_128_SHA",
+                            "TLS1_RSA_AES_256_SHA",
+                            "TLS1_RSA_EXPORT1024_RC4_56_MD5",
+                            "TLS1_RSA_EXPORT1024_RC4_56_SHA",
+                            "TLS1_RSA_AES_128_SHA256",
+                            "TLS1_RSA_AES_256_SHA256",
+                            "TLS1_DHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_DHE_RSA_AES_128_SHA",
+                            "TLS1_DHE_RSA_AES_128_SHA256",
+                            "TLS1_DHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_DHE_RSA_AES_256_SHA",
+                            "TLS1_DHE_RSA_AES_256_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_RSA_AES_128_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_SHA256",
+                            "TLS1_ECDHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA",
+                            "TLS1_RSA_AES_128_GCM_SHA256",
+                            "TLS1_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                        ],
+                        "enumMap": [
+                            {
+                                "SSL3_RSA_DES_192_CBC3_SHA": "\"SSL3_RSA_DES_192_CBC3_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_40_CBC_SHA": "\"SSL3_RSA_DES_40_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_64_CBC_SHA": "\"SSL3_RSA_DES_64_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_MD5": "\"SSL3_RSA_RC4_128_MD5"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_SHA": "\"SSL3_RSA_RC4_128_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_40_MD5": "\"SSL3_RSA_RC4_40_MD5"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA": "\"TLS1_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA": "\"TLS1_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_MD5": "\"TLS1_RSA_EXPORT1024_RC4_56_MD5"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_SHA": "\"TLS1_RSA_EXPORT1024_RC4_56_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA256": "\"TLS1_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA256": "\"TLS1_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_GCM_SHA256": "\"TLS1_DHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA": "\"TLS1_DHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA256": "\"TLS1_DHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_GCM_SHA384": "\"TLS1_DHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA": "\"TLS1_DHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA256": "\"TLS1_DHE_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA": "\"TLS1_ECDHE_ECDSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA": "\"TLS1_ECDHE_ECDSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA": "\"TLS1_ECDHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA256": "\"TLS1_ECDHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA": "\"TLS1_ECDHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_GCM_SHA256": "\"TLS1_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_GCM_SHA384": "\"TLS1_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA384": "\"TLS1_ECDHE_RSA_AES_256_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                            }
+                        ],
+                        "description": "'SSL3_RSA_DES_192_CBC3_SHA': \"SSL3_RSA_DES_192_CBC3_SHA;'SSL3_RSA_DES_40_CBC_SHA': \"SSL3_RSA_DES_40_CBC_SHA;'SSL3_RSA_DES_64_CBC_SHA': \"SSL3_RSA_DES_64_CBC_SHA;'SSL3_RSA_RC4_128_MD5': \"SSL3_RSA_RC4_128_MD5;'SSL3_RSA_RC4_128_SHA': \"SSL3_RSA_RC4_128_SHA;'SSL3_RSA_RC4_40_MD5': \"SSL3_RSA_RC4_40_MD5;'TLS1_RSA_AES_128_SHA': \"TLS1_RSA_AES_128_SHA;'TLS1_RSA_AES_256_SHA': \"TLS1_RSA_AES_256_SHA;'TLS1_RSA_EXPORT1024_RC4_56_MD5': \"TLS1_RSA_EXPORT1024_RC4_56_MD5;'TLS1_RSA_EXPORT1024_RC4_56_SHA': \"TLS1_RSA_EXPORT1024_RC4_56_SHA;'TLS1_RSA_AES_128_SHA256': \"TLS1_RSA_AES_128_SHA256;'TLS1_RSA_AES_256_SHA256': \"TLS1_RSA_AES_256_SHA256;'TLS1_DHE_RSA_AES_128_GCM_SHA256': \"TLS1_DHE_RSA_AES_128_GCM_SHA256;'TLS1_DHE_RSA_AES_128_SHA': \"TLS1_DHE_RSA_AES_128_SHA;'TLS1_DHE_RSA_AES_128_SHA256': \"TLS1_DHE_RSA_AES_128_SHA256;'TLS1_DHE_RSA_AES_256_GCM_SHA384': \"TLS1_DHE_RSA_AES_256_GCM_SHA384;'TLS1_DHE_RSA_AES_256_SHA': \"TLS1_DHE_RSA_AES_256_SHA;'TLS1_DHE_RSA_AES_256_SHA256': \"TLS1_DHE_RSA_AES_256_SHA256;'TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256;'TLS1_ECDHE_ECDSA_AES_128_SHA': \"TLS1_ECDHE_ECDSA_AES_128_SHA;'TLS1_ECDHE_ECDSA_AES_128_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_SHA256;'TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA': \"TLS1_ECDHE_ECDSA_AES_256_SHA;'TLS1_ECDHE_RSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_RSA_AES_128_GCM_SHA256;'TLS1_ECDHE_RSA_AES_128_SHA': \"TLS1_ECDHE_RSA_AES_128_SHA;'TLS1_ECDHE_RSA_AES_128_SHA256': \"TLS1_ECDHE_RSA_AES_128_SHA256;'TLS1_ECDHE_RSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA': \"TLS1_ECDHE_RSA_AES_256_SHA;'TLS1_RSA_AES_128_GCM_SHA256': \"TLS1_RSA_AES_128_GCM_SHA256;'TLS1_RSA_AES_256_GCM_SHA384': \"TLS1_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA384': \"TLS1_ECDHE_RSA_AES_256_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_SHA384;",
+                        "format": "enum",
+                        "src-name": "cipher-suite"
+                    }
+                },
+                {
+                    "priority": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "100",
+                        "default": "1",
+                        "condition": "cipher-suite",
+                        "description": "Cipher priority (Cipher priority (default 1))",
+                        "format": "number",
+                        "src-name": "priority"
+                    }
+                }
+            ],
+            "src-name": "cipher-cfg"
+        }
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "obj-name": "smpp",
+    "obj-help": "SMPP template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "smpp",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.smpp",
+    "axapi": "/axapi/v3/slb/template/smpp/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "SMPP Template Name",
+            "src-name": "name"
+        },
+        "client-enquire-link": {
+            "type": "number",
+            "format": "flag",
+            "description": "Respond client ENQUIRE_LINK packet directly instead of forwarding to server",
+            "src-name": "client-enquire-link"
+        },
+        "server-enquire-link": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send server ENQUIRE_LINK packet for every persist connection when enable conn-reuse",
+            "src-name": "server-enquire-link"
+        },
+        "server-enquire-link-val": {
+            "type": "number",
+            "minimum": "5",
+            "maximum": "300",
+            "condition": "server-enquire-link",
+            "description": "Set interval of keep-alive packet for each persistent connection (second, default is 30)",
+            "default": "30",
+            "format": "number",
+            "src-name": "server-enquire-link-val"
+        },
+        "user": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Configure the user to bind (The name used to bind)",
+            "src-name": "user"
+        },
+        "password": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "user",
+            "description": "Configure the password used to bind (The password used to bind)",
+            "src-name": "password"
+        },
+        "server-selection-per-request": {
+            "type": "number",
+            "format": "flag",
+            "description": "Force server selection on every SMPP request when enable conn-reuse",
+            "src-name": "server-selection-per-request"
+        }
+    }
+}

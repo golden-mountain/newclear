@@ -1,0 +1,12 @@
+{
+    "obj-name": "persist",
+    "obj-help": "Show persist statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "4",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.persist",
+    "axapi": "/axapi/v3/slb/persist",
+    "properties": {}
+}

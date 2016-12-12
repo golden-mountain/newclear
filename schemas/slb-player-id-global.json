@@ -1,0 +1,62 @@
+{
+    "obj-name": "player-id-global",
+    "obj-help": "Player-id global commands",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-module": true,
+    "obj-auto-create": true,
+    "obj-stats-oid": "508",
+    "obj-lineage-full": "slb.player-id-global",
+    "axapi": "/axapi/v3/slb/player-id-global",
+    "properties": {
+        "enable-64bit-player-id": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable 64 bit player id check. Default is 32 bit",
+            "src-name": "enable-64bit-player-id"
+        },
+        "force-passive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Forces the device to be in passive mode (Only stats and no packet drops)",
+            "src-name": "force-passive"
+        },
+        "enforcement-timer": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "32767",
+            "description": "Time to playerid enforcement after bootup (default 480 seconds) (Time to playerid enforcement in seconds, default 480)",
+            "default": "480",
+            "format": "number",
+            "src-name": "enforcement-timer"
+        },
+        "min-expiration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "32767",
+            "description": "Minimum record expiration value (default 1 min) (Min record expiration time in minutes, default 1)",
+            "default": "1",
+            "format": "number",
+            "src-name": "min-expiration"
+        },
+        "pkt-activity-expiration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "32767",
+            "description": "Packet activity record expiration value (default 5 minutes) (Packet activity record expiration time in minutes, default 5)",
+            "default": "5",
+            "format": "number",
+            "src-name": "pkt-activity-expiration"
+        },
+        "abs-max-expiration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "32767",
+            "description": "Absolute max record expiration value (default 10 minutes) (Absolute max record expiration time in minutes, default 10)",
+            "default": "10",
+            "format": "number",
+            "src-name": "abs-max-expiration"
+        }
+    }
+}

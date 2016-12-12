@@ -1,0 +1,808 @@
+{
+    "obj-name": "http",
+    "obj-help": "HTTP",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "http",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-disp-after": "slb.template.logging",
+    "obj-lineage-full": "slb.template.http",
+    "axapi": "/axapi/v3/slb/template/http/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "snmp-alias": "slbTemplateHttpName",
+            "description": "HTTP Template Name",
+            "src-name": "name"
+        },
+        "compression": {
+            "type": "dummy",
+            "description": "Compression configuration",
+            "format": "dummy",
+            "src-name": "compression"
+        },
+        "compression-auto-disable-on-high-cpu": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "100",
+            "condition": "compression",
+            "alias": "compression-auto-disable-on-high-cpu",
+            "description": "Auto-disable software compression on high cpu usage (Disable compression if cpu usage is above threshold. Default is off.)",
+            "format": "number",
+            "src-name": "auto-disable-on-high-cpu"
+        },
+        "compression-content-type": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "content-type": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "31",
+                        "condition": "compression",
+                        "maxItems": "10",
+                        "description": "Compression content-type (Compression content-type)",
+                        "src-name": "content-type"
+                    }
+                }
+            ],
+            "src-name": "compression-content-type"
+        },
+        "compression-enable": {
+            "type": "number",
+            "format": "flag",
+            "condition": "compression",
+            "alias": "compression-enable",
+            "default": "0",
+            "description": "Enable Compression",
+            "src-name": "enable"
+        },
+        "compression-exclude-content-type": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "exclude-content-type": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "31",
+                        "condition": "compression",
+                        "maxItems": "10",
+                        "description": "Compression exclude content-type (Compression exclude content type)",
+                        "src-name": "exclude-content-type"
+                    }
+                }
+            ],
+            "src-name": "compression-exclude-content-type"
+        },
+        "compression-exclude-uri": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "exclude-uri": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "31",
+                        "multi-field-key": true,
+                        "condition": "compression",
+                        "maxItems": "10",
+                        "description": "Compression exclude uri (Compression exclude uri)",
+                        "src-name": "exclude-uri"
+                    }
+                }
+            ],
+            "src-name": "compression-exclude-uri"
+        },
+        "compression-keep-accept-encoding": {
+            "type": "number",
+            "format": "flag",
+            "condition": "compression",
+            "alias": "compression-keep-accept-encoding",
+            "description": "Keep accept encoding",
+            "src-name": "keep-accept-encoding"
+        },
+        "compression-keep-accept-encoding-enable": {
+            "type": "number",
+            "format": "flag",
+            "condition": "compression-keep-accept-encoding",
+            "alias": "compression-keep-accept-encoding-enable",
+            "description": "Enable Server Accept Encoding",
+            "src-name": "enable"
+        },
+        "compression-level": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "9",
+            "condition": "compression",
+            "alias": "compression-level",
+            "description": "compression level, default 1 (compression level value, default is 1)",
+            "default": "1",
+            "format": "number",
+            "src-name": "level"
+        },
+        "compression-minimum-content-length": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2147483647",
+            "condition": "compression",
+            "alias": "compression-minimum-content-length",
+            "description": "Minimum Content Length (Minimum content length for compression in bytes. Default is 120.)",
+            "default": "120",
+            "format": "number",
+            "src-name": "minimum-content-length"
+        },
+        "failover-url": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "255",
+            "description": "Failover to this URL (Failover URL Name)",
+            "src-name": "failover-url"
+        },
+        "host-switching": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Host Name Switching",
+            "properties": [
+                {
+                    "host-switching-type": {
+                        "type": "string",
+                        "format": "enum",
+                        "condition": "host-switching",
+                        "multi-field-key": true,
+                        "maxItems": "1024",
+                        "enum": [
+                            "contains",
+                            "ends-with",
+                            "equals",
+                            "starts-with",
+                            "regex-match",
+                            "host-hits-enable"
+                        ],
+                        "enumMap": [
+                            {
+                                "contains": "\"Select service group if hostname contains another string"
+                            },
+                            {
+                                "ends-with": "\"Select service group if hostname ends with another string"
+                            },
+                            {
+                                "equals": "\"Select service group if hostname equals another string"
+                            },
+                            {
+                                "starts-with": "\"Select service group if hostname starts with another string"
+                            },
+                            {
+                                "regex-match": "\"Select service group if URL string matches with regular expression"
+                            },
+                            {
+                                "host-hits-enable": "\"Enables Host Hits counters"
+                            }
+                        ],
+                        "description": "'contains': \"Select service group if hostname contains another string;'ends-with': \"Select service group if hostname ends with another string;'equals': \"Select service group if hostname equals another string;'starts-with': \"Select service group if hostname starts with another string;'regex-match': \"Select service group if URL string matches with regular expression;'host-hits-enable': \"Enables Host Hits counters;",
+                        "src-name": "host-switching-type"
+                    }
+                },
+                {
+                    "host-match-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "host-switching-type",
+                        "maxItems": "1024",
+                        "disabled": "host-hits-enable",
+                        "description": "Hostname String",
+                        "src-name": "host-match-string"
+                    }
+                },
+                {
+                    "host-service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "condition": "host-match-string",
+                        "description": "Create a Service Group comprising Servers (Service Group Name)",
+                        "alias": "host-service-group",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "host-switching"
+        },
+        "insert-client-ip": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert Client IP address into HTTP header",
+            "src-name": "insert-client-ip"
+        },
+        "insert-client-ip-header-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "insert-client-ip",
+            "alias": "insert-client-ip-header-name",
+            "description": "HTTP Header Name for inserting Client IP",
+            "link-next-fwd": "client-ip-hdr-replace",
+            "format": "string",
+            "src-name": "client-ip"
+        },
+        "client-ip-hdr-replace": {
+            "type": "number",
+            "format": "flag",
+            "condition": "insert-client-ip",
+            "alias": "client-ip-hdr-replace",
+            "description": "Replace the existing header",
+            "src-name": "replace"
+        },
+        "insert-client-port": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert Client Port address into HTTP header",
+            "src-name": "insert-client-port"
+        },
+        "insert-client-port-header-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "insert-client-port",
+            "alias": "insert-client-port-header-name",
+            "description": "HTTP Header Name for inserting Client Port",
+            "link-next-fwd": "client-port-hdr-replace",
+            "format": "string",
+            "src-name": "client-port"
+        },
+        "client-port-hdr-replace": {
+            "type": "number",
+            "format": "flag",
+            "condition": "insert-client-port",
+            "alias": "client-port-hdr-replace",
+            "description": "Replace the existing header",
+            "src-name": "replace"
+        },
+        "log-retry": {
+            "type": "number",
+            "format": "flag",
+            "description": "log when HTTP request retry",
+            "src-name": "log-retry"
+        },
+        "non-http-bypass": {
+            "type": "number",
+            "format": "flag",
+            "description": "Bypass non-http traffic instead of dropping",
+            "src-name": "non-http-bypass"
+        },
+        "bypass-sg": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "non-http-bypass",
+            "alias": "bypass-sg",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "description": "Select service group for non-http traffic (Service Group Name)",
+            "src-name": "service-group"
+        },
+        "redirect": {
+            "type": "number",
+            "format": "flag",
+            "description": "Automatically send a redirect response",
+            "src-name": "redirect"
+        },
+        "rd-simple-loc": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "condition": "redirect",
+            "alias": "rd-simple-loc",
+            "link-next-fwd": "rd-resp-code",
+            "minLength": "1",
+            "maxLength": "255",
+            "not-allowed-in-no": true,
+            "description": "Redirect location tag absolute URI string (Redirect location tag absolute URI string)",
+            "src-name": "location"
+        },
+        "rd-secure": {
+            "type": "number",
+            "format": "flag",
+            "condition": "redirect",
+            "alias": "rd-secure",
+            "link-next-fwd": "rd-port",
+            "m-exclusion": "rd-simple-loc",
+            "not-allowed-in-no": true,
+            "description": "Use HTTPS",
+            "src-name": "secure"
+        },
+        "rd-port": {
+            "type": "number",
+            "condition": "redirect",
+            "alias": "rd-port",
+            "link-next-fwd": "rd-resp-code",
+            "m-exclusion": "rd-simple-loc",
+            "minimum": "1",
+            "maximum": "65535",
+            "not-allowed-in-no": true,
+            "description": "Port (Port Number)",
+            "format": "number",
+            "src-name": "port"
+        },
+        "redirect-rewrite": {
+            "type": "object",
+            "array-start": true,
+            "description": "Rewrite the redirect URL",
+            "properties": {
+                "match-list": {
+                    "type": "array",
+                    "array-start": true,
+                    "array-multi": true,
+                    "properties": [
+                        {
+                            "redirect-match": {
+                                "type": "string",
+                                "format": "string-rlx",
+                                "minLength": "1",
+                                "maxLength": "63",
+                                "multi-field-key": true,
+                                "condition": "redirect-rewrite",
+                                "alias": "redirect-match",
+                                "maxItems": "8",
+                                "description": "URL Matching (Pattern URL String)",
+                                "src-name": "match"
+                            }
+                        },
+                        {
+                            "rewrite-to": {
+                                "type": "string",
+                                "format": "string-rlx",
+                                "minLength": "1",
+                                "maxLength": "63",
+                                "condition": "redirect-match",
+                                "description": "Rewrite to Destination URL String (Destination URL String)",
+                                "src-name": "rewrite-to"
+                            }
+                        }
+                    ],
+                    "src-name": "match-list"
+                },
+                "redirect-secure": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "redirect-rewrite",
+                    "alias": "redirect-secure",
+                    "description": "Use HTTPS",
+                    "src-name": "secure"
+                },
+                "redirect-secure-port": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "redirect-secure",
+                    "alias": "redirect-secure-port",
+                    "description": "Port (Port Number)",
+                    "default": "443",
+                    "format": "number",
+                    "src-name": "port"
+                }
+            },
+            "src-name": "redirect-rewrite"
+        },
+        "request-header-erase-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "request-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "maxItems": "8",
+                        "description": "Erase a header from HTTP request (Header Name)",
+                        "src-name": "request-header-erase"
+                    }
+                }
+            ],
+            "src-name": "request-header-erase-list"
+        },
+        "request-header-insert-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "request-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "maxItems": "8",
+                        "description": "Insert a header into HTTP request (Header Content (Format: \"[name]: [value]\"))",
+                        "src-name": "request-header-insert"
+                    }
+                },
+                {
+                    "request-header-insert-type": {
+                        "type": "string",
+                        "format": "enum",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "request-header-insert",
+                        "alias": "request-header-insert-type",
+                        "src-name": "insert-type"
+                    }
+                }
+            ],
+            "src-name": "request-header-insert-list"
+        },
+        "response-content-replace-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "response-content-replace": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "maxItems": "8",
+                        "description": "replace the data from HTTP response content String in the http content need to be replaced (String in the http content need to be replaced)",
+                        "src-name": "response-content-replace"
+                    }
+                },
+                {
+                    "response-new-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "response-content-replace",
+                        "alias": "response-new-string",
+                        "description": "String will be in the http content",
+                        "src-name": "new-string"
+                    }
+                }
+            ],
+            "src-name": "response-content-replace-list"
+        },
+        "response-header-erase-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "response-header-erase": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "maxItems": "8",
+                        "description": "Erase a header from HTTP response (Header Name)",
+                        "src-name": "response-header-erase"
+                    }
+                }
+            ],
+            "src-name": "response-header-erase-list"
+        },
+        "response-header-insert-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "response-header-insert": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "maxItems": "8",
+                        "description": "Insert a header into HTTP response (Header Content (Format: \"[name]: [value]\"))",
+                        "src-name": "response-header-insert"
+                    }
+                },
+                {
+                    "response-header-insert-type": {
+                        "type": "string",
+                        "format": "enum",
+                        "enum": [
+                            "insert-if-not-exist",
+                            "insert-always"
+                        ],
+                        "enumMap": [
+                            {
+                                "insert-if-not-exist": "\"Only insert the header when it does not exist"
+                            },
+                            {
+                                "insert-always": "\"Always insert the header even when there is a header with the same name"
+                            }
+                        ],
+                        "description": "'insert-if-not-exist': \"Only insert the header when it does not exist;'insert-always': \"Always insert the header even when there is a header with the same name;",
+                        "condition": "response-header-insert",
+                        "alias": "response-header-insert-type",
+                        "src-name": "insert-type"
+                    }
+                }
+            ],
+            "src-name": "response-header-insert-list"
+        },
+        "retry-on-5xx": {
+            "type": "number",
+            "format": "flag",
+            "description": "Retry http request on HTTP 5xx code",
+            "src-name": "retry-on-5xx"
+        },
+        "retry-on-5xx-val": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "3",
+            "condition": "retry-on-5xx",
+            "description": "Number of times to retry (default is 3)",
+            "default": "3",
+            "format": "number",
+            "src-name": "retry-on-5xx-val"
+        },
+        "retry-on-5xx-per-req": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "retry-on-5xx",
+            "description": "Retry http request on HTTP 5xx code for each request",
+            "src-name": "retry-on-5xx-per-req"
+        },
+        "retry-on-5xx-per-req-val": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "3",
+            "condition": "retry-on-5xx-per-req",
+            "description": "Number of times to retry (default is 3)",
+            "default": "3",
+            "format": "number",
+            "src-name": "retry-on-5xx-per-req-val"
+        },
+        "strict-transaction-switch": {
+            "type": "number",
+            "format": "flag",
+            "description": "Force server selection on every HTTP request",
+            "src-name": "strict-transaction-switch"
+        },
+        "template": {
+            "type": "object",
+            "array-start": true,
+            "description": "Applying Template to the HTTP template",
+            "properties": {
+                "logging": {
+                    "type": "string",
+                    "minLength": "1",
+                    "maxLength": "127",
+                    "condition": "template",
+                    "description": "Logging template (Logging Config name)",
+                    "obj-lineage-full": "slb.template.logging",
+                    "$ref": "/axapi/v3/slb/template/logging",
+                    "format": "string",
+                    "src-name": "logging"
+                }
+            },
+            "src-name": "template"
+        },
+        "term-11client-hdr-conn-close": {
+            "type": "number",
+            "format": "flag",
+            "description": "Terminate HTTP 1.1 client when req has Connection: close",
+            "src-name": "term-11client-hdr-conn-close"
+        },
+        "100-cont-wait-for-req-complete": {
+            "type": "number",
+            "format": "flag",
+            "description": "When REQ has Expect 100 and response is not 100, then wait for whole request to be sent",
+            "src-name": "100-cont-wait-for-req-complete"
+        },
+        "url-hash-persist": {
+            "type": "number",
+            "format": "flag",
+            "description": "Use URL's hash value to select server",
+            "src-name": "url-hash-persist"
+        },
+        "url-hash-offset": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "255",
+            "condition": "url-hash-persist",
+            "link-next-fwd": "url-hash-first",
+            "alias": "url-hash-offset",
+            "description": "Skip part of URL to calculate hash value (Offset of the URL string)",
+            "format": "number",
+            "src-name": "offset"
+        },
+        "url-hash-first": {
+            "type": "number",
+            "minimum": "4",
+            "maximum": "128",
+            "condition": "url-hash-persist",
+            "link-next-fwd": "use-server-status",
+            "alias": "url-hash-first",
+            "description": "Use the begining part of URL to calculate hash value (URL string length to calculate hash value)",
+            "format": "number",
+            "src-name": "first"
+        },
+        "url-hash-last": {
+            "type": "number",
+            "minimum": "4",
+            "maximum": "128",
+            "condition": "url-hash-persist",
+            "m-exclusion": "url-hash-first",
+            "link-next-fwd": "use-server-status",
+            "alias": "url-hash-last",
+            "description": "Use the end part of URL to calculate hash value (URL string length to calculate hash value)",
+            "format": "number",
+            "src-name": "last"
+        },
+        "use-server-status": {
+            "type": "number",
+            "format": "flag",
+            "condition": "url-hash-first",
+            "description": "Use Server-Status header to do URL hashing",
+            "src-name": "use-server-status"
+        },
+        "url-switching": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "URL switching",
+            "properties": [
+                {
+                    "url-switching-type": {
+                        "type": "string",
+                        "format": "enum",
+                        "condition": "url-switching",
+                        "multi-field-key": true,
+                        "maxItems": "1024",
+                        "enum": [
+                            "contains",
+                            "ends-with",
+                            "equals",
+                            "starts-with",
+                            "regex-match",
+                            "url-case-insensitive",
+                            "url-hits-enable"
+                        ],
+                        "enumMap": [
+                            {
+                                "contains": "\"Select service group if URL string contains another string"
+                            },
+                            {
+                                "ends-with": "\"Select service group if URL string ends with another string"
+                            },
+                            {
+                                "equals": "\"Select service group if URL string equals another string"
+                            },
+                            {
+                                "starts-with": "\"Select service group if URL string starts with another string"
+                            },
+                            {
+                                "regex-match": "\"Select service group if URL string matches with regular expression"
+                            },
+                            {
+                                "url-case-insensitive": "\"Case insensitive URL switching"
+                            },
+                            {
+                                "url-hits-enable": "\"Enables URL Hits"
+                            }
+                        ],
+                        "description": "'contains': \"Select service group if URL string contains another string;'ends-with': \"Select service group if URL string ends with another string;'equals': \"Select service group if URL string equals another string;'starts-with': \"Select service group if URL string starts with another string;'regex-match': \"Select service group if URL string matches with regular expression;'url-case-insensitive': \"Case insensitive URL switching;'url-hits-enable': \"Enables URL Hits;",
+                        "src-name": "url-switching-type"
+                    }
+                },
+                {
+                    "url-match-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "url-switching-type",
+                        "maxItems": "1024",
+                        "description": "URL String",
+                        "disabled": "url-case-insensitive/url-hits-enable",
+                        "src-name": "url-match-string"
+                    }
+                },
+                {
+                    "url-service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "multi-field-key": true,
+                        "condition": "url-match-string",
+                        "description": "Create a Service Group comprising Servers (Service Group Name)",
+                        "alias": "url-service-group",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "url-switching"
+        },
+        "req-hdr-wait-time": {
+            "type": "number",
+            "format": "flag",
+            "description": "HTTP request header wait time before abort connection",
+            "src-name": "req-hdr-wait-time"
+        },
+        "req-hdr-wait-time-val": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "default": "7",
+            "condition": "req-hdr-wait-time",
+            "description": "Number of seconds wait for client request header (default is 7)",
+            "format": "number",
+            "src-name": "req-hdr-wait-time-val"
+        },
+        "request-line-case-insensitive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Parse http request line as case insensitive",
+            "src-name": "request-line-case-insensitive"
+        },
+        "keep-client-alive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Keep client alive",
+            "src-name": "keep-client-alive"
+        },
+        "cookie-format": {
+            "type": "string",
+            "enum": [
+                "rfc6265"
+            ],
+            "enumMap": [
+                {
+                    "rfc6265": "\"Follow rfc6265"
+                }
+            ],
+            "description": "Parse RFC Cookie standard 'rfc6265': \"Follow rfc6265;",
+            "format": "enum",
+            "src-name": "cookie-format"
+        }
+    }
+}

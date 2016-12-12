@@ -1,0 +1,86 @@
+{
+    "obj-name": "fix",
+    "obj-help": "FIX template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "fix",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-disp-after": "slb.service-group",
+    "obj-lineage-full": "slb.template.fix",
+    "axapi": "/axapi/v3/slb/template/fix/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "FIX Template Name",
+            "src-name": "name"
+        },
+        "insert-client-ip": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert client ip to tag 11447",
+            "src-name": "insert-client-ip"
+        },
+        "tag-switching": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "maxItems": "127",
+            "description": "tag-switching Select service group based on tag value",
+            "properties": [
+                {
+                    "switching-type": {
+                        "type": "string",
+                        "condition": "tag-switching",
+                        "enum": [
+                            "sender-comp-id",
+                            "target-comp-id"
+                        ],
+                        "enumMap": [
+                            {
+                                "sender-comp-id": "\"Select service group based on SenderCompID"
+                            },
+                            {
+                                "target-comp-id": "\"Select service group based on TargetCompID"
+                            }
+                        ],
+                        "description": "'sender-comp-id': \"Select service group based on SenderCompID;'target-comp-id': \"Select service group based on TargetCompID;",
+                        "format": "enum",
+                        "src-name": "switching-type"
+                    }
+                },
+                {
+                    "equals": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "multi-field-key": true,
+                        "condition": "switching-type",
+                        "description": "Equals (Tag String)",
+                        "format": "string",
+                        "src-name": "equals"
+                    }
+                },
+                {
+                    "service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "equals",
+                        "description": "Create a Service Group comprising Servers (Service Group Name)",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "tag-switching"
+        }
+    }
+}

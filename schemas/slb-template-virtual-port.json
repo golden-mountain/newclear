@@ -1,0 +1,244 @@
+{
+    "obj-name": "virtual-port",
+    "obj-help": "Virtual port template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "vport",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.virtual-port",
+    "axapi": "/axapi/v3/slb/template/virtual-port/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Virtual port template name",
+            "src-name": "name"
+        },
+        "aflow": {
+            "type": "number",
+            "format": "flag",
+            "description": "Use aFlow to eliminate the traffic surge",
+            "src-name": "aflow"
+        },
+        "allow-syn-otherflags": {
+            "type": "number",
+            "format": "flag",
+            "description": "Allow initial SYN packet with other flags",
+            "src-name": "allow-syn-otherflags"
+        },
+        "conn-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "8000000",
+            "default": "8000000",
+            "description": "Connection limit (Connection limit)",
+            "format": "number",
+            "src-name": "conn-limit"
+        },
+        "conn-limit-reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "link-next-fwd": "conn-limit-no-logging",
+            "description": "Send client reset when connection over limit",
+            "alias": "conn-limit-reset",
+            "src-name": "reset"
+        },
+        "conn-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "conn-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Connection rate limit (Connection rate limit)",
+            "format": "number",
+            "src-name": "conn-rate-limit"
+        },
+        "rate-interval": {
+            "type": "string",
+            "alias": "rate-interval",
+            "condition": "conn-rate-limit",
+            "description": "'100ms': \"Use 100 ms as sampling interval;'second': \"Use 1 second as sampling interval;",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Use 100 ms as sampling interval"
+                },
+                {
+                    "second": "\"Use 1 second as sampling interval"
+                }
+            ],
+            "link-next-fwd": "conn-rate-limit-reset",
+            "default": "second",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "conn-rate-limit-reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "link-next-fwd": "conn-rate-limit-no-logging",
+            "description": "Send client reset when connection rate over limit",
+            "alias": "conn-rate-limit-reset",
+            "src-name": "reset"
+        },
+        "conn-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-rate-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "pkt-rate-limit": {
+            "type": "dummy",
+            "description": "Source port packet rate limit",
+            "format": "dummy",
+            "src-name": "pkt-rate-limit"
+        },
+        "rate": {
+            "type": "number",
+            "condition": "pkt-rate-type",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Source IP and port rate limit (Packet rate limit)",
+            "format": "number",
+            "src-name": "rate"
+        },
+        "pkt-rate-interval": {
+            "type": "string",
+            "condition": "rate",
+            "alias": "pkt-rate-interval",
+            "description": "'100ms': \"Source IP and port rate limit per 100ms;'second': \"Source IP and port rate limit per second (default);",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Source IP and port rate limit per 100ms"
+                },
+                {
+                    "second": "\"Source IP and port rate limit per second (default)"
+                }
+            ],
+            "default": "second",
+            "link-next-fwd": "pkt-rate-limit-reset",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "pkt-rate-limit-reset": {
+            "type": "number",
+            "condition": "rate",
+            "minimum": "0",
+            "maximum": "1048575",
+            "default": "0",
+            "description": "send client-side reset (reset after packet limit)",
+            "alias": "pkt-rate-limit-reset",
+            "link-next-fwd": "log-options",
+            "format": "number",
+            "src-name": "reset"
+        },
+        "log-options": {
+            "type": "string",
+            "condition": "rate",
+            "enum": [
+                "no-logging",
+                "no-repeat-logging"
+            ],
+            "enumMap": [
+                {
+                    "no-logging": "\"Do not log over limit event"
+                },
+                {
+                    "no-repeat-logging": "\"log once for over limit event. Default is log once per minute"
+                }
+            ],
+            "description": "'no-logging': \"Do not log over limit event;'no-repeat-logging': \"log once for over limit event. Default is log once per minute;",
+            "link-next-fwd": "when-rr-enable",
+            "format": "enum",
+            "src-name": "log-options"
+        },
+        "when-rr-enable": {
+            "type": "number",
+            "format": "flag",
+            "condition": "rate",
+            "link-next-rev": "log-options",
+            "description": "Only do rate limit if CPU RR triggered",
+            "src-name": "when-rr-enable"
+        },
+        "allow-vip-to-rport-mapping": {
+            "type": "number",
+            "format": "flag",
+            "description": "Allow mapping of VIP to real port",
+            "src-name": "allow-vip-to-rport-mapping"
+        },
+        "dscp": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "description": "Differentiated Services Code Point (DSCP to Real Server IP Mapping Value)",
+            "format": "number",
+            "src-name": "dscp"
+        },
+        "drop-unknown-conn": {
+            "type": "number",
+            "format": "flag",
+            "description": "Drop conection if receives TCP packet without SYN or RST flag and it does not belong to any existing connections",
+            "src-name": "drop-unknown-conn"
+        },
+        "reset-unknown-conn": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send reset back if receives TCP packet without SYN or RST flag and it does not belong to any existing connections",
+            "src-name": "reset-unknown-conn"
+        },
+        "reset-l7-on-failover": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send reset to L7 client and server connection upon a failover",
+            "src-name": "reset-l7-on-failover"
+        },
+        "ignore-tcp-msl": {
+            "type": "number",
+            "format": "flag",
+            "description": "reclaim TCP resource immediately without MSL",
+            "src-name": "ignore-tcp-msl"
+        },
+        "snat-msl": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1800",
+            "description": "Source NAT MSL (Source NAT MSL value)",
+            "format": "number",
+            "src-name": "snat-msl"
+        },
+        "snat-port-preserve": {
+            "type": "number",
+            "format": "flag",
+            "description": "Source NAT Port Preservation",
+            "src-name": "snat-port-preserve"
+        },
+        "non-syn-initiation": {
+            "type": "number",
+            "format": "flag",
+            "description": "Allow initial TCP packet to be non-SYN",
+            "src-name": "non-syn-initiation"
+        }
+    }
+}

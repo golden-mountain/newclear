@@ -1,0 +1,64 @@
+{
+    "obj-name": "web-category-list",
+    "obj-help": "Configure web-category category-list for destination matching",
+    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "string",
+    "obj-module-prompt": "cat-list",
+    "obj-stats-oid": "2046",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.web-category-list",
+    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/web-category-list/{web-category-list}",
+    "properties": {
+        "web-category-list": {
+            "type": "string",
+            "format": "string-rlx",
+            "alias": "web-category-list",
+            "minLength": "1",
+            "maxLength": "63",
+            "object-key": true,
+            "obj-lineage-full": "web-category.category-list",
+            "$ref": "/axapi/v3/web-category/category-list",
+            "description": "Destination Class List Name",
+            "src-name": "name"
+        },
+        "action": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "web-category-list",
+            "description": "Action to be performed",
+            "format": "string",
+            "src-name": "action"
+        },
+        "type": {
+            "type": "string",
+            "condition": "action",
+            "enum": [
+                "host",
+                "url"
+            ],
+            "enumMap": [
+                {
+                    "host": "\"Match hostname"
+                },
+                {
+                    "url": "\"match URL"
+                }
+            ],
+            "description": "'host': \"Match hostname;'url': \"match URL;",
+            "format": "enum",
+            "src-name": "type"
+        },
+        "priority": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1024",
+            "condition": "type",
+            "description": "Priority value of the action(higher the number higher the priority)",
+            "format": "number",
+            "src-name": "priority"
+        }
+    }
+}

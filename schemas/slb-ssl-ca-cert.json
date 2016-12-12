@@ -1,0 +1,13 @@
+{
+    "obj-name": "ssl-ca-cert",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-backend": "system",
+    "obj-head-node-options": "<hide-help; operation>",
+    "obj-auto-create": true,
+    "obj-stats-oid": "317",
+    "obj-lineage-full": "slb.ssl-ca-cert",
+    "axapi": "/axapi/v3/slb/ssl-ca-cert",
+    "properties": {}
+}

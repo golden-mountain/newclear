@@ -1,0 +1,12 @@
+{
+    "obj-name": "sport-rate-limit",
+    "obj-help": "Show source port rate-limit statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "514",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.sport-rate-limit",
+    "axapi": "/axapi/v3/slb/sport-rate-limit",
+    "properties": {}
+}

@@ -1,0 +1,12 @@
+{
+    "obj-name": "pop3-proxy",
+    "obj-help": "Show POP3 Proxy global Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "386",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.pop3-proxy",
+    "axapi": "/axapi/v3/slb/pop3-proxy",
+    "properties": {}
+}

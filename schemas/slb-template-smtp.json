@@ -1,0 +1,198 @@
+{
+    "obj-name": "smtp",
+    "obj-help": "SMTP",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "smtp",
+    "obj-disp-after": "slb.service-group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.smtp",
+    "axapi": "/axapi/v3/slb/template/smtp/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "SMTP Template Name",
+            "src-name": "name"
+        },
+        "server-domain": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "31",
+            "description": "Config the domain of the email servers (Server's domain, default is \"mail-server-domain\")",
+            "default": "\"mail-server-domain\"",
+            "src-name": "server-domain"
+        },
+        "service-ready-msg": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Set SMTP service ready message (SMTP service ready message, default is \"ESMTP mail service ready\")",
+            "default": "\"ESMTP mail service ready\"",
+            "src-name": "service-ready-msg"
+        },
+        "starttls": {
+            "type": "dummy",
+            "description": "STARTTLS requiremen",
+            "format": "dummy",
+            "src-name": "starttls"
+        },
+        "client": {
+            "type": "dummy",
+            "condition": "starttls",
+            "description": "client side STARTTLS",
+            "format": "dummy",
+            "src-name": "client"
+        },
+        "server": {
+            "type": "dummy",
+            "condition": "starttls",
+            "description": "server side STARTTLS",
+            "format": "dummy",
+            "src-name": "server"
+        },
+        "client-starttls-type": {
+            "type": "string",
+            "enum": [
+                "optional",
+                "enforced"
+            ],
+            "enumMap": [
+                {
+                    "optional": "\"STARTTLS is optional requirement"
+                },
+                {
+                    "enforced": "\"Must issue STARTTLS command before mail transaction"
+                }
+            ],
+            "description": "STARTTLS requirement 'optional': \"STARTTLS is optional requirement;'enforced': \"Must issue STARTTLS command before mail transaction;",
+            "condition": "client",
+            "format": "enum",
+            "src-name": "client-starttls-type"
+        },
+        "server-starttls-type": {
+            "type": "string",
+            "enum": [
+                "optional",
+                "enforced"
+            ],
+            "enumMap": [
+                {
+                    "optional": "\"STARTTLS is optional requirement"
+                },
+                {
+                    "enforced": "\"Must issue STARTTLS command before mail transaction"
+                }
+            ],
+            "description": "STARTTLS requirement 'optional': \"STARTTLS is optional requirement;'enforced': \"Must issue STARTTLS command before mail transaction;",
+            "condition": "server",
+            "format": "enum",
+            "src-name": "server-starttls-type"
+        },
+        "command-disable": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Disable some SMTP commands for security reasons",
+            "properties": [
+                {
+                    "disable-type": {
+                        "type": "enum",
+                        "multi-field-key": true,
+                        "maxItems": "3",
+                        "condition": "command-disable",
+                        "enum": [
+                            "expn",
+                            "turn",
+                            "vrfy"
+                        ],
+                        "enumMap": [
+                            {
+                                "expn": "\"Disable SMTP EXPN commands"
+                            },
+                            {
+                                "turn": "\"Disable SMTP TURN commands"
+                            },
+                            {
+                                "vrfy": "\"Disable SMTP VRFY commands"
+                            }
+                        ],
+                        "description": "'expn': \"Disable SMTP EXPN commands;'turn': \"Disable SMTP TURN commands;'vrfy': \"Disable SMTP VRFY commands;",
+                        "format": "enum",
+                        "src-name": "disable-type"
+                    }
+                }
+            ],
+            "src-name": "command-disable"
+        },
+        "client-domain-switching": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Use client domain to select email server",
+            "properties": [
+                {
+                    "switching-type": {
+                        "type": "string",
+                        "condition": "client-domain-switching",
+                        "enum": [
+                            "contains",
+                            "ends-with",
+                            "starts-with"
+                        ],
+                        "enumMap": [
+                            {
+                                "contains": "\"Specify domain name string if domain contains another string"
+                            },
+                            {
+                                "ends-with": "\"Specify domain name string if domain ends with another string"
+                            },
+                            {
+                                "starts-with": "\"Specify domain string if domain starts with another string"
+                            }
+                        ],
+                        "description": "'contains': \"Specify domain name string if domain contains another string;'ends-with': \"Specify domain name string if domain ends with another string;'starts-with': \"Specify domain string if domain starts with another string;",
+                        "maxItems": "16",
+                        "multi-field-key": true,
+                        "format": "enum",
+                        "src-name": "switching-type"
+                    }
+                },
+                {
+                    "match-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "31",
+                        "condition": "switching-type",
+                        "multi-field-key": true,
+                        "description": "Domain name string",
+                        "src-name": "match-string"
+                    }
+                },
+                {
+                    "service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "match-string",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "description": "Select service group (Service group name)",
+                        "maxItems": "16",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "client-domain-switching"
+        }
+    }
+}

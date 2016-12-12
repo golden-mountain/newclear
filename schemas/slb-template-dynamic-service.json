@@ -1,0 +1,70 @@
+{
+    "obj-name": "dynamic-service",
+    "obj-help": "Dynamic service template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "dynamic-service",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.dynamic-service",
+    "axapi": "/axapi/v3/slb/template/dynamic-service/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Dynamic Service Template Name",
+            "src-name": "name"
+        },
+        "dns-server": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "dns": {
+                        "type": "dummy",
+                        "description": "Specify DNS Option",
+                        "format": "dummy",
+                        "src-name": "dns"
+                    }
+                },
+                {
+                    "server": {
+                        "type": "dummy",
+                        "description": "DNS Server",
+                        "condition": "dns",
+                        "format": "dummy",
+                        "src-name": "server"
+                    }
+                },
+                {
+                    "ipv4-dns-server": {
+                        "type": "ipv4-address",
+                        "description": "DNS Server IPv4 Address",
+                        "condition": "server",
+                        "multi-field-key": true,
+                        "maxItems": "2",
+                        "format": "ipv4-address",
+                        "src-name": "ipv4-dns-server"
+                    }
+                },
+                {
+                    "ipv6-dns-server": {
+                        "type": "ipv6-address",
+                        "description": "DNS Server IPv6 Address",
+                        "condition": "server",
+                        "multi-field-key": true,
+                        "maxItems": "2",
+                        "format": "ipv6-address",
+                        "src-name": "ipv6-dns-server"
+                    }
+                }
+            ],
+            "src-name": "dns-server"
+        }
+    }
+}

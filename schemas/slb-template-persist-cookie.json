@@ -1,0 +1,126 @@
+{
+    "obj-name": "cookie",
+    "obj-help": "Cookie persistence",
+    "obj-lineage": "cmroot.slb.template.persist",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "cookie persist",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.persist.cookie",
+    "axapi": "/axapi/v3/slb/template/persist/cookie/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Cookie persistence (Cookie persistence template name)",
+            "src-name": "name"
+        },
+        "domain": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "31",
+            "description": "Set cookie domain (Cookie domain)",
+            "format": "string",
+            "src-name": "domain"
+        },
+        "dont-honor-conn-rules": {
+            "type": "number",
+            "format": "flag",
+            "description": "Do not observe connection rate rules",
+            "src-name": "dont-honor-conn-rules"
+        },
+        "expire": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "31536000",
+            "default": "315360000",
+            "description": "Set cookie expiration time (Expiration in seconds)",
+            "format": "number",
+            "src-name": "expire"
+        },
+        "insert-always": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert persist cookie to every reponse",
+            "src-name": "insert-always"
+        },
+        "cookie-name": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "alias": "cookie-name",
+            "default": "sto-id",
+            "description": "Set cookie name (Cookie name, default \"sto-id\")",
+            "src-name": "name"
+        },
+        "path": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "31",
+            "default": "/",
+            "description": "Set cookie path (Cookie path, default is \"/\")",
+            "src-name": "path"
+        },
+        "pass-thru": {
+            "type": "number",
+            "format": "flag",
+            "description": "Pass thru mode - Server sends the persist cookie",
+            "src-name": "pass-thru"
+        },
+        "secure": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable secure attribute",
+            "src-name": "secure"
+        },
+        "httponly": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable HttpOnly attribute",
+            "src-name": "httponly"
+        },
+        "match-type": {
+            "type": "number",
+            "format": "flag",
+            "description": "Persist for server, default is port",
+            "src-name": "match-type"
+        },
+        "server": {
+            "type": "number",
+            "format": "flag",
+            "condition": "match-type",
+            "description": "Persist to the same server, default is port",
+            "src-name": "server"
+        },
+        "server-service-group": {
+            "type": "number",
+            "format": "flag",
+            "condition": "server",
+            "link-next-fwd": "scan-all-members",
+            "description": "Persist to the same server and within the same service group",
+            "alias": "server-service-group",
+            "src-name": "service-group"
+        },
+        "scan-all-members": {
+            "type": "number",
+            "format": "flag",
+            "condition": "server",
+            "description": "Persist within the same server SCAN",
+            "src-name": "scan-all-members"
+        },
+        "service-group": {
+            "type": "number",
+            "format": "flag",
+            "condition": "match-type",
+            "m-exclusion": "server",
+            "description": "Persist within the same service group",
+            "src-name": "service-group"
+        }
+    }
+}

@@ -1,0 +1,146 @@
+{
+    "obj-name": "logging",
+    "obj-help": "Logging template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "logging",
+    "obj-disp-after": "slb.service-group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.logging",
+    "axapi": "/axapi/v3/slb/template/logging/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Logging Template Name",
+            "src-name": "name"
+        },
+        "format": {
+            "type": "string",
+            "format": "line",
+            "minLength": "1",
+            "maxLength": "250",
+            "description": "Specfiy a format string for web logging (format string(less than 250 characters) for web logging)",
+            "src-name": "format"
+        },
+        "local-logging": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "1",
+            "description": "1 to enable local logging (1 to enable local logging, default 0)",
+            "default": "0",
+            "format": "number",
+            "src-name": "local-logging"
+        },
+        "service-group": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "description": "Bind a Service Group to the logging template (Service Group Name)",
+            "src-name": "service-group"
+        },
+        "pcre-mask": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "value-not-allowed-in-no": true,
+            "description": "Mask matched PCRE pattern in the log (PCRE pattern)",
+            "src-name": "pcre-mask"
+        },
+        "mask": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "1",
+            "condition": "pcre-mask",
+            "link-next-fwd": "keep-end",
+            "not-allowed-in-no": true,
+            "description": "Character to mask the matched pattern (default: X) (Character to mask the matched pattern)",
+            "default": "X",
+            "format": "string",
+            "src-name": "mask"
+        },
+        "keep-end": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "65535",
+            "condition": "pcre-mask",
+            "link-next-rev": "mask",
+            "not-allowed-in-no": true,
+            "description": "Number of unmasked characters at the end (default: 0) (Number of unmasked characters)",
+            "default": "0",
+            "format": "number",
+            "src-name": "keep-end"
+        },
+        "keep-start": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "65535",
+            "condition": "pcre-mask",
+            "link-next-rev": "mask",
+            "description": "Number of unmasked characters at the beginning (default: 0) (Number of unmasked characters)",
+            "default": "0",
+            "format": "number",
+            "src-name": "keep-start"
+        },
+        "template": {
+            "type": "dummy",
+            "description": "Applying template to the logging template",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "tcp-proxy": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "description": "TCP proxy template (TCP Proxy Config name)",
+            "default": "default",
+            "format": "string",
+            "src-name": "tcp-proxy"
+        },
+        "source-nat": {
+            "type": "dummy",
+            "description": "Source NAT",
+            "example-default": "0",
+            "format": "dummy",
+            "src-name": "source-nat"
+        },
+        "pool": {
+            "type": "string",
+            "format": "string-rlx",
+            "condition": "source-nat",
+            "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
+            "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
+            "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
+            "example-default": "ip.nat.pool",
+            "src-name": "pool"
+        },
+        "auto": {
+            "type": "string",
+            "default": "auto",
+            "condition": "source-nat",
+            "m-exclusion": "pool",
+            "enum": [
+                "auto"
+            ],
+            "enumMap": [
+                {
+                    "auto": "\"Configure auto NAT for logging, default is auto enabled"
+                }
+            ],
+            "description": "'auto': \"Configure auto NAT for logging, default is auto enabled;",
+            "not-allowed-in-no": true,
+            "format": "enum",
+            "src-name": "auto"
+        }
+    }
+}

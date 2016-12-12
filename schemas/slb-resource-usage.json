@@ -1,0 +1,315 @@
+{
+    "obj-name": "resource-usage",
+    "obj-help": "Configure SLB Resource Usage",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-visibility": "shared",
+    "obj-auto-create": true,
+    "obj-stats-oid": "323",
+    "obj-lineage-full": "slb.resource-usage",
+    "axapi": "/axapi/v3/slb/resource-usage",
+    "properties": {
+        "client-ssl-template-count": {
+            "type": "number",
+            "minimum": "^cssltemplatemin",
+            "maximum": "^cssltemplatemax",
+            "default": "^cssltemplatedefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Client SSL Templates in the System",
+            "format": "number",
+            "src-name": "client-ssl-template-count"
+        },
+        "conn-reuse-template-count": {
+            "type": "number",
+            "minimum": "^connreusetemplatemin",
+            "maximum": "^connreusetemplatemax",
+            "default": "^connreusetemplatedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Connection reuse Templates in the System",
+            "format": "number",
+            "src-name": "conn-reuse-template-count"
+        },
+        "fast-tcp-template-count": {
+            "type": "number",
+            "minimum": "^fasttcptemplatemin",
+            "maximum": "^fasttcptemplatemax",
+            "default": "^fasttcptemplatedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Fast TCP Templates in the System",
+            "format": "number",
+            "src-name": "fast-tcp-template-count"
+        },
+        "fast-udp-template-count": {
+            "type": "number",
+            "minimum": "^fastudptemplatemin",
+            "maximum": "^fastudptemplatemax",
+            "default": "^fastudptemplatedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Fast UDP Templates in the System",
+            "format": "number",
+            "src-name": "fast-udp-template-count"
+        },
+        "http-template-count": {
+            "type": "number",
+            "minimum": "^httptemplatemin",
+            "maximum": "^httptemplatemax",
+            "default": "^httptemplatedefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable HTTP Templates in the System",
+            "format": "number",
+            "src-name": "http-template-count"
+        },
+        "nat-pool-addr-count": {
+            "type": "number",
+            "minimum": "^natpoolmin",
+            "maximum": "^natpoolmax",
+            "default": "^natpooldefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable NAT Pool addresses in the System",
+            "format": "number",
+            "src-name": "nat-pool-addr-count"
+        },
+        "persist-cookie-template-count": {
+            "type": "number",
+            "minimum": "^persistcookiemin",
+            "maximum": "^persistcookiemax",
+            "default": "^persistcookiedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Persistent cookie Templates in the System",
+            "format": "number",
+            "src-name": "persist-cookie-template-count"
+        },
+        "persist-srcip-template-count": {
+            "type": "number",
+            "minimum": "^persistsrcipmin",
+            "maximum": "^persistsrcipmax",
+            "default": "^persistsrcipdef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Source IP Persistent Templates in the System",
+            "format": "number",
+            "src-name": "persist-srcip-template-count"
+        },
+        "proxy-template-count": {
+            "type": "number",
+            "minimum": "^proxytemplatemin",
+            "maximum": "^proxytemplatemax",
+            "default": "^proxytemplatemindef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Proxy Templates in the System",
+            "format": "number",
+            "src-name": "proxy-template-count"
+        },
+        "real-port-count": {
+            "type": "number",
+            "minimum": "^rportmin",
+            "maximum": "^rportmax",
+            "default": "^rportdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total Real Server Ports in the System",
+            "format": "number",
+            "src-name": "real-port-count"
+        },
+        "real-server-count": {
+            "type": "number",
+            "minimum": "^rservermin",
+            "maximum": "^rservermax",
+            "default": "^rserverdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total Real Servers in the System",
+            "format": "number",
+            "src-name": "real-server-count"
+        },
+        "server-ssl-template-count": {
+            "type": "number",
+            "minimum": "^sssltemplatemin",
+            "maximum": "^sssltemplatemax",
+            "default": "^sssltemplatedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Server SSL Templates in the System",
+            "format": "number",
+            "src-name": "server-ssl-template-count"
+        },
+        "service-group-count": {
+            "type": "number",
+            "minimum": "^svcgroupmin",
+            "maximum": "^svcgroupmax",
+            "default": "^svcgroupdef",
+            "value-not-allowed-in-no": true,
+            "description": "Total Service Groups in the System",
+            "format": "number",
+            "src-name": "service-group-count"
+        },
+        "stream-template-count": {
+            "type": "number",
+            "minimum": "^streamtemplatemin",
+            "maximum": "^streamtemplatemax",
+            "default": "^streamtemplatedef",
+            "value-not-allowed-in-no": true,
+            "description": "Total configurable Streaming media in the System",
+            "format": "number",
+            "src-name": "stream-template-count"
+        },
+        "virtual-port-count": {
+            "type": "number",
+            "minimum": "^vportmin",
+            "maximum": "^vportmax",
+            "default": "^vportdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total Virtual Server Ports in the System",
+            "format": "number",
+            "src-name": "virtual-port-count"
+        },
+        "virtual-server-count": {
+            "type": "number",
+            "minimum": "^vservermin",
+            "maximum": "^vservermax",
+            "default": "^vserverdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total Virtual Servers in the System",
+            "format": "number",
+            "src-name": "virtual-server-count"
+        },
+        "gslb-site-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbsitemin",
+            "maximum": "^gslbsitemax",
+            "default": "^gslbsitedefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB sites in the System",
+            "format": "number",
+            "src-name": "gslb-site-count"
+        },
+        "gslb-device-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbdevmin",
+            "maximum": "^gslbdevmax",
+            "default": "^gslbdevdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB devices in the System",
+            "format": "number",
+            "src-name": "gslb-device-count"
+        },
+        "gslb-service-ip-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbsvcipmin",
+            "maximum": "^gslbsvcipmax",
+            "default": "^gslbsvcipdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB service-ip in the System",
+            "format": "number",
+            "src-name": "gslb-service-ip-count"
+        },
+        "gslb-service-port-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbsvcportmin",
+            "maximum": "^gslbsvcportmax",
+            "default": "^gslbsvcportdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB service-port in the System",
+            "format": "number",
+            "src-name": "gslb-service-port-count"
+        },
+        "gslb-zone-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbznmin",
+            "maximum": "^gslbznmax",
+            "default": "^gslbzndefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB zones in the System",
+            "format": "number",
+            "src-name": "gslb-zone-count"
+        },
+        "gslb-service-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbsvcmin",
+            "maximum": "^gslbsvcmax",
+            "default": "^gslbsvcdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB services in the System",
+            "format": "number",
+            "src-name": "gslb-service-count"
+        },
+        "gslb-policy-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbplcymin",
+            "maximum": "^gslbplcymax",
+            "default": "^gslbplcydefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB policies in the System",
+            "format": "number",
+            "src-name": "gslb-policy-count"
+        },
+        "gslb-geo-location-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbgeolocmin",
+            "maximum": "^gslbgeolocmax",
+            "default": "^gslbgeolocdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB geo-location in the System",
+            "format": "number",
+            "src-name": "gslb-geo-location-count"
+        },
+        "gslb-ip-list-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbipmin",
+            "maximum": "^gslbipmax",
+            "default": "^gslbipdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB ip-list in the System",
+            "format": "number",
+            "src-name": "gslb-ip-list-count"
+        },
+        "gslb-template-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbtemplatemin",
+            "maximum": "^gslbtemplatemax",
+            "default": "^gslbtemplatedefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB templates in the System",
+            "format": "number",
+            "src-name": "gslb-template-count"
+        },
+        "gslb-svc-group-count": {
+            "type": "number",
+            "hide-help": true,
+            "minimum": "^gslbobjgrpmin",
+            "maximum": "^gslbobjgrpmax",
+            "default": "^gslbobjgrpdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total GSLB services in the System",
+            "format": "number",
+            "src-name": "gslb-svc-group-count"
+        },
+        "health-monitor-count": {
+            "type": "number",
+            "minimum": "^healthmonitormin",
+            "maximum": "^healthmonitormax",
+            "default": "^healthmonitordefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total Health Monitors in the System",
+            "format": "number",
+            "src-name": "health-monitor-count"
+        },
+        "pbslb-subnet-count": {
+            "type": "number",
+            "minimum": "^pbslbsubnetmin",
+            "maximum": "^pbslbsubnetmax",
+            "default": "^pbslbsubnetdefault",
+            "value-not-allowed-in-no": true,
+            "description": "Total PBSLB Subnets in the System",
+            "format": "number",
+            "src-name": "pbslb-subnet-count"
+        }
+    }
+}

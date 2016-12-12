@@ -1,0 +1,123 @@
+{
+    "obj-name": "member",
+    "obj-help": "Service Group Member",
+    "obj-lineage": "cmroot.slb.service-group",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-stats-oid": "2002",
+    "obj-indexing": "string",
+    "obj-enable-user-tag-at-backend": true,
+    "obj-cr-not-allowed-in-show-counters": true,
+    "obj-lineage-full": "slb.service-group.member",
+    "axapi": "/axapi/v3/slb/service-group/{name}/member/{name}+{port}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "comp-string",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "obj-lineage-full": "slb.server",
+            "$ref": "/axapi/v3/slb/server",
+            "example-default": "slb.server",
+            "snmp-alias": "slbServiceGroupMemberName",
+            "description": "Member name",
+            "src-name": "name"
+        },
+        "port": {
+            "type": "number",
+            "object-key": true,
+            "minimum": "0",
+            "maximum": "65534",
+            "default": "65534",
+            "obj-lineage-full": "slb.server.port",
+            "$ref": "/axapi/v3/slb/server/port",
+            "example-default": "slb.server.port",
+            "condition": "name",
+            "snmp-alias": "slbServiceGroupMemberPort",
+            "description": "Port number",
+            "format": "number",
+            "src-name": "port"
+        },
+        "fqdn-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "port",
+            "example-default": "test.a10networks.com",
+            "description": "Server hostname - Not applicable if real server is already defined",
+            "format": "string",
+            "src-name": "fqdn-name"
+        },
+        "host": {
+            "type": "ipv4-address",
+            "condition": "port",
+            "example-default": "10.10.10.1",
+            "description": "IP Address - Not applicable if real server is already defined",
+            "format": "ipv4-address",
+            "src-name": "host"
+        },
+        "server-ipv6-addr": {
+            "type": "ipv6-address",
+            "condition": "port",
+            "example-default": "3000::1",
+            "description": "IPV6 Address - Not applicable if real server is already defined",
+            "format": "ipv6-address",
+            "src-name": "server-ipv6-addr"
+        },
+        "member-state": {
+            "type": "string",
+            "not-allowed-in-no": true,
+            "enum": [
+                "enable",
+                "disable",
+                "disable-with-health-check "
+            ],
+            "enumMap": [
+                {
+                    "enable": "\"Enable member service port"
+                },
+                {
+                    "disable": "\"Disable member service port"
+                },
+                {
+                    "disable-with-health-check ": "\"disable member service port, but health check work"
+                }
+            ],
+            "description": "Enable/Disable member service port 'enable': \"Enable member service port;'disable': \"Disable member service port;'disable-with-health-check ': \"disable member service port, but health check work;",
+            "default": "enable",
+            "format": "enum",
+            "src-name": "member-state"
+        },
+        "member-stats-data-disable": {
+            "type": "number",
+            "format": "flag",
+            "alias": "member-stats-data-disable",
+            "example-default": "1",
+            "description": "Disable statistical data collection",
+            "src-name": "stats-data-disable"
+        },
+        "member-template": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "alias": "member-template",
+            "example-default": "default",
+            "description": "Real server port template (Real server port template name)",
+            "obj-lineage-full": "slb.template.port",
+            "$ref": "/axapi/v3/slb/template/port",
+            "src-name": "template"
+        },
+        "member-priority": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16",
+            "alias": "member-priority",
+            "default": "1",
+            "description": "Priority of Port in the Group (Priority of Port in the Group, default is 1)",
+            "format": "number",
+            "src-name": "priority"
+        }
+    }
+}

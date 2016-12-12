@@ -1,0 +1,219 @@
+{
+    "obj-name": "respmod-icap",
+    "obj-help": "RESPMOD ICAP template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "respmod-icap",
+    "obj-disp-after": "slb.service-group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-head-node-options": "<plat-neg-list",
+    "obj-lineage-full": "slb.template.respmod-icap",
+    "axapi": "/axapi/v3/slb/template/respmod-icap/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Reqmod ICAP Template Name",
+            "src-name": "name"
+        },
+        "include-protocol-in-uri": {
+            "type": "number",
+            "format": "flag",
+            "default": "0",
+            "description": "Include protocol and port in HTTP URI",
+            "src-name": "include-protocol-in-uri"
+        },
+        "fail-close": {
+            "type": "number",
+            "format": "flag",
+            "default": "0",
+            "description": "When template sg is down mark vport down",
+            "src-name": "fail-close"
+        },
+        "bypass-ip-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "bypass-ip": {
+                        "type": "ipv4-address",
+                        "multi-field-key": true,
+                        "hide-help": true,
+                        "description": "ip address to bypass respmod-icap service (IP address)",
+                        "maxItems": "20",
+                        "format": "ipv4-address",
+                        "src-name": "bypass-ip"
+                    }
+                },
+                {
+                    "mask": {
+                        "type": "ipv4-netmask",
+                        "multi-field-key": true,
+                        "condition": "bypass-ip",
+                        "description": "IP prefix mask (IP prefix mask)",
+                        "format": "ipv4-netmask",
+                        "src-name": "mask"
+                    }
+                }
+            ],
+            "src-name": "bypass-ip-cfg"
+        },
+        "failure-action": {
+            "type": "string",
+            "enum": [
+                "continue",
+                "drop",
+                "reset"
+            ],
+            "enumMap": [
+                {
+                    "continue": "\"Continue"
+                },
+                {
+                    "drop": "\"Drop"
+                },
+                {
+                    "reset": "\"Reset"
+                }
+            ],
+            "description": "Action to take after failure, default is continue 'continue': \"Continue;'drop': \"Drop;'reset': \"Reset;",
+            "hide-help": true,
+            "default": "continue",
+            "format": "enum",
+            "src-name": "failure-action"
+        },
+        "timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "200",
+            "default": "5",
+            "hide-help": true,
+            "description": "Timeout value 1 - 200 in units of 200ms, default is 5 (default is 1000ms) (1 - 200 in units of 200ms, default is 5 (1000ms))",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "action": {
+            "type": "string",
+            "condition": "timeout",
+            "enum": [
+                "continue",
+                "drop",
+                "reset"
+            ],
+            "enumMap": [
+                {
+                    "continue": "\"Continue"
+                },
+                {
+                    "drop": "\"Drop"
+                },
+                {
+                    "reset": "\"Reset"
+                }
+            ],
+            "description": "action to take after timeout: default action is continue 'continue': \"Continue;'drop': \"Drop;'reset': \"Reset;",
+            "default": "continue",
+            "format": "enum",
+            "src-name": "action"
+        },
+        "min-payload-size": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65536",
+            "default": "4096",
+            "description": "min-payload-size value 1 - 65536, default is 4096 (1 - 65536, default is 4096)",
+            "format": "number",
+            "src-name": "min-payload-size"
+        },
+        "preview": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "32768",
+            "default": "32768",
+            "description": "Preview value 1 - 32768, default is 32768 (1 - 32768, default is 32768)",
+            "format": "number",
+            "src-name": "preview"
+        },
+        "service-url": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "255",
+            "description": "URL to send to ICAP server (Service URL Name)",
+            "src-name": "service-url"
+        },
+        "service-group": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "description": "Bind a Service Group to the template (Service Group Name)",
+            "src-name": "service-group"
+        },
+        "template": {
+            "type": "dummy",
+            "description": "Apply a tcp-proxy/persist/logging/server-ssl template to this template",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "tcp-proxy": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "description": "TCP proxy template (TCP proxy template name)",
+            "obj-lineage-full": "slb.template.tcp-proxy",
+            "$ref": "/axapi/v3/slb/template/tcp-proxy",
+            "format": "string",
+            "src-name": "tcp-proxy"
+        },
+        "logging": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "description": "logging template (Logging template name)",
+            "obj-lineage-full": "slb.template.logging",
+            "$ref": "/axapi/v3/slb/template/logging",
+            "format": "string",
+            "src-name": "logging"
+        },
+        "server-ssl": {
+            "type": "string",
+            "format": "name",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "description": "Server SSL template (Server SSL template name)",
+            "obj-lineage-full": "slb.template.server-ssl",
+            "$ref": "/axapi/v3/slb/template/server-ssl",
+            "src-name": "server-ssl"
+        },
+        "persist": {
+            "type": "dummy",
+            "condition": "template",
+            "description": "Persistence templates",
+            "format": "dummy",
+            "src-name": "persist"
+        },
+        "source-ip": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "persist",
+            "obj-lineage-full": "slb.template.persist.source-ip",
+            "$ref": "/axapi/v3/slb/template/persist/source-ip",
+            "description": "Source IP persistence template (Source IP persistence template name)",
+            "format": "string",
+            "src-name": "source-ip"
+        }
+    }
+}

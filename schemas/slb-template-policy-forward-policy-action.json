@@ -1,0 +1,150 @@
+{
+    "obj-name": "action",
+    "obj-help": "action list",
+    "obj-lineage": "cmroot.slb.template.policy.forward-policy",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "string",
+    "obj-module-prompt": "action",
+    "obj-stats-oid": "2048",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.policy.forward-policy.action",
+    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/action/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Action policy name",
+            "format": "string",
+            "src-name": "name"
+        },
+        "action1": {
+            "type": "string",
+            "enum": [
+                "forward-to-internet",
+                "forward-to-service-group",
+                "forward-to-proxy",
+                "drop"
+            ],
+            "enumMap": [
+                {
+                    "forward-to-internet": "\"Forward request to Internet"
+                },
+                {
+                    "forward-to-service-group": "\"Forward request to service group"
+                },
+                {
+                    "forward-to-proxy": "\"Forward request to HTTP proxy server"
+                },
+                {
+                    "drop": "\"Drop request"
+                }
+            ],
+            "description": "'forward-to-internet': \"Forward request to Internet;'forward-to-service-group': \"Forward request to service group;'forward-to-proxy': \"Forward request to HTTP proxy server;'drop': \"Drop request;",
+            "format": "enum",
+            "src-name": "action1"
+        },
+        "fake-sg": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "enabled": "forward-to-internet",
+            "description": "service group to forward the packets to Internet",
+            "format": "string",
+            "src-name": "fake-sg"
+        },
+        "real-sg": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "enabled": "forward-to-service-group/forward-to-proxy",
+            "description": "service group to forward the packets",
+            "format": "string",
+            "src-name": "real-sg"
+        },
+        "forward-snat": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "alias": "forward-snat",
+            "disabled": "drop",
+            "description": "Source NAT pool or pool group",
+            "src-name": "snat"
+        },
+        "fall-back": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "alias": "fall-back",
+            "enabled": "forward-to-internet",
+            "description": "Fallback service group for Internet",
+            "format": "string",
+            "src-name": "fallback"
+        },
+        "fall-back-snat": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "alias": "fall-back-snat",
+            "enabled": "forward-to-internet",
+            "description": "Source NAT pool or pool group for fallback server",
+            "src-name": "snat"
+        },
+        "proxy-chaining": {
+            "type": "number",
+            "format": "flag",
+            "alias": "proxy-chaining",
+            "disabled": "{action1 in (forward-to-proxy)}",
+            "hide-help": true,
+            "description": "Enable proxy chaining feature",
+            "src-name": "proxy-chaining"
+        },
+        "log": {
+            "type": "number",
+            "format": "flag",
+            "description": "enable logging",
+            "src-name": "log"
+        },
+        "drop-message": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "1023",
+            "description": "drop-message sent to the client as webpage(html tags are included and quotation marks are required for white spaces)",
+            "src-name": "drop-message"
+        },
+        "drop-redirect-url": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "1023",
+            "m-exclusion": "drop-message",
+            "description": "Specify URL to which client request is redirected upon being dropped",
+            "src-name": "drop-redirect-url"
+        },
+        "http-status-code": {
+            "type": "string",
+            "condition": "drop-redirect-url",
+            "description": "'301': \"Moved permanently;'302': \"Found;",
+            "enum": [
+                "301",
+                "302"
+            ],
+            "enumMap": [
+                {
+                    "301": "\"Moved permanently"
+                },
+                {
+                    "302": "\"Found"
+                }
+            ],
+            "default": "302",
+            "format": "enum",
+            "src-name": "http-status-code"
+        }
+    }
+}

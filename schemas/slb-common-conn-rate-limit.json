@@ -1,0 +1,117 @@
+{
+    "obj-name": "conn-rate-limit",
+    "obj-help": "Set rate limiting on virtual ports",
+    "obj-lineage": "cmroot.slb.common",
+    "obj-occurences": "intermediate",
+    "obj-indexing": "none",
+    "obj-lineage-full": "slb.common.conn-rate-limit",
+    "axapi": "/axapi/v3/slb/common/conn-rate-limit",
+    "properties": {
+        "src-ip-list": {
+            "obj-name": "src-ip",
+            "obj-help": "Set connection limit based on source IP address",
+            "obj-lineage": "cmroot.slb.common.conn-rate-limit",
+            "obj-occurences": "multi",
+            "obj-json-suffix": "-list",
+            "obj-indexing": "string",
+            "obj-lineage-full": "slb.common.conn-rate-limit.src-ip",
+            "axapi": "/axapi/v3/slb/common/conn-rate-limit/src-ip/{protocol}",
+            "properties": {
+                "protocol": {
+                    "type": "string",
+                    "object-key": true,
+                    "enum": [
+                        "tcp",
+                        "udp"
+                    ],
+                    "enumMap": [
+                        {
+                            "tcp": "\"Set TCP connection rate limit"
+                        },
+                        {
+                            "udp": "\"Set UDP packet rate limit"
+                        }
+                    ],
+                    "description": "'tcp': \"Set TCP connection rate limit;'udp': \"Set UDP packet rate limit;",
+                    "format": "enum",
+                    "src-name": "protocol"
+                },
+                "limit": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "1000000",
+                    "condition": "protocol",
+                    "not-allowed-in-no": true,
+                    "description": "Set max connections per period",
+                    "format": "number",
+                    "src-name": "limit"
+                },
+                "per": {
+                    "type": "dummy",
+                    "condition": "limit",
+                    "not-allowed-in-no": true,
+                    "description": "per",
+                    "format": "dummy",
+                    "src-name": "per"
+                },
+                "limit-period": {
+                    "type": "string",
+                    "enum": [
+                        "100",
+                        "1000"
+                    ],
+                    "enumMap": [
+                        {
+                            "100": "\"100 ms"
+                        },
+                        {
+                            "1000": "\"1000 ms"
+                        }
+                    ],
+                    "description": "'100': \"100 ms;'1000': \"1000 ms;",
+                    "condition": "per",
+                    "format": "enum",
+                    "src-name": "limit-period"
+                },
+                "shared": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "limit-period",
+                    "link-next-fwd": "exceed-action",
+                    "not-allowed-in-no": true,
+                    "description": "Set threshold shared amongst all virtual ports",
+                    "src-name": "shared"
+                },
+                "exceed-action": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "limit-period",
+                    "link-next-fwd": "log",
+                    "not-allowed-in-no": true,
+                    "description": "Set action if threshold exceeded",
+                    "src-name": "exceed-action"
+                },
+                "log": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "exceed-action",
+                    "link-next-fwd": "lock-out",
+                    "not-allowed-in-no": true,
+                    "description": "Send log if threshold exceeded",
+                    "src-name": "log"
+                },
+                "lock-out": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "3600",
+                    "condition": "exceed-action",
+                    "not-allowed-in-no": true,
+                    "description": "Set lockout period in seconds if threshold exceeded (Lockout period in seconds if threshold exceeded)",
+                    "format": "number",
+                    "src-name": "lock-out"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

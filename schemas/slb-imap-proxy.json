@@ -1,0 +1,12 @@
+{
+    "obj-name": "imap-proxy",
+    "obj-help": "Show IMAP Proxy global Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "385",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.imap-proxy",
+    "axapi": "/axapi/v3/slb/imap-proxy",
+    "properties": {}
+}
