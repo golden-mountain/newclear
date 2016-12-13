@@ -11,20 +11,35 @@ const ServiceListPage = asyncComponent(() =>
   System.import('./List').then(module => module.default)
 );
 
+const ReportSolutionPage = asyncComponent(() =>
+  System.import('./Solutions/ReportSolution').then(module => module.default)
+);
+
+const SummarySolutionPage = asyncComponent(() =>
+  System.import('./Solutions/SummarySolution').then(module => module.default)
+);
+
 class Router extends RouterBase {
   path = 'ssli'
 
   pages = {
     wizard: {
       component: WizardPage,
-      menuPath: [ 'Security', 'Virtual Service', 'Wizard' ]
+      menuPath: [ 'Security', 'SSLi', 'Wizard' ]
     },
     list: {
       component: ServiceListPage,
-      menuPath: [ 'Security', 'Virtual Service', 'List' ]
+      menuPath: [ 'Security', 'SSLi', 'List' ]
+    },
+    report: {
+      component: ReportSolutionPage,
+      menuPath: [ 'Security', 'SSLi', 'Solutions - Report' ]
+    },
+    summary: {
+      component: SummarySolutionPage,
+      menuPath: [ 'Security', 'SSLi', 'Solutions - Summary' ]
     }
   }
-
 }
 
 export default Router;
