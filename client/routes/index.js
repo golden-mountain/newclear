@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Router from 'react-router/BrowserRouter';
 
+import ModuleManager from 'helpers/ModuleManager';
 import AppRoutes from './app';
-import ADCRouter from 'pages/ADC';
-import AuthRouter from 'pages/Auth';
-import DashboardRouter from 'pages/Dashboard';
-import DevRouter from 'pages/Dev';
-import SecurityRouter from 'pages/Security';
+import * as AppModules from 'pages';
 
 export default class App extends Component {
   render() {
@@ -14,11 +11,11 @@ export default class App extends Component {
       <Router>
         <div className="page-router">
           { AppRoutes }
-          <AuthRouter />
-          <DashboardRouter />
-          <ADCRouter />
-          <SecurityRouter />
-          <DevRouter />
+          {
+            Object.entries(AppModules).map(([ moduleName, moduleOpt ]) =>
+              <ModuleManager key={moduleName} {...moduleOpt} />
+            )
+          }
         </div>
       </Router>
     );

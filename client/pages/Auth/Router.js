@@ -6,7 +6,7 @@ const OEM = configApp.OEM;
 const LoginPageLayout = require('oem/' + OEM + '/LoginLayout').default;
 
 const Login = asyncComponent(() =>
-  System.import('./login').then(module => module.default), 
+  System.import('./login').then(module => module.default),
   LoginPageLayout
 );
 
