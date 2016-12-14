@@ -1,11 +1,13 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
+import Panel from 'react-bootstrap/lib/Panel';
 
 // test components loading
 import ContainerWidget from './components/ContainerWidget';
 import NotEditableCom from './components/NotEditableCom';
 import EditableCom from './components/EditableCom';
 import FieldCheckbox from './components/FieldCheckbox';
+
 import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -159,9 +161,8 @@ export default class Sandbox extends React.Component {
 
     return (
       <Row>
-        <Col xs={2}>
-          <h3>Component Candidates</h3>
-          <div>
+        <Col xs={3}>
+          <Panel header="Component Candidates">
           {
             Widgets.map((item, index)=>{
               return (
@@ -175,11 +176,9 @@ export default class Sandbox extends React.Component {
               );
             })
           }
-          </div>
+          </Panel>
         </Col>
-        <Col xs={6}>
-          <h3> Drag and Drop Demo </h3>
-
+        <Col xs={5}>
           {
             editableUtils.jsonToComponent(reactSchema, true, { editingComponentId }, {
               startToEditComponent: this.startToEditComponent.bind(this),

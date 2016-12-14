@@ -65,7 +65,7 @@ export default widgetWrapper([ 'app' ])(EditableCom, {
     },
     propGroups: {
       title: 'basic',
-      invalid: 'basic'
+      invalid: 'advanced'
     },
     propValidations: {
       title: [ 'ipv6-address' ]

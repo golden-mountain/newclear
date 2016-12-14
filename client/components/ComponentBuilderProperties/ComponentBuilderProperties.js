@@ -7,23 +7,12 @@ import _ from 'lodash';
 import Col from 'react-bootstrap/lib/Col';
 import Panel from 'react-bootstrap/lib/Panel';
 import Form from 'react-bootstrap/lib/Form';
+import PanelGroup from 'react-bootstrap/lib/PanelGroup';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Checkbox from 'react-bootstrap/lib/Checkbox';
 import Select from 'react-select';
 import MultiOptionsEdit from './properties/MultiOptionsEdit';
-
-// import {
-//   updateComponent,
-//   stopEditingComponent
-// } from '../../redux/modules/componentBuilder';
-
-// @connect(null, {
-//   updateComponent,
-//   stopEditingComponent
-// })
-// 
-// 
 
 export default class ComponentBuilderProperties extends Component {
   static propTypes = {
@@ -36,7 +25,6 @@ export default class ComponentBuilderProperties extends Component {
   constructor(props) {
     super(props);
     this.state = this.getStateFromProps(props);
-    console.log(this.state);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -96,7 +84,7 @@ export default class ComponentBuilderProperties extends Component {
   getStateFromProps(props) {
     const { componentProps } = props;
     if (componentProps) {
-      return Object.assign({children: '', style: {}}, componentProps);
+      return Object.assign({ children: '', style: {} }, componentProps);
     }
   }
 
@@ -104,33 +92,55 @@ export default class ComponentBuilderProperties extends Component {
     this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state, {children: null}));
   }, 100)
 
+  getGroupComponentProperties() {
+    const {
+      componentMeta = {}
+    } = this.props;
+    const groupComponentProperties = (componentMeta.propTypes ? Object.keys(componentMeta.propTypes).map((key)=>{
+      return {
+        prop: key,
+        type: componentMeta.propTypes[key],
+        group: componentMeta.propGroups[key],
+        validation: componentMeta.propValidations[key],
+        description: componentMeta.propDescriptions[key]
+      };
+    }) : [])
+    .reduce((accum, current)=>{
+      accum[current.group] = accum[current.group] ? [ ...accum[current.group], current ] : [ current ];
+      return accum;
+    }, {});
+    return groupComponentProperties;
+  }
+
   renderInput(propTypeName, propType, value) {
 
     // Some special propTypeName
 
     switch (propTypeName) {
-      case 'bsSize':
-        const bsSizeOptions = ['lg', 'large', 'sm', 'small', 'xs', 'xsmall'];
+      case 'bsSize': {
+        const bsSizeOptions = [ 'lg', 'large', 'sm', 'small', 'xs', 'xsmall' ];
         return (
           <Select
             value={ value }
             options={ bsSizeOptions.map(option => {
-              return {label: option, value: option};
+              return { label: option, value: option };
             }) }
             onChange={this.onSelectChange.bind(this, propTypeName)}
           />
         );
-      case 'bsStyle':
-        const bsStyleOptions = ['success', 'warning', 'danger', 'info', 'default', 'primary', 'link'];
+      }
+      case 'bsStyle': {
+        const bsStyleOptions = [ 'success', 'warning', 'danger', 'info', 'default', 'primary', 'link' ];
         return (
           <Select
             value={ value }
             options={ bsStyleOptions.map(option => {
-              return {label: option, value: option};
+              return { label: option, value: option };
             }) }
             onChange={this.onSelectChange.bind(this, propTypeName)}
           />
         );
+      }
       default:
         break;
     }
@@ -146,57 +156,66 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   render() {
-    const {
-      componentMeta = {}
-    } = this.props;
     const PanelHeader = (
       <span>
         <i className="fa fa-gear" />&nbsp;Properties
         <i className="fa fa-times pull-right"
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
           onClick={::this.onDismissComponentBuilderPrperties} />
       </span>
     );
 
+    const PropertyInput = (props) => (
+      <FormGroup key={props.key}>
+        <Col sm={4}>
+          {props.property.prop}
+        </Col>
+        <Col sm={8}>
+          {
+            this.renderInput(props.property.prop, props.property.type, this.state[props.property.prop])
+          }
+        </Col>
+      </FormGroup>
+    );
+
+
+    const groupComponentProperties = this.getGroupComponentProperties();
+
     return (
       <Panel className="panel panel-success" header={PanelHeader}>
         <Form horizontal>
-          <FormGroup>
-            <Col sm={4}>
-              Component
-            </Col>
-            <Col sm={8}>
-             { /*this.props.componentProps.component */}
-            </Col>
-          </FormGroup>
-          {/*<FormGroup>
-                      <Col sm={4}>
-                        Text
-                      </Col>
-                      <Col sm={8}>
-                        <FormControl
-                          type="text"
-                          disabled={typeof this.state.componentChildren === 'object'}
-                          value={this.state.componentChildren}
-                          onChange={this.onInputChange.bind(this, 'componentChildren')}/>
-                      </Col>
-                    </FormGroup>*/}
           {
-            componentMeta.propTypes && Object.keys(componentMeta.propTypes).map((propTypeName, index) => {
-              return (
-                <FormGroup key={index}>
-                <Col sm={4}>
-                  {propTypeName}
-                </Col>
-                <Col sm={8}>
-                  {
-                    this.renderInput(propTypeName, componentMeta.propTypes[propTypeName], this.state[propTypeName])
-                  }
-                </Col>
-                </FormGroup>
-              );
-            })
+            // <FormGroup>
+            //   <Col sm={4}>
+            //     Text
+            //   </Col>
+            //   <Col sm={8}>
+            //     <FormControl
+            //       type="text"
+            //       disabled={typeof this.state.componentChildren === 'object'}
+            //       value={this.state.componentChildren}
+            //       onChange={this.onInputChange.bind(this, 'componentChildren')}/>
+            //   </Col>
+            // </FormGroup>
           }
+          <PanelGroup accordion >
+            {
+              Object.keys(groupComponentProperties).map((key) => {
+                return (
+                  <Panel header={key} eventKey={key}>
+                    {
+                      groupComponentProperties[key].map((property, index)=>{
+                        return (
+                          <PropertyInput key={index} property={property} />
+                        );
+                      })
+                    }
+                  </Panel>
+                );
+              })
+            }
+          </PanelGroup>
+
         </Form>
       </Panel>
     );
