@@ -41,8 +41,8 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   }
   if (enableWrap && obj.componentId !== 'root') {
     if (!_cachedWrappedComponents[component]) {
-      const { editableProps = {} } = reactComponent;
-      _cachedWrappedComponents[component] = editableComponent(actions)(reactComponent, editableProps);
+      const { meta = {} } = reactComponent;
+      _cachedWrappedComponents[component] = editableComponent(actions)(reactComponent, meta);
     }
     reactComponent = _cachedWrappedComponents[component];
   }

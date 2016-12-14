@@ -18,7 +18,7 @@ export default function (componentCandidate) {
         component: props.component,
         _isNew: true,
         _isContainer: props.isContainer
-      }, componentModule.candidateMeta.defaultProps ? { ...componentModule.candidateMeta.defaultProps } : {});
+      }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});
       return item;
     }
   };

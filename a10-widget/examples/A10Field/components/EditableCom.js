@@ -47,18 +47,32 @@ class EditableCom extends React.Component {
 }
 
 export default widgetWrapper([ 'app' ])(EditableCom, {
-  editableProps : { 
-    title: PropTypes.string,
-    invalid: PropTypes.bool
-  },
-  candidateMeta: {
-    iconClassName: 'fa fa-square-o',
-    type: 'basic',
-    name: 'EditableCom',
-    component: 'EditableCom',
-    description: '',
+  meta: {
+    widget: {
+      iconClassName: 'fa fa-square-o',
+      type: 'basic',
+      name: 'EditableCom',
+      component: 'EditableCom',
+      description: ''
+    },
     defaultProps: {
-      title: 'EditableCom'
+      title: 'My title',
+      invalid: true
+    },
+    propTypes: {
+      title: PropTypes.string,
+      invalid: PropTypes.bool
+    },
+    propGroups: {
+      title: 'basic',
+      invalid: 'basic'
+    },
+    propValidations: {
+      title: [ 'ipv6-address' ]
+    },
+    propDescriptions: {
+      title: 'Just title',
+      invalid: 'just invalid'
     }
   }
 });

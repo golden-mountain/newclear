@@ -53,8 +53,7 @@ export default function editableComponent({
     }
   };
 
-  return (WrappedComponent, editableProps) => {
-    console.log(editableProps); 
+  return (WrappedComponent, meta) => {
     /* eslint-disable */
     @dragSource(DndTypes.COMPONENT, componentSource, (dragConnect, monitor) => ({
       connectDragSource: dragConnect.dragSource(),
@@ -83,7 +82,7 @@ export default function editableComponent({
       editProperties(event) {
         event.stopPropagation();
         startToEditComponent({
-          componentPropTypes: editableProps,
+          componentMeta: meta,
           componentProps: this.props
         });
       }

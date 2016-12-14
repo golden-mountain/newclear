@@ -110,17 +110,17 @@ export default class Sandbox extends React.Component {
       reactSchema: reactSchemaSource,
       editingComponentId: null,
       componentProps: null,
-      componentPropTypes: null
+      componentMeta: null
     };
   }
   
   startToEditComponent(args) {
     console.log('startToEditComponent');
-    const { componentPropTypes, componentProps } = args; 
+    const { componentMeta, componentProps } = args; 
     this.setState({
       editingComponentId: componentProps.componentId,
       editingComponentProps: componentProps,
-      editingComponentPropTypes: componentPropTypes
+      editingComponentMeta: componentMeta
     });
   }
 
@@ -150,14 +150,16 @@ export default class Sandbox extends React.Component {
     const {
       editingComponentId,
       editingComponentProps,
-      editingComponentPropTypes
+      editingComponentMeta
     } = this.state;
 
-    const Widgets = Object.values(allComponents).map(item=>item.candidateMeta);
+    const Widgets = Object.values(allComponents)
+      .filter(item=>item.meta)
+      .map(item=> item.meta.widget);
 
     return (
       <Row>
-        <Col xs={4}>
+        <Col xs={2}>
           <h3>Component Candidates</h3>
           <div>
           {
@@ -175,7 +177,7 @@ export default class Sandbox extends React.Component {
           }
           </div>
         </Col>
-        <Col xs={8}>
+        <Col xs={6}>
           <h3> Drag and Drop Demo </h3>
 
           {
@@ -186,13 +188,14 @@ export default class Sandbox extends React.Component {
             })
           }
         </Col>
-
-        <ComponentBuilderProperties
-          editingComponentId={editingComponentId}
-          componentProps={editingComponentProps}
-          componentPropTypes={editingComponentPropTypes}
-          updateComponent={this.updateComponent.bind(this)}
-        />
+        <Col xs={4}>
+          <ComponentBuilderProperties
+            editingComponentId={editingComponentId}
+            componentProps={editingComponentProps}
+            componentMeta={editingComponentMeta}
+            updateComponent={this.updateComponent.bind(this)}
+          />
+        </Col>
       </Row>
     );
   }

@@ -25,15 +25,12 @@ import MultiOptionsEdit from './properties/MultiOptionsEdit';
 // 
 // 
 
-const updateComponent = () => {};
-const stopEditingComponent = () => {};
-
 export default class ComponentBuilderProperties extends Component {
   static propTypes = {
     componentProps: PropTypes.object,
-    componentPropTypes: PropTypes.object,
+    componentMeta: PropTypes.object,
     updateComponent: PropTypes.func,
-    stopEditingComponent: PropTypes.func,
+    stopEditingComponent: PropTypes.func
   }
 
   constructor(props) {
@@ -150,7 +147,7 @@ export default class ComponentBuilderProperties extends Component {
 
   render() {
     const {
-      componentPropTypes = {}
+      componentMeta = {}
     } = this.props;
     const PanelHeader = (
       <span>
@@ -185,7 +182,7 @@ export default class ComponentBuilderProperties extends Component {
                       </Col>
                     </FormGroup>*/}
           {
-            Object.keys(componentPropTypes).map((propTypeName, index) => {
+            componentMeta.propTypes && Object.keys(componentMeta.propTypes).map((propTypeName, index) => {
               return (
                 <FormGroup key={index}>
                 <Col sm={4}>
@@ -193,7 +190,7 @@ export default class ComponentBuilderProperties extends Component {
                 </Col>
                 <Col sm={8}>
                   {
-                    this.renderInput(propTypeName, componentPropTypes[propTypeName], this.state[propTypeName])
+                    this.renderInput(propTypeName, componentMeta.propTypes[propTypeName], this.state[propTypeName])
                   }
                 </Col>
                 </FormGroup>

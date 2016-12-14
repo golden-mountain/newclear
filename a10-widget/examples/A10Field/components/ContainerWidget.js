@@ -35,20 +35,4 @@ class ContainerWidget extends React.Component {
   }
 }
 
-export default widgetWrapper()(ContainerWidget, {
-  editableProps : { 
-    title: PropTypes.string,
-    invalid: PropTypes.bool
-  },
-  candidateMeta: {
-    iconClassName: 'fa fa-square-o',
-    type: 'basic',
-    name: 'ContainerWidget',
-    component: 'ContainerWidget',
-    description: '',
-    defaultProps: {
-      title: 'test',
-      invalid: true
-    }
-  }
-});
+export default widgetWrapper()(ContainerWidget);

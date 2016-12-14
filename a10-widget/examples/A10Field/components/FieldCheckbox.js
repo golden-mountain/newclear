@@ -34,15 +34,32 @@ class FieldCheckbox extends React.Component {
 }
 
 export default widgetWrapper([ 'app' ])(FieldCheckbox, {
-  editableProps : { 
-    title: PropTypes.string,
-    invalid: PropTypes.bool
-  },
-  candidateMeta: {
-    iconClassName: 'fa fa-square-o',
-    type: 'basic',
-    name: 'FieldCheckbox',
-    component: 'FieldCheckbox',
-    description: ''
+  meta: {
+    widget: {
+      iconClassName: 'fa fa-square-o',
+      type: 'basic',
+      name: 'ContainerWidget',
+      component: 'ContainerWidget',
+      description: ''
+    },
+    defaultProps: {
+      title: 'My title',
+      invalid: true
+    },
+    propTypes: {
+      title: PropTypes.string,
+      invalid: PropTypes.bool
+    },
+    propGroups: {
+      title: 'basic',
+      invalid: 'basic'
+    },
+    propValidations: {
+      title: [ 'ipv6-address' ]
+    },
+    propDescriptions: {
+      title: 'Just title',
+      invalid: 'just invalid'
+    }
   }
 });
