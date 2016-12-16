@@ -165,20 +165,6 @@ export default class ComponentBuilderProperties extends Component {
       </span>
     );
 
-    const PropertyInput = (props) => (
-      <FormGroup key={props.key}>
-        <Col sm={4}>
-          {props.property.prop}
-        </Col>
-        <Col sm={8}>
-          {
-            this.renderInput(props.property.prop, props.property.type, this.state[props.property.prop])
-          }
-        </Col>
-      </FormGroup>
-    );
-
-
     const groupComponentProperties = this.getGroupComponentProperties();
 
     return (
@@ -202,11 +188,20 @@ export default class ComponentBuilderProperties extends Component {
             {
               Object.keys(groupComponentProperties).map((key) => {
                 return (
-                  <Panel header={key} eventKey={key}>
+                  <Panel header={key} eventKey={key} key={key}>
                     {
                       groupComponentProperties[key].map((property, index)=>{
                         return (
-                          <PropertyInput key={index} property={property} />
+                          <FormGroup key={index}>
+                            <Col sm={4}>
+                              {property.prop}
+                            </Col>
+                            <Col sm={8}>
+                              {
+                                this.renderInput(property.prop, property.type, this.state[property.prop])
+                              }
+                            </Col>
+                          </FormGroup>
                         );
                       })
                     }

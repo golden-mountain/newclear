@@ -4,7 +4,15 @@ import { widgetWrapper } from 'widgetWrapper';
 import { FormControl, FormGroup, ControlLabel, Row, Col, Button, HelpBlock } from 'react-bootstrap';
 
 class EditableCom extends React.Component {
-  static displayName = 'EditableCom'
+  static displayName = 'EditableCom';
+  static defaultProps = {
+    title: 'My title',
+    invalid: true
+  };
+  static propTypes = {
+    title: PropTypes.string,
+    invalid: PropTypes.bool
+  };
 
   change(event) {
     // console.log(event.target.value);
@@ -55,14 +63,8 @@ export default widgetWrapper([ 'app' ])(EditableCom, {
       component: 'EditableCom',
       description: ''
     },
-    defaultProps: {
-      title: 'My title',
-      invalid: true
-    },
-    propTypes: {
-      title: PropTypes.string,
-      invalid: PropTypes.bool
-    },
+    defaultProps: EditableCom.defaultProps,
+    propTypes: EditableCom.propTypes,
     propGroups: {
       title: 'basic',
       invalid: 'advanced'
