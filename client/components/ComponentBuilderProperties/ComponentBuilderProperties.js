@@ -101,8 +101,8 @@ export default class ComponentBuilderProperties extends Component {
         prop: key,
         type: componentMeta.propTypes[key],
         group: componentMeta.propGroups[key],
-        validation: componentMeta.propValidations[key],
-        description: componentMeta.propDescriptions[key]
+        validation: componentMeta.propValidations && componentMeta.propValidations[key],
+        description: componentMeta.propDescriptions && componentMeta.propDescriptions[key]
       };
     }) : [])
     .reduce((accum, current)=>{

@@ -7,6 +7,8 @@ import ContainerWidget from './components/ContainerWidget';
 import NotEditableCom from './components/NotEditableCom';
 import EditableCom from './components/EditableCom';
 import FieldCheckbox from './components/FieldCheckbox';
+import Button from './components/Button';
+import FieldGroup from './components/FieldGroup';
 
 import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
@@ -20,7 +22,9 @@ const allComponents = {
   ContainerWidget,
   NotEditableCom,
   EditableCom,
-  FieldCheckbox
+  FieldCheckbox,
+  Button,
+  FieldGroup
 };
 
 editableUtils.registerComponents(allComponents);
@@ -158,6 +162,8 @@ export default class Sandbox extends React.Component {
     const Widgets = Object.values(allComponents)
       .filter(item=>item.meta)
       .map(item=> item.meta.widget);
+
+    console.log(Widgets);
 
     return (
       <Row>

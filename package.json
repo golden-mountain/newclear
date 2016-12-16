@@ -140,7 +140,7 @@
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
-    "react-bootstrap": "^0.30.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.0",
     "react-helmet": "^3.1.0",
     "react-json-inspector": "^7.0.0",
