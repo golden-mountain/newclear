@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+// import { Glyphicon } from 'react-bootstrap';
 import Footer from './jsx/Layout/Footer';
 import logoLarger from './img/logo-larger.png';
 import OEMConfig from './Config';
@@ -7,7 +8,9 @@ import Bezel from 'components/Dashboard/Bezel';
 import BaseInfo from 'components/Dashboard/BaseInfo';
 import Licensed from 'components/Dashboard/Licensed';
 
-import './sass/layout/login.scss';
+import './sass/bootstrap.scss';
+import './sass/layouts/login/footer.scss';
+import './sass/layouts/login/login.scss';
 
 // import { Grid, Row, Col, Panel, Button } from 'react-bootstrap';
 
@@ -19,7 +22,7 @@ class Login extends React.Component {
       MODULE_NAME: PropTypes.string.isRequired
     })
   }
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +42,7 @@ class Login extends React.Component {
       return res.json();
     }).then(data => {
       this.setState({ auth: `A10 ${data.authresponse.signature}` });
-    }).then(err => {
+    }).catch(err => {
       console.log(err);
     });
   }
@@ -71,12 +74,16 @@ class Login extends React.Component {
           <div className="col-md-7 right">
             <div className="front-bezel-container">
               <label>
-                <span className="glyphicon glyphicon-bookmark"></span>Thunder 3030s
+                {
+                  // <Glyphicon glyph='bookmark' />
+                }
+                <span className="glyphicon glyphicon-bookmark"/>
+                Thunder 3030s
               </label>
-              <Bezel 
+              <Bezel
                 auth={this.state.auth}
-                url={bezelUrl} 
-                logo={OEMConfig.logo} 
+                url={bezelUrl}
+                logo={OEMConfig.logo}
                 logoPos={OEMConfig.logoPosMapping[MODULE_NAME]}
                 portPos={OEMConfig.portPosMapping[MODULE_NAME]}
               />
