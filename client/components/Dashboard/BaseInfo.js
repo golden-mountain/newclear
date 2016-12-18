@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './assets/baseinfo/sass/index.scss';
+
 function BaseInfo() {
   return (
     <table className="table table-bordered">

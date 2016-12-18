@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import SVGInjector from 'svg-injector';
 
+import './assets/bezel/sass/index.scss';
+
 class Bezel extends Component {
 
   static propTypes = {
@@ -15,14 +17,14 @@ class Bezel extends Component {
   constructor(props) {
     super(props);
     this.statusColors = {
-      'UP':'#09942B', 
-      'DOWN': '#777777', 
-      'DISABLED': '#999999' 
+      'UP':'#09942B',
+      'DOWN': '#777777',
+      'DISABLED': '#999999'
     };
     this.modelStatus = {
       interface: {
         'mgmt': {
-          fill: this.statusColors['UP'], 
+          fill: this.statusColors['UP'],
           title: 'UP'
         }
       },
@@ -69,7 +71,7 @@ class Bezel extends Component {
   setEtherStatus() {
     const { netInfo, svgDOM } = this.state;
     if (!netInfo || !svgDOM) return;
-    
+
     const { portPos } = this.props;
     const portGroupDOM = svgDOM.querySelector('#bezel-port-group');
     for (const key in portPos) {

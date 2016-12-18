@@ -1,0 +1,33 @@
+
+.licensed-container {
+  .icon-row {
+    display: flex;
+    > div {
+      user-select: none;
+      margin: 0 5px;
+    }
+    + div {
+      margin-top: 10px;
+    }
+  }
+  .icon-container {
+    position: relative;
+    // FIXME, remove this
+    .dummy-icon {
+      width: 100px;
+      height: 100px;
+      background-color: #bbc1cc;
+    }
+    .ok {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 60px;
+      height: 60px;
+    }
+  }
+  .title {
+    text-align: center;
+    padding: 5px 0;
+  }
+}

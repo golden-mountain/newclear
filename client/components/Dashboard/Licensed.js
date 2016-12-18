@@ -1,27 +1,69 @@
-import React from 'react';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 
-function Licensed() {
-  return (
-    <div>
+import OKurl from './assets/licensed/img/ok.png';
+import './assets/licensed/sass/index.scss';
+
+class Licensed extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  popoverCreator = content => {
+    return (
+      <Popover id="popover-positioned-top">{content}</Popover>
+    );
+  }
+
+  changeTitleColor = (index, isHover) => {
+    const licesedDOM = ReactDOM.findDOMNode(this.refs[`licensed${index}`]);
+    const title = licesedDOM.querySelector('.title');
+    title.setAttribute('style', 'color: ' + (isHover ? '#47c10f' : 'black'));
+  }
+
+  render() {
+    const data = [
+      {
+        title: 'ADC',
+        content: 'This is ADC'
+      },
+      {
+        title: 'Security',
+        content: 'This is Security'
+      },
+      {
+        title: 'GSLIB',
+        content: 'This is GSLIB'
+      },
+      {
+        title: 'DDoS',
+        content: 'This is DDoS'
+      }
+    ];
+    return (
       <div className="icon-row">
-        <div className="">
-          <div className="dummy-icon"></div>
-        </div>
-        <div className="">
-          <div className="dummy-icon"></div>
-        </div>
-        <div className="">
-          <div className="dummy-icon"></div>
-        </div>
-        <div className="">
-          <div className="dummy-icon"></div>
-        </div>
+        {
+          data.map((item, index) => (
+            <OverlayTrigger key={index}
+              placement="bottom"
+              overlay={this.popoverCreator(item.content)}
+              onEntered={this.changeTitleColor.bind(this, index, true)}
+              onExit={this.changeTitleColor.bind(this, index, false)} >
+              <div ref={`licensed${index}`}>
+                <div className="icon-container">
+                  <div className="dummy-icon"></div>
+                  <img className="ok" src={OKurl} />
+                </div>
+                <div className="title">{ item.title }</div>
+              </div>
+            </OverlayTrigger>
+          ))
+        }
       </div>
-      <div className="well">
-        It is Copywriter
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Licensed;
