@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import '../Resource/asset.scss';
 
+import { chart1, chart2 } from '../Resource/charts';
+
 import configApp from 'configs/app';
 const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
@@ -18,6 +20,11 @@ const matas = [
 ];
 
 class SummarySolution extends Component {
+
+  componentDidMount() {
+    chart1('chart-1');
+    chart2('chart-2');
+  }
 
   render() {
     return (
@@ -48,6 +55,14 @@ class SummarySolution extends Component {
           </Table>
 
           <div className="title">{'Part2: Charts'}</div>
+          <div className="row">
+            <div className="col-lg-6 col-md-6">
+              <div id="chart-1" />
+            </div>
+            <div className="col-lg-6 col-md-6">
+              <div id="chart-2" />
+            </div>
+          </div>
 
           <div className="title">{'Part3: Important Pperations(Audit)'}</div>
 

@@ -19,6 +19,10 @@ const SummarySolutionPage = asyncComponent(() =>
   System.import('./Solutions/SummarySolution').then(module => module.default)
 );
 
+const DashboardPage = asyncComponent(() =>
+  System.import('./Solutions/Dashboard').then(module => module.default)
+);
+
 class Router extends RouterBase {
   path = 'ssli'
 
@@ -38,6 +42,10 @@ class Router extends RouterBase {
     summary: {
       component: SummarySolutionPage,
       menuPath: [ 'Security', 'SSLi', 'Solutions - Summary' ]
+    },
+    dashboard: {
+      component: DashboardPage,
+      menuPath: [ 'Security', 'SSLi', 'Dashboard' ]
     }
   }
 }
