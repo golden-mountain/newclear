@@ -7,6 +7,7 @@ import AuthRouter from 'pages/Auth';
 import DashboardRouter from 'pages/Dashboard';
 import DevRouter from 'pages/Dev';
 import SecurityRouter from 'pages/Security';
+import WelcomeRouter from 'pages/Welcome';
 
 export default class App extends Component {
   render() {
@@ -19,6 +20,7 @@ export default class App extends Component {
           <ADCRouter />
           <SecurityRouter />
           <DevRouter />
+          <WelcomeRouter />
         </div>
       </Router>
     );

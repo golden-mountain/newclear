@@ -35,11 +35,23 @@ class LoginForm extends React.Component {
   //   return true;
   // }
 
+  // FIXME. using action
+  isFirstLogin() {
+    const cookieVal = document.cookie;
+    const cookieItems = cookieVal.split(';');
+    for (let i = 0; i < cookieItems.length; i++) {
+      const item = cookieItems[i];
+      const result = item.match(/isFirst=(.*)/);
+      if (result && result[1] === 'false') return false;
+    }
+    return true;
+  }
+
   render() {
     const { modal } = this.props;
 
     return (
-      <A10Form action='/axapi/v3/auth' redirect="/" modal={modal} bsClass="mb-lg">
+      <A10Form action='/axapi/v3/auth' redirect={this.isFirstLogin() ? '/welcome' : '/'} modal={modal} bsClass="mb-lg">
         <A10Field name="credentials.username" initial="admin" validation={{ required }} layout={false}>
           <FormControl id="username" type="text" placeholder="Enter Username" autoComplete="off" required="required" className="form-control" />
           <span className="fa fa-envelope form-control-feedback text-muted"></span>
