@@ -1,7 +1,9 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Tabs, Tab } from 'react-bootstrap';
 import Panel from 'react-bootstrap/lib/Panel';
-
+import { Button as ReactButton } from 'react-bootstrap';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/github.css';
 // test components loading
 import ContainerWidget from './components/ContainerWidget';
 import NotEditableCom from './components/NotEditableCom';
@@ -116,7 +118,8 @@ export default class Sandbox extends React.Component {
       reactSchema: reactSchemaSource,
       editingComponentId: null,
       componentProps: null,
-      componentMeta: null
+      componentMeta: null,
+      editMode: true
     };
   }
   
@@ -148,12 +151,17 @@ export default class Sandbox extends React.Component {
     });
   }
 
+  downloadJsxFile = ()=> {
+    window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
+  }
+
   render() {
     const {
       reactSchema
     } = this.state;
 
     const {
+      editMode,
       editingComponentId,
       editingComponentProps,
       editingComponentMeta
@@ -163,37 +171,55 @@ export default class Sandbox extends React.Component {
       .filter(item=>item.meta)
       .map(item=> item.meta.widget);
 
-    console.log(Widgets);
-
     return (
       <Row>
-        <Col xs={3}>
-          <Panel header="Component Candidates">
-          {
-            Widgets.map((item, index)=>{
-              return (
-                <ComponentCandidate
-                  key={index}
-                  name={item.name}
-                  component={item.component}
-                  iconClassName={item.iconClassName}
-                  isContainer={item.isContainer === true}
-                />
-              );
-            })
-          }
+        <Col xs={4}>
+          <Panel>
+            <Tabs>
+              <Tab eventKey={1} title="Components">
+                {
+                  Widgets.map((item, index)=>{
+                    return (
+                      <ComponentCandidate
+                        key={index}
+                        name={item.name}
+                        component={item.component}
+                        iconClassName={item.iconClassName}
+                        isContainer={item.isContainer === true}
+                      />
+                    );
+                  })
+                }
+              </Tab>
+              <Tab eventKey={2} title="JSX">
+                <Highlight
+                  className="javascript"
+                  style={{ width: '100%', height: 'auto', minHeight: 300 }}
+                >
+                  { editableUtils.generateReactCodeFromSchema(reactSchema) }
+                </Highlight>
+                <ReactButton
+                  onClick={::this.downloadJsxFile}
+                >
+                  Download
+                </ReactButton>
+              </Tab>
+            </Tabs>
           </Panel>
+         
         </Col>
         <Col xs={5}>
+          <div>
           {
-            editableUtils.jsonToComponent(reactSchema, true, { editingComponentId }, {
+            editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
               startToEditComponent: this.startToEditComponent.bind(this),
               deleteComponent: this.deleteComponent.bind(this),
               moveComponent: this.moveComponent.bind(this)
             })
           }
+          </div>
         </Col>
-        <Col xs={4}>
+        <Col xs={3}>
           <ComponentBuilderProperties
             editingComponentId={editingComponentId}
             componentProps={editingComponentProps}

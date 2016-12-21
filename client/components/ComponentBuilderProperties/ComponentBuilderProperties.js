@@ -70,9 +70,9 @@ export default class ComponentBuilderProperties extends Component {
     this.updateComponent();
   }
 
-  onSelectChange(propTypeName, value) {
+  onSelectChange(propTypeName, option) {
     this.setState({
-      [propTypeName]: value
+      [propTypeName]: option.value
     });
     this.updateComponent();
   }
