@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { widgetWrapper } from 'a10-widget';
 
+import { Nav, NavItem } from 'react-bootstrap';
+
 import configApp from 'configs/app';
 const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
@@ -8,14 +10,14 @@ const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 import * as d3 from 'd3';
 import Director from '../Resource/graph/director';
 
-import { sampleDescripton } from '../Resource/description';
+// import { sampleDescripton } from '../Resource/description';
 
 class Dashboard extends Component {
 
   constructor() {
     super();
     this.state = {
-      selected: undefined
+      selectedKey: 'network'
     };
   }
 
@@ -29,7 +31,7 @@ class Dashboard extends Component {
 
     const events = {
       'ax.svg': () => {
-        this.setState({ selected: 'network' });
+        this.setState({ selectedKey: 'network' });
       }
     };
 
@@ -61,20 +63,27 @@ class Dashboard extends Component {
     networkGraph.addPath('M 0, 50, L0, -190, L-50, -190');
   }
 
+  handleSelect(eventKey) {
+    this.setState({ selectedKey: eventKey });
+  }
+
   render() {
     return (
       <StandardPageLayout title="Dashboard">
-        tests
+
         <div id="dashboard-network-graph"
           style={{
             width: '1100px',
             height: '500px',
-            border: '1px solid #ddd'
+            border: '1px solid #ddd',
+            backgroundColor: '#fff'
           }}
         />
-      <div>
-        {this.state.selected === 'network' ? sampleDescripton.network : ''}
-      </div>
+        <Nav bsStyle="tabs" activeKey={this.state.selectedKey} onSelect={::this.handleSelect}>
+          <NavItem eventKey="network">Network</NavItem>
+          <NavItem eventKey="system">System</NavItem>
+          <NavItem eventKey="3">Test</NavItem>
+        </Nav>
       </StandardPageLayout>
     );
   }
