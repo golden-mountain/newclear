@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { widgetWrapper } from 'a10-widget';
 import './assets/baseinfo/sass/index.scss';
 
 function BaseInfo() {
@@ -34,4 +35,4 @@ function BaseInfo() {
   );
 }
 
-export default BaseInfo;
+export default widgetWrapper()(BaseInfo);

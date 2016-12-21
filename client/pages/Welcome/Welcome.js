@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 
+import { widgetWrapper } from 'a10-widget';
 import './assets/sass/index.scss';
 
 class Welcome extends Component {
@@ -15,6 +16,7 @@ class Welcome extends Component {
   }
 
   render() {
+    console.log(this.props);
     const solutions = [
       {
         title: 'ADC Application',
@@ -76,4 +78,5 @@ class Welcome extends Component {
   }
 
 }
-export default Welcome;
+
+export default widgetWrapper()(Welcome);

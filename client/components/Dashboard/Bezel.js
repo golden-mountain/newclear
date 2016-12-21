@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import SVGInjector from 'svg-injector';
 
+import { widgetWrapper } from 'a10-widget';
 import './assets/bezel/sass/index.scss';
 
 class Bezel extends Component {
@@ -146,4 +147,4 @@ class Bezel extends Component {
 
 }
 
-export default Bezel;
+export default widgetWrapper()(Bezel);

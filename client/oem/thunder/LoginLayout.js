@@ -4,9 +4,9 @@ import Footer from './jsx/Layout/Footer';
 import logoLarger from './img/logo-larger.png';
 import OEMConfig from './Config';
 
-import Bezel from 'components/Dashboard/Bezel';
-import BaseInfo from 'components/Dashboard/BaseInfo';
-import Licensed from 'components/Dashboard/Licensed';
+import Bezel from '../../components/Dashboard/Bezel';
+import BaseInfo from '../../components/Dashboard/BaseInfo';
+import Licensed from '../../components/Dashboard/Licensed';
 
 import './sass/bootstrap.scss';
 import './sass/layouts/login/footer.scss';
@@ -57,7 +57,6 @@ class Login extends React.Component {
         <div className="row">
           <div className="col-md-5 left">
             <div className="block-center mt-xl wd-xl">
-              { /* START panel */ }
               <div className="panel panel-dark panel-flat">
                 <div className="panel-heading text-center">
                   <a href="#">
@@ -98,7 +97,6 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
-        { /* END panel */ }
         <div className="p-lg text-right footer">
           <hr/>
           <Footer />
