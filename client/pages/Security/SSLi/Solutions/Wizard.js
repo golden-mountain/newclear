@@ -10,7 +10,7 @@ const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 import * as d3 from 'd3';
 import Director from '../Resource/graph/director';
 
-// import { sampleDescripton } from '../Resource/description';
+import { sampleDescripton } from '../Resource/description';
 
 class Dashboard extends Component {
 
@@ -30,12 +30,19 @@ class Dashboard extends Component {
     // director.centerPoint();
 
     const events = {
-      'ax.svg': () => {
+      'laptop.svg': () => {
         this.setState({ selectedKey: 'network' });
+      },
+      'ax.svg': () => {
+        this.setState({ selectedKey: 'system' });
+      },
+      'router.svg': () => {
+        this.setState({ selectedKey: 'internal' });
       }
     };
 
     director.addEvent(function (node) {
+      console.log(node.type);
       const nodeEvent = events[node.type];
       nodeEvent && nodeEvent();
     });
@@ -69,7 +76,7 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <StandardPageLayout title="Dashboard">
+      <StandardPageLayout title="Wizard">
 
         <div id="dashboard-network-graph"
           style={{
@@ -79,11 +86,18 @@ class Dashboard extends Component {
             backgroundColor: '#fff'
           }}
         />
+        <br />
         <Nav bsStyle="tabs" activeKey={this.state.selectedKey} onSelect={::this.handleSelect}>
           <NavItem eventKey="network">Network</NavItem>
           <NavItem eventKey="system">System</NavItem>
-          <NavItem eventKey="3">Test</NavItem>
+          <NavItem eventKey="internal">Internal</NavItem>
         </Nav>
+        <div style={{ width: '1100px', padding: '8px', backgroundColor: '#fff' }}>
+          <div>{ this.state.selectedKey === 'network' ? sampleDescripton.network : ''}</div>
+          <div>{ this.state.selectedKey === 'system' ? sampleDescripton.system : ''}</div>
+          <div>{ this.state.selectedKey === 'internal' ? sampleDescripton.internal : ''}</div>
+        </div>
+
       </StandardPageLayout>
     );
   }
