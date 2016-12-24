@@ -35,7 +35,11 @@ class AppLayout extends Component {
 
   static contextTypes = {
     props: PropTypes.object.isRequired,
-    wm: PropTypes.object.isRequired
+    wm: PropTypes.object.isRequired,
+    appConfig: PropTypes.shape({
+      OEM: PropTypes.string.isRequired,
+      MODULE_NAME: PropTypes.string.isRequired
+    })
   }
 
   state = {

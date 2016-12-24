@@ -44,24 +44,27 @@ class Licensed extends Component {
       }
     ];
     return (
-      <div className="icon-row">
-        {
-          data.map((item, index) => (
-            <OverlayTrigger key={index}
-              placement="bottom"
-              overlay={this.popoverCreator(item.content)}
-              onEntered={this.changeTitleColor.bind(this, index, true)}
-              onExit={this.changeTitleColor.bind(this, index, false)} >
-              <div ref={`licensed${index}`}>
-                <div className="icon-container">
-                  <div className="dummy-icon"></div>
-                  <img className="ok" src={OKurl} />
+      <div className="licensed-container">
+        <label>Licensed</label>
+        <div className="icon-row">
+          {
+            data.map((item, index) => (
+              <OverlayTrigger key={index}
+                placement="bottom"
+                overlay={this.popoverCreator(item.content)}
+                onEntered={this.changeTitleColor.bind(this, index, true)}
+                onExit={this.changeTitleColor.bind(this, index, false)} >
+                <div ref={`licensed${index}`}>
+                  <div className="icon-container">
+                    <div className="dummy-icon"></div>
+                    <img className="ok" src={OKurl} />
+                  </div>
+                  <div className="title">{ item.title }</div>
                 </div>
-                <div className="title">{ item.title }</div>
-              </div>
-            </OverlayTrigger>
-          ))
-        }
+              </OverlayTrigger>
+            ))
+          }
+        </div>
       </div>
     );
   }

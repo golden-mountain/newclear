@@ -11,8 +11,9 @@ class Bezel extends Component {
     logo: PropTypes.string.isRequired,
     logoPos: PropTypes.array.isRequired,
     portPos: PropTypes.object.isRequired,
-    url: PropTypes.string.isRequired,
-    auth: PropTypes.any
+    moduleName: PropTypes.string.isRequired,
+    auth: PropTypes.any,
+    oem: PropTypes.string.isRequired
   }
 
   constructor(props) {
@@ -59,7 +60,7 @@ class Bezel extends Component {
     const { netInfo } = this.state;
     if (this.props.auth && !netInfo) this.getNetInfo();
     if (netInfo !== prevState.netInfo) this.setEtherStatus();
-    if (prevProps.url !== this.props.url) {
+    if (prevProps.moduleName !== this.props.moduleName) {
       this.injectorSVG();
     }
   }
@@ -139,9 +140,18 @@ class Bezel extends Component {
   }
 
   render() {
-    const { url } = this.props;
+    const { oem, moduleName } = this.props;
+    // FIXME, should use anthor way
+    const url = require(`oem/${oem}/img/bezel_templates/${moduleName}.svg`);
+    
     return (
-      <img ref="bezel" src={url} />
+      <div className="front-bezel-container">
+        <label>
+          <span className="glyphicon glyphicon-bookmark"/>
+          Thunder 3030s
+        </label>
+        <img ref="bezel" src={url} />
+      </div>
     );
   }
 

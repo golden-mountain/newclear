@@ -9,10 +9,14 @@ import { createWidgetStore, registerWidgetPlugins } from 'a10-widget';
 import { SchemaPlugin } from 'a10-widget-lib';
 registerWidgetPlugins([ SchemaPlugin ]);
 
+var oemConfig = require(`./oem/${Config.OEM}/Config`).default;
+
 class Root extends Component {
 
   static childContextTypes = {
-    appConfig: PropTypes.object
+    appConfig: PropTypes.object,
+    oemConfig: PropTypes.object,
+    dispatch: PropTypes.func
   }
 
   constructor(props) {
@@ -22,7 +26,9 @@ class Root extends Component {
 
   getChildContext() {
     return {
-      appConfig: Config
+      appConfig: Config,
+      oemConfig: oemConfig,
+      dispatch: this.store.dispatch
     };
   }
 
