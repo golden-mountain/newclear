@@ -1,26 +1,25 @@
 import React, { PropTypes } from 'react';
-// import { Glyphicon } from 'react-bootstrap';
-import Footer from './jsx/Layout/Footer';
-import logoLarger from './img/logo-larger.png';
+import { Glyphicon } from 'react-bootstrap';
+import logoLarger from './img/logo2.png';
 
-import Bezel from '../../components/Dashboard/Bezel';
+import LangDropdown from '../../components/Dropdown/lang';
 import BaseInfo from '../../components/Dashboard/BaseInfo';
 import Licensed from '../../components/Dashboard/Licensed';
 
-import './sass/bootstrap.scss';
-import './sass/layouts/login/footer.scss';
+import './sass/app.scss';
 import './sass/layouts/login/login.scss';
 
 // import { Grid, Row, Col, Panel, Button } from 'react-bootstrap';
 
 class Login extends React.Component {
 
+  static displayName = 'loginLayout'
+
   static contextTypes = {
     appConfig: PropTypes.shape({
       OEM: PropTypes.string.isRequired,
       MODULE_NAME: PropTypes.string.isRequired
-    }),
-    oemConfig: PropTypes.object.isRequired
+    })
   }
 
   constructor(props) {
@@ -30,64 +29,54 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // FIXME
-    fetch('/axapi/v3/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: '{"credentials":{"username":"admin","password":"a10"}}'
-    }).then(res => {
-      return res.json();
-    }).then(data => {
-      this.setState({ auth: `A10 ${data.authresponse.signature}` });
-    }).catch(err => {
-      console.log(err);
-    });
-  }
-
   render() {
     const { 
-      appConfig: { OEM, MODULE_NAME },
-      oemConfig: { logo, logoPosMapping, portPosMapping }
+      appConfig: { MODULE_NAME }
     } = this.context;
-    
+    const bezelImgUrl = require(`./img/bezel/${MODULE_NAME}.svg`);
+
     return (
       <div id="login-layout">
-        <div className="row">
-          <div className="col-md-5 left">
-            <div className="block-center mt-xl wd-xl">
-              <div className="panel panel-dark panel-flat">
-                <div className="panel-heading text-center">
-                  <a href="#">
-                    <img src={logoLarger} alt="Image" style={{ height: '52px' }} className="block-center img-rounded" />
-                  </a>
+        <header className="row text-right">
+          <div className="col-md-12">
+            <LangDropdown />
+          </div>
+        </header>
+        <main className="row">
+          <div className="col-md-6 left">
+            <div className="block-center">
+              <div className="panel panel-dark login-form-container">
+                <div className="login-title-container">
+                  <div className="image-container">
+                    <a href="#">
+                      <img src={logoLarger} alt="Image" style={{ height: '52px' }} className="block-center img-rounded" />
+                    </a>
+                  </div>
+                  <div className="text-container">
+                    <div>
+                      <Glyphicon glyph="bookmark" />
+                      <span>Thunder {MODULE_NAME}</span>
+                    </div>
+                    <div>
+                      SIGN IN Thunder series
+                    </div>
+                  </div>
                 </div>
-                <div className="panel-body">
-                  <p className="text-center pv">SIGN IN TO CONTINUE.</p>
-                  { this.props.children }
-                </div>
+                { this.props.children }
               </div>
             </div>
           </div>
-          <div className="col-md-7 right">
-            <Bezel
-              auth={this.state.auth}
-              logo={logo}
-              oem={OEM}
-              moduleName={MODULE_NAME}
-              logoPos={logoPosMapping[MODULE_NAME]}
-              portPos={portPosMapping[MODULE_NAME]}
-            />
+          <div className="col-md-6 right">
+            <div>
+              <img src={bezelImgUrl} />
+            </div>
             <BaseInfo />
             <Licensed />
           </div>
-        </div>
-        <div className="p-lg text-right footer">
-          <hr/>
-          <Footer />
-        </div>
+        </main>
+        <footer className="p-lg text-right footer">
+          <span>&copy; 2016 - A10Networks</span>
+        </footer>
       </div>
     );
   }

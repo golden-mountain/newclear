@@ -8,20 +8,22 @@ import './assets/licensed/sass/index.scss';
 
 class Licensed extends Component {
 
+  static displayName = 'Licensed'
+
   constructor(props) {
     super(props);
   }
 
   popoverCreator = content => {
     return (
-      <Popover id="popover-positioned-top">{content}</Popover>
+      <Popover id="popover-licensed-content">{content}</Popover>
     );
   }
 
   changeTitleColor = (index, isHover) => {
     const licesedDOM = ReactDOM.findDOMNode(this.refs[`licensed${index}`]);
     const title = licesedDOM.querySelector('.title');
-    title.setAttribute('style', 'color: ' + (isHover ? '#47c10f' : 'black'));
+    title.setAttribute('style', 'color: ' + (isHover ? '#428bca' : 'black'));
   }
 
   render() {

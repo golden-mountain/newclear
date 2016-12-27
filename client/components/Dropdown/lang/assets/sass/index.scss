@@ -1,0 +1,22 @@
+
+@import "./_variables";
+@import "./_flag-icon";
+@import "./_flag-icon-base";
+@import "./_flag-icon-list";
+@import "./_flag-icon-more";
+
+.lang-dropdown {
+  width: 130px;
+  + ul > li > a {
+    text-align: center;
+  }
+}
+
+.lang-dropdown-item {
+  padding: 2px 0;
+  text-align: center;
+  display: inline;
+  .flag-icon {
+    margin-right: 10px;
+  }
+}

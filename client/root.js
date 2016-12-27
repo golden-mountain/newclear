@@ -9,14 +9,12 @@ import { createWidgetStore, registerWidgetPlugins } from 'a10-widget';
 import { SchemaPlugin } from 'a10-widget-lib';
 registerWidgetPlugins([ SchemaPlugin ]);
 
-var oemConfig = require(`./oem/${Config.OEM}/Config`).default;
-
 class Root extends Component {
 
+  static displayName = 'Root'
+
   static childContextTypes = {
-    appConfig: PropTypes.object,
-    oemConfig: PropTypes.object,
-    dispatch: PropTypes.func
+    appConfig: PropTypes.object
   }
 
   constructor(props) {
@@ -26,15 +24,13 @@ class Root extends Component {
 
   getChildContext() {
     return {
-      appConfig: Config,
-      oemConfig: oemConfig,
-      dispatch: this.store.dispatch
+      appConfig: Config
     };
   }
 
   render() {
     return (
-      <Provider store={this.store} key="provider">
+      <Provider store={this.store} dispatch={this.store.dispatch} key="provider">
         <RootRouter />
       </Provider>
     );

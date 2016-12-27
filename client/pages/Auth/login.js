@@ -9,6 +9,8 @@ import { widgetWrapper } from 'a10-widget';
 
 class LoginPage extends React.Component {
 
+  static displayName = 'loginPage'
+
   render() {
     // console.log(this);
     return (
@@ -18,4 +20,4 @@ class LoginPage extends React.Component {
 
 }
 
-export default widgetWrapper()(LoginPage);
+export default widgetWrapper([ 'app' ])(LoginPage);

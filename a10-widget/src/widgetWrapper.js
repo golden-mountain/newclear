@@ -13,6 +13,10 @@ export const widgetWrapper = ReduxDataConnector => {
   // };
   return WrappedComponent => {
 
+    if (!WrappedComponent.displayName) {
+      console.warn(`${WrappedComponent.name} is missing displayName`);
+    }
+    
     const displayName = `Widget${WrappedComponent.displayName}`;
     // console.log(uniqueId(displayName));
 
@@ -266,7 +270,6 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       render() {
-        // console.log(this.context.props);
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
         return (this.visible ? <WrappedComponent  {...newProps} /> : null);

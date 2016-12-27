@@ -38,13 +38,14 @@ const CoreManager = config => ( Layout, WrappedElement, WrappedProps) => {
     //wm == component manager
     constructor(props, context) {
       super(props, context);
-      // console.log(props, this.context);
       this.wm = getWidgetManager(this.props.dispatch);
       this.wm.registerComponent(pagePath);
     }
 
     getChildContext() {
-      return {  props: Object.assign({}, this.props, WrappedProps ), wm: this.wm };
+      return {  
+        props: Object.assign({}, this.props, { dispatch: this.context.store.dispatch }, WrappedProps ), wm: this.wm 
+      };
     }
 
     componentWillMount() {

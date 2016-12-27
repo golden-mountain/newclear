@@ -7,6 +7,8 @@ import './assets/bezel/sass/index.scss';
 
 class Bezel extends Component {
 
+  static displayName = 'Bezel'
+
   static propTypes = {
     logo: PropTypes.string.isRequired,
     logoPos: PropTypes.array.isRequired,

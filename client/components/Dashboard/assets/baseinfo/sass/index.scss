@@ -3,8 +3,18 @@
   max-width: 100%;
   table {
     font-size: 12px;
-    th {
-      background-color: #edeff2;
+    thead {
+      th {
+        background-color: #5BC0DE;
+        color: #FFFFFF;
+        text-align: center;
+      }
+    }
+    tbody {
+      td {
+        background-color: #F2F2F2;
+        text-align: center;
+      }
     }
   }
 }

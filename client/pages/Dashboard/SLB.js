@@ -52,16 +52,6 @@ class SLBDashboard extends Component {
       layouts: { lg: layout, md: layout, sm: layout },
       layout: layout
     });
-
-    // temp
-    window.qq = () => {
-      const newLayout = [];
-      for (let i = 1; i < layout.length; i++) newLayout.push(layout[i]);
-      this.setState({
-        layouts: { lg: newLayout, md: newLayout, sm: newLayout },
-        layout: newLayout
-      });
-    };
   }
 
   render() {

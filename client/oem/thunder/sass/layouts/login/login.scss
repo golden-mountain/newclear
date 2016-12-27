@@ -4,11 +4,13 @@
   flex-direction: column;
   overflow-x: hidden;
   height: 100%;
+
+  header {
+    padding: 10px 20px;
+  }
+
   .row {
     flex-grow: 2;
-    .left {
-      padding-top: 70px;
-    }
     .right {
       padding: 50px 50px 0 0;
       label {
@@ -17,6 +19,35 @@
       > div {
         width: 100%;
         margin-bottom: 20px;
+        * {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+
+  .login-form-container {
+    padding: 20px;
+    margin: 30px;
+    .login-title-container {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 25px;
+      .image-container {
+        flex-grow: 2;
+      }
+      .text-container {
+        text-align: right;
+        :first-child span {
+          color: #5BC0DE;
+          font-size: 18px;
+          font-weight: 700;
+        }
+        :nth-child(2) {
+          color: #999999;
+          font-size: 14px;
+          font-weight: 400;
+        }
       }
     }
   }
