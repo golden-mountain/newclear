@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { widgetWrapper } from 'a10-widget';
 import ChooseBoard from '../../components/Solutions/ChooseBoard';
@@ -57,6 +57,10 @@ class Welcome extends Component {
           </p>
           <ChooseBoard />
         </main>
+
+        <div className="toolbar">
+          <Button href="/">Skip</Button>
+        </div>
       </div>
     );
   }
