@@ -1,0 +1,5 @@
+{
+  "AuthenticationService": {"secret": "123"},
+  "connectionString": "localhost",
+  "db": "../../testdb"
+}
