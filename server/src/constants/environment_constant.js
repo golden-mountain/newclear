@@ -1,0 +1,5 @@
+const ROUTES_MODULES = 'routes',
+  HANDLERS_MODULES = 'handlers',
+  SERVICES_MODULES = 'services';
+
+export { ROUTES_MODULES, HANDLERS_MODULES, SERVICES_MODULES };
