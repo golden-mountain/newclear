@@ -23,6 +23,25 @@ class Director {
     // 获取SVG的高
     this.height = parseInt(this.scene.style('height').replace('px', ''));
     this.events = [];
+
+    this.addMarker();
+  }
+
+  addMarker() {
+    var defs = this.scene.append('defs');
+    //添加marker标签及其属性
+    var marker = defs.append('marker')
+        .attr('id', 'arrow')
+        .attr('markerUnits', 'strokeWidth')
+        .attr('markerWidth', 12)
+        .attr('markerHeight', 12)
+        .attr('viewBox', '0 0 12 12')
+        .attr('refX', 6)
+        .attr('refY', 6)
+        .attr('orient', 'auto');
+    marker.append('path')
+        .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
+        .attr('fill', '#aaa');
   }
 
   addEvent(event) {
