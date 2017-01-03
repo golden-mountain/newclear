@@ -6,16 +6,19 @@ class ChooseBoard extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      data: null
+    };
   }
 
-  renderSolution(data) {
+  renderSolution = (data) => {
     const colors = [ 'primary', 'warning', 'default', 'success', 'info', 'danger' ];
     return data.map((solution, index) => (
       <button type="button" className={`btn btn-${colors[index % 7]} btn-xs`}>{solution.name}</button>
     ));
   }
 
-  renderApplicationItem(data) {
+  renderApplicationItem = (data) => {
     return data.map((application, index) => (
       <div className="col-md-4" key={index}>
         <div className="">
@@ -32,8 +35,8 @@ class ChooseBoard extends Component {
     ));
   }
 
-  render() {
-    const data = this.props.data.reduce((prev, item) => {
+  transDataFormat = (data) => {
+    return data.reduce((prev, item) => {
       if (prev[prev.length - 1].length >= 3) {
         prev.push([ item ]);
       } else {
@@ -41,7 +44,21 @@ class ChooseBoard extends Component {
       }
       return prev;
     }, [ [] ]);
+  }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      this.setState({ data: this.transDataFormat(this.props.data) });
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ data: this.transDataFormat(this.props.data) });
+  }
+
+  render() {
+    const { data } = this.state;
+    if (!data) return null;
     return (
       <div className="solution-choose-board">
         <h5>Choose App you want to deploy on this device</h5>

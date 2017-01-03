@@ -1,61 +1,75 @@
 import React, { Component, PropTypes } from 'react';
 // import auth from 'helpers/auth';
 // import Link from 'react-router/Link';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import * as DashboardComponent from '../../components/Dashboard';
 
-import './layout.scss';
+import { Dashboard, Widgets, GridView } from '../../components/Dashboard';
 
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import './assets/sass/layout.scss';
 
 class SLBDashboard extends Component {
 
+  static displayName = 'SLBDashboard'
+
   static contextTypes = {
-    appConfig: PropTypes.shape({
-      OEM: PropTypes.string.isRequired,
-      MODULE_NAME: PropTypes.string.isRequired
-    }),
-    oemConfig: PropTypes.object.isRequired
+    appConfig: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      layouts: { lg: [] },
-      layout: []
+      widgets: []
     };
   } 
-
-  layoutChange = layout => {
-    console.log(layout);
+  
+  changeWidgetOrder = (widgetIndex, boxIndex) => {
+    const { widgets } = this.state;
+    const result = [];
+    for (let i = 0; i < widgets.length; i++) {
+      if (boxIndex < widgetIndex) {
+        if (i === boxIndex) result.push(widgets[widgetIndex]);
+        if (i !== widgetIndex) result.push(widgets[i]);
+      } else {
+        if (i !== widgetIndex) result.push(widgets[i]);
+        if (i === boxIndex) result.push(widgets[widgetIndex]);
+      }
+    }
+    this.setState({ widgets: result });
   }
 
   componentDidMount() {
-    const { 
-      appConfig: { OEM: oem, MODULE_NAME: moduleName },
-      oemConfig: { logo, logoPosMapping, portPosMapping }
-    } = this.context;
-
-    const layout = [
-      { 
-        i: 'Bezel', x: 0, y: 0, w: 7, h: 2,
-        options: {
-          auth: '', logo, oem, moduleName,
-          logoPos: logoPosMapping[moduleName],
-          portPos: portPosMapping[moduleName]
-        }
-      },
-      { i: 'BaseInfo', x: 0, y: 1, w: 6, h: 2 },
-      { i: 'Licensed', x: 7, y: 0, w: 3, h: 4, minW: 2, maxW: 4 }
+    const widgets = [
+      { widgetPath: 'System.Summary', width: 33 },
+      { widgetPath: 'System.ApplicationStatus', width: 33 },
+      { widgetPath: 'System.Logging', width: 33 },
+      { widgetPath: 'Networks.Summary.Chart', width: 33 },
+      { widgetPath: 'System.CPU.Chart', width: 33 },
+      { widgetPath: 'System.CPU.Chart', width: 33 }
     ];
     this.setState({
-      layouts: { lg: layout, md: layout, sm: layout },
-      layout: layout
+      widgets: widgets
     });
   }
 
   render() {
-    // const token = auth.getToken();
+    const { getWidget } = Widgets;
+    const infoCardData = [
+      {
+        widgetPath: 'System.CPU.Card',
+        width: 22
+      },
+      {
+        widgetPath: 'System.CPU.Card',
+        width: 22
+      },
+      {
+        widgetPath: 'System.DiskInfo',
+        width: 22
+      },
+      {
+        widgetPath: 'System.PortInfo',
+        width: 33
+      }
+    ];
 
     return (
       <div className="container-fluid">
@@ -66,24 +80,30 @@ class SLBDashboard extends Component {
           //   <li><Link to="/adc/template-virtual-server/edit">Template Virtual Server Port Edit</Link></li>
           // </ul>
         }
-        <ResponsiveReactGridLayout className="layout" 
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-          layouts={this.state.layouts}
-          measureBeforeMount={false}
-          useCSSTransforms={true} 
-          isResizable={true}
-          onLayoutChange={this.layoutChange}>
-          {
-            this.state.layout.map(item => {
-              const Component = DashboardComponent[item.i];
-              return (
-                <div key={item.i} className="dashboard-item react-grid-item">
-                  <Component {...item.options} />
-                </div>
-              );
-            })
-          }
-        </ResponsiveReactGridLayout>
+        <div className="page-title">
+          <h3>System Dashboard</h3>
+          <div>Show System General Information</div>
+        </div>
+        <main className="content">
+          <GridView className="system-info">
+            {
+              infoCardData.map((item, index) => {
+                const Card = getWidget(Widgets, item.widgetPath);
+                return <Card key={index} width={item.width} />;
+              })
+            }
+          </GridView>
+          <Dashboard changeWidgetOrder={this.changeWidgetOrder}>
+            {
+              this.state.widgets.map(item => {
+                const Widget = getWidget(Widgets, item.widgetPath);
+                return (
+                  <Widget key={item.widgetPath} width={item.width} />
+                );
+              })
+            }
+          </Dashboard>
+        </main>
       </div>
     );
   }

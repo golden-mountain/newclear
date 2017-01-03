@@ -18,7 +18,7 @@
   "license": "MIT",
   "betterScripts": {
     "start-dev": {
-      "command": "webpack-dev-server --config webpack/webpack.config.js --history-api-fallback --inline --hot --progress --port 3000",
+      "command": "webpack-dev-server --config webpack/webpack.config.js --history-api-fallback --inline --hot --progress --port 3000 --no-info",
       "env": {
         "NODE_ENV": "development"
       }
@@ -144,6 +144,8 @@
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
     "react-bootstrap": "^0.30.2",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.4.0",
     "react-helmet": "^3.1.0",
     "react-json-inspector": "^7.0.0",
@@ -163,7 +165,6 @@
     "redux-thunk": "^2.1.0",
     "scroll-behavior": "^0.8.1",
     "superagent": "^2.1.0",
-    "svg-injector": "^1.1.3",
     "tree-model": "^1.0.4"
   }
 }

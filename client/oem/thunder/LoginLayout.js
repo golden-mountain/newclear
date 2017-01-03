@@ -3,8 +3,7 @@ import { Glyphicon } from 'react-bootstrap';
 import logoLarger from './img/logo2.png';
 
 import LangDropdown from '../../components/Dropdown/lang';
-import BaseInfo from '../../components/Dashboard/BaseInfo';
-import Licensed from '../../components/Dashboard/Licensed';
+import * as DashboardWidgets from '../../components/Dashboard/widgets';
 
 import './sass/app.scss';
 import './sass/layouts/login/login.scss';
@@ -33,6 +32,9 @@ class Login extends React.Component {
     const { 
       appConfig: { MODULE_NAME }
     } = this.context;
+    // const { comSetComponentState, getData } = this.props;
+
+    const { BaseInfo, Licensed } = DashboardWidgets;
     const bezelImgUrl = require(`./img/bezel/${MODULE_NAME}.svg`);
 
     return (

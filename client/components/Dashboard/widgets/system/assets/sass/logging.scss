@@ -1,0 +1,19 @@
+.logging-container {
+  .list-group-item {
+    background-color: #FFFFFF;
+
+    &-success {
+      color: #00CC00;
+    }
+    &-warming {
+      color: #F0AD7D;
+    }
+    &-error {
+      color: #D43F3A;
+    }
+
+    > div:last-child {
+      color: #949494;
+    }
+  }
+}

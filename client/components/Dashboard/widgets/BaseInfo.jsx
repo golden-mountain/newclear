@@ -47,4 +47,4 @@ class BaseInfo extends Component {
   }
 }
 
-export default widgetWrapper()(BaseInfo);
+export default widgetWrapper([ 'app' ])(BaseInfo);

@@ -1,4 +1,3 @@
-
-export Bezel from './Bezel';
-export BaseInfo from './BaseInfo';
-export Licensed from './Licensed';
+export Dashboard from './Dashboard';
+export * as Widgets from './widgets';
+export GridView from './GridView';

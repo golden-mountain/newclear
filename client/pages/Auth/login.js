@@ -4,8 +4,6 @@ import React from 'react';
 import LoginForm from './components/Form';
 // import PageBase from 'helpers/PageBase';
 // import pageWrapper from 'helpers/pageWrapper';
-import { widgetWrapper } from 'a10-widget';
-
 
 class LoginPage extends React.Component {
 
@@ -20,4 +18,4 @@ class LoginPage extends React.Component {
 
 }
 
-export default widgetWrapper([ 'app' ])(LoginPage);
+export default LoginPage;

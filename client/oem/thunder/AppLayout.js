@@ -140,7 +140,6 @@ class AppLayout extends Component {
 
           <Footer />
 
-
           <ModalLayout visible={this.state.showLogin}  onHide={this.close} title="Login" >
             <LoginForm modal />
           </ModalLayout>

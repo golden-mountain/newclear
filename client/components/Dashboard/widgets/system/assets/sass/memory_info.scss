@@ -1,0 +1,11 @@
+
+@import './info_card';
+
+.memory-info {
+  > .text-container {
+    background-color: #6459A3 !important;
+  }
+  > .chart-container {
+    background-color: #7266BA !important;
+  }
+}

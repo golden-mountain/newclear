@@ -51,8 +51,14 @@ html, body, #app {
   height: auto;
   min-height: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
   &.ng-leave {
     display: none;
+  }
+
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   // Contains the main sidebar
@@ -95,12 +101,25 @@ html, body, #app {
   // Contains the main content
   > section {
     position: relative;
-    height: 100%;
+    min-height: 100%;
+    height: auto;
     margin-left: 0;
     // overflow: hidden;
     z-index: $z-index-main-section;
     background-color: $content-bg;
-    margin-bottom: $footer-hg !important; // ensure a space for the footer
+    margin-bottom: $footer-hg !important; // ensure a space for the footer    
+    .page-title {
+      padding: 5px 15px 15px 15px;
+      border-bottom: 1px solid #DDDDDD;
+      h3 {
+        margin: 15px 0 5px 0;
+        padding-bottom: 0;
+      }
+      div {
+        font-size: 12px;
+        color: #999999;
+      }
+    }
   }
 
   // Page Footer
