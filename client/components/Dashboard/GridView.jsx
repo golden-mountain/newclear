@@ -10,7 +10,6 @@ function GridView(props) {
       {
         children.map((itemNode, index) => {
           const width = itemNode.props.width || '100';
-          console.log(itemNode, width);
           return (
             <div key={index} className={`item-${width}`}>{itemNode}</div>
           );

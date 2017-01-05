@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import PieChart from '../chart/PieChart';
 
 import './assets/sass/disk_info.scss';
 
@@ -8,6 +10,17 @@ class DiskInfo extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      width: 100,
+      height: 100,
+      color: '#FFFFFF'
+    };
+  }
+
+  componentDidMount() {
+    const chartContainerDOM = ReactDOM.findDOMNode(this.refs.chartContainer);
+    const { width, height } = chartContainerDOM.getBoundingClientRect();
+    this.setState({ width, height });
   }
 
   render() {
@@ -20,8 +33,8 @@ class DiskInfo extends Component {
             <div>Total:  100G</div>
           </div>
         </div>
-        <div className="chart-container">
-          qq
+        <div className="chart-container" ref="chartContainer">
+          <PieChart {...this.state} />
         </div>
       </div>
     );

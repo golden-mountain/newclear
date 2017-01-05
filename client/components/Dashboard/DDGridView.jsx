@@ -8,7 +8,7 @@ import WidgetDragger from './WidgetDragger';
 
 import './assets/index.scss';
 
-class Dashboard extends Component {
+class DDGridView extends Component {
 
   static displayName = 'Dashboard'
 
@@ -40,4 +40,4 @@ class Dashboard extends Component {
 
 }
 
-export default DragDropContext(HTML5Backend)(Dashboard);
+export default DragDropContext(HTML5Backend)(DDGridView);

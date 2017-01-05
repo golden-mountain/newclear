@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 // import auth from 'helpers/auth';
 // import Link from 'react-router/Link';
 
-import { Dashboard, Widgets, GridView } from '../../components/Dashboard';
+import { DDGridView, Widgets, GridView } from '../../components/Dashboard';
 
 import './assets/sass/layout.scss';
 
@@ -58,7 +58,7 @@ class SLBDashboard extends Component {
         width: 22
       },
       {
-        widgetPath: 'System.CPU.Card',
+        widgetPath: 'System.MemoryInfo',
         width: 22
       },
       {
@@ -93,7 +93,7 @@ class SLBDashboard extends Component {
               })
             }
           </GridView>
-          <Dashboard changeWidgetOrder={this.changeWidgetOrder}>
+          <DDGridView changeWidgetOrder={this.changeWidgetOrder}>
             {
               this.state.widgets.map(item => {
                 const Widget = getWidget(Widgets, item.widgetPath);
@@ -102,7 +102,7 @@ class SLBDashboard extends Component {
                 );
               })
             }
-          </Dashboard>
+          </DDGridView>
         </main>
       </div>
     );
