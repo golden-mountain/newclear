@@ -19,10 +19,18 @@ class Chart extends Component {
     };
   }
 
-  componentDidMount() {
+  updateSize = () => {
     const chartContainerDOM = ReactDOM.findDOMNode(this.refs.chartContainer);
     const { width, height } = chartContainerDOM.getBoundingClientRect();
     this.setState({ width, height });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) this.updateSize();
+  }
+
+  componentDidMount() {
+    this.updateSize();
   }
 
   render() {

@@ -26,9 +26,11 @@ class AreaChart extends Component {
     const { data, width: parentWidth, height: parentHeight, color } = this.props;
     const svgDOM = ReactDOM.findDOMNode(this.refs.chart);
 
-    var margin = { top: 30, right: 20, bottom: 30, left: 30 },
-      width = parentWidth - margin.left - margin.right,
-      height = parentHeight - margin.top - margin.bottom;
+    var realWidth = 380;
+    var realHeight = 250;
+    var margin = { top: 30, right: 10, bottom: 30, left: 20 },
+      width = realWidth - margin.left - margin.right,
+      height = realHeight - margin.top - margin.bottom;
 
     var x = d3.scaleLinear()
         .domain([ 0, d3.max(data, d => d.x ) ])
@@ -52,14 +54,18 @@ class AreaChart extends Component {
         .y1(d => y(d.y));
 
     var svg = d3.select(svgDOM)
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr('viewBox', `0 0 ${realWidth} ${realHeight}`)
+        .attr('width', parentWidth)
+        .attr('height', parentHeight)
+        .attr('preserveAspectRatio', 'none')
+        .classed('svg-content-responsive', true)
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     svg.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', `translate(0, ${height})`)
         .call(xAxis);
 
     svg.append('g')
