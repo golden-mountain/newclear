@@ -43,7 +43,9 @@ class SLBDashboard extends Component {
       { widgetPath: 'System.Logging', width: 33 },
       { widgetPath: 'Networks.Summary.Chart', width: 33 },
       { widgetPath: 'System.CPU.Chart', width: 33 },
-      { widgetPath: 'System.CPU.Chart', width: 33 }
+      { widgetPath: 'System.CPU.Chart', width: 33 },
+      { widgetPath: 'System.CPU.Chart', width: 75 },
+      { widgetPath: 'System.Logging', width: 25 }
     ];
     this.setState({
       widgets: widgets
@@ -96,6 +98,7 @@ class SLBDashboard extends Component {
           <DDGridView changeWidgetOrder={this.changeWidgetOrder}>
             {
               this.state.widgets.map(item => {
+                console.log(item);
                 const Widget = getWidget(Widgets, item.widgetPath);
                 return (
                   <Widget key={item.widgetPath} width={item.width} />

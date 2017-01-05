@@ -32,6 +32,8 @@ $grid-margin: 10px;
     }
   }
   > * {
+    flex-grow: 1;
+    flex-shrink: 1;
     margin: 5px;
   }
   > * > * {
