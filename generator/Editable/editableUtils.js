@@ -114,15 +114,15 @@ const toJSX = (schema, indent = 0) =>{
   const props = Object.assign({}, schema, {
     _isNew: null,
     _isContainer: null,
-    component: null,
     _componentId: null,
+    component: null,
     editingComponentId: null,
     isDragging: null
   });
   const indention = ' '.repeat(indent * 2);
 
   const propsString = Object.keys(props)
-    .filter(prop => props[prop] !== null && typeof props[prop] !== 'function')
+    .filter(prop => props[prop] !== null && typeof props[prop] !== 'function' && prop !== 'children')
     .filter(prop => !(typeof props[prop] === 'object' && Object.keys(props[prop]).length === 0))
     .map(prop => {
       let result = `${prop}=`;
