@@ -122,6 +122,7 @@
     "express": "^4.14.0",
     "font-awesome": "^4.7.0",
     "graceful-fs": "^4.1.10",
+    "highlight.js": "^9.9.0",
     "history": "^3.2.1",
     "http": "0.0.0",
     "http-proxy": "^1.14.0",
@@ -143,6 +144,7 @@
     "react-bootstrap": "^0.30.2",
     "react-dom": "^15.4.0",
     "react-helmet": "^3.1.0",
+    "react-highlight": "^0.9.0",
     "react-json-inspector": "^7.0.0",
     "react-loading": "0.0.9",
     "react-motion": "^0.4.5",
@@ -164,11 +166,11 @@
     "tree-model": "^1.0.4"
   },
   "peerDependencies": {
+    "jquery": "^3.1.1",
     "react": "^15.3.2",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
-    "redux-immutable": "^3.0.8",
-    "jquery": "^3.1.1"
+    "redux-immutable": "^3.0.8"
   },
   "files": [
     "README.md",

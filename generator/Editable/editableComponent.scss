@@ -1,0 +1,89 @@
+@mixin editableComponentWrapper {
+  padding: 10px;
+  overflow: overlay;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  left: -5px;
+  bottom: -5px;
+
+  // padding-top: 30px;
+  display: inline-block;
+
+  span:nth-child(1) {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+  }
+
+  i {
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  i:nth-child(2) {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+    right: 25px;
+    color: #7777e9;
+  }
+
+  i:nth-child(3) {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+    right: 10px;
+    color: #f01111;
+  }
+
+  &:hover {
+    i {
+      opacity: 1;
+    }
+
+    span {
+      opacity: 1;
+    }
+  }
+}
+
+.editable-component-normal {
+  @include editableComponentWrapper;
+  z-index: 9999;
+  border: 1px dashed #ddd;
+  &:hover {
+    border: 1px dashed #888;
+  }
+}
+
+.editable-component-active {
+  @include editableComponentWrapper;
+  border: 1px solid darkblue;
+  &:hover {
+    border: 1px solid darkblue;
+  }
+}
+
+.editable-component-container {
+  min-height: 50px;
+  min-width: 100px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.editable-component-toolbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  i {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}

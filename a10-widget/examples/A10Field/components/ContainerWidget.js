@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'widgetWrapper';
 import { Button, Panel } from 'react-bootstrap';

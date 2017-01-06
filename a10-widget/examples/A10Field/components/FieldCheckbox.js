@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 // import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'widgetWrapper';
 import { FormGroup, ControlLabel, Col, Checkbox } from 'react-bootstrap';
@@ -33,4 +33,33 @@ class FieldCheckbox extends React.Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(FieldCheckbox);
+export default widgetWrapper([ 'app' ])(FieldCheckbox, {
+  meta: {
+    widget: {
+      iconClassName: 'fa fa-square-o',
+      type: 'basic',
+      name: 'ContainerWidget',
+      component: 'ContainerWidget',
+      description: ''
+    },
+    defaultProps: {
+      title: 'My title',
+      invalid: true
+    },
+    propTypes: {
+      title: PropTypes.string,
+      invalid: PropTypes.bool
+    },
+    propGroups: {
+      title: 'basic',
+      invalid: 'basic'
+    },
+    propValidations: {
+      title: [ 'ipv6-address' ]
+    },
+    propDescriptions: {
+      title: 'Just title',
+      invalid: 'just invalid'
+    }
+  }
+});
