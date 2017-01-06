@@ -155,6 +155,10 @@ export default class Sandbox extends React.Component {
     window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
   }
 
+  toggleEditMode = ()=> {
+    this.setState({ editMode: !this.state.editMode });
+  }
+
   render() {
     const {
       reactSchema
@@ -175,7 +179,17 @@ export default class Sandbox extends React.Component {
       <Row>
         <Col xs={4}>
           <Panel>
-            <Tabs>
+            <ReactButton active={editMode} onClick={this.toggleEditMode}>
+              {editMode ? (
+                <span><i className="fa fa-eye" />&nbsp;View</span> 
+              ) : (
+                <span>
+                  <i className="fa fa-pencil" />&nbsp;Edit
+                </span> 
+              )}
+            </ReactButton>
+            <br />
+            <Tabs id="sandbox-controller-panel">
               <Tab eventKey={1} title="Components">
                 {
                   Widgets.map((item, index)=>{

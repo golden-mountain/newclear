@@ -33,7 +33,6 @@ export default class ComponentBuilderProperties extends Component {
         this.state = {};
       }
       this.setState(this.getStateFromProps(nextProps));
-
     }
   }
 
@@ -89,7 +88,7 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   updateComponent = _.debounce(() =>{
-    this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state, {children: null}));
+    this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state, { children: null }));
   }, 100)
 
   getGroupComponentProperties() {
