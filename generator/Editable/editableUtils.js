@@ -39,7 +39,7 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
       console.error(`component ${component} is not found, use editableUtils.registerComponents to register component`);
     }
   }
-  if (enableWrap && obj.componentId !== 'root') {
+  if (enableWrap && obj._componentId !== 'root') {
     if (!_cachedWrappedComponents[component]) {
       const { meta = {} } = reactComponent;
       _cachedWrappedComponents[component] = editableComponent(actions)(reactComponent, meta);
@@ -55,51 +55,51 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   return React.createElement
     .apply(this, [ 
       reactComponent, 
-      Object.assign({}, obj, props, { key: obj.componentId }), ...reactComponentChildren 
+      Object.assign({}, obj, props, { key: obj._componentId }), ...reactComponentChildren 
     ]);
 };
 
-const deleteComponent = (schema, componentId) => {
+const deleteComponent = (schema, _componentId) => {
   return {
     ...schema,
     children: !schema.children || typeof schema.children === 'string' ? schema.children :
-      schema.children.filter(item => item.componentId !== componentId)
+      schema.children.filter(item => item._componentId !== _componentId)
       .map(item => {
-        return deleteComponent(item, componentId);
+        return deleteComponent(item, _componentId);
       })
   };
 };
 
-const updateComponent = (schema, componentId, component) => {
+const updateComponent = (schema, _componentId, component) => {
   return {
     ...schema,
     children: !schema.children || typeof schema.children === 'string' ? schema.children :
       schema.children
       .map(item => {
-        if ( item.componentId === componentId) {
+        if ( item._componentId === _componentId) {
           Object.assign(item, component);
         }
-        return updateComponent(item, componentId, component);
+        return updateComponent(item, _componentId, component);
       })
   };
 };
 
 const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPosition) => {
-  if (isNew && !dragComponent.componentId) {
-    dragComponent.componentId = _.uniqueId();
+  if (isNew && !dragComponent._componentId) {
+    dragComponent._componentId = _.uniqueId();
   }
   const modifiedChildren = !schema.children || typeof schema.children === 'string' ? schema.children :
-    schema.children.filter(item => item.componentId !== dragComponent.componentId)
+    schema.children.filter(item => item._componentId !== dragComponent._componentId)
     .map(item => moveComponent(item, dragComponent, dropComponentId, isNew, newPosition))
     .reduce((prev, current) => {
-      if (current.componentId === dropComponentId) {
+      if (current._componentId === dropComponentId) {
         if (newPosition === 'inside') {
           current.children = current.children || [];
           current.children = [ ...current.children, dragComponent ];
         } else {
           return newPosition === 'before' ? [ ...prev, dragComponent, current ] : [ ...prev, current, dragComponent ];
         }
-      } else if (current.componentId === dragComponent.id) {
+      } else if (current._componentId === dragComponent.id) {
         return prev;
       }
       return [ ...prev, current ];
@@ -115,7 +115,7 @@ const toJSX = (schema, indent = 0) =>{
     _isNew: null,
     _isContainer: null,
     component: null,
-    componentId: null,
+    _componentId: null,
     editingComponentId: null,
     isDragging: null
   });

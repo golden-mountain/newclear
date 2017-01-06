@@ -28,7 +28,7 @@ export default function editableComponent({
       if (monitor.didDrop()) {
         return;
       }
-      if (props.componentId === item.componentId) {
+      if (props._componentId === item._componentId) {
         return;
       }
       const dropBoundingRect = findDOMNode(component).getBoundingClientRect();
@@ -49,7 +49,7 @@ export default function editableComponent({
         }
       }
 
-      moveComponent(Object.assign({}, item, { _isNew: false }), props.componentId, item._isNew, newPosition);
+      moveComponent(Object.assign({}, item, { _isNew: false }), props._componentId, item._isNew, newPosition);
     }
   };
 
@@ -67,7 +67,7 @@ export default function editableComponent({
     class Wrap extends Component {
       static propTypes = {
         _isContainer: PropTypes.bool,
-        componentId: PropTypes.string,
+        _componentId: PropTypes.string,
         editingComponentId: PropTypes.string,
         connectDragSource: PropTypes.func,
         connectDropTarget: PropTypes.func,
@@ -76,7 +76,7 @@ export default function editableComponent({
 
       deleteComponent(event) {
         event.stopPropagation();
-        deleteComponent(this.props.componentId);
+        deleteComponent(this.props._componentId);
       }
 
       editProperties(event) {
@@ -90,7 +90,7 @@ export default function editableComponent({
       renderTitle() {
         return (
           <div >
-            componentId: {this.props.componentId}
+            _componentId: {this.props._componentId}
             <div className="pull-right">
               <i className="fa fa-cog" style={ { cursor: 'pointer' } } onClick={::this.editProperties}/>
               &nbsp;&nbsp;&nbsp;
@@ -101,14 +101,15 @@ export default function editableComponent({
       }
       render() {
         const {
+          _componentId,
+          _isContainer,
           connectDragSource,
           connectDropTarget,
-          componentId,
           editingComponentId,
-          _isContainer
+          children
         } = this.props;
 
-        const isActive = componentId === editingComponentId;
+        const isActive = _componentId === editingComponentId;
         return (
           <WrappedComponent {...this.props}
             style={ { position: 'relative', margin: '10px 0' } }
@@ -120,12 +121,12 @@ export default function editableComponent({
             }
           }>
             <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'} />
-            <div className={ _isContainer ? 'editable-component-container' : ''} />
+            { !children && <div className={ _isContainer ? 'editable-component-container' : ''} /> }
             <div className="editable-component-toolbar">
               <i className="fa fa-cog" onClick={::this.editProperties}/>
               <i className="fa fa-trash text-alert " onClick={::this.deleteComponent}/>
             </div>
-            {this.props.children}
+            {children}
           </WrappedComponent>
         );
       }

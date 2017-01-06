@@ -7,15 +7,8 @@ import 'highlight.js/styles/github.css';
 import PanelGroup from 'react-bootstrap/lib/PanelGroup';
 import _ from 'lodash';
 
-// test components loading
-import ContainerWidget from './components/ContainerWidget';
-import NotEditableCom from './components/NotEditableCom';
-import EditableCom from './components/EditableCom';
-import FieldCheckbox from './components/FieldCheckbox';
-import Button from './components/Button';
-import FieldGroup from './components/FieldGroup';
-import Row from './components/Row';
-import Col from './components/Col';
+import allLayouts from './layouts';
+import allComponents from './components';
 
 import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
@@ -25,20 +18,9 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import editableUtils from '../../../generator/Editable/editableUtils';
 import componentCandidate from '../../../generator/Editable/componentCandidate';
 
-const allComponents = {
-  ContainerWidget,
-  NotEditableCom,
-  EditableCom,
-  FieldCheckbox,
-  Button,
-  FieldGroup,
-  Row,
-  Col
-};
 
 editableUtils.registerComponents(allComponents);
 const ComponentCandidate = componentCandidate(allComponents);
-
 const urlParams = {
   'name': 'vs2',
   'port-number': 80,
@@ -84,12 +66,12 @@ const noSchemaData = {
 
 
 const reactSchemaSource = {
-  componentId: 'root',
+  _componentId: 'root',
   component: 'div',
   meta: containerSchema,
   children: [
     {
-      componentId: 'a',
+      _componentId: 'a',
       component: 'Button',
       children: 'Hello'
     }
@@ -114,14 +96,14 @@ export default class Sandbox extends React.Component {
   startToEditComponent(args) {
     const { componentMeta, componentProps } = args; 
     this.setState({
-      editingComponentId: componentProps.componentId,
+      editingComponentId: componentProps._componentId,
       editingComponentProps: componentProps,
       editingComponentMeta: componentMeta
     });
   }
 
-  deleteComponent(componentId)  {
-    const newSchema = editableUtils.deleteComponent(this.state.reactSchema, componentId);
+  deleteComponent(_componentId)  {
+    const newSchema = editableUtils.deleteComponent(this.state.reactSchema, _componentId);
     this.setState({ reactSchema: newSchema });
   }
 
@@ -130,8 +112,8 @@ export default class Sandbox extends React.Component {
     this.setState({ reactSchema: newSchema });
   }
 
-  updateComponent(componentId, component) {
-    const newSchema = editableUtils.updateComponent(this.state.reactSchema, componentId, component);
+  updateComponent(_componentId, component) {
+    const newSchema = editableUtils.updateComponent(this.state.reactSchema, _componentId, component);
     this.setState({ 
       reactSchema: newSchema,
       editingComponentProps: component
@@ -146,87 +128,9 @@ export default class Sandbox extends React.Component {
     this.setState({ editMode: !this.state.editMode });
   }
 
-  chooseLayout = ()=>{
-    const chosenReactSchema = {
-      componentId: 'root',
-      component: 'div',
-      children: [
-        {
-          componentId: 'row1',
-          component: 'Row',
-          children: [
-            {
-              componentId: 'col11',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col12',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col13',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            }
-          ]
-        },
-        {
-          componentId: 'row2',
-          component: 'Row',
-          children: [
-            {
-              componentId: 'col21',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col22',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col23',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            }
-          ]
-        },
-        {
-          componentId: 'row3',
-          component: 'Row',
-          children: [
-            {
-              componentId: 'col31',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col32',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            },
-            {
-              componentId: 'col33',
-              component: 'Col',
-              _isContainer: true,
-              md: 4
-            }
-          ]
-        }
-      ]
-    };
+  chooseLayout = (schema)=>{
     this.setState({
-      reactSchema: chosenReactSchema
+      reactSchema: schema
     });
   }
 
@@ -247,7 +151,7 @@ export default class Sandbox extends React.Component {
       .map(item=> item.meta.widget);
 
     const groupedWidgets = _.groupBy(Widgets, widget => widget.type);
-
+    // const groupLayout = _.groupBy(Object.values(allLayouts), layout)
     return (
       <BootstrapRow>
         <BootstrapCol xs={4}>
@@ -294,11 +198,25 @@ export default class Sandbox extends React.Component {
               <Tab eventKey={2} title="Layout">
                 <PanelGroup accordion defaultActiveKey="basic">
                   <Panel header="basic" eventKey="basic" key="basic">
-                    <span style={ { width: '33%', display: 'inline-block', textAlign: 'center', cursor: 'pointer' } } onClick={this.chooseLayout}>
-                      <i className="fa fa-th" />
-                      <br />
-                      9-Columns
-                    </span>
+                    {
+                      Object.values(allLayouts).map((item, index)=>{
+                        const style = {
+                          width: '33%',
+                          display: 'inline-block',
+                          textAlign: 'center',
+                          cursor: 'pointer'
+                        };
+                        return (
+                          <span 
+                            key={index} 
+                            style={style} onClick={this.chooseLayout.bind(this, item.schema)}>
+                            <i className={item.iconClassName} />
+                            <br />
+                            {item.name}
+                          </span>
+                        );
+                      })
+                    }
                   </Panel>
                 </PanelGroup>
               </Tab>
