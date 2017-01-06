@@ -122,7 +122,6 @@ export default function editableComponent({
               return domNode;
             }
           }>
-            {this.props.children}
             <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'} />
             <div className={_isContainer ? 'editable-component-container' : ''} />
             <div className="editable-component-toolbar">
@@ -130,6 +129,7 @@ export default function editableComponent({
               <i className="fa fa-cog" onClick={::this.editProperties}/>
               <i className="fa fa-trash text-alert " onClick={::this.deleteComponent}/>
             </div>
+            {this.props.children}
           </WrappedComponent>
         );
       }

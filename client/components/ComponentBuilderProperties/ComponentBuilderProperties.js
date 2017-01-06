@@ -183,7 +183,7 @@ export default class ComponentBuilderProperties extends Component {
             //   </Col>
             // </FormGroup>
           }
-          <PanelGroup accordion >
+          <PanelGroup accordion defaultActiveKey="basic">
             {
               Object.keys(groupComponentProperties).map((key) => {
                 return (

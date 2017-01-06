@@ -43,19 +43,23 @@ export default function (componentCandidate) {
         iconClassName,
         name
       } = this.props;
+      const style = {
+        width: '33%',
+        display: 'inline-block',
+        textAlign: 'center',
+        marginBottom: 10,
+        cursor: 'move'
+      };
       return connectDragSource(
-        <div>
-          <div>
-            <i className={iconClassName} />
-            &nbsp;{name}
-          </div>
+        <div style={style}>
+          <i className={iconClassName} />
+          <br />{name}
         </div>
+
       );
     }
   }
-
   return ComponentCandidate;
-
 }
 
 

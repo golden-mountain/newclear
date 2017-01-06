@@ -1,9 +1,12 @@
 import React from 'react';
-import { Col, Row, Tabs, Tab } from 'react-bootstrap';
+import { Col as BootstrapCol, Row as BootstrapRow, Tabs, Tab } from 'react-bootstrap';
 import Panel from 'react-bootstrap/lib/Panel';
-import { Button as ReactButton } from 'react-bootstrap';
+import { Button as BootstrapButton } from 'react-bootstrap';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/github.css';
+import PanelGroup from 'react-bootstrap/lib/PanelGroup';
+import _ from 'lodash';
+
 // test components loading
 import ContainerWidget from './components/ContainerWidget';
 import NotEditableCom from './components/NotEditableCom';
@@ -11,6 +14,8 @@ import EditableCom from './components/EditableCom';
 import FieldCheckbox from './components/FieldCheckbox';
 import Button from './components/Button';
 import FieldGroup from './components/FieldGroup';
+import Row from './components/Row';
+import Col from './components/Col';
 
 import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
@@ -26,7 +31,9 @@ const allComponents = {
   EditableCom,
   FieldCheckbox,
   Button,
-  FieldGroup
+  FieldGroup,
+  Row,
+  Col
 };
 
 editableUtils.registerComponents(allComponents);
@@ -159,6 +166,90 @@ export default class Sandbox extends React.Component {
     this.setState({ editMode: !this.state.editMode });
   }
 
+  chooseLayout = ()=>{
+    const chosenReactSchema = {
+      componentId: 'root',
+      component: 'ContainerWidget',
+      componentChildren: [
+        {
+          componentId: 'row1',
+          component: 'Row',
+          componentChildren: [
+            {
+              componentId: 'col11',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col12',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col13',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            }
+          ]
+        },
+        {
+          componentId: 'row2',
+          component: 'Row',
+          componentChildren: [
+            {
+              componentId: 'col21',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col22',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col23',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            }
+          ]
+        },
+        {
+          componentId: 'row3',
+          component: 'Row',
+          componentChildren: [
+            {
+              componentId: 'col31',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col32',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            },
+            {
+              componentId: 'col33',
+              component: 'Col',
+              _isContainer: true,
+              md: 4
+            }
+          ]
+        }
+      ]
+    };
+    this.setState({
+      reactSchema: chosenReactSchema
+    });
+  }
+
   render() {
     const {
       reactSchema
@@ -175,11 +266,13 @@ export default class Sandbox extends React.Component {
       .filter(item=>item.meta)
       .map(item=> item.meta.widget);
 
+    const groupedWidgets = _.groupBy(Widgets, widget => widget.type);
+
     return (
-      <Row>
-        <Col xs={4}>
+      <BootstrapRow>
+        <BootstrapCol xs={4}>
           <Panel>
-            <ReactButton active={editMode} onClick={this.toggleEditMode}>
+            <BootstrapButton active={editMode} onClick={this.toggleEditMode}>
               {editMode ? (
                 <span><i className="fa fa-eye" />&nbsp;View</span> 
               ) : (
@@ -187,42 +280,66 @@ export default class Sandbox extends React.Component {
                   <i className="fa fa-pencil" />&nbsp;Edit
                 </span> 
               )}
-            </ReactButton>
+            </BootstrapButton>
+            <br />
+            <br />
             <br />
             <Tabs id="sandbox-controller-panel">
               <Tab eventKey={1} title="Components">
-                {
-                  Widgets.map((item, index)=>{
-                    return (
-                      <ComponentCandidate
-                        key={index}
-                        name={item.name}
-                        component={item.component}
-                        iconClassName={item.iconClassName}
-                        isContainer={item.isContainer === true}
-                      />
-                    );
-                  })
-                }
+                <PanelGroup accordion defaultActiveKey="basic">
+                  {
+                    Object.keys(groupedWidgets).map(key=>{
+                      return (
+                        <Panel header={key} eventKey={key} key={key}>
+                          {
+                            groupedWidgets[key].map((item, index) => {
+                              return (
+                                <ComponentCandidate
+                                  key={index}
+                                  name={item.name}
+                                  component={item.component}
+                                  iconClassName={item.iconClassName}
+                                  isContainer={item.isContainer === true}
+                                />
+                              );
+                            })
+                          }
+                        </Panel>
+                      );
+                    })
+
+                  }
+                </PanelGroup>
               </Tab>
-              <Tab eventKey={2} title="JSX">
+              <Tab eventKey={2} title="Layout">
+                <PanelGroup accordion defaultActiveKey="basic">
+                  <Panel header="basic" eventKey="basic" key="basic">
+                    <span style={ { width: '33%', display: 'inline-block', textAlign: 'center', cursor: 'pointer' } } onClick={this.chooseLayout}>
+                      <i className="fa fa-th" />
+                      <br />
+                      9-Columns
+                    </span>
+                  </Panel>
+                </PanelGroup>
+              </Tab>
+              <Tab eventKey={3} title="JSX">
                 <Highlight
                   className="javascript"
                   style={{ width: '100%', height: 'auto', minHeight: 300 }}
                 >
                   { editableUtils.generateReactCodeFromSchema(reactSchema) }
                 </Highlight>
-                <ReactButton
+                <BootstrapButton
                   onClick={::this.downloadJsxFile}
                 >
                   Download
-                </ReactButton>
+                </BootstrapButton>
               </Tab>
             </Tabs>
           </Panel>
          
-        </Col>
-        <Col xs={5}>
+        </BootstrapCol>
+        <BootstrapCol xs={5}>
           <div>
           {
             editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
@@ -232,16 +349,16 @@ export default class Sandbox extends React.Component {
             })
           }
           </div>
-        </Col>
-        <Col xs={3}>
+        </BootstrapCol>
+        <BootstrapCol xs={3}>
           <ComponentBuilderProperties
             editingComponentId={editingComponentId}
             componentProps={editingComponentProps}
             componentMeta={editingComponentMeta}
             updateComponent={this.updateComponent.bind(this)}
           />
-        </Col>
-      </Row>
+        </BootstrapCol>
+      </BootstrapRow>
     );
   }
 }
