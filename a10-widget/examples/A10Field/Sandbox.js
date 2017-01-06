@@ -85,32 +85,13 @@ const noSchemaData = {
 
 const reactSchemaSource = {
   componentId: 'root',
-  component: 'ContainerWidget',
+  component: 'div',
   meta: containerSchema,
-  componentChildren: [
+  children: [
     {
       componentId: 'a',
-      component: 'NotEditableCom',
-      meta: metaWithEndpoint
-    },
-    {
-      componentId: 'b',
-      component: 'EditableCom',
-      meta: metaWithSchema,
-      title: 'Port'
-    },
-    {
-      componentId: 'c',
-      component: 'EditableCom',
-      meta: noSchemaData,
-      title: 'IP Address',
-      validation: { 'ipv6-address': () => 'error IPv6' }
-    },
-    {
-      componentId: 'd',
-      component: 'EditableCom',
-      meta: objectSchema,
-      title: 'Netmask'
+      component: 'Button',
+      children: 'Hello'
     }
   ]
 };
@@ -131,7 +112,6 @@ export default class Sandbox extends React.Component {
   }
   
   startToEditComponent(args) {
-    console.log('startToEditComponent');
     const { componentMeta, componentProps } = args; 
     this.setState({
       editingComponentId: componentProps.componentId,
@@ -169,12 +149,12 @@ export default class Sandbox extends React.Component {
   chooseLayout = ()=>{
     const chosenReactSchema = {
       componentId: 'root',
-      component: 'ContainerWidget',
-      componentChildren: [
+      component: 'div',
+      children: [
         {
           componentId: 'row1',
           component: 'Row',
-          componentChildren: [
+          children: [
             {
               componentId: 'col11',
               component: 'Col',
@@ -198,7 +178,7 @@ export default class Sandbox extends React.Component {
         {
           componentId: 'row2',
           component: 'Row',
-          componentChildren: [
+          children: [
             {
               componentId: 'col21',
               component: 'Col',
@@ -222,7 +202,7 @@ export default class Sandbox extends React.Component {
         {
           componentId: 'row3',
           component: 'Row',
-          componentChildren: [
+          children: [
             {
               componentId: 'col31',
               component: 'Col',
@@ -340,15 +320,17 @@ export default class Sandbox extends React.Component {
          
         </BootstrapCol>
         <BootstrapCol xs={5}>
-          <div>
-          {
-            editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
-              startToEditComponent: this.startToEditComponent.bind(this),
-              deleteComponent: this.deleteComponent.bind(this),
-              moveComponent: this.moveComponent.bind(this)
-            })
-          }
-          </div>
+          <Panel header="Edit">
+          
+            {
+              editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
+                startToEditComponent: this.startToEditComponent.bind(this),
+                deleteComponent: this.deleteComponent.bind(this),
+                moveComponent: this.moveComponent.bind(this)
+              })
+            }
+          
+          </Panel>
         </BootstrapCol>
         <BootstrapCol xs={3}>
           <ComponentBuilderProperties

@@ -88,7 +88,7 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   updateComponent = _.debounce(() =>{
-    this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state, { children: null }));
+    this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state));
   }, 100)
 
   getGroupComponentProperties() {

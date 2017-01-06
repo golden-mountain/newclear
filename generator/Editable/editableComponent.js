@@ -49,7 +49,7 @@ export default function editableComponent({
         }
       }
 
-      moveComponent(Object.assign({}, item, { _isNew: false, children: null }), props.componentId, item._isNew, newPosition);
+      moveComponent(Object.assign({}, item, { _isNew: false }), props.componentId, item._isNew, newPosition);
     }
   };
 
@@ -108,9 +108,6 @@ export default function editableComponent({
           _isContainer
         } = this.props;
 
-
-        // const ComponentId = 'componentId: ' + componentId;
-
         const isActive = componentId === editingComponentId;
         return (
           <WrappedComponent {...this.props}
@@ -123,9 +120,8 @@ export default function editableComponent({
             }
           }>
             <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'} />
-            <div className={_isContainer ? 'editable-component-container' : ''} />
+            <div className={ _isContainer ? 'editable-component-container' : ''} />
             <div className="editable-component-toolbar">
-              { /* <span>{ ComponentId }</span> */ }
               <i className="fa fa-cog" onClick={::this.editProperties}/>
               <i className="fa fa-trash text-alert " onClick={::this.deleteComponent}/>
             </div>
