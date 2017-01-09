@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormControl } from 'react-bootstrap';
-import { A10Field, A10Form, A10MultiSelect, widgetWrapper } from 'a10-widget';
+import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
 // import A10SubmitButtons from 'components/Form/A10SubmitButtons';
 // import A10Form from 'components/Form/A10Form';
 import { required } from 'a10-widget-lib';
@@ -52,7 +52,6 @@ class LoginForm extends React.Component {
 
     return (
       <div>
-        <A10MultiSelect />
         <A10Form action='/axapi/v3/auth' redirect={this.isFirstLogin() ? '/welcome' : '/'} modal={modal} bsClass="mb-lg">
           <A10Field name="credentials.username" initial="admin" validation={{ required }} layout={false}>
             <FormControl id="username" type="text" placeholder="Enter Username" autoComplete="off" required="required" className="form-control" />
