@@ -269,10 +269,13 @@ export const widgetWrapper = ReduxDataConnector => {
         return props;
       }
 
+
       render() {
         const newProps = this.getNewProps();
+        let NewWrappedComponent = this.executePluginMethod('onRender', newProps, WrappedComponent) || WrappedComponent;
         // console.log('widgetProps',  this.componentId, this.visible);
-        return (this.visible ? <WrappedComponent  {...newProps} /> : null);
+        
+        return (this.visible ?  <NewWrappedComponent {...newProps} /> : null);
       }
     }
 

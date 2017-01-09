@@ -43,4 +43,12 @@ class NotEditableCom extends React.Component {
   }
 }
 
-export default widgetWrapper([ 'app' ])(NotEditableCom);
+
+
+export default Object.assign(widgetWrapper([ 'app' ])(NotEditableCom), { 
+  editableProps : { 
+    title: PropTypes.string,
+    number: PropTypes.number,
+    answer: PropTypes.bool
+  }
+});
