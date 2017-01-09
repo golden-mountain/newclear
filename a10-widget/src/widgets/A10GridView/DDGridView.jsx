@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
+import { widgetWrapper } from '../../widgetWrapper';
 import GridView from './GridView';
 import WidgetDropper from './WidgetDropper';
 import WidgetDragger from './WidgetDragger';
@@ -40,4 +41,4 @@ class DDGridView extends Component {
 
 }
 
-export default DragDropContext(HTML5Backend)(DDGridView);
+export default DragDropContext(HTML5Backend)(widgetWrapper([ 'app' ])(DDGridView));

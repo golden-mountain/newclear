@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { widgetWrapper } from '../../widgetWrapper';
 import './assets/gridview.scss';
 
 class GridView extends Component {
@@ -27,4 +28,4 @@ class GridView extends Component {
 
 }
 
-export default GridView;
+export default widgetWrapper([ 'app' ])(GridView);
