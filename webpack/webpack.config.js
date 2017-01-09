@@ -94,7 +94,7 @@ base.devServer = {
   },
   proxy: {
     '/axapi/*': {
-      target: 'https://' + ( process.env.AXAPI_HOST || '192.168.105.196' ),
+      target: 'https://' + ( process.env.AXAPI_HOST || '192.168.99.59' ),
       secure: false,
       rewrite: function(req, res) { // eslint-disable-line
         console.log(req, 'this is request');

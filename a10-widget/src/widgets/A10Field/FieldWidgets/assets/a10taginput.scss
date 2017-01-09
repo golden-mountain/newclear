@@ -1,4 +1,5 @@
 .react-tagsinput {
+  display: flex;
   background-color: #fff;
   border: 1px solid #ccc;
   overflow: hidden;
@@ -35,6 +36,7 @@
 }
 
 .react-tagsinput-input {
+  flex-grow: 2;
   background: transparent;
   border: 0;
   color: #777;
@@ -45,5 +47,4 @@
   margin-top: 1px;
   outline: none;
   padding: 5px;
-  width: 80px;
 }
