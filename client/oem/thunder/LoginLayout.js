@@ -3,7 +3,7 @@ import { Glyphicon } from 'react-bootstrap';
 import logoLarger from './img/logo2.png';
 
 import LangDropdown from '../../components/Dropdown/lang';
-import * as DashboardWidgets from '../../components/Dashboard/widgets';
+import * as DashboardWidgets from '../../components/Dashboard';
 
 import './sass/app.scss';
 import './sass/layouts/login/login.scss';

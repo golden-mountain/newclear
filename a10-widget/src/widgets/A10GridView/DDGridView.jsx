@@ -6,7 +6,7 @@ import GridView from './GridView';
 import WidgetDropper from './WidgetDropper';
 import WidgetDragger from './WidgetDragger';
 
-import './assets/index.scss';
+import './assets/ddgridview.scss';
 
 class DDGridView extends Component {
 
@@ -35,7 +35,7 @@ class DDGridView extends Component {
 
   render() {
     const { children } = this.props;
-    return <GridView className="dashboard">{this.renderItem(children)}</GridView>;
+    return <GridView className="ddgridview">{this.renderItem(children)}</GridView>;
   }
 
 }

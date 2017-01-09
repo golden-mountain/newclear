@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 // import auth from 'helpers/auth';
 // import Link from 'react-router/Link';
 
-import { DDGridView, Widgets, GridView } from '../../components/Dashboard';
+import { Widgets, getWidget } from '../../components/Dashboard';
+import { DDGridView, GridView } from 'a10-widget';
 
 import './assets/sass/layout.scss';
 
@@ -17,7 +18,16 @@ class SLBDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      widgets: []
+      widgets: [
+        { widgetPath: 'System.Summary', width: 33 },
+        { widgetPath: 'System.ApplicationStatus', width: 33 },
+        { widgetPath: 'System.Logging', width: 33 },
+        { widgetPath: 'Networks.Summary.Chart', width: 33 },
+        { widgetPath: 'System.CPU.Chart', width: 33 },
+        { widgetPath: 'System.CPU.Chart', width: 33 },
+        { widgetPath: 'System.CPU.Chart', width: 75 },
+        { widgetPath: 'System.Logging', width: 25 }
+      ]
     };
   } 
   
@@ -36,24 +46,7 @@ class SLBDashboard extends Component {
     this.setState({ widgets: result });
   }
 
-  componentDidMount() {
-    const widgets = [
-      { widgetPath: 'System.Summary', width: 33 },
-      { widgetPath: 'System.ApplicationStatus', width: 33 },
-      { widgetPath: 'System.Logging', width: 33 },
-      { widgetPath: 'Networks.Summary.Chart', width: 33 },
-      { widgetPath: 'System.CPU.Chart', width: 33 },
-      { widgetPath: 'System.CPU.Chart', width: 33 },
-      { widgetPath: 'System.CPU.Chart', width: 75 },
-      { widgetPath: 'System.Logging', width: 25 }
-    ];
-    this.setState({
-      widgets: widgets
-    });
-  }
-
   render() {
-    const { getWidget } = Widgets;
     const infoCardData = [
       {
         widgetPath: 'System.CPU.Card',
@@ -72,7 +65,7 @@ class SLBDashboard extends Component {
         width: 33
       }
     ];
-
+    
     return (
       <div className="container-fluid">
         {
