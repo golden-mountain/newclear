@@ -11,12 +11,8 @@ export const widgetWrapper = ReduxDataConnector => {
   // const uniqueId = (prefix='') => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
-  return (WrappedComponent, members={} ) => {
+  return WrappedComponent => {
 
-    if (!WrappedComponent.displayName) {
-      console.warn(`${WrappedComponent.name} is missing displayName`);
-    }
-    
     const displayName = `Widget${WrappedComponent.displayName}`;
     // console.log(uniqueId(displayName));
 
@@ -201,14 +197,14 @@ export const widgetWrapper = ReduxDataConnector => {
         return this.executePluginMethod('onBeforeUpdate', nextProps, nextState) || true;
       }
 
-      // shouldComponentUpdate(nextProps, nextState) {
-      //   let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
-      //   if (result) {
-      //     result = this.checkWidgetDataUpdate(nextProps);
-      //   }
-      //   // console.log(result, this.instancePath);
-      //   return result;
-      // }
+      shouldComponentUpdate(nextProps, nextState) {
+        let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+        if (result) {
+          result = this.checkWidgetDataUpdate(nextProps);
+        }
+        // console.log(result, this.instancePath);
+        return result;
+      }
 
       checkWidgetDataUpdate(nextProps) {
         if (!nextProps || !nextProps.app) {
@@ -218,8 +214,10 @@ export const widgetWrapper = ReduxDataConnector => {
         const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
         // console.log(thisComInstanceData);
         const defaultCheckFields = [ 'data', 'activeData', 'visible', 'errorMsg', 'invalid', 'submitErrors', 'children' ];
-        const needUpdateFields = this.props.updateFields && Object.assign({}, this.props.updateFields, defaultCheckFields);
-        return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
+        const needUpdateFields = this.props.updateFields || defaultCheckFields;
+        return this.checkComponentNeedUpdate(needUpdateFields, 
+          { ...nextComInstanceData, children: nextProps.children }, 
+          { ...thisComInstanceData, children: this.props.children });
       }
 
       checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {
@@ -269,13 +267,11 @@ export const widgetWrapper = ReduxDataConnector => {
         return props;
       }
 
-
       render() {
+        // console.log(this.context.props);
         const newProps = this.getNewProps();
-        let NewWrappedComponent = this.executePluginMethod('onRender', newProps, WrappedComponent) || WrappedComponent;
-        console.log(NewWrappedComponent);
         // console.log('widgetProps',  this.componentId, this.visible);
-        return (this.visible ?  <NewWrappedComponent {...newProps} /> : null);
+        return (this.visible ? <WrappedComponent  {...newProps} /> : null);
       }
     }
 
@@ -297,9 +293,9 @@ export const widgetWrapper = ReduxDataConnector => {
           return result;
         };
       }
-      return Object.assign(connect(conn)(Widget), members);
+      return connect(conn)(Widget);
     } else {
-      return Object.assign(connect()(Widget), members);
+      return connect()(Widget);
     }
     // return ConnnectedWidget;
   };
