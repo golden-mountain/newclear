@@ -120,12 +120,13 @@ export default function editableComponent({
               return domNode;
             }
           }>
-            <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'} />
-            { !children && <div className={ _isContainer ? 'editable-component-container' : ''} /> }
-            <div className="editable-component-toolbar">
-              <i className="fa fa-cog" onClick={::this.editProperties}/>
-              <i className="fa fa-trash text-alert " onClick={::this.deleteComponent}/>
+            <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'}>
+              <div className="editable-component-toolbar">
+                <i className="fa fa-cog" onClick={::this.editProperties}/>
+                <i className="fa fa-trash" onClick={::this.deleteComponent}/>
+              </div>
             </div>
+            { !children && <div className={ _isContainer ? 'editable-component-container-spacing' : ''} /> }
             {children}
           </WrappedComponent>
         );

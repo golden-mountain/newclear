@@ -6,7 +6,7 @@ export default widgetWrapper()(Panel, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
-      type: 'basic',
+      type: 'layout',
       name: 'Panel',
       component: 'Panel',
       display: 'block',
