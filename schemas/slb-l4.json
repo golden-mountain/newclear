@@ -1,0 +1,12 @@
+{
+    "obj-name": "l4",
+    "obj-help": "Show L4 Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "7",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.l4",
+    "axapi": "/axapi/v3/slb/l4",
+    "properties": {}
+}

@@ -1,0 +1,800 @@
+{
+    "obj-name": "service-group",
+    "obj-help": "Service Group",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "string",
+    "obj-stats-oid": "2009",
+    "obj-module-prompt": "slb svc group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.service-group",
+    "axapi": "/axapi/v3/slb/service-group/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "example-default": "web-service",
+            "snmp-alias": "slbServiceGroupName",
+            "description": "SLB Service Name",
+            "src-name": "name"
+        },
+        "protocol": {
+            "type": "string",
+            "modify-ineligible": true,
+            "enum": [
+                "tcp",
+                "udp"
+            ],
+            "enumMap": [
+                {
+                    "tcp": "\"TCP LB service"
+                },
+                {
+                    "udp": "\"UDP LB service"
+                }
+            ],
+            "description": "LB service 'tcp': \"TCP LB service;'udp': \"UDP LB service;",
+            "condition": "name",
+            "example-default": "tcp",
+            "format": "enum",
+            "src-name": "protocol"
+        },
+        "template": {
+            "type": "dummy",
+            "example-default": "1",
+            "description": "Apply template to service-group",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "template-port": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "obj-lineage-full": "slb.template.port",
+            "$ref": "/axapi/v3/slb/template/port",
+            "description": "Port template (Port template name)",
+            "example-default": "slb.template.port",
+            "alias": "template-port",
+            "src-name": "port"
+        },
+        "template-server": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "obj-lineage-full": "slb.template.server",
+            "$ref": "/axapi/v3/slb/template/server",
+            "description": "Server template (Server template name)",
+            "example-default": "slb.template.server",
+            "alias": "template-server",
+            "src-name": "server"
+        },
+        "template-policy": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "obj-lineage-full": "slb.template.policy",
+            "$ref": "/axapi/v3/slb/template/policy",
+            "description": "Policy template (Policy template name)",
+            "example-default": "slb.template.policy",
+            "alias": "template-policy",
+            "src-name": "policy"
+        },
+        "method": {
+            "type": "dummy",
+            "example-default": "1",
+            "description": "Load Balancing Method, Default is Round-Robin",
+            "format": "dummy",
+            "src-name": "method"
+        },
+        "lb-method": {
+            "type": "string",
+            "enum": [
+                "dst-ip-hash",
+                "dst-ip-only-hash",
+                "fastest-response",
+                "least-request",
+                "src-ip-hash",
+                "src-ip-only-hash",
+                "weighted-rr",
+                "round-robin",
+                "round-robin-strict",
+                "odd-even-hash"
+            ],
+            "enumMap": [
+                {
+                    "dst-ip-hash": "\"Load-balancing based on only Dst IP and Port hash"
+                },
+                {
+                    "dst-ip-only-hash": "\"Load-balancing based on only Dst IP hash"
+                },
+                {
+                    "fastest-response": "\"Fastest response time on service port level"
+                },
+                {
+                    "least-request": "\"Least request on service port level"
+                },
+                {
+                    "src-ip-hash": "\"Load-balancing based on only Src IP and Port hash"
+                },
+                {
+                    "src-ip-only-hash": "\"Load-balancing based on only Src IP hash"
+                },
+                {
+                    "weighted-rr": "\"Weighted round robin on server level"
+                },
+                {
+                    "round-robin": "\"Round robin on server level"
+                },
+                {
+                    "round-robin-strict": "\"Strict mode round robin on server level"
+                },
+                {
+                    "odd-even-hash": "\"odd/even hash based of client src-ip"
+                }
+            ],
+            "description": "LB method 'dst-ip-hash': \"Load-balancing based on only Dst IP and Port hash;'dst-ip-only-hash': \"Load-balancing based on only Dst IP hash;'fastest-response': \"Fastest response time on service port level;'least-request': \"Least request on service port level;'src-ip-hash': \"Load-balancing based on only Src IP and Port hash;'src-ip-only-hash': \"Load-balancing based on only Src IP hash;'weighted-rr': \"Weighted round robin on server level;'round-robin': \"Round robin on server level;'round-robin-strict': \"Strict mode round robin on server level;'odd-even-hash': \"odd/even hash based of client src-ip;",
+            "condition": "method",
+            "link-next-fwd": "stateless-auto-switch",
+            "example-default": "dst-ip-hash",
+            "default": "round-robin",
+            "format": "enum",
+            "src-name": "lb-method"
+        },
+        "lc-method": {
+            "type": "string",
+            "enum": [
+                "least-connection",
+                "service-least-connection",
+                "weighted-least-connection",
+                "service-weighted-least-connection"
+            ],
+            "enumMap": [
+                {
+                    "least-connection": "\"Least connection on server level"
+                },
+                {
+                    "service-least-connection": "\"Least connection on service port level"
+                },
+                {
+                    "weighted-least-connection": "\"Weighted least connection on server level"
+                },
+                {
+                    "service-weighted-least-connection": "\"Weighted least connection on service port level"
+                }
+            ],
+            "description": "Least connection method 'least-connection': \"Least connection on server level;'service-least-connection': \"Least connection on service port level;'weighted-least-connection': \"Weighted least connection on server level;'service-weighted-least-connection': \"Weighted least connection on service port level;",
+            "condition": "method",
+            "example-default": "least-connection",
+            "m-exclusion": "lb-method",
+            "format": "enum",
+            "src-name": "lc-method"
+        },
+        "stateless-lb-method": {
+            "type": "string",
+            "enum": [
+                "stateless-dst-ip-hash",
+                "stateless-per-pkt-round-robin",
+                "stateless-src-dst-ip-hash",
+                "stateless-src-dst-ip-only-hash",
+                "stateless-src-ip-hash",
+                "stateless-src-ip-only-hash"
+            ],
+            "enumMap": [
+                {
+                    "stateless-dst-ip-hash": "\"Stateless load-balancing based on Dst IP and Dst port hash"
+                },
+                {
+                    "stateless-per-pkt-round-robin": "\"Stateless load-balancing using per-packet round-robin"
+                },
+                {
+                    "stateless-src-dst-ip-hash": "\"Stateless load-balancing based on IP and port hash for both Src and Dst"
+                },
+                {
+                    "stateless-src-dst-ip-only-hash": "\"Stateless load-balancing based on only IP hash for both Src and Dst"
+                },
+                {
+                    "stateless-src-ip-hash": "\"Stateless load-balancing based on Src IP and Src port hash"
+                },
+                {
+                    "stateless-src-ip-only-hash": "\"Stateless load-balancing based on only Src IP hash"
+                }
+            ],
+            "description": "Stateless LB method 'stateless-dst-ip-hash': \"Stateless load-balancing based on Dst IP and Dst port hash;'stateless-per-pkt-round-robin': \"Stateless load-balancing using per-packet round-robin;'stateless-src-dst-ip-hash': \"Stateless load-balancing based on IP and port hash for both Src and Dst;'stateless-src-dst-ip-only-hash': \"Stateless load-balancing based on only IP hash for both Src and Dst;'stateless-src-ip-hash': \"Stateless load-balancing based on Src IP and Src port hash;'stateless-src-ip-only-hash': \"Stateless load-balancing based on only Src IP hash;",
+            "condition": "method",
+            "m-exclusion": "lc-method, lb-method",
+            "example-default": "stateless-dst-ip-hash",
+            "format": "enum",
+            "src-name": "stateless-lb-method"
+        },
+        "pseudo-round-robin": {
+            "type": "number",
+            "format": "flag",
+            "condition": "lc-method",
+            "link-next-fwd": "stateless-auto-switch",
+            "example-default": "0",
+            "description": "PRR, select the oldest node for sub-select",
+            "src-name": "pseudo-round-robin"
+        },
+        "stateless-auto-switch": {
+            "type": "number",
+            "format": "flag",
+            "condition": "lc-method",
+            "alias": "stateless-auto-switch",
+            "example-default": "0",
+            "description": "Enable auto stateless method",
+            "src-name": "auto-switch"
+        },
+        "stateless-lb-method2": {
+            "type": "string",
+            "enum": [
+                "stateless-dst-ip-hash",
+                "stateless-per-pkt-round-robin",
+                "stateless-src-dst-ip-hash",
+                "stateless-src-dst-ip-only-hash",
+                "stateless-src-ip-hash",
+                "stateless-src-ip-only-hash"
+            ],
+            "enumMap": [
+                {
+                    "stateless-dst-ip-hash": "\"Stateless load-balancing based on Dst IP and Dst port hash"
+                },
+                {
+                    "stateless-per-pkt-round-robin": "\"Stateless load-balancing using per-packet round-robin"
+                },
+                {
+                    "stateless-src-dst-ip-hash": "\"Stateless load-balancing based on IP and port hash for both Src and Dst"
+                },
+                {
+                    "stateless-src-dst-ip-only-hash": "\"Stateless load-balancing based on only IP hash for both Src and Dst"
+                },
+                {
+                    "stateless-src-ip-hash": "\"Stateless load-balancing based on Src IP and Src port hash"
+                },
+                {
+                    "stateless-src-ip-only-hash": "\"Stateless load-balancing based on only Src IP hash"
+                }
+            ],
+            "description": "Stateless LB method 'stateless-dst-ip-hash': \"Stateless load-balancing based on Dst IP and Dst port hash;'stateless-per-pkt-round-robin': \"Stateless load-balancing using per-packet round-robin;'stateless-src-dst-ip-hash': \"Stateless load-balancing based on IP and port hash for both Src and Dst;'stateless-src-dst-ip-only-hash': \"Stateless load-balancing based on only IP hash for both Src and Dst;'stateless-src-ip-hash': \"Stateless load-balancing based on Src IP and Src port hash;'stateless-src-ip-only-hash': \"Stateless load-balancing based on only Src IP hash;",
+            "condition": "stateless-auto-switch",
+            "example-default": "stateless-per-pkt-round-robin",
+            "format": "enum",
+            "src-name": "stateless-lb-method2"
+        },
+        "conn-rate": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000000",
+            "condition": "stateless-lb-method2",
+            "example-default": "10000",
+            "description": "Dynamically enable stateless method by conn-rate (Rate to trigger stateless method(conn/sec))",
+            "format": "number",
+            "src-name": "conn-rate"
+        },
+        "conn-rate-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "conn-rate",
+            "example-default": "600",
+            "description": "Period that trigger condition consistently happens(seconds)",
+            "format": "number",
+            "src-name": "conn-rate-duration"
+        },
+        "conn-revert-rate": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000000",
+            "condition": "conn-rate-duration",
+            "example-default": "10000",
+            "description": "Rate to revert to statelful method (conn/sec)",
+            "format": "number",
+            "src-name": "conn-revert-rate"
+        },
+        "conn-rate-revert-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "conn-revert-rate",
+            "link-next-fwd": "conn-rate-grace-period",
+            "example-default": "600",
+            "description": "Period that revert condition consistently happens(seconds)",
+            "format": "number",
+            "src-name": "conn-rate-revert-duration"
+        },
+        "conn-rate-grace-period": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "conn-rate-duration",
+            "alias": "conn-rate-grace-period",
+            "link-next-fwd": "conn-rate-log",
+            "example-default": "600",
+            "description": "Define the grace period during transition (Define the grace period during transition(seconds))",
+            "format": "number",
+            "src-name": "grace-period"
+        },
+        "conn-rate-log": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-duration",
+            "link-next-rev": "conn-rate-grace-period",
+            "example-default": "0",
+            "description": "Send log if transition happens",
+            "alias": "conn-rate-log",
+            "src-name": "log"
+        },
+        "l4-session-usage": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "100",
+            "condition": "stateless-lb-method2",
+            "example-default": "100",
+            "description": "Dynamically enable stateless method by session usage (Usage to trigger stateless method)",
+            "format": "number",
+            "src-name": "l4-session-usage"
+        },
+        "l4-session-usage-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "l4-session-usage",
+            "example-default": "600",
+            "description": "Period that trigger condition consistently happens(seconds)",
+            "format": "number",
+            "src-name": "l4-session-usage-duration"
+        },
+        "l4-session-usage-revert-rate": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "100",
+            "condition": "l4-session-usage-duration",
+            "example-default": "100",
+            "description": "Usage to revert to statelful method",
+            "format": "number",
+            "src-name": "l4-session-usage-revert-rate"
+        },
+        "l4-session-revert-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "l4-session-usage-revert-rate",
+            "link-next-fwd": "l4-session-usage-grace-period",
+            "example-default": "600",
+            "description": "Period that revert condition consistently happens(seconds)",
+            "format": "number",
+            "src-name": "l4-session-revert-duration"
+        },
+        "l4-session-usage-grace-period": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "600",
+            "condition": "l4-session-usage-duration",
+            "alias": "l4-session-usage-grace-period",
+            "link-next-fwd": "l4-session-usage-log",
+            "example-default": "600",
+            "description": "Define the grace period during transition (Define the grace period during transition(seconds))",
+            "format": "number",
+            "src-name": "grace-period"
+        },
+        "l4-session-usage-log": {
+            "type": "number",
+            "format": "flag",
+            "condition": "l4-session-usage-duration",
+            "link-next-rev": "l4-session-usage-grace-period",
+            "example-default": "0",
+            "description": "Send log if transition happens",
+            "alias": "l4-session-usage-log",
+            "src-name": "log"
+        },
+        "min-active-member": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "example-default": "1",
+            "description": "Minimum Active Member Per Priority (Minimum Active Member before Action)",
+            "format": "number",
+            "src-name": "min-active-member"
+        },
+        "min-active-member-action": {
+            "type": "string",
+            "condition": "min-active-member",
+            "enum": [
+                "dynamic-priority",
+                "skip-pri-set"
+            ],
+            "enumMap": [
+                {
+                    "dynamic-priority": "\"dynamic change member priority to met the min-active-member requirement"
+                },
+                {
+                    "skip-pri-set": "\"Skip Current Priority Set If Min not met"
+                }
+            ],
+            "description": "'dynamic-priority': \"dynamic change member priority to met the min-active-member requirement;'skip-pri-set': \"Skip Current Priority Set If Min not met;",
+            "format": "enum",
+            "src-name": "min-active-member-action"
+        },
+        "reset-on-server-selection-fail": {
+            "type": "number",
+            "format": "flag",
+            "disabled": "udp",
+            "example-default": "0",
+            "description": "Send reset to client if server selection fails",
+            "src-name": "reset-on-server-selection-fail"
+        },
+        "priority-affinity": {
+            "type": "number",
+            "format": "flag",
+            "example-default": "0",
+            "description": "Priority affinity. Persist to the same priority if possible.",
+            "src-name": "priority-affinity"
+        },
+        "reset-priority-affinity": {
+            "type": "number",
+            "format": "flag",
+            "condition": "priority-affinity",
+            "alias": "reset-priority-affinity",
+            "example-default": "0",
+            "description": "Reset",
+            "src-name": "reset"
+        },
+        "backup-server-event-log": {
+            "type": "number",
+            "format": "flag",
+            "example-default": "0",
+            "description": "Send log info on back up server events",
+            "src-name": "backup-server-event-log"
+        },
+        "strict-select": {
+            "type": "number",
+            "format": "flag",
+            "example-default": "0",
+            "description": "strict selection",
+            "src-name": "strict-select"
+        },
+        "stats-data-action": {
+            "type": "string",
+            "enum": [
+                "stats-data-enable",
+                "stats-data-disable"
+            ],
+            "enumMap": [
+                {
+                    "stats-data-enable": "\"Enable statistical data collection for service group"
+                },
+                {
+                    "stats-data-disable": "\"Disable statistical data collection for service group"
+                }
+            ],
+            "description": "Statistical data collection 'stats-data-enable': \"Enable statistical data collection for service group;'stats-data-disable': \"Disable statistical data collection for service group;",
+            "default": "stats-data-enable",
+            "not-allowed-in-no": true,
+            "format": "enum",
+            "src-name": "stats-data-action"
+        },
+        "extended-stats": {
+            "type": "number",
+            "format": "flag",
+            "example-default": "0",
+            "description": "Enable extended statistics on service group",
+            "src-name": "extended-stats"
+        },
+        "traffic-replication-type": {
+            "type": "dummy",
+            "description": "Enable traffic replication on service group",
+            "format": "dummy",
+            "src-name": "traffic-replication-type"
+        },
+        "traffic-replication-mirror": {
+            "type": "number",
+            "format": "flag",
+            "condition": "traffic-replication-type",
+            "example-default": "0",
+            "description": "Mirror Bi-directional Packet",
+            "alias": "traffic-replication-mirror",
+            "src-name": "mirror"
+        },
+        "traffic-replication-mirror-da-repl": {
+            "type": "number",
+            "format": "flag",
+            "condition": "traffic-replication-type",
+            "example-default": "0",
+            "description": "Replace Destination MAC",
+            "alias": "traffic-replication-mirror-da-repl",
+            "src-name": "mirror-da-repl"
+        },
+        "traffic-replication-mirror-ip-repl": {
+            "type": "number",
+            "format": "flag",
+            "condition": "traffic-replication-type",
+            "example-default": "0",
+            "description": "Replaces IP with server-IP",
+            "alias": "traffic-replication-mirror-ip-repl",
+            "src-name": "mirror-ip-repl"
+        },
+        "traffic-replication-mirror-sa-da-repl": {
+            "type": "number",
+            "format": "flag",
+            "condition": "traffic-replication-type",
+            "example-default": "0",
+            "description": "Replace Source MAC and Destination MAC",
+            "alias": "traffic-replication-mirror-sa-da-repl",
+            "src-name": "mirror-sa-da-repl"
+        },
+        "traffic-replication-mirror-sa-repl": {
+            "type": "number",
+            "format": "flag",
+            "condition": "traffic-replication-type",
+            "example-default": "0",
+            "description": "Replace Source MAC",
+            "alias": "traffic-replication-mirror-sa-repl",
+            "src-name": "mirror-sa-repl"
+        },
+        "health-check": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "example-default": "health-check",
+            "description": "Health Check (Monitor Name)",
+            "obj-lineage-full": "health.monitor",
+            "$ref": "/axapi/v3/health/monitor",
+            "src-name": "health-check"
+        },
+        "health-check-disable": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "health-check",
+            "example-default": "1",
+            "description": "Disable health check",
+            "src-name": "health-check-disable"
+        },
+        "priorities": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "priority": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "maxItems": "16",
+                        "example-default": "1",
+                        "description": "Priority option. Define different action for each priority node. (Priority in the Group)",
+                        "format": "number",
+                        "src-name": "priority"
+                    }
+                },
+                {
+                    "priority-action": {
+                        "type": "string",
+                        "condition": "priority",
+                        "enum": [
+                            "drop",
+                            "drop-if-exceed-limit",
+                            "proceed",
+                            "reset",
+                            "reset-if-exceed-limit"
+                        ],
+                        "enumMap": [
+                            {
+                                "drop": "\"Drop request when all priority nodes fail"
+                            },
+                            {
+                                "drop-if-exceed-limit": "\"Drop request when connection over limit"
+                            },
+                            {
+                                "proceed": "\"Proceed to next priority when all priority nodes fail(default)"
+                            },
+                            {
+                                "reset": "\"Send client reset when all priority nodes fail"
+                            },
+                            {
+                                "reset-if-exceed-limit": "\"Send client reset when connection over limit"
+                            }
+                        ],
+                        "description": "Priority action 'drop': \"Drop request when all priority nodes fail;'drop-if-exceed-limit': \"Drop request when connection over limit;'proceed': \"Proceed to next priority when all priority nodes fail(default);'reset': \"Send client reset when all priority nodes fail;'reset-if-exceed-limit': \"Send client reset when connection over limit;",
+                        "example-default": "proceed",
+                        "default": "proceed",
+                        "format": "enum",
+                        "src-name": "priority-action"
+                    }
+                }
+            ],
+            "src-name": "priorities"
+        },
+        "sample-rsp-time": {
+            "type": "number",
+            "format": "flag",
+            "description": "sample server response time",
+            "src-name": "sample-rsp-time"
+        },
+        "rpt-ext-server": {
+            "type": "number",
+            "format": "flag",
+            "condition": "sample-rsp-time",
+            "description": "Report top 10 fastest/slowest servers",
+            "src-name": "rpt-ext-server"
+        },
+        "report-delay": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "7200",
+            "condition": "rpt-ext-server",
+            "description": "Reporting frequency (in minutes) (Reporting frequency (in minutes))",
+            "format": "number",
+            "src-name": "report-delay"
+        },
+        "top-slowest": {
+            "type": "number",
+            "format": "flag",
+            "condition": "rpt-ext-server",
+            "description": "Report top 10 slowest servers",
+            "src-name": "top-slowest"
+        },
+        "top-fastest": {
+            "type": "number",
+            "format": "flag",
+            "condition": "rpt-ext-server",
+            "description": "Report top 10 fastest servers",
+            "src-name": "top-fastest"
+        },
+        "reset": {
+            "obj-name": "reset",
+            "obj-help": "Reset",
+            "obj-lineage": "cmroot.slb.service-group",
+            "obj-head-node-options": "<operation; not-allowed-in-no>",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-module-dont-display-value-in-prompt": true,
+            "obj-vcs-device-spec": true,
+            "obj-lineage-full": "slb.service-group.reset",
+            "axapi": "/axapi/v3/slb/service-group/{name}/reset",
+            "properties": {
+                "auto-switch": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Reset auto stateless state",
+                    "src-name": "auto-switch"
+                }
+            },
+            "type": "object"
+        },
+        "member-list": {
+            "obj-name": "member",
+            "obj-help": "Service Group Member",
+            "obj-lineage": "cmroot.slb.service-group",
+            "obj-occurences": "multi",
+            "obj-json-suffix": "-list",
+            "obj-stats-oid": "2002",
+            "obj-indexing": "string",
+            "obj-enable-user-tag-at-backend": true,
+            "obj-cr-not-allowed-in-show-counters": true,
+            "obj-lineage-full": "slb.service-group.member",
+            "axapi": "/axapi/v3/slb/service-group/{name}/member/{name}+{port}",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "format": "comp-string",
+                    "object-key": true,
+                    "minLength": "1",
+                    "maxLength": "127",
+                    "obj-lineage-full": "slb.server",
+                    "$ref": "/axapi/v3/slb/server",
+                    "example-default": "slb.server",
+                    "snmp-alias": "slbServiceGroupMemberName",
+                    "description": "Member name",
+                    "src-name": "name"
+                },
+                "port": {
+                    "type": "number",
+                    "object-key": true,
+                    "minimum": "0",
+                    "maximum": "65534",
+                    "default": "65534",
+                    "obj-lineage-full": "slb.server.port",
+                    "$ref": "/axapi/v3/slb/server/port",
+                    "example-default": "slb.server.port",
+                    "condition": "name",
+                    "snmp-alias": "slbServiceGroupMemberPort",
+                    "description": "Port number",
+                    "format": "number",
+                    "src-name": "port"
+                },
+                "fqdn-name": {
+                    "type": "string",
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "condition": "port",
+                    "example-default": "test.a10networks.com",
+                    "description": "Server hostname - Not applicable if real server is already defined",
+                    "format": "string",
+                    "src-name": "fqdn-name"
+                },
+                "host": {
+                    "type": "ipv4-address",
+                    "condition": "port",
+                    "example-default": "10.10.10.1",
+                    "description": "IP Address - Not applicable if real server is already defined",
+                    "format": "ipv4-address",
+                    "src-name": "host"
+                },
+                "server-ipv6-addr": {
+                    "type": "ipv6-address",
+                    "condition": "port",
+                    "example-default": "3000::1",
+                    "description": "IPV6 Address - Not applicable if real server is already defined",
+                    "format": "ipv6-address",
+                    "src-name": "server-ipv6-addr"
+                },
+                "member-state": {
+                    "type": "string",
+                    "not-allowed-in-no": true,
+                    "enum": [
+                        "enable",
+                        "disable",
+                        "disable-with-health-check "
+                    ],
+                    "enumMap": [
+                        {
+                            "enable": "\"Enable member service port"
+                        },
+                        {
+                            "disable": "\"Disable member service port"
+                        },
+                        {
+                            "disable-with-health-check ": "\"disable member service port, but health check work"
+                        }
+                    ],
+                    "description": "Enable/Disable member service port 'enable': \"Enable member service port;'disable': \"Disable member service port;'disable-with-health-check ': \"disable member service port, but health check work;",
+                    "default": "enable",
+                    "format": "enum",
+                    "src-name": "member-state"
+                },
+                "member-stats-data-disable": {
+                    "type": "number",
+                    "format": "flag",
+                    "alias": "member-stats-data-disable",
+                    "example-default": "1",
+                    "description": "Disable statistical data collection",
+                    "src-name": "stats-data-disable"
+                },
+                "member-template": {
+                    "type": "string",
+                    "format": "string-rlx",
+                    "minLength": "1",
+                    "maxLength": "127",
+                    "alias": "member-template",
+                    "example-default": "default",
+                    "description": "Real server port template (Real server port template name)",
+                    "obj-lineage-full": "slb.template.port",
+                    "$ref": "/axapi/v3/slb/template/port",
+                    "src-name": "template"
+                },
+                "member-priority": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "16",
+                    "alias": "member-priority",
+                    "default": "1",
+                    "description": "Priority of Port in the Group (Priority of Port in the Group, default is 1)",
+                    "format": "number",
+                    "src-name": "priority"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

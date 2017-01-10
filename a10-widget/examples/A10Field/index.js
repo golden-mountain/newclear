@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createWidgetStore } from 'WidgetExport';
 
-
 const store = createWidgetStore('app');
 
 const dest = document.getElementById('content');

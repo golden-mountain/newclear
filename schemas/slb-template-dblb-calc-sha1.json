@@ -1,0 +1,22 @@
+{
+    "obj-name": "calc-sha1",
+    "obj-help": "Calculate sha1 value of a cleartext password",
+    "obj-lineage": "cmroot.slb.template.dblb",
+    "obj-head-node-options": "<operation>",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-vcs-device-spec": true,
+    "obj-lineage-full": "slb.template.dblb.calc-sha1",
+    "axapi": "/axapi/v3/slb/template/dblb/{name}/calc-sha1",
+    "properties": {
+        "sha1-value": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Cleartext password",
+            "format": "string",
+            "src-name": "sha1-value"
+        }
+    }
+}

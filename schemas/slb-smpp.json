@@ -1,0 +1,12 @@
+{
+    "obj-name": "smpp",
+    "obj-help": "Show SMPP Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "28",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.smpp",
+    "axapi": "/axapi/v3/slb/smpp",
+    "properties": {}
+}

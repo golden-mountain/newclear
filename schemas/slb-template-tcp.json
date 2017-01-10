@@ -1,0 +1,137 @@
+{
+    "obj-name": "tcp",
+    "obj-help": "L4 TCP switch config",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "l4 tcp",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.tcp",
+    "axapi": "/axapi/v3/slb/template/tcp/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Fast TCP Template Name",
+            "src-name": "name"
+        },
+        "idle-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2097151",
+            "description": "Idle Timeout value (Interval of 60 seconds), default 120 seconds (idle timeout in second, default 120)",
+            "default": "120",
+            "round-off": "(60,30,60)",
+            "format": "number",
+            "src-name": "idle-timeout"
+        },
+        "half-open-idle-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "description": "TCP Half Open Idle Timeout (sec), default off (half open idle timeout in second, default off)",
+            "format": "number",
+            "src-name": "half-open-idle-timeout"
+        },
+        "half-close-idle-timeout": {
+            "type": "number",
+            "minimum": "60",
+            "maximum": "120",
+            "description": "TCP Half Close Idle Timeout (sec), default off (half close idle timeout in second, default off)",
+            "format": "number",
+            "src-name": "half-close-idle-timeout"
+        },
+        "initial-window-size": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "description": "Set the initial window size (number)",
+            "format": "number",
+            "src-name": "initial-window-size"
+        },
+        "force-delete-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "description": "The maximum time that a session can stay in the system before being delete (number (second))",
+            "format": "number",
+            "src-name": "force-delete-timeout"
+        },
+        "force-delete-timeout-100ms": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "m-exclusion": "force-delete-timeout",
+            "link-next-fwd": "alive-if-active",
+            "description": "The maximum time that a session can stay in the system before being delete (number in 100ms)",
+            "format": "number",
+            "src-name": "force-delete-timeout-100ms"
+        },
+        "alive-if-active": {
+            "type": "number",
+            "format": "flag",
+            "condition": "force-delete-timeout",
+            "description": "keep connection alive if active traffic",
+            "src-name": "alive-if-active"
+        },
+        "qos": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "description": "QOS level (number)",
+            "format": "number",
+            "src-name": "qos"
+        },
+        "insert-client-ip": {
+            "type": "number",
+            "format": "flag",
+            "default": "0",
+            "description": "Insert client ip into TCP option",
+            "src-name": "insert-client-ip"
+        },
+        "lan-fast-ack": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable fast TCP ack on LAN",
+            "src-name": "lan-fast-ack"
+        },
+        "reset-fwd": {
+            "type": "number",
+            "format": "flag",
+            "description": "send reset to server if error happens",
+            "src-name": "reset-fwd"
+        },
+        "reset-rev": {
+            "type": "number",
+            "format": "flag",
+            "description": "send reset to client if error happens",
+            "src-name": "reset-rev"
+        },
+        "disable": {
+            "type": "number",
+            "format": "flag",
+            "condition": "reset-rev",
+            "description": "send reset to client when server is disabled",
+            "src-name": "disable"
+        },
+        "down": {
+            "type": "number",
+            "format": "flag",
+            "condition": "reset-rev",
+            "m-exclusion": "disable",
+            "description": "send reset to client when server is down",
+            "src-name": "down"
+        },
+        "del-session-on-server-down": {
+            "type": "number",
+            "format": "flag",
+            "description": "Delete session if the server/port goes down (either disabled/hm down)",
+            "src-name": "del-session-on-server-down"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "obj-name": "ssli",
+    "obj-help": "SSL insight template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "ssli",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.ssli",
+    "axapi": "/axapi/v3/slb/template/ssli/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "SSLi Template Name",
+            "src-name": "name"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "http",
+                "xmpp",
+                "smtp",
+                "pop"
+            ],
+            "enumMap": [
+                {
+                    "http": "\"HTTP service"
+                },
+                {
+                    "xmpp": "\"XMPP service"
+                },
+                {
+                    "smtp": "\"SMTP service"
+                },
+                {
+                    "pop": "\"POP service"
+                }
+            ],
+            "description": "SSL insight protocol type 'http': \"HTTP service;'xmpp': \"XMPP service;'smtp': \"SMTP service;'pop': \"POP service;",
+            "default": "http",
+            "format": "enum",
+            "src-name": "type"
+        }
+    }
+}

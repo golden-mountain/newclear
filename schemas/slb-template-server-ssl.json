@@ -1,0 +1,513 @@
+{
+    "obj-name": "server-ssl",
+    "obj-help": "Server Side SSL Template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "server ssl",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.server-ssl",
+    "axapi": "/axapi/v3/slb/template/server-ssl/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Server SSL Template Name",
+            "src-name": "name"
+        },
+        "ca-certs": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "CA Certificate",
+            "properties": [
+                {
+                    "ca-cert": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "maxItems": "128",
+                        "description": "Specify CA certificate (CA Certificate)",
+                        "format": "string",
+                        "src-name": "ca-cert"
+                    }
+                },
+                {
+                    "server-ocsp": {
+                        "type": "dummy",
+                        "condition": "ca-cert",
+                        "alias": "server-ocsp",
+                        "description": "Specify ocsp authentication server(s) for client certificate verification",
+                        "format": "dummy",
+                        "src-name": "ocsp"
+                    }
+                },
+                {
+                    "server-ocsp-srvr": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "condition": "server-ocsp",
+                        "alias": "server-ocsp-srvr",
+                        "obj-lineage-full": "aam.authentication.server.ocsp",
+                        "$ref": "/axapi/v3/aam/authentication/server/ocsp",
+                        "description": "Specify authentication server",
+                        "src-name": "server"
+                    }
+                },
+                {
+                    "server-ocsp-sg": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "server-ocsp",
+                        "alias": "server-ocsp-sg",
+                        "obj-lineage-full": "aam.authentication.service-group",
+                        "$ref": "/axapi/v3/aam/authentication/service-group",
+                        "description": "Specify service-group (Service group name)",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "ca-certs"
+        },
+        "crl-certs": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "crl": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "255",
+                        "maxItems": "128",
+                        "description": "Certificate Revocation Lists (Certificate Revocation Lists file name)",
+                        "format": "string",
+                        "src-name": "crl"
+                    }
+                }
+            ],
+            "src-name": "crl-certs"
+        },
+        "cert": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "description": "Specify Client certificate (Certificate Name)",
+            "format": "string",
+            "src-name": "cert"
+        },
+        "cipher": {
+            "type": "dummy",
+            "description": "Specify SSL cipher suite, default is enable all",
+            "format": "dummy",
+            "src-name": "cipher"
+        },
+        "cipher-without-prio-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "cipher-wo-prio": {
+                        "type": "enum",
+                        "multi-field-key": true,
+                        "enum": [
+                            "SSL3_RSA_DES_192_CBC3_SHA",
+                            "SSL3_RSA_DES_40_CBC_SHA",
+                            "SSL3_RSA_DES_64_CBC_SHA",
+                            "SSL3_RSA_RC4_128_MD5",
+                            "SSL3_RSA_RC4_128_SHA",
+                            "SSL3_RSA_RC4_40_MD5",
+                            "TLS1_RSA_AES_128_SHA",
+                            "TLS1_RSA_AES_256_SHA",
+                            "TLS1_RSA_EXPORT1024_RC4_56_MD5",
+                            "TLS1_RSA_EXPORT1024_RC4_56_SHA",
+                            "TLS1_RSA_AES_128_SHA256",
+                            "TLS1_RSA_AES_256_SHA256",
+                            "TLS1_DHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_DHE_RSA_AES_128_SHA",
+                            "TLS1_DHE_RSA_AES_128_SHA256",
+                            "TLS1_DHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_DHE_RSA_AES_256_SHA",
+                            "TLS1_DHE_RSA_AES_256_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_RSA_AES_128_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_SHA256",
+                            "TLS1_ECDHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA",
+                            "TLS1_RSA_AES_128_GCM_SHA256",
+                            "TLS1_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                        ],
+                        "enumMap": [
+                            {
+                                "SSL3_RSA_DES_192_CBC3_SHA": "\"SSL3_RSA_DES_192_CBC3_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_40_CBC_SHA": "\"SSL3_RSA_DES_40_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_64_CBC_SHA": "\"SSL3_RSA_DES_64_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_MD5": "\"SSL3_RSA_RC4_128_MD5"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_SHA": "\"SSL3_RSA_RC4_128_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_40_MD5": "\"SSL3_RSA_RC4_40_MD5"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA": "\"TLS1_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA": "\"TLS1_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_MD5": "\"TLS1_RSA_EXPORT1024_RC4_56_MD5"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_SHA": "\"TLS1_RSA_EXPORT1024_RC4_56_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA256": "\"TLS1_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA256": "\"TLS1_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_GCM_SHA256": "\"TLS1_DHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA": "\"TLS1_DHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA256": "\"TLS1_DHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_GCM_SHA384": "\"TLS1_DHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA": "\"TLS1_DHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA256": "\"TLS1_DHE_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA": "\"TLS1_ECDHE_ECDSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA": "\"TLS1_ECDHE_ECDSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA": "\"TLS1_ECDHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA256": "\"TLS1_ECDHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA": "\"TLS1_ECDHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_GCM_SHA256": "\"TLS1_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_GCM_SHA384": "\"TLS1_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA384": "\"TLS1_ECDHE_RSA_AES_256_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                            }
+                        ],
+                        "description": "'SSL3_RSA_DES_192_CBC3_SHA': \"SSL3_RSA_DES_192_CBC3_SHA;'SSL3_RSA_DES_40_CBC_SHA': \"SSL3_RSA_DES_40_CBC_SHA;'SSL3_RSA_DES_64_CBC_SHA': \"SSL3_RSA_DES_64_CBC_SHA;'SSL3_RSA_RC4_128_MD5': \"SSL3_RSA_RC4_128_MD5;'SSL3_RSA_RC4_128_SHA': \"SSL3_RSA_RC4_128_SHA;'SSL3_RSA_RC4_40_MD5': \"SSL3_RSA_RC4_40_MD5;'TLS1_RSA_AES_128_SHA': \"TLS1_RSA_AES_128_SHA;'TLS1_RSA_AES_256_SHA': \"TLS1_RSA_AES_256_SHA;'TLS1_RSA_EXPORT1024_RC4_56_MD5': \"TLS1_RSA_EXPORT1024_RC4_56_MD5;'TLS1_RSA_EXPORT1024_RC4_56_SHA': \"TLS1_RSA_EXPORT1024_RC4_56_SHA;'TLS1_RSA_AES_128_SHA256': \"TLS1_RSA_AES_128_SHA256;'TLS1_RSA_AES_256_SHA256': \"TLS1_RSA_AES_256_SHA256;'TLS1_DHE_RSA_AES_128_GCM_SHA256': \"TLS1_DHE_RSA_AES_128_GCM_SHA256;'TLS1_DHE_RSA_AES_128_SHA': \"TLS1_DHE_RSA_AES_128_SHA;'TLS1_DHE_RSA_AES_128_SHA256': \"TLS1_DHE_RSA_AES_128_SHA256;'TLS1_DHE_RSA_AES_256_GCM_SHA384': \"TLS1_DHE_RSA_AES_256_GCM_SHA384;'TLS1_DHE_RSA_AES_256_SHA': \"TLS1_DHE_RSA_AES_256_SHA;'TLS1_DHE_RSA_AES_256_SHA256': \"TLS1_DHE_RSA_AES_256_SHA256;'TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256;'TLS1_ECDHE_ECDSA_AES_128_SHA': \"TLS1_ECDHE_ECDSA_AES_128_SHA;'TLS1_ECDHE_ECDSA_AES_128_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_SHA256;'TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA': \"TLS1_ECDHE_ECDSA_AES_256_SHA;'TLS1_ECDHE_RSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_RSA_AES_128_GCM_SHA256;'TLS1_ECDHE_RSA_AES_128_SHA': \"TLS1_ECDHE_RSA_AES_128_SHA;'TLS1_ECDHE_RSA_AES_128_SHA256': \"TLS1_ECDHE_RSA_AES_128_SHA256;'TLS1_ECDHE_RSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA': \"TLS1_ECDHE_RSA_AES_256_SHA;'TLS1_RSA_AES_128_GCM_SHA256': \"TLS1_RSA_AES_128_GCM_SHA256;'TLS1_RSA_AES_256_GCM_SHA384': \"TLS1_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA384': \"TLS1_ECDHE_RSA_AES_256_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_SHA384;",
+                        "maxItems": "32",
+                        "condition": "cipher",
+                        "format": "enum",
+                        "src-name": "cipher-wo-prio"
+                    }
+                }
+            ],
+            "src-name": "cipher-without-prio-list"
+        },
+        "dh-param": {
+            "type": "dummy",
+            "description": "Specify Diffie Hellman Parameter",
+            "format": "dummy",
+            "src-name": "dh-param"
+        },
+        "dh-type": {
+            "type": "enum",
+            "condition": "dh-param",
+            "enum": [
+                "1024",
+                "1024-dsa",
+                "2048"
+            ],
+            "enumMap": [
+                {
+                    "1024": "\"1024"
+                },
+                {
+                    "1024-dsa": "\"1024-dsa"
+                },
+                {
+                    "2048": "\"2048"
+                }
+            ],
+            "description": "'1024': \"1024;'1024-dsa': \"1024-dsa;'2048': \"2048;",
+            "format": "enum",
+            "src-name": "dh-type"
+        },
+        "ec-name": {
+            "type": "dummy",
+            "description": "Specify Elliptic Curve Name",
+            "format": "dummy",
+            "src-name": "ec-name"
+        },
+        "ec-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "ec": {
+                        "type": "enum",
+                        "multi-field-key": true,
+                        "condition": "ec-name",
+                        "enum": [
+                            "secp256r1",
+                            "secp384r1"
+                        ],
+                        "enumMap": [
+                            {
+                                "secp256r1": "\"X9_62_prime256v1"
+                            },
+                            {
+                                "secp384r1": "\"secp384r1"
+                            }
+                        ],
+                        "description": "'secp256r1': \"X9_62_prime256v1;'secp384r1': \"secp384r1;",
+                        "maxItems": "2",
+                        "format": "enum",
+                        "src-name": "ec"
+                    }
+                }
+            ],
+            "src-name": "ec-list"
+        },
+        "enable-tls-alert-logging": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable TLS alert logging",
+            "src-name": "enable-tls-alert-logging"
+        },
+        "alert-type": {
+            "type": "string",
+            "enum": [
+                "fatal"
+            ],
+            "enumMap": [
+                {
+                    "fatal": "\"Log fatal alerts"
+                }
+            ],
+            "description": "'fatal': \"Log fatal alerts;",
+            "condition": "enable-tls-alert-logging",
+            "format": "enum",
+            "src-name": "alert-type"
+        },
+        "close-notify": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send close notification when terminate connection",
+            "src-name": "close-notify"
+        },
+        "forward-proxy-enable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable SSL forward proxy",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-enable"
+        },
+        "session-ticket-enable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable server side session ticket support",
+            "src-name": "session-ticket-enable"
+        },
+        "version": {
+            "type": "number",
+            "minimum": "30",
+            "maximum": "33",
+            "description": "TLS/SSL version, default is the highest number supported (TLS/SSL version: 30-SSLv3.0, 31-TLSv1.0, 32-TLSv1.1 and 33-TLSv1.2)",
+            "default": "33",
+            "format": "number",
+            "src-name": "version"
+        },
+        "dgversion": {
+            "type": "number",
+            "minimum": "30",
+            "maximum": "33",
+            "condition": "version",
+            "description": "Lower TLS/SSL version can be downgraded",
+            "default": "31",
+            "format": "number",
+            "src-name": "dgversion"
+        },
+        "server-certificate-error": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Specify actions for server certificate errors. Disallow error by default",
+            "properties": [
+                {
+                    "error-type": {
+                        "type": "enum",
+                        "multi-field-key": true,
+                        "maxItems": "4",
+                        "condition": "server-certificate-error",
+                        "enum": [
+                            "email",
+                            "ignore",
+                            "logging",
+                            "trap"
+                        ],
+                        "enumMap": [
+                            {
+                                "email": "\"Notify the error via email"
+                            },
+                            {
+                                "ignore": "\"Ignore the error, which mean the connection can continue"
+                            },
+                            {
+                                "logging": "\"Log the error"
+                            },
+                            {
+                                "trap": "\"Notify the error by SNMP trap"
+                            }
+                        ],
+                        "description": "'email': \"Notify the error via email;'ignore': \"Ignore the error, which mean the connection can continue;'logging': \"Log the error;'trap': \"Notify the error by SNMP trap;",
+                        "format": "enum",
+                        "src-name": "error-type"
+                    }
+                }
+            ],
+            "src-name": "server-certificate-error"
+        },
+        "key": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "description": "Client private-key (Key Name)",
+            "format": "string",
+            "src-name": "key"
+        },
+        "pass-phrase": {
+            "type": "dummy",
+            "condition": "key",
+            "description": "Password Phrase",
+            "format": "dummy",
+            "src-name": "pass-phrase"
+        },
+        "passphrase": {
+            "type": "string",
+            "format": "password",
+            "condition": "pass-phrase",
+            "description": "Password Phrase",
+            "src-name": "passphrase"
+        },
+        "encrypted": {
+            "type": "encrypted",
+            "format": "encrypted",
+            "condition": "pass-phrase",
+            "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+            "src-name": "encrypted"
+        },
+        "ocsp-stapling": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable ocsp-stapling support",
+            "src-name": "ocsp-stapling"
+        },
+        "use-client-sni": {
+            "type": "number",
+            "format": "flag",
+            "description": "use client SNI",
+            "src-name": "use-client-sni"
+        },
+        "renegotiation-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable SSL renegotiation",
+            "src-name": "renegotiation-disable"
+        },
+        "session-cache-size": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "128",
+            "description": "Session Cache Size (Specify 0 to disable Session ID reuse.)",
+            "format": "number",
+            "src-name": "session-cache-size"
+        },
+        "session-cache-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "7200",
+            "description": "Session Cache Timeout (Timeout value, in seconds)",
+            "format": "number",
+            "src-name": "session-cache-timeout"
+        },
+        "template": {
+            "type": "dummy",
+            "description": "Template",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "cipher-template": {
+            "type": "string",
+            "format": "name",
+            "m-exclusion": "cipher-wo-prio",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "alias": "cipher-template",
+            "obj-lineage-full": "slb.template.cipher",
+            "$ref": "/axapi/v3/slb/template/cipher",
+            "description": "Cipher Template (Cipher Config Name)",
+            "src-name": "cipher"
+        }
+    }
+}

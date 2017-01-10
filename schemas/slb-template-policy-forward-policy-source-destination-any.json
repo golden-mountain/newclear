@@ -1,0 +1,22 @@
+{
+    "obj-name": "any",
+    "obj-help": "Default destination match rule",
+    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+    "obj-occurences": "single",
+    "obj-module-prompt": "any",
+    "obj-stats-oid": "2047",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.any",
+    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/any",
+    "properties": {
+        "action": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "mandatory-in-api": true,
+            "description": "Action to be performed",
+            "format": "string",
+            "src-name": "action"
+        }
+    }
+}

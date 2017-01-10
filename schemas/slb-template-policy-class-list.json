@@ -1,0 +1,372 @@
+{
+    "obj-name": "class-list",
+    "obj-help": "Configure classification list",
+    "obj-lineage": "cmroot.slb.template.policy",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-lineage-full": "slb.template.policy.class-list",
+    "axapi": "/axapi/v3/slb/template/policy/{name}/class-list/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Class list name or geo-location-class-list name",
+            "src-name": "name"
+        },
+        "client-ip": {
+            "type": "dummy",
+            "description": "Set Client IP address, by default source IP address is used",
+            "format": "dummy",
+            "src-name": "client-ip"
+        },
+        "client-ip-l3-dest": {
+            "type": "number",
+            "format": "flag",
+            "condition": "client-ip",
+            "description": "Use destination IP as client IP address",
+            "alias": "client-ip-l3-dest",
+            "src-name": "l3-dest"
+        },
+        "client-ip-l7-header": {
+            "type": "number",
+            "format": "flag",
+            "condition": "client-ip",
+            "m-exclusion": "client-ip-l3-dest",
+            "alias": "client-ip-l7-header",
+            "description": "Use extract client IP address from L7 header",
+            "src-name": "l7-header"
+        },
+        "header-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "client-ip-l7-header",
+            "description": "Specify L7 header name",
+            "format": "string",
+            "src-name": "header-name"
+        },
+        "lid-list": {
+            "obj-name": "lid",
+            "obj-help": "Limit ID",
+            "obj-lineage": "cmroot.slb.template.policy.class-list",
+            "obj-occurences": "multi",
+            "obj-json-suffix": "-list",
+            "obj-indexing": "number",
+            "obj-lineage-full": "slb.template.policy.class-list.lid",
+            "axapi": "/axapi/v3/slb/template/policy/{name}/class-list/{name}/lid/{lidnum}",
+            "properties": {
+                "lidnum": {
+                    "type": "number",
+                    "object-key": true,
+                    "alias": "lidnum",
+                    "minimum": "1",
+                    "maximum": "31",
+                    "description": "Specify a limit ID",
+                    "format": "number",
+                    "src-name": "lid"
+                },
+                "conn-limit": {
+                    "type": "number",
+                    "minimum": "0",
+                    "maximum": "1048575",
+                    "description": "Connection limit (Connection limit)",
+                    "format": "number",
+                    "src-name": "conn-limit"
+                },
+                "conn-rate-limit": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "2147483647",
+                    "description": "Specify connection rate limit (Connection rate limit)",
+                    "format": "number",
+                    "src-name": "conn-rate-limit"
+                },
+                "conn-per": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "conn-rate-limit",
+                    "alias": "conn-per",
+                    "description": "Per (Specify interval in number of 100ms)",
+                    "format": "number",
+                    "src-name": "per"
+                },
+                "request-limit": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "1048575",
+                    "description": "Request limit (Specify request limit)",
+                    "format": "number",
+                    "src-name": "request-limit"
+                },
+                "request-rate-limit": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "4294967295",
+                    "description": "Request rate limit (Specify request rate limit)",
+                    "format": "number",
+                    "src-name": "request-rate-limit"
+                },
+                "request-per": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "request-rate-limit",
+                    "alias": "request-per",
+                    "description": "Per (Specify interval in number of 100ms)",
+                    "format": "number",
+                    "src-name": "per"
+                },
+                "bw-rate-limit": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "2147483647",
+                    "description": "Specify bandwidth rate limit (Bandwidth rate limit in bytes)",
+                    "format": "number",
+                    "src-name": "bw-rate-limit"
+                },
+                "bw-per": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "bw-rate-limit",
+                    "alias": "bw-per",
+                    "description": "Per (Specify interval in number of 100ms)",
+                    "format": "number",
+                    "src-name": "per"
+                },
+                "over-limit-action": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Set action when exceeds limit",
+                    "src-name": "over-limit-action"
+                },
+                "action-value": {
+                    "type": "string",
+                    "condition": "over-limit-action",
+                    "enum": [
+                        "forward",
+                        "reset"
+                    ],
+                    "enumMap": [
+                        {
+                            "forward": "\"Forward the traffic even it exceeds limit"
+                        },
+                        {
+                            "reset": "\"Reset the connection when it exceeds limit"
+                        }
+                    ],
+                    "description": "'forward': \"Forward the traffic even it exceeds limit;'reset': \"Reset the connection when it exceeds limit;",
+                    "link-next-fwd": "lockout",
+                    "format": "enum",
+                    "src-name": "action-value"
+                },
+                "lockout": {
+                    "type": "number",
+                    "condition": "over-limit-action",
+                    "minimum": "1",
+                    "maximum": "1023",
+                    "disabled": "forward",
+                    "link-next-fwd": "log",
+                    "description": "Don't accept any new connection for certain time (Lockout duration in minutes)",
+                    "value-not-allowed-in-no": true,
+                    "format": "number",
+                    "src-name": "lockout"
+                },
+                "log": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "over-limit-action",
+                    "description": "Log a message",
+                    "src-name": "log"
+                },
+                "interval": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "255",
+                    "condition": "log",
+                    "description": "Specify log interval in minutes, by default system will log every over limit instance",
+                    "format": "number",
+                    "src-name": "interval"
+                },
+                "direct-action": {
+                    "type": "number",
+                    "format": "flag",
+                    "alias": "direct-action",
+                    "description": "Set action when match the lid",
+                    "src-name": "action"
+                },
+                "direct-service-group": {
+                    "type": "string",
+                    "format": "long-string-rlx",
+                    "minLength": "1",
+                    "maxLength": "127",
+                    "condition": "direct-action",
+                    "alias": "direct-service-group",
+                    "obj-lineage-full": "slb.service-group",
+                    "$ref": "/axapi/v3/slb/service-group",
+                    "description": "Specify a service group (Specify the service group name)",
+                    "src-name": "service-group"
+                },
+                "direct-pbslb-logging": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "direct-service-group",
+                    "description": "Configure PBSLB logging",
+                    "alias": "direct-pbslb-logging",
+                    "src-name": "logging"
+                },
+                "direct-pbslb-interval": {
+                    "type": "number",
+                    "default": "3",
+                    "minimum": "0",
+                    "maximum": "60",
+                    "condition": "direct-pbslb-logging",
+                    "link-next-fwd": "direct-fail",
+                    "description": "Specify logging interval in minutes",
+                    "alias": "direct-pbslb-interval",
+                    "format": "number",
+                    "src-name": "interval"
+                },
+                "direct-fail": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "direct-pbslb-logging",
+                    "description": "Only log unsuccessful connectionsi",
+                    "alias": "direct-fail",
+                    "src-name": "fail"
+                },
+                "direct-action-value": {
+                    "type": "string",
+                    "condition": "direct-action",
+                    "m-exclusion": "direct-service-group",
+                    "enum": [
+                        "drop",
+                        "reset"
+                    ],
+                    "enumMap": [
+                        {
+                            "drop": "\"drop the packet"
+                        },
+                        {
+                            "reset": "\"Send reset back"
+                        }
+                    ],
+                    "description": "'drop': \"drop the packet;'reset': \"Send reset back;",
+                    "format": "enum",
+                    "src-name": "direct-action-value"
+                },
+                "direct-logging-drp-rst": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "direct-action-value",
+                    "alias": "direct-logging-drp-rst",
+                    "description": "Configure PBSLB logging",
+                    "src-name": "logging"
+                },
+                "direct-action-interval": {
+                    "type": "number",
+                    "default": "3",
+                    "alias": "direct-action-interval",
+                    "minimum": "0",
+                    "maximum": "60",
+                    "condition": "direct-logging-drp-rst",
+                    "description": "Specify logging interval in minute (default is 3)",
+                    "format": "number",
+                    "src-name": "interval"
+                },
+                "response-code-rate-limit": {
+                    "type": "array",
+                    "array-start": true,
+                    "array-multi": true,
+                    "description": "Server response code rate limit(only support SMTP now)",
+                    "maxItems": "5",
+                    "properties": [
+                        {
+                            "code-range-start": {
+                                "type": "number",
+                                "condition": "response-code-rate-limit",
+                                "multi-field-key": true,
+                                "minimum": "100",
+                                "maximum": "600",
+                                "description": "server response code range start",
+                                "format": "number",
+                                "src-name": "code-range-start"
+                            }
+                        },
+                        {
+                            "code-range-end": {
+                                "type": "number",
+                                "condition": "code-range-start",
+                                "minimum": "100",
+                                "maximum": "600",
+                                "description": "server response code range end",
+                                "alias": "code-range-end",
+                                "format": "number",
+                                "src-name": "-"
+                            }
+                        },
+                        {
+                            "threshold": {
+                                "type": "number",
+                                "condition": "code-range-end",
+                                "minimum": "1",
+                                "maximum": "15",
+                                "description": "the times of getting the response code",
+                                "format": "number",
+                                "src-name": "threshold"
+                            }
+                        },
+                        {
+                            "period": {
+                                "type": "number",
+                                "condition": "threshold",
+                                "minimum": "1",
+                                "maximum": "127",
+                                "description": "seconds",
+                                "alias": "period",
+                                "format": "number",
+                                "src-name": "per"
+                            }
+                        }
+                    ],
+                    "src-name": "response-code-rate-limit"
+                },
+                "dns64": {
+                    "type": "object",
+                    "array-start": true,
+                    "description": "Apply DNS64",
+                    "feat-license": "cgnv6",
+                    "properties": {
+                        "disable": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "dns64",
+                            "description": "Disable",
+                            "src-name": "disable"
+                        },
+                        "exclusive-answer": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "dns64",
+                            "description": "Exclusive Answer in DNS Response",
+                            "src-name": "exclusive-answer"
+                        },
+                        "prefix": {
+                            "type": "ipv6-address-plen",
+                            "condition": "dns64",
+                            "description": "IPv6 prefix",
+                            "format": "ipv6-address-plen",
+                            "src-name": "prefix"
+                        }
+                    },
+                    "src-name": "dns64"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

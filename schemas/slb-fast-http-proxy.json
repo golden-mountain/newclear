@@ -1,0 +1,12 @@
+{
+    "obj-name": "fast-http-proxy",
+    "obj-help": "Show Fast-HTTP Proxy Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "40",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.fast-http-proxy",
+    "axapi": "/axapi/v3/slb/fast-http-proxy",
+    "properties": {}
+}

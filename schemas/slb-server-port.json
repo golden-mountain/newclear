@@ -1,0 +1,286 @@
+{
+    "obj-name": "port",
+    "obj-help": "Real Server Port",
+    "obj-lineage": "cmroot.slb.server",
+    "obj-snmp-alias": "slbServerPort",
+    "obj-counter": true,
+    "obj-stats-oid": "2001",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "number",
+    "obj-module-prompt": "node port",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.server.port",
+    "axapi": "/axapi/v3/slb/server/{name}/port/{port-number}+{protocol}",
+    "properties": {
+        "port-number": {
+            "type": "number",
+            "object-key": true,
+            "minimum": "0",
+            "maximum": "65534",
+            "alias": "port-number",
+            "description": "Port Number",
+            "format": "number",
+            "src-name": "port"
+        },
+        "protocol": {
+            "type": "string",
+            "object-key": true,
+            "enum": [
+                "tcp"
+            ],
+            "enumMap": [
+                {
+                    "tcp": "\"TCP Port"
+                }
+            ],
+            "description": "Protocol 'tcp': \"TCP Port;",
+            "condition": "port-number",
+            "example-default": "tcp",
+            "format": "enum",
+            "src-name": "protocol"
+        },
+        "range": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "254",
+            "condition": "protocol",
+            "disabled": "udp",
+            "default": "0",
+            "example-default": "1",
+            "description": "Port range (Port range value - used for vip-to-rport-mapping)",
+            "format": "number",
+            "src-name": "range"
+        },
+        "template": {
+            "type": "dummy",
+            "description": "Apply template to port",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "template-port": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "alias": "template-port",
+            "obj-lineage-full": "slb.template.port",
+            "$ref": "/axapi/v3/slb/template/port",
+            "description": "Port template (Port template name)",
+            "example-default": "slb.template.port",
+            "default": "default",
+            "src-name": "port"
+        },
+        "template-server-ssl": {
+            "type": "string",
+            "format": "name",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "disabled": "udp",
+            "alias": "template-server-ssl",
+            "obj-lineage-full": "slb.template.server-ssl",
+            "$ref": "/axapi/v3/slb/template/server-ssl",
+            "description": "Server side SSL template (Server side SSL Name)",
+            "example-default": "slb.template.server-ssl",
+            "src-name": "server-ssl"
+        },
+        "action": {
+            "type": "string",
+            "enum": [
+                "enable/disable/disable-with-health-check"
+            ],
+            "enumMap": [
+                {
+                    "enable/disable/disable-with-health-check": "\"disable port, but health check work"
+                }
+            ],
+            "description": "Template action 'enable/disable/disable-with-health-check': \"disable port, but health check work;",
+            "default": "enable",
+            "not-allowed-in-no": true,
+            "format": "enum",
+            "src-name": "action"
+        },
+        "no-ssl": {
+            "type": "number",
+            "format": "flag",
+            "description": "No SSL",
+            "src-name": "no-ssl"
+        },
+        "health-check": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Health Check (Monitor Name)",
+            "example-default": "health-check",
+            "obj-lineage-full": "health.monitor",
+            "$ref": "/axapi/v3/health/monitor",
+            "src-name": "health-check"
+        },
+        "health-check-follow-port": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65534",
+            "m-exclusion": "health-check",
+            "example-default": "3",
+            "description": "Specify which port to follow for health status (Port Number)",
+            "format": "number",
+            "src-name": "health-check-follow-port"
+        },
+        "follow-port-protocol": {
+            "type": "string",
+            "enum": [
+                "tcp",
+                "udp"
+            ],
+            "enumMap": [
+                {
+                    "tcp": "\"TCP Port"
+                },
+                {
+                    "udp": "\"UDP Port"
+                }
+            ],
+            "description": "Protocol 'tcp': \"TCP Port;'udp': \"UDP Port;",
+            "condition": "health-check-follow-port",
+            "example-default": "tcp",
+            "format": "enum",
+            "src-name": "follow-port-protocol"
+        },
+        "health-check-disable": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "health-check-follow-port",
+            "example-default": "1",
+            "description": "Disable health check",
+            "src-name": "health-check-disable"
+        },
+        "weight": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000",
+            "default": "1",
+            "description": "Port Weight (Connection Weight)",
+            "format": "number",
+            "src-name": "weight"
+        },
+        "conn-limit": {
+            "type": "number",
+            "value-not-allowed-in-no": true,
+            "minimum": "1",
+            "maximum": "8000000",
+            "default": "8000000",
+            "example-default": "800000",
+            "description": "Connection Limit (Connection Limit)",
+            "format": "number",
+            "src-name": "conn-limit"
+        },
+        "no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "example-default": "1",
+            "description": "Do not log connection over limit event",
+            "src-name": "no-logging"
+        },
+        "conn-resume": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000000",
+            "example-default": "1000000",
+            "description": "Connection Resume (Connection Resume)",
+            "format": "number",
+            "src-name": "conn-resume"
+        },
+        "stats-data-action": {
+            "type": "string",
+            "enum": [
+                "stats-data-enable",
+                "stats-data-disable"
+            ],
+            "enumMap": [
+                {
+                    "stats-data-enable": "\"Enable statistical data collection for real server port"
+                },
+                {
+                    "stats-data-disable": "\"Disable statistical data collection for real server port"
+                }
+            ],
+            "description": "Stats data action 'stats-data-enable': \"Enable statistical data collection for real server port;'stats-data-disable': \"Disable statistical data collection for real server port;",
+            "default": "stats-data-enable",
+            "not-allowed-in-no": true,
+            "format": "enum",
+            "src-name": "stats-data-action"
+        },
+        "extended-stats": {
+            "type": "number",
+            "format": "flag",
+            "example-default": "0",
+            "description": "Enable extended statistics on real server port",
+            "src-name": "extended-stats"
+        },
+        "alternate-port": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Alternate Server",
+            "properties": [
+                {
+                    "alternate": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "maxItems": "16",
+                        "example-default": "3",
+                        "description": "Alternate Server Number (Alternate Server Number)",
+                        "format": "number",
+                        "src-name": "alternate"
+                    }
+                },
+                {
+                    "alternate-name": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "alternate",
+                        "example-default": "web-port",
+                        "description": "Alternate Name (Alternate Name)",
+                        "src-name": "alternate-name"
+                    }
+                },
+                {
+                    "alternate-server-port": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "65535",
+                        "condition": "alternate-name",
+                        "alias": "alternate-server-port",
+                        "example-default": "80",
+                        "description": "Port (Alternate Server Port Value)",
+                        "format": "number",
+                        "src-name": "port"
+                    }
+                }
+            ],
+            "src-name": "alternate-port"
+        },
+        "auth-cfg": {
+            "type": "object",
+            "array-start": true,
+            "properties": {
+                "service-principal-name": {
+                    "type": "string",
+                    "format": "string-rlx",
+                    "example-default": "null",
+                    "description": "Service Principal Name (Kerberos principal name)",
+                    "src-name": "service-principal-name"
+                }
+            },
+            "src-name": "auth-cfg"
+        }
+    }
+}

@@ -101,7 +101,7 @@
         "use-if-ip": {
             "type": "number",
             "format": "flag",
-            "plat-pos-list": "soft-ax",
+            "plat-pos-list": "aten-sp-mode",
             "m-exclusion": "ip-address, ipv6-address",
             "condition": "name",
             "description": "Use Interface IP",
@@ -110,14 +110,14 @@
         "ethernet": {
             "type": "number",
             "format": "interface",
-            "plat-pos-list": "soft-ax",
+            "plat-pos-list": "aten-sp-mode",
             "condition": "use-if-ip",
             "description": "Ethernet interface",
             "src-name": "ethernet"
         },
         "description": {
             "type": "string",
-            "format": "string-rlx",
+            "format": "line",
             "minLength": "1",
             "maxLength": "63",
             "example-default": "A default Virtual-Server",
@@ -188,15 +188,15 @@
         },
         "template-virtual-server": {
             "type": "string",
-            "condition": "template",
-            "description": "Virtual server template (Virtual server template name)",
+            "format": "string-rlx",
             "minLength": "1",
             "maxLength": "127",
+            "condition": "template",
+            "description": "Virtual server template (Virtual server template name)",
             "obj-lineage-full": "slb.template.virtual-server",
             "$ref": "/axapi/v3/slb/template/virtual-server",
             "example-default": "slb.template.virtual-server",
             "alias": "template-virtual-server",
-            "format": "string",
             "src-name": "virtual-server"
         },
         "template-logging": {
@@ -443,7 +443,7 @@
                 },
                 "name": {
                     "type": "string",
-                    "format": "string-rlx",
+                    "format": "long-string-rlx",
                     "minLength": "1",
                     "maxLength": "127",
                     "example-default": "vportname",
@@ -767,6 +767,7 @@
                         {
                             "acl-id-src-nat-pool": {
                                 "type": "string",
+                                "format": "string-rlx",
                                 "condition": "acl-id",
                                 "multi-field-key": true,
                                 "example-default": "snatpool",
@@ -774,7 +775,6 @@
                                 "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
                                 "description": "Policy based Source NAT (NAT Pool or Pool Group)",
                                 "alias": "acl-id-src-nat-pool",
-                                "format": "string",
                                 "src-name": "source-nat-pool"
                             }
                         },
@@ -819,6 +819,7 @@
                         {
                             "acl-name-src-nat-pool": {
                                 "type": "string",
+                                "format": "string-rlx",
                                 "condition": "acl-name",
                                 "multi-field-key": true,
                                 "example-default": "snatpool",
@@ -826,7 +827,6 @@
                                 "alias": "acl-name-src-nat-pool",
                                 "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
                                 "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
-                                "format": "string",
                                 "src-name": "source-nat-pool"
                             }
                         },
@@ -909,12 +909,12 @@
                 },
                 "pool": {
                     "type": "string",
+                    "format": "string-rlx",
                     "condition": "source-nat",
                     "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
                     "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
                     "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
                     "example-default": "ip.nat.pool",
-                    "format": "string",
                     "src-name": "pool"
                 },
                 "auto": {
@@ -936,7 +936,7 @@
                 "use-cgnv6": {
                     "type": "number",
                     "format": "flag",
-                    "disabled": "tcp, udp, others, diameter, dns-tcp, dns-udp, fast-http, fix, ftp, ftp-proxy, http, mlb, mms, mysql, mssql, radius, rtsp, sip, sip-tcp, sips, smpp-tcp, spdy, spdys, smtp, ssl-proxy, tcp-proxy, tftp",
+                    "disabled": "tcp, udp, others, diameter, dns-tcp, dns-udp, fast-http, fix, ftp, ftp-proxy, mlb, mms, mysql, mssql, radius, rtsp, sip, sip-tcp, sips, smpp-tcp, spdy, spdys, smtp, ssl-proxy, tcp-proxy, tftp",
                     "condition": "source-nat",
                     "description": "Follow CGNv6 source NAT configuration",
                     "example-default": "0",
@@ -951,7 +951,7 @@
                 },
                 "service-group": {
                     "type": "string",
-                    "format": "string-rlx",
+                    "format": "long-string-rlx",
                     "obj-lineage-full": "slb.service-group",
                     "$ref": "/axapi/v3/slb/service-group",
                     "description": "Bind a Service Group to this Virtual Server (Service Group Name)",
@@ -1010,55 +1010,57 @@
                     "format": "enum",
                     "src-name": "persist-type"
                 },
-                "l2-redirect-fwd": {
+                "redirect-fwd": {
                     "type": "dummy",
-                    "description": "L2 redirect packets to an interface/trunk/ve in fwd direction",
+                    "description": "L2 redirect packets to an interface/trunk in fwd direction",
                     "example-default": "0",
                     "format": "dummy",
-                    "src-name": "l2-redirect-fwd"
+                    "src-name": "redirect-fwd"
                 },
                 "eth-fwd": {
                     "type": "number",
-                    "condition": "l2-redirect-fwd",
-                    "vcs-intf-device-spec": "if-eth",
+                    "format": "interface",
+                    "alias": "eth-fwd",
+                    "condition": "redirect-fwd",
                     "example-default": "0",
                     "description": "Ethernet interface number",
-                    "format": "number",
-                    "src-name": "eth-fwd"
+                    "src-name": "ethernet"
                 },
                 "trunk-fwd": {
                     "type": "number",
-                    "condition": "l2-redirect-fwd",
+                    "format": "interface",
+                    "alias": "trunk-fwd",
+                    "condition": "redirect-fwd",
+                    "m-exclusion": "eth-fwd",
                     "description": "Trunk interface number",
-                    "vcs-intf-device-spec": "if-trunk",
                     "example-default": "1",
-                    "format": "number",
-                    "src-name": "trunk-fwd"
+                    "src-name": "trunk"
                 },
-                "l2-redirect-rev": {
+                "redirect-rev": {
                     "type": "dummy",
-                    "description": "L2 redirect packets to an interface/trunk/ve in rev direction",
+                    "description": "L2 redirect packets to an interface/trunk in rev direction",
                     "example-default": "0",
                     "format": "dummy",
-                    "src-name": "l2-redirect-rev"
+                    "src-name": "redirect-rev"
                 },
                 "eth-rev": {
                     "type": "number",
-                    "condition": "l2-redirect-rev",
-                    "vcs-intf-device-spec": "if-eth",
+                    "format": "interface",
+                    "alias": "eth-rev",
+                    "condition": "redirect-rev",
                     "example-default": "0",
                     "description": "Ethernet interface number",
-                    "format": "number",
-                    "src-name": "eth-rev"
+                    "src-name": "ethernet"
                 },
                 "trunk-rev": {
                     "type": "number",
-                    "condition": "l2-redirect-rev",
+                    "format": "interface",
+                    "alias": "trunk-rev",
+                    "condition": "redirect-rev",
+                    "m-exclusion": "eth-rev",
                     "description": "Trunk interface number",
-                    "vcs-intf-device-spec": "if-trunk",
                     "example-default": "1",
-                    "format": "number",
-                    "src-name": "trunk-rev"
+                    "src-name": "trunk"
                 },
                 "template": {
                     "type": "dummy",
@@ -1175,6 +1177,7 @@
                 },
                 "template-persist-source-ip": {
                     "type": "string",
+                    "format": "string-rlx",
                     "minLength": "1",
                     "maxLength": "127",
                     "condition": "persist",
@@ -1183,11 +1186,11 @@
                     "example-default": "slb.template.persist.source-ip",
                     "alias": "template-persist-source-ip",
                     "description": "Source IP persistence (Source IP persistence template name)",
-                    "format": "string",
                     "src-name": "source-ip"
                 },
                 "template-persist-destination-ip": {
                     "type": "string",
+                    "format": "string-rlx",
                     "minLength": "1",
                     "maxLength": "127",
                     "condition": "persist",
@@ -1196,11 +1199,11 @@
                     "example-default": "slb.template.persist.destination-ip",
                     "alias": "template-persist-destination-ip",
                     "description": "Destination IP persistence (Destination IP persistence template name)",
-                    "format": "string",
                     "src-name": "destination-ip"
                 },
                 "template-persist-ssl-sid": {
                     "type": "string",
+                    "format": "string-rlx",
                     "minLength": "1",
                     "maxLength": "127",
                     "condition": "persist",
@@ -1210,7 +1213,6 @@
                     "example-default": "slb.template.persist.ssl-sid",
                     "alias": "template-persist-ssl-sid",
                     "description": "SSL session ID persistence (Source IP Persistence Config name)",
-                    "format": "string",
                     "src-name": "ssl-sid"
                 },
                 "template-persist-cookie": {

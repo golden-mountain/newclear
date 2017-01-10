@@ -1,0 +1,12 @@
+{
+    "obj-name": "connection-reuse",
+    "obj-help": "Show Connection Reuse Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "2",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.connection-reuse",
+    "axapi": "/axapi/v3/slb/connection-reuse",
+    "properties": {}
+}

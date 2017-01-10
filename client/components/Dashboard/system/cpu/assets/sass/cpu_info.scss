@@ -1,0 +1,11 @@
+
+@import '../../../assets/sass/info_card.scss';
+
+.cup-info {
+  > .text-container {
+    background-color: #2B957A !important;
+  }
+  > .chart-container {
+    background-color: #37BC9B !important;
+  }
+}

@@ -1,0 +1,2364 @@
+{
+    "obj-name": "client-ssl",
+    "obj-help": "Client SSL Template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-stats-oid": "2043",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "client ssl",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-disp-after": "slb.service-group",
+    "obj-lineage-full": "slb.template.client-ssl",
+    "axapi": "/axapi/v3/slb/template/client-ssl/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "snmp-alias": "slbTemplateClientSslName",
+            "description": "Client SSL Template Name",
+            "src-name": "name"
+        },
+        "template": {
+            "type": "dummy",
+            "description": "Template",
+            "format": "dummy",
+            "src-name": "template"
+        },
+        "template-cipher": {
+            "type": "string",
+            "format": "name",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "alias": "template-cipher",
+            "obj-lineage-full": "slb.template.cipher",
+            "$ref": "/axapi/v3/slb/template/cipher",
+            "description": "Cipher Template (Cipher Config Name)",
+            "src-name": "cipher"
+        },
+        "template-hsm": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "template",
+            "alias": "template-hsm",
+            "description": "HSM Template (HSM Template Name)",
+            "format": "string",
+            "src-name": "hsm"
+        },
+        "hsm-param": {
+            "type": "dummy",
+            "description": "Specify HSM Parameter",
+            "format": "dummy",
+            "src-name": "hsm-param"
+        },
+        "hsm-type": {
+            "type": "enum",
+            "condition": "hsm-param",
+            "enum": [
+                "thales-embed",
+                "thales-hwcrhk"
+            ],
+            "enumMap": [
+                {
+                    "thales-embed": "\"Thales embed key"
+                },
+                {
+                    "thales-hwcrhk": "\"Thales hwcrhk Key"
+                }
+            ],
+            "description": "'thales-embed': \"Thales embed key;'thales-hwcrhk': \"Thales hwcrhk Key;",
+            "format": "enum",
+            "src-name": "hsm-type"
+        },
+        "auth-username": {
+            "type": "string",
+            "format": "string-follow",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Specify the Username Field in the Client Certificate(If multi-fields are specificed, prior one has higher priority)",
+            "src-name": "auth-username"
+        },
+        "common-name": {
+            "type": "number",
+            "format": "flag",
+            "ignore-in-json": true,
+            "description": "Certificate subject common came",
+            "src-name": "common-name"
+        },
+        "subject-alt-name-othername": {
+            "type": "number",
+            "format": "flag",
+            "ignore-in-json": true,
+            "description": "Subject Alternative Name - other name",
+            "src-name": "subject-alt-name-othername"
+        },
+        "subject-alt-name-email": {
+            "type": "number",
+            "format": "flag",
+            "ignore-in-json": true,
+            "description": "Subject Alternative Name - extension email",
+            "src-name": "subject-alt-name-email"
+        },
+        "ca-certs": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "ca-cert": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "description": "CA Certificate (CA Certificate Name)",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "maxItems": "128",
+                        "format": "string",
+                        "src-name": "ca-cert"
+                    }
+                },
+                {
+                    "client-ocsp": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "ca-cert",
+                        "alias": "client-ocsp",
+                        "description": "Specify ocsp authentication server(s) for client certificate verification",
+                        "src-name": "ocsp"
+                    }
+                },
+                {
+                    "client-ocsp-srvr": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "condition": "client-ocsp",
+                        "alias": "client-ocsp-srvr",
+                        "obj-lineage-full": "aam.authentication.server.ocsp",
+                        "$ref": "/axapi/v3/aam/authentication/server/ocsp",
+                        "description": "Specify authentication server",
+                        "src-name": "server"
+                    }
+                },
+                {
+                    "client-ocsp-sg": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "client-ocsp",
+                        "alias": "client-ocsp-sg",
+                        "obj-lineage-full": "aam.authentication.service-group",
+                        "$ref": "/axapi/v3/aam/authentication/service-group",
+                        "description": "Specify service-group (Service group name)",
+                        "src-name": "service-group"
+                    }
+                }
+            ],
+            "src-name": "ca-certs"
+        },
+        "chain-cert": {
+            "type": "string",
+            "description": "Chain Certificate (Chain Certificate Name)",
+            "minLength": "1",
+            "maxLength": "245",
+            "format": "string",
+            "src-name": "chain-cert"
+        },
+        "cert": {
+            "type": "string",
+            "description": "Server Certificate (Certificate Name)",
+            "minLength": "1",
+            "maxLength": "245",
+            "format": "string",
+            "src-name": "cert"
+        },
+        "cipher": {
+            "type": "dummy",
+            "description": "SSL cipher suites and all by default",
+            "format": "dummy",
+            "src-name": "cipher"
+        },
+        "cipher-without-prio-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "cipher-wo-prio": {
+                        "type": "enum",
+                        "m-exclusion": "template-cipher",
+                        "multi-field-key": true,
+                        "condition": "cipher",
+                        "enum": [
+                            "SSL3_RSA_DES_192_CBC3_SHA",
+                            "SSL3_RSA_DES_40_CBC_SHA",
+                            "SSL3_RSA_DES_64_CBC_SHA",
+                            "SSL3_RSA_RC4_128_MD5",
+                            "SSL3_RSA_RC4_128_SHA",
+                            "SSL3_RSA_RC4_40_MD5",
+                            "TLS1_RSA_AES_128_SHA",
+                            "TLS1_RSA_AES_256_SHA",
+                            "TLS1_RSA_EXPORT1024_RC4_56_MD5",
+                            "TLS1_RSA_EXPORT1024_RC4_56_SHA",
+                            "TLS1_RSA_AES_128_SHA256",
+                            "TLS1_RSA_AES_256_SHA256",
+                            "TLS1_DHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_DHE_RSA_AES_128_SHA",
+                            "TLS1_DHE_RSA_AES_128_SHA256",
+                            "TLS1_DHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_DHE_RSA_AES_256_SHA",
+                            "TLS1_DHE_RSA_AES_256_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA",
+                            "TLS1_ECDHE_ECDSA_AES_128_SHA256",
+                            "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_GCM_SHA256",
+                            "TLS1_ECDHE_RSA_AES_128_SHA",
+                            "TLS1_ECDHE_RSA_AES_128_SHA256",
+                            "TLS1_ECDHE_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA",
+                            "TLS1_RSA_AES_128_GCM_SHA256",
+                            "TLS1_RSA_AES_256_GCM_SHA384",
+                            "TLS1_ECDHE_RSA_AES_256_SHA384",
+                            "TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                        ],
+                        "enumMap": [
+                            {
+                                "SSL3_RSA_DES_192_CBC3_SHA": "\"SSL3_RSA_DES_192_CBC3_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_40_CBC_SHA": "\"SSL3_RSA_DES_40_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_DES_64_CBC_SHA": "\"SSL3_RSA_DES_64_CBC_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_MD5": "\"SSL3_RSA_RC4_128_MD5"
+                            },
+                            {
+                                "SSL3_RSA_RC4_128_SHA": "\"SSL3_RSA_RC4_128_SHA"
+                            },
+                            {
+                                "SSL3_RSA_RC4_40_MD5": "\"SSL3_RSA_RC4_40_MD5"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA": "\"TLS1_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA": "\"TLS1_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_MD5": "\"TLS1_RSA_EXPORT1024_RC4_56_MD5"
+                            },
+                            {
+                                "TLS1_RSA_EXPORT1024_RC4_56_SHA": "\"TLS1_RSA_EXPORT1024_RC4_56_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_SHA256": "\"TLS1_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_SHA256": "\"TLS1_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_GCM_SHA256": "\"TLS1_DHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA": "\"TLS1_DHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_128_SHA256": "\"TLS1_DHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_GCM_SHA384": "\"TLS1_DHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA": "\"TLS1_DHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_DHE_RSA_AES_256_SHA256": "\"TLS1_DHE_RSA_AES_256_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA": "\"TLS1_ECDHE_ECDSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_128_SHA256": "\"TLS1_ECDHE_ECDSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA": "\"TLS1_ECDHE_ECDSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_GCM_SHA256": "\"TLS1_ECDHE_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA": "\"TLS1_ECDHE_RSA_AES_128_SHA"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_128_SHA256": "\"TLS1_ECDHE_RSA_AES_128_SHA256"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_GCM_SHA384": "\"TLS1_ECDHE_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA": "\"TLS1_ECDHE_RSA_AES_256_SHA"
+                            },
+                            {
+                                "TLS1_RSA_AES_128_GCM_SHA256": "\"TLS1_RSA_AES_128_GCM_SHA256"
+                            },
+                            {
+                                "TLS1_RSA_AES_256_GCM_SHA384": "\"TLS1_RSA_AES_256_GCM_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_RSA_AES_256_SHA384": "\"TLS1_ECDHE_RSA_AES_256_SHA384"
+                            },
+                            {
+                                "TLS1_ECDHE_ECDSA_AES_256_SHA384": "\"TLS1_ECDHE_ECDSA_AES_256_SHA384"
+                            }
+                        ],
+                        "description": "'SSL3_RSA_DES_192_CBC3_SHA': \"SSL3_RSA_DES_192_CBC3_SHA;'SSL3_RSA_DES_40_CBC_SHA': \"SSL3_RSA_DES_40_CBC_SHA;'SSL3_RSA_DES_64_CBC_SHA': \"SSL3_RSA_DES_64_CBC_SHA;'SSL3_RSA_RC4_128_MD5': \"SSL3_RSA_RC4_128_MD5;'SSL3_RSA_RC4_128_SHA': \"SSL3_RSA_RC4_128_SHA;'SSL3_RSA_RC4_40_MD5': \"SSL3_RSA_RC4_40_MD5;'TLS1_RSA_AES_128_SHA': \"TLS1_RSA_AES_128_SHA;'TLS1_RSA_AES_256_SHA': \"TLS1_RSA_AES_256_SHA;'TLS1_RSA_EXPORT1024_RC4_56_MD5': \"TLS1_RSA_EXPORT1024_RC4_56_MD5;'TLS1_RSA_EXPORT1024_RC4_56_SHA': \"TLS1_RSA_EXPORT1024_RC4_56_SHA;'TLS1_RSA_AES_128_SHA256': \"TLS1_RSA_AES_128_SHA256;'TLS1_RSA_AES_256_SHA256': \"TLS1_RSA_AES_256_SHA256;'TLS1_DHE_RSA_AES_128_GCM_SHA256': \"TLS1_DHE_RSA_AES_128_GCM_SHA256;'TLS1_DHE_RSA_AES_128_SHA': \"TLS1_DHE_RSA_AES_128_SHA;'TLS1_DHE_RSA_AES_128_SHA256': \"TLS1_DHE_RSA_AES_128_SHA256;'TLS1_DHE_RSA_AES_256_GCM_SHA384': \"TLS1_DHE_RSA_AES_256_GCM_SHA384;'TLS1_DHE_RSA_AES_256_SHA': \"TLS1_DHE_RSA_AES_256_SHA;'TLS1_DHE_RSA_AES_256_SHA256': \"TLS1_DHE_RSA_AES_256_SHA256;'TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_GCM_SHA256;'TLS1_ECDHE_ECDSA_AES_128_SHA': \"TLS1_ECDHE_ECDSA_AES_128_SHA;'TLS1_ECDHE_ECDSA_AES_128_SHA256': \"TLS1_ECDHE_ECDSA_AES_128_SHA256;'TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_GCM_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA': \"TLS1_ECDHE_ECDSA_AES_256_SHA;'TLS1_ECDHE_RSA_AES_128_GCM_SHA256': \"TLS1_ECDHE_RSA_AES_128_GCM_SHA256;'TLS1_ECDHE_RSA_AES_128_SHA': \"TLS1_ECDHE_RSA_AES_128_SHA;'TLS1_ECDHE_RSA_AES_128_SHA256': \"TLS1_ECDHE_RSA_AES_128_SHA256;'TLS1_ECDHE_RSA_AES_256_GCM_SHA384': \"TLS1_ECDHE_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA': \"TLS1_ECDHE_RSA_AES_256_SHA;'TLS1_RSA_AES_128_GCM_SHA256': \"TLS1_RSA_AES_128_GCM_SHA256;'TLS1_RSA_AES_256_GCM_SHA384': \"TLS1_RSA_AES_256_GCM_SHA384;'TLS1_ECDHE_RSA_AES_256_SHA384': \"TLS1_ECDHE_RSA_AES_256_SHA384;'TLS1_ECDHE_ECDSA_AES_256_SHA384': \"TLS1_ECDHE_ECDSA_AES_256_SHA384;",
+                        "maxItems": "32",
+                        "format": "enum",
+                        "src-name": "cipher-wo-prio"
+                    }
+                }
+            ],
+            "src-name": "cipher-without-prio-list"
+        },
+        "dh-param": {
+            "type": "dummy",
+            "description": "Specify Diffie Hellman Parameter",
+            "format": "dummy",
+            "src-name": "dh-param"
+        },
+        "dh-type": {
+            "type": "enum",
+            "condition": "dh-param",
+            "enum": [
+                "1024",
+                "1024-dsa",
+                "2048"
+            ],
+            "enumMap": [
+                {
+                    "1024": "\"1024"
+                },
+                {
+                    "1024-dsa": "\"1024-dsa"
+                },
+                {
+                    "2048": "\"2048"
+                }
+            ],
+            "description": "'1024': \"1024;'1024-dsa': \"1024-dsa;'2048': \"2048;",
+            "format": "enum",
+            "src-name": "dh-type"
+        },
+        "ec-name": {
+            "type": "dummy",
+            "description": "Specify Elliptic Curve Name",
+            "format": "dummy",
+            "src-name": "ec-name"
+        },
+        "ec-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "ec": {
+                        "type": "enum",
+                        "multi-field-key": true,
+                        "condition": "ec-name",
+                        "enum": [
+                            "secp256r1",
+                            "secp384r1"
+                        ],
+                        "enumMap": [
+                            {
+                                "secp256r1": "\"X9_62_prime256v1"
+                            },
+                            {
+                                "secp384r1": "\"secp384r1"
+                            }
+                        ],
+                        "description": "'secp256r1': \"X9_62_prime256v1;'secp384r1': \"secp384r1;",
+                        "maxItems": "2",
+                        "format": "enum",
+                        "src-name": "ec"
+                    }
+                }
+            ],
+            "src-name": "ec-list"
+        },
+        "ocsp-stapling": {
+            "type": "number",
+            "format": "flag",
+            "description": "Config OCSP stapling support",
+            "src-name": "ocsp-stapling"
+        },
+        "ocspst-ca-cert": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "condition": "ocsp-stapling",
+            "alias": "ocspst-ca-cert",
+            "description": "CA certificate",
+            "format": "string",
+            "src-name": "ca-cert"
+        },
+        "ocspst-ocsp": {
+            "type": "number",
+            "format": "flag",
+            "condition": "ocspst-ca-cert",
+            "alias": "ocspst-ocsp",
+            "description": "Specify OCSP Authentication",
+            "src-name": "ocsp"
+        },
+        "ocspst-srvr": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "ocspst-ocsp",
+            "alias": "ocspst-srvr",
+            "obj-lineage-full": "aam.authentication.server.ocsp",
+            "$ref": "/axapi/v3/aam/authentication/server/ocsp",
+            "description": "Specify OCSP authentication server",
+            "src-name": "server"
+        },
+        "ocspst-srvr-period": {
+            "type": "dummy",
+            "condition": "ocspst-srvr",
+            "alias": "ocspst-srvr-period",
+            "description": "Specify certificate status update period (Default is 1 hour)",
+            "format": "dummy",
+            "src-name": "period"
+        },
+        "ocspst-srvr-days": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "condition": "ocspst-srvr-period",
+            "alias": "ocspst-srvr-days",
+            "link-next-fwd": "ocspst-srvr-timeout",
+            "description": "Specify update period, in days",
+            "format": "number",
+            "src-name": "days"
+        },
+        "ocspst-srvr-hours": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "23",
+            "condition": "ocspst-srvr-period",
+            "alias": "ocspst-srvr-hours",
+            "link-next-fwd": "ocspst-srvr-timeout",
+            "description": "Specify update period, in hours",
+            "default": "1",
+            "m-exclusion": "ocspst-srvr-days",
+            "format": "number",
+            "src-name": "hours"
+        },
+        "ocspst-srvr-minutes": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "59",
+            "condition": "ocspst-srvr-period",
+            "alias": "ocspst-srvr-minutes",
+            "link-next-fwd": "ocspst-srvr-timeout",
+            "description": "Specify update period, in minutes",
+            "m-exclusion": "ocspst-srvr-hours, ocspst-srvr-days",
+            "format": "number",
+            "src-name": "minutes"
+        },
+        "ocspst-srvr-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "44640",
+            "condition": "ocspst-srvr",
+            "alias": "ocspst-srvr-timeout",
+            "link-next-rev": "ocspst-srvr-period",
+            "description": "Specify retry timeout (Default is 30 mins)",
+            "default": "30",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "ocspst-sg": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "ocspst-ocsp",
+            "alias": "ocspst-sg",
+            "obj-lineage-full": "aam.authentication.service-group",
+            "$ref": "/axapi/v3/aam/authentication/service-group",
+            "m-exclusion": "ocspst-srvr",
+            "description": "Specify authentication service group",
+            "src-name": "service-group"
+        },
+        "ocspst-sg-period": {
+            "type": "dummy",
+            "condition": "ocspst-sg",
+            "alias": "ocspst-sg-period",
+            "description": "Specify certificate status update period (Default is 1 hour)",
+            "format": "dummy",
+            "src-name": "period"
+        },
+        "ocspst-sg-days": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "condition": "ocspst-sg-period",
+            "alias": "ocspst-sg-days",
+            "link-next-fwd": "ocspst-sg-timeout",
+            "description": "Specify update period, in days",
+            "format": "number",
+            "src-name": "days"
+        },
+        "ocspst-sg-hours": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "23",
+            "condition": "ocspst-sg-period",
+            "alias": "ocspst-sg-hours",
+            "link-next-fwd": "ocspst-sg-timeout",
+            "description": "Specify update period, in hours",
+            "default": "1",
+            "m-exclusion": "ocspst-sg-days",
+            "format": "number",
+            "src-name": "hours"
+        },
+        "ocspst-sg-minutes": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "59",
+            "condition": "ocspst-sg-period",
+            "alias": "ocspst-sg-minutes",
+            "link-next-fwd": "ocspst-sg-timeout",
+            "description": "Specify update period, in minutes",
+            "m-exclusion": "ocspst-sg-hours, ocspst-sg-days",
+            "format": "number",
+            "src-name": "minutes"
+        },
+        "ocspst-sg-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "44640",
+            "condition": "ocspst-sg",
+            "alias": "ocspst-sg-timeout",
+            "link-next-rev": "ocspst-sg-period",
+            "description": "Specify retry timeout (Default is 30 mins)",
+            "default": "30",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "client-certificate": {
+            "type": "string",
+            "description": "'Ignore': \"Don't request client certificate;'Require': \"Require client certificate;'Request': \"Request client certificate;",
+            "enum": [
+                "Ignore",
+                "Require",
+                "Request"
+            ],
+            "enumMap": [
+                {
+                    "Ignore": "\"Don't request client certificate"
+                },
+                {
+                    "Require": "\"Require client certificate"
+                },
+                {
+                    "Request": "\"Request client certificate"
+                }
+            ],
+            "default": "Ignore",
+            "format": "enum",
+            "src-name": "client-certificate"
+        },
+        "req-ca-lists": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "client-certificate-Request-CA": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "maxItems": "10",
+                        "description": "Send CA lists in certificate request (CA Certificate Name)",
+                        "format": "string",
+                        "src-name": "client-certificate-Request-CA"
+                    }
+                }
+            ],
+            "src-name": "req-ca-lists"
+        },
+        "close-notify": {
+            "type": "number",
+            "format": "flag",
+            "description": "Send close notification when terminate connection",
+            "src-name": "close-notify"
+        },
+        "crl-certs": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "crl": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "255",
+                        "maxItems": "128",
+                        "description": "Certificate Revocation Lists (Certificate Revocation Lists file name)",
+                        "format": "string",
+                        "src-name": "crl"
+                    }
+                }
+            ],
+            "src-name": "crl-certs"
+        },
+        "forward-proxy-ca-cert": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "description": "CA Certificate for forward proxy (SSL forward proxy CA Certificate Name)",
+            "feat-license": "ssli",
+            "format": "string",
+            "src-name": "forward-proxy-ca-cert"
+        },
+        "forward-proxy-ca-key": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "description": "CA Private Key for forward proxy (SSL forward proxy CA Key Name)",
+            "feat-license": "ssli",
+            "format": "string",
+            "src-name": "forward-proxy-ca-key"
+        },
+        "forward-pass-phrase": {
+            "type": "dummy",
+            "condition": "forward-proxy-ca-key",
+            "alias": "forward-pass-phrase",
+            "description": "Password Phrase",
+            "format": "dummy",
+            "src-name": "pass-phrase"
+        },
+        "forward-passphrase": {
+            "type": "string",
+            "format": "password",
+            "condition": "forward-pass-phrase",
+            "alias": "forward-passphrase",
+            "description": "Password Phrase",
+            "src-name": "passphrase"
+        },
+        "forward-encrypted": {
+            "type": "encrypted",
+            "format": "encrypted",
+            "condition": "forward-pass-phrase",
+            "alias": "forward-encrypted",
+            "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+            "src-name": "encrypted"
+        },
+        "forward-proxy-alt-sign": {
+            "type": "number",
+            "format": "flag",
+            "description": "Forward proxy alternate signing cert and key",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-alt-sign"
+        },
+        "fp-alt-cert": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "condition": "forward-proxy-alt-sign",
+            "alias": "fp-alt-cert",
+            "description": "CA Certificate for forward proxy alternate signing (Certificate name)",
+            "format": "string",
+            "src-name": "cert"
+        },
+        "fp-alt-key": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "condition": "fp-alt-cert",
+            "alias": "fp-alt-key",
+            "description": "CA Private Key for forward proxy alternate signing (Key name)",
+            "format": "string",
+            "src-name": "key"
+        },
+        "fp-alt-pass-phrase": {
+            "type": "dummy",
+            "condition": "fp-alt-key",
+            "alias": "fp-alt-pass-phrase",
+            "description": "Password Phrase",
+            "format": "dummy",
+            "src-name": "pass-phrase"
+        },
+        "fp-alt-passphrase": {
+            "type": "string",
+            "format": "password",
+            "condition": "fp-alt-pass-phrase",
+            "alias": "fp-alt-passphrase",
+            "description": "Password Phrase",
+            "src-name": "passphrase"
+        },
+        "fp-alt-encrypted": {
+            "type": "encrypted",
+            "format": "encrypted",
+            "condition": "fp-alt-pass-phrase",
+            "alias": "fp-alt-encrypted",
+            "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+            "src-name": "encrypted"
+        },
+        "forward-proxy-trusted-ca-lists": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "Forward proxy trusted CA list files",
+            "properties": [
+                {
+                    "forward-proxy-trusted-ca": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "255",
+                        "description": "Forward proxy trusted CA file (CA file name)",
+                        "maxItems": "128",
+                        "feat-license": "ssli",
+                        "format": "string",
+                        "src-name": "forward-proxy-trusted-ca"
+                    }
+                }
+            ],
+            "src-name": "forward-proxy-trusted-ca-lists"
+        },
+        "enable-tls-alert-logging": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable TLS alert logging",
+            "src-name": "enable-tls-alert-logging"
+        },
+        "alert-type": {
+            "type": "string",
+            "enum": [
+                "fatal"
+            ],
+            "enumMap": [
+                {
+                    "fatal": "\"Log fatal alerts"
+                }
+            ],
+            "description": "'fatal': \"Log fatal alerts;",
+            "condition": "enable-tls-alert-logging",
+            "format": "enum",
+            "src-name": "alert-type"
+        },
+        "forward-proxy-verify-cert-fail-action": {
+            "type": "number",
+            "format": "flag",
+            "description": "Action taken if certificate verification fails, close the connection by default",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-verify-cert-fail-action"
+        },
+        "verify-cert-fail-action": {
+            "type": "string",
+            "condition": "forward-proxy-verify-cert-fail-action",
+            "enum": [
+                "bypass",
+                "continue",
+                "drop"
+            ],
+            "enumMap": [
+                {
+                    "bypass": "\"bypass SSLi processing"
+                },
+                {
+                    "continue": "\"continue the connection"
+                },
+                {
+                    "drop": "\"close the connection"
+                }
+            ],
+            "description": "'bypass': \"bypass SSLi processing;'continue': \"continue the connection;'drop': \"close the connection;",
+            "default": "drop",
+            "alias": "verify-cert-fail-action",
+            "format": "enum",
+            "src-name": "action-value"
+        },
+        "forward-proxy-cert-revoke-action": {
+            "type": "number",
+            "format": "flag",
+            "description": "Action taken if a certificate is irreversibly revoked, bypass SSLi processing by default",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-cert-revoke-action"
+        },
+        "cert-revoke-action": {
+            "type": "string",
+            "condition": "forward-proxy-cert-revoke-action",
+            "enum": [
+                "bypass",
+                "continue",
+                "drop"
+            ],
+            "enumMap": [
+                {
+                    "bypass": "\"bypass SSLi processing"
+                },
+                {
+                    "continue": "\"continue the connection"
+                },
+                {
+                    "drop": "\"close the connection"
+                }
+            ],
+            "description": "'bypass': \"bypass SSLi processing;'continue': \"continue the connection;'drop': \"close the connection;",
+            "default": "bypass",
+            "alias": "cert-revoke-action",
+            "format": "enum",
+            "src-name": "action-value"
+        },
+        "forward-proxy-cert-unknown-action": {
+            "type": "number",
+            "format": "flag",
+            "description": "Action taken if a certificate revocation status is unknown, bypass SSLi processing by default",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-cert-unknown-action"
+        },
+        "cert-unknown-action": {
+            "type": "string",
+            "condition": "forward-proxy-cert-unknown-action",
+            "enum": [
+                "bypass",
+                "continue",
+                "drop"
+            ],
+            "enumMap": [
+                {
+                    "bypass": "\"bypass SSLi processing"
+                },
+                {
+                    "continue": "\"continue the connection"
+                },
+                {
+                    "drop": "\"close the connection"
+                }
+            ],
+            "description": "'bypass': \"bypass SSLi processing;'continue': \"continue the connection;'drop': \"close the connection;",
+            "default": "bypass",
+            "alias": "cert-unknown-action",
+            "format": "enum",
+            "src-name": "action-value"
+        },
+        "forward-proxy-cache-persistence": {
+            "type": "dummy",
+            "description": "Configure class-list for SSLi cache persistence",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-cache-persistence"
+        },
+        "cache-persistence-list": {
+            "type": "dummy",
+            "description": "Do persistence hash on certificates that match this class-list",
+            "condition": "forward-proxy-cache-persistence",
+            "alias": "cache-persistence-list",
+            "format": "dummy",
+            "src-name": "class-list"
+        },
+        "cache-persistence-list-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Class List Name",
+            "condition": "cache-persistence-list",
+            "format": "string",
+            "src-name": "cache-persistence-list-name"
+        },
+        "forward-proxy-cert-ext": {
+            "type": "dummy",
+            "description": "Extensions to add to forward proxy certificates",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-cert-ext"
+        },
+        "fp-cert-ext-crldp": {
+            "type": "string",
+            "condition": "forward-proxy-cert-ext",
+            "description": "CRL Distribution Point",
+            "alias": "fp-cert-ext-crldp",
+            "format": "string",
+            "src-name": "crldp"
+        },
+        "aia": {
+            "type": "dummy",
+            "condition": "forward-proxy-cert-ext",
+            "description": "Authority Information Access",
+            "format": "dummy",
+            "src-name": "aia"
+        },
+        "fp-cert-ext-aia-ocsp": {
+            "type": "string",
+            "condition": "aia",
+            "description": "OCSP",
+            "alias": "fp-cert-ext-aia-ocsp",
+            "format": "string",
+            "src-name": "ocsp"
+        },
+        "fp-cert-ext-aia-ca-issuers": {
+            "type": "string",
+            "m-exclusion": "fp-cert-ext-aia-ocsp",
+            "condition": "aia",
+            "description": "CA Issuers",
+            "alias": "fp-cert-ext-aia-ca-issuers",
+            "format": "string",
+            "src-name": "ca-issuers"
+        },
+        "forward-proxy-cert-validity": {
+            "type": "dummy",
+            "description": "Set the validity period for forward proxy certificates",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-cert-validity"
+        },
+        "notbefore": {
+            "type": "number",
+            "format": "flag",
+            "condition": "forward-proxy-cert-validity",
+            "description": "notBefore date",
+            "src-name": "notbefore"
+        },
+        "notbeforeday": {
+            "type": "number",
+            "condition": "notbefore",
+            "minimum": "1",
+            "maximum": "31",
+            "description": "Day",
+            "alias": "notbeforeday",
+            "format": "number",
+            "src-name": "day"
+        },
+        "notbeforemonth": {
+            "type": "number",
+            "condition": "notbeforeday",
+            "minimum": "1",
+            "maximum": "12",
+            "description": "Month",
+            "alias": "notbeforemonth",
+            "format": "number",
+            "src-name": "month"
+        },
+        "notbeforeyear": {
+            "type": "number",
+            "condition": "notbeforemonth",
+            "minimum": "2005",
+            "maximum": "2035",
+            "description": "Year",
+            "alias": "notbeforeyear",
+            "format": "number",
+            "src-name": "year"
+        },
+        "notafter": {
+            "type": "number",
+            "format": "flag",
+            "condition": "forward-proxy-cert-validity",
+            "description": "notAfter date",
+            "src-name": "notafter"
+        },
+        "notafterday": {
+            "type": "number",
+            "condition": "notafter",
+            "minimum": "1",
+            "maximum": "31",
+            "description": "Day",
+            "alias": "notafterday",
+            "format": "number",
+            "src-name": "day"
+        },
+        "notaftermonth": {
+            "type": "number",
+            "condition": "notafterday",
+            "minimum": "1",
+            "maximum": "12",
+            "description": "Month",
+            "alias": "notaftermonth",
+            "format": "number",
+            "src-name": "month"
+        },
+        "notafteryear": {
+            "type": "number",
+            "condition": "notaftermonth",
+            "minimum": "2005",
+            "maximum": "2035",
+            "description": "Year",
+            "alias": "notafteryear",
+            "format": "number",
+            "src-name": "year"
+        },
+        "forward-proxy-hash-persistence-interval": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "720",
+            "default": "30",
+            "hide-help": true,
+            "description": "Set the time interval to save the hash persistence certs (Interval value, in minutes)",
+            "format": "number",
+            "src-name": "forward-proxy-hash-persistence-interval"
+        },
+        "forward-proxy-ssl-version": {
+            "type": "number",
+            "minimum": "31",
+            "maximum": "33",
+            "default": "33",
+            "description": "TLS/SSL version, default is TLS1.2 (TLS/SSL version: 31-TLSv1.0, 32-TLSv1.1 and 33-TLSv1.2)",
+            "feat-license": "ssli",
+            "format": "number",
+            "src-name": "forward-proxy-ssl-version"
+        },
+        "forward-proxy-ocsp-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable ocsp-stapling for forward proxy",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-ocsp-disable"
+        },
+        "forward-proxy-crl-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable Certificate Revocation List checking for forward proxy",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-crl-disable"
+        },
+        "forward-proxy-cert-cache": {
+            "type": "dummy",
+            "description": "Forward proxy certificate cache options",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-cert-cache"
+        },
+        "forward-proxy-cert-cache-timeout": {
+            "type": "number",
+            "condition": "forward-proxy-cert-cache",
+            "alias": "forward-proxy-cert-cache-timeout",
+            "default": "3600",
+            "description": "Certificate cache timeout, default is 1 hour (seconds, set to 0 for never timeout)",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "forward-proxy-cert-cache-limit": {
+            "type": "number",
+            "condition": "forward-proxy-cert-cache",
+            "alias": "forward-proxy-cert-cache-limit",
+            "default": "524288",
+            "description": "Certificate cache size limit, default is 524288 (set to 0 for unlimited size)",
+            "format": "number",
+            "src-name": "limit"
+        },
+        "forward-proxy-cert-expiry": {
+            "type": "number",
+            "format": "flag",
+            "description": "Adjust certificate expiry relative to the time when it is created on the device",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-cert-expiry"
+        },
+        "expire-hours": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "168",
+            "condition": "forward-proxy-cert-expiry",
+            "alias": "expire-hours",
+            "description": "Certificate lifetime in hours (hours)",
+            "format": "number",
+            "src-name": "hours"
+        },
+        "forward-proxy-enable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable SSL forward proxy",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-enable"
+        },
+        "forward-proxy-selfsign-redir": {
+            "type": "number",
+            "format": "flag",
+            "description": "Redirect connections to pages with self signed certs to a warning page",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-selfsign-redir"
+        },
+        "forward-proxy-failsafe-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable Failsafe for SSL forward proxy",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-failsafe-disable"
+        },
+        "forward-proxy-log-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable SSL forward proxy logging",
+            "feat-license": "ssli",
+            "src-name": "forward-proxy-log-disable"
+        },
+        "forward-proxy-source-nat": {
+            "type": "dummy",
+            "description": "Source NAT to fetch server certificate",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-source-nat"
+        },
+        "fp-cert-fetch-natpool-name": {
+            "type": "string",
+            "format": "string-rlx",
+            "alias": "fp-cert-fetch-natpool-name",
+            "condition": "forward-proxy-source-nat",
+            "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
+            "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
+            "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
+            "example-default": "ip.nat.pool",
+            "src-name": "pool"
+        },
+        "fp-cert-fetch-autonat": {
+            "type": "string",
+            "alias": "fp-cert-fetch-autonat",
+            "condition": "forward-proxy-source-nat",
+            "m-exclusion": "fp-cert-fetch-natpool-name",
+            "enum": [
+                "auto"
+            ],
+            "enumMap": [
+                {
+                    "auto": "\"Configure auto NAT for server certificate fetching"
+                }
+            ],
+            "description": "'auto': \"Configure auto NAT for server certificate fetching;",
+            "format": "enum",
+            "src-name": "auto"
+        },
+        "forward-proxy-bypass": {
+            "type": "dummy",
+            "description": "Bypass SSL forward proxy",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-bypass"
+        },
+        "case-insensitive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Case insensitive forward proxy bypass",
+            "condition": "forward-proxy-bypass",
+            "src-name": "case-insensitive"
+        },
+        "class-list": {
+            "type": "dummy",
+            "description": "Forward proxy bypass if SNI string matches class-list",
+            "condition": "forward-proxy-bypass",
+            "format": "dummy",
+            "src-name": "class-list"
+        },
+        "class-list-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Class List Name",
+            "condition": "class-list",
+            "format": "string",
+            "src-name": "class-list-name"
+        },
+        "multi-class-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "description": "If binding multiple class-lists",
+            "condition": "class-list",
+            "properties": [
+                {
+                    "multi-clist-name": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "maxItems": "16",
+                        "m-exclusion": "class-list-name",
+                        "description": "Class List Name",
+                        "condition": "multi-class-list",
+                        "format": "string",
+                        "src-name": "multi-clist-name"
+                    }
+                }
+            ],
+            "src-name": "multi-class-list"
+        },
+        "forward-proxy-inspect": {
+            "type": "dummy",
+            "description": "SSL forward proxy Inspect Class-list",
+            "feat-license": "ssli",
+            "format": "dummy",
+            "src-name": "forward-proxy-inspect"
+        },
+        "inspect-list": {
+            "type": "dummy",
+            "description": "Forward proxy Inspect if SNI string matches class-list",
+            "condition": "forward-proxy-inspect",
+            "alias": "inspect-list",
+            "format": "dummy",
+            "src-name": "class-list"
+        },
+        "inspect-list-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Class List Name",
+            "condition": "inspect-list",
+            "format": "string",
+            "src-name": "inspect-list-name"
+        },
+        "client-auth": {
+            "type": "dummy",
+            "condition": "forward-proxy-bypass",
+            "description": "Bypass SSL forward proxy client authentication",
+            "format": "dummy",
+            "src-name": "client-auth"
+        },
+        "contains-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "contains": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string contains another string (SNI String)",
+                        "condition": "forward-proxy-bypass",
+                        "maxItems": "64",
+                        "src-name": "contains"
+                    }
+                }
+            ],
+            "src-name": "contains-list"
+        },
+        "ends-with-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "ends-with": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string ends with another string (SNI String)",
+                        "condition": "forward-proxy-bypass",
+                        "maxItems": "64",
+                        "src-name": "ends-with"
+                    }
+                }
+            ],
+            "src-name": "ends-with-list"
+        },
+        "equals-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "equals": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string equals another string (SNI String)",
+                        "condition": "forward-proxy-bypass",
+                        "maxItems": "64",
+                        "src-name": "equals"
+                    }
+                }
+            ],
+            "src-name": "equals-list"
+        },
+        "starts-with-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "starts-with": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string starts with another string (SNI String)",
+                        "condition": "forward-proxy-bypass",
+                        "maxItems": "64",
+                        "src-name": "starts-with"
+                    }
+                }
+            ],
+            "src-name": "starts-with-list"
+        },
+        "client-auth-case-insensitive": {
+            "type": "number",
+            "format": "flag",
+            "description": "Case insensitive forward proxy client auth bypass",
+            "condition": "client-auth",
+            "alias": "client-auth-case-insensitive",
+            "src-name": "case-insensitive"
+        },
+        "client-auth-class-list": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "client-auth",
+            "alias": "client-auth-class-list",
+            "description": "Forward proxy client auth bypass if SNI string matches class-list (Class List Name)",
+            "format": "string",
+            "src-name": "class-list"
+        },
+        "client-auth-contains-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "client-auth-contains": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string contains another string (SNI String)",
+                        "condition": "client-auth",
+                        "alias": "client-auth-contains",
+                        "maxItems": "64",
+                        "src-name": "contains"
+                    }
+                }
+            ],
+            "src-name": "client-auth-contains-list"
+        },
+        "client-auth-ends-with-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "client-auth-ends-with": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string ends with another string (SNI String)",
+                        "condition": "client-auth",
+                        "alias": "client-auth-ends-with",
+                        "maxItems": "64",
+                        "src-name": "ends-with"
+                    }
+                }
+            ],
+            "src-name": "client-auth-ends-with-list"
+        },
+        "client-auth-equals-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "client-auth-equals": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string equals another string (SNI String)",
+                        "condition": "client-auth",
+                        "alias": "client-auth-equals",
+                        "maxItems": "64",
+                        "src-name": "equals"
+                    }
+                }
+            ],
+            "src-name": "client-auth-equals-list"
+        },
+        "client-auth-starts-with-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "client-auth-starts-with": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Forward proxy bypass if SNI string starts with another string (SNI String)",
+                        "condition": "client-auth",
+                        "alias": "client-auth-starts-with",
+                        "maxItems": "64",
+                        "src-name": "starts-with"
+                    }
+                }
+            ],
+            "src-name": "client-auth-starts-with-list"
+        },
+        "forward-proxy-cert-not-ready-action": {
+            "type": "string",
+            "description": "'bypass': \"bypass the connection;'reset': \"reset the connection;",
+            "enum": [
+                "bypass",
+                "reset"
+            ],
+            "enumMap": [
+                {
+                    "bypass": "\"bypass the connection"
+                },
+                {
+                    "reset": "\"reset the connection"
+                }
+            ],
+            "default": "bypass",
+            "feat-license": "ssli",
+            "format": "enum",
+            "src-name": "forward-proxy-cert-not-ready-action"
+        },
+        "web-category": {
+            "type": "object",
+            "array-start": true,
+            "condition": "forward-proxy-bypass",
+            "description": "Web URL Category",
+            "feat-license": "=web-category",
+            "properties": {
+                "uncategorized": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Uncategorized URLs",
+                    "condition": "web-category",
+                    "src-name": "uncategorized"
+                },
+                "real-estate": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Real Estate",
+                    "condition": "web-category",
+                    "src-name": "real-estate"
+                },
+                "computer-and-internet-security": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Computer and Internet Security",
+                    "condition": "web-category",
+                    "src-name": "computer-and-internet-security"
+                },
+                "financial-services": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Financial Services",
+                    "condition": "web-category",
+                    "src-name": "financial-services"
+                },
+                "business-and-economy": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Business and Economy",
+                    "condition": "web-category",
+                    "src-name": "business-and-economy"
+                },
+                "computer-and-internet-info": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Computer and Internet Info",
+                    "condition": "web-category",
+                    "src-name": "computer-and-internet-info"
+                },
+                "auctions": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Auctions",
+                    "condition": "web-category",
+                    "src-name": "auctions"
+                },
+                "shopping": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Shopping",
+                    "condition": "web-category",
+                    "src-name": "shopping"
+                },
+                "cult-and-occult": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Cult and Occult",
+                    "condition": "web-category",
+                    "src-name": "cult-and-occult"
+                },
+                "travel": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Travel",
+                    "condition": "web-category",
+                    "src-name": "travel"
+                },
+                "drugs": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Abused Drugs",
+                    "condition": "web-category",
+                    "src-name": "drugs"
+                },
+                "adult-and-pornography": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Adult and Pornography",
+                    "condition": "web-category",
+                    "src-name": "adult-and-pornography"
+                },
+                "home-and-garden": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Home and Garden",
+                    "condition": "web-category",
+                    "src-name": "home-and-garden"
+                },
+                "military": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Military",
+                    "condition": "web-category",
+                    "src-name": "military"
+                },
+                "social-network": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Social Network",
+                    "condition": "web-category",
+                    "src-name": "social-network"
+                },
+                "dead-sites": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Dead Sites (db Ops only)",
+                    "condition": "web-category",
+                    "src-name": "dead-sites"
+                },
+                "stock-advice-and-tools": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Stock Advice and Tools",
+                    "condition": "web-category",
+                    "src-name": "stock-advice-and-tools"
+                },
+                "training-and-tools": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Training and Tools",
+                    "condition": "web-category",
+                    "src-name": "training-and-tools"
+                },
+                "dating": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Dating",
+                    "condition": "web-category",
+                    "src-name": "dating"
+                },
+                "sex-education": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Sex Education",
+                    "condition": "web-category",
+                    "src-name": "sex-education"
+                },
+                "religion": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Religion",
+                    "condition": "web-category",
+                    "src-name": "religion"
+                },
+                "entertainment-and-arts": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Entertainment and Arts",
+                    "condition": "web-category",
+                    "src-name": "entertainment-and-arts"
+                },
+                "personal-sites-and-blogs": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Personal sites and Blogs",
+                    "condition": "web-category",
+                    "src-name": "personal-sites-and-blogs"
+                },
+                "legal": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Legal",
+                    "condition": "web-category",
+                    "src-name": "legal"
+                },
+                "local-information": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Local Information",
+                    "condition": "web-category",
+                    "src-name": "local-information"
+                },
+                "streaming-media": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Streaming Media",
+                    "condition": "web-category",
+                    "src-name": "streaming-media"
+                },
+                "job-search": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Job Search",
+                    "condition": "web-category",
+                    "src-name": "job-search"
+                },
+                "gambling": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Gambling",
+                    "condition": "web-category",
+                    "src-name": "gambling"
+                },
+                "translation": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Translation",
+                    "condition": "web-category",
+                    "src-name": "translation"
+                },
+                "reference-and-research": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Reference and Research",
+                    "condition": "web-category",
+                    "src-name": "reference-and-research"
+                },
+                "shareware-and-freeware": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Shareware and Freeware",
+                    "condition": "web-category",
+                    "src-name": "shareware-and-freeware"
+                },
+                "peer-to-peer": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Peer to Peer",
+                    "condition": "web-category",
+                    "src-name": "peer-to-peer"
+                },
+                "marijuana": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Marijuana",
+                    "condition": "web-category",
+                    "src-name": "marijuana"
+                },
+                "hacking": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Hacking",
+                    "condition": "web-category",
+                    "src-name": "hacking"
+                },
+                "games": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Games",
+                    "condition": "web-category",
+                    "src-name": "games"
+                },
+                "philosophy-and-politics": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Philosophy and Political Advocacy",
+                    "condition": "web-category",
+                    "src-name": "philosophy-and-politics"
+                },
+                "weapons": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Weapons",
+                    "condition": "web-category",
+                    "src-name": "weapons"
+                },
+                "pay-to-surf": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Pay to Surf",
+                    "condition": "web-category",
+                    "src-name": "pay-to-surf"
+                },
+                "hunting-and-fishing": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Hunting and Fishing",
+                    "condition": "web-category",
+                    "src-name": "hunting-and-fishing"
+                },
+                "society": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Society",
+                    "condition": "web-category",
+                    "src-name": "society"
+                },
+                "educational-institutions": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Educational Institutions",
+                    "condition": "web-category",
+                    "src-name": "educational-institutions"
+                },
+                "online-greeting-cards": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Online Greeting cards",
+                    "condition": "web-category",
+                    "src-name": "online-greeting-cards"
+                },
+                "sports": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Sports",
+                    "condition": "web-category",
+                    "src-name": "sports"
+                },
+                "swimsuits-and-intimate-apparel": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Swimsuits and Intimate Apparel",
+                    "condition": "web-category",
+                    "src-name": "swimsuits-and-intimate-apparel"
+                },
+                "questionable": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Questionable",
+                    "condition": "web-category",
+                    "src-name": "questionable"
+                },
+                "kids": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Kids",
+                    "condition": "web-category>,ion web-category",
+                    "src-name": "kids"
+                },
+                "hate-and-racism": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Hate and Racism",
+                    "condition": "web-category",
+                    "src-name": "hate-and-racism"
+                },
+                "personal-storage": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Personal Storage",
+                    "condition": "web-category",
+                    "src-name": "personal-storage"
+                },
+                "violence": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Violence",
+                    "condition": "web-category",
+                    "src-name": "violence"
+                },
+                "keyloggers-and-monitoring": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Keyloggers and Monitoring",
+                    "condition": "web-category",
+                    "src-name": "keyloggers-and-monitoring"
+                },
+                "search-engines": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Search Engines",
+                    "condition": "web-category",
+                    "src-name": "search-engines"
+                },
+                "internet-portals": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Internet Portals",
+                    "condition": "web-category",
+                    "src-name": "internet-portals"
+                },
+                "web-advertisements": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Web Advertisements",
+                    "condition": "web-category",
+                    "src-name": "web-advertisements"
+                },
+                "cheating": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Cheating",
+                    "condition": "web-category",
+                    "src-name": "cheating"
+                },
+                "gross": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Gross",
+                    "condition": "web-category",
+                    "src-name": "gross"
+                },
+                "web-based-email": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Web based email",
+                    "condition": "web-category",
+                    "src-name": "web-based-email"
+                },
+                "malware-sites": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Malware Sites",
+                    "condition": "web-category",
+                    "src-name": "malware-sites"
+                },
+                "phishing-and-other-fraud": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Phishing and Other Frauds",
+                    "condition": "web-category",
+                    "src-name": "phishing-and-other-fraud"
+                },
+                "proxy-avoid-and-anonymizers": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Proxy Avoid and Anonymizers",
+                    "condition": "web-category",
+                    "src-name": "proxy-avoid-and-anonymizers"
+                },
+                "spyware-and-adware": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Spyware and Adware",
+                    "condition": "web-category",
+                    "src-name": "spyware-and-adware"
+                },
+                "music": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Music",
+                    "condition": "web-category",
+                    "src-name": "music"
+                },
+                "government": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Government",
+                    "condition": "web-category",
+                    "src-name": "government"
+                },
+                "nudity": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Nudity",
+                    "condition": "web-category",
+                    "src-name": "nudity"
+                },
+                "news-and-media": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category News and Media",
+                    "condition": "web-category",
+                    "src-name": "news-and-media"
+                },
+                "illegal": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Illegal",
+                    "condition": "web-category",
+                    "src-name": "illegal"
+                },
+                "cdns": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category CDNs",
+                    "condition": "web-category",
+                    "src-name": "cdns"
+                },
+                "internet-communications": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Internet Communications",
+                    "condition": "web-category",
+                    "src-name": "internet-communications"
+                },
+                "bot-nets": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Bot Nets",
+                    "condition": "web-category",
+                    "src-name": "bot-nets"
+                },
+                "abortion": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Abortion",
+                    "condition": "web-category",
+                    "src-name": "abortion"
+                },
+                "health-and-medicine": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Health and Medicine",
+                    "condition": "web-category",
+                    "src-name": "health-and-medicine"
+                },
+                "confirmed-spam-sources": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Confirmed SPAM Sources",
+                    "condition": "web-category",
+                    "src-name": "confirmed-spam-sources"
+                },
+                "spam-urls": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category SPAM URLs",
+                    "condition": "web-category",
+                    "src-name": "spam-urls"
+                },
+                "unconfirmed-spam-sources": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Unconfirmed SPAM Sources",
+                    "condition": "web-category",
+                    "src-name": "unconfirmed-spam-sources"
+                },
+                "open-http-proxies": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Open HTTP Proxies",
+                    "condition": "web-category",
+                    "src-name": "open-http-proxies"
+                },
+                "dynamic-comment": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Dynamic Comment",
+                    "condition": "web-category",
+                    "src-name": "dynamic-comment"
+                },
+                "parked-domains": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Parked Domains",
+                    "condition": "web-category",
+                    "src-name": "parked-domains"
+                },
+                "alcohol-and-tobacco": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Alcohol and Tobacco",
+                    "condition": "web-category",
+                    "src-name": "alcohol-and-tobacco"
+                },
+                "private-ip-addresses": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Private IP Addresses",
+                    "condition": "web-category",
+                    "src-name": "private-ip-addresses"
+                },
+                "image-and-video-search": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Image and Video Search",
+                    "condition": "web-category",
+                    "src-name": "image-and-video-search"
+                },
+                "fashion-and-beauty": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Fashion and Beauty",
+                    "condition": "web-category",
+                    "src-name": "fashion-and-beauty"
+                },
+                "recreation-and-hobbies": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Recreation and Hobbies",
+                    "condition": "web-category",
+                    "src-name": "recreation-and-hobbies"
+                },
+                "motor-vehicles": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Motor Vehicles",
+                    "condition": "web-category",
+                    "src-name": "motor-vehicles"
+                },
+                "web-hosting-sites": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Web Hosting Sites",
+                    "condition": "web-category",
+                    "src-name": "web-hosting-sites"
+                },
+                "food-and-dining": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Category Food and Dining",
+                    "condition": "web-category",
+                    "src-name": "food-and-dining"
+                }
+            },
+            "src-name": "web-category"
+        },
+        "key": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "245",
+            "description": "Server Private Key (Key Name)",
+            "format": "string",
+            "src-name": "key"
+        },
+        "key-pass-phrase": {
+            "type": "dummy",
+            "condition": "key",
+            "alias": "key-pass-phrase",
+            "description": "Password Phrase",
+            "format": "dummy",
+            "src-name": "pass-phrase"
+        },
+        "key-passphrase": {
+            "type": "string",
+            "format": "password",
+            "condition": "key-pass-phrase",
+            "alias": "key-passphrase",
+            "description": "Password Phrase",
+            "src-name": "passphrase"
+        },
+        "key-encrypted": {
+            "type": "encrypted",
+            "format": "encrypted",
+            "condition": "key-pass-phrase",
+            "alias": "key-encrypted",
+            "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+            "src-name": "encrypted"
+        },
+        "server-name-list": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "server-name": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Server name indication in Client hello extension (Server name String)",
+                        "maxItems": "8192",
+                        "format": "string",
+                        "src-name": "server-name"
+                    }
+                },
+                {
+                    "server-cert": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "condition": "server-name",
+                        "alias": "server-cert",
+                        "description": "Server Certificate associated to SNI (Server Certificate Name)",
+                        "format": "string",
+                        "src-name": "cert"
+                    }
+                },
+                {
+                    "server-key": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "condition": "server-cert",
+                        "alias": "server-key",
+                        "description": "Server Private Key associated to SNI (Server Private Key Name)",
+                        "format": "string",
+                        "src-name": "key"
+                    }
+                },
+                {
+                    "server-pass-phrase": {
+                        "type": "dummy",
+                        "condition": "server-key",
+                        "alias": "server-pass-phrase",
+                        "description": "help Password Phrase",
+                        "format": "dummy",
+                        "src-name": "pass-phrase"
+                    }
+                },
+                {
+                    "server-passphrase": {
+                        "type": "string",
+                        "format": "password",
+                        "condition": "server-pass-phrase",
+                        "alias": "server-passphrase",
+                        "description": "help Password Phrase",
+                        "src-name": "passphrase"
+                    }
+                },
+                {
+                    "server-encrypted": {
+                        "type": "encrypted",
+                        "format": "encrypted",
+                        "condition": "server-pass-phrase",
+                        "alias": "server-encrypted",
+                        "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+                        "src-name": "encrypted"
+                    }
+                },
+                {
+                    "server-name-regex": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "Server name indication in Client hello extension with regular expression (Server name String with regex)",
+                        "maxItems": "1024",
+                        "src-name": "server-name-regex"
+                    }
+                },
+                {
+                    "server-cert-regex": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "condition": "server-name-regex",
+                        "alias": "server-cert-regex",
+                        "description": "Server Certificate associated to SNI regex (Server Certificate Name)",
+                        "format": "string",
+                        "src-name": "cert"
+                    }
+                },
+                {
+                    "server-key-regex": {
+                        "type": "string",
+                        "minLength": "1",
+                        "maxLength": "245",
+                        "condition": "server-cert-regex",
+                        "alias": "server-key-regex",
+                        "description": "Server Private Key associated to SNI regex (Server Private Key Name)",
+                        "format": "string",
+                        "src-name": "key"
+                    }
+                },
+                {
+                    "server-pass-phrase-regex": {
+                        "type": "dummy",
+                        "condition": "server-key-regex",
+                        "alias": "server-pass-phrase-regex",
+                        "description": "help Password Phrase",
+                        "format": "dummy",
+                        "src-name": "pass-phrase"
+                    }
+                },
+                {
+                    "server-passphrase-regex": {
+                        "type": "string",
+                        "format": "password",
+                        "condition": "server-pass-phrase-regex",
+                        "alias": "server-passphrase-regex",
+                        "description": "help Password Phrase",
+                        "src-name": "passphrase"
+                    }
+                },
+                {
+                    "server-encrypted-regex": {
+                        "type": "encrypted",
+                        "format": "encrypted",
+                        "condition": "server-pass-phrase-regex",
+                        "alias": "server-encrypted-regex",
+                        "description": "Do NOT use this option manually. (This is an A10 reserved keyword.) (The ENCRYPTED password string)",
+                        "src-name": "encrypted"
+                    }
+                }
+            ],
+            "src-name": "server-name-list"
+        },
+        "session-cache-size": {
+            "type": "number",
+            "description": "Session Cache Size (Specify 0 to disable Session ID reuse.)",
+            "minimum": "0",
+            "maximum": "^session_cache_size_max",
+            "format": "number",
+            "src-name": "session-cache-size"
+        },
+        "session-cache-timeout": {
+            "type": "number",
+            "description": "Session Cache Timeout (Timeout value, in seconds)",
+            "minimum": "0",
+            "maximum": "604800",
+            "format": "number",
+            "src-name": "session-cache-timeout"
+        },
+        "session-ticket-lifetime": {
+            "type": "number",
+            "description": "Session ticket lieftime in seconds from stateless session resumption (Lifetime value in seconds)",
+            "format": "number",
+            "src-name": "session-ticket-lifetime"
+        },
+        "ssl-false-start-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "disable SSL False Start",
+            "src-name": "ssl-false-start-disable"
+        },
+        "disable-sslv3": {
+            "type": "number",
+            "format": "flag",
+            "description": "Reject Client requests for SSL version 3",
+            "src-name": "disable-sslv3"
+        },
+        "renegotiation-disable": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable SSL renegotiation",
+            "src-name": "renegotiation-disable"
+        },
+        "sslv2-bypass": {
+            "type": "dummy",
+            "description": "Bypass SSL version 2",
+            "format": "dummy",
+            "src-name": "sslv2-bypass"
+        },
+        "sslv2-bypass-service-group": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Service Group for Bypass SSLV2 (Service Group Name)",
+            "condition": "sslv2-bypass",
+            "alias": "sslv2-bypass-service-group",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "src-name": "service-group"
+        },
+        "authorization": {
+            "type": "number",
+            "format": "flag",
+            "description": "Specify LDAP server for client SSL authorizaiton",
+            "src-name": "authorization"
+        },
+        "authen-name": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "authorization",
+            "obj-lineage-full": "aam.authentication.server.ldap",
+            "$ref": "/axapi/v3/aam/authentication/server/ldap",
+            "description": "Specify authorization LDAP server name",
+            "src-name": "authen-name"
+        },
+        "ldap-base-dn-from-cert": {
+            "type": "number",
+            "format": "flag",
+            "condition": "authen-name",
+            "link-next-fwd": "ldap-search-filter",
+            "description": "Use Subject DN as LDAP search base DN",
+            "src-name": "ldap-base-dn-from-cert"
+        },
+        "ldap-search-filter": {
+            "type": "string",
+            "format": "line",
+            "minLength": "1",
+            "maxLength": "255",
+            "condition": "authen-name",
+            "description": "Specify LDAP search filter",
+            "src-name": "ldap-search-filter"
+        },
+        "auth-sg": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "condition": "authorization",
+            "obj-lineage-full": "aam.authentication.service-group",
+            "$ref": "/axapi/v3/aam/authentication/service-group",
+            "alias": "auth-sg",
+            "m-exclusion": "authen-name",
+            "description": "Specify authorization LDAP service group",
+            "src-name": "service-group"
+        },
+        "auth-sg-dn": {
+            "type": "number",
+            "format": "flag",
+            "condition": "auth-sg",
+            "alias": "auth-sg-dn",
+            "link-next-fwd": "auth-sg-filter",
+            "description": "Use Subject DN as LDAP search base DN",
+            "src-name": "ldap-base-dn-from-cert"
+        },
+        "auth-sg-filter": {
+            "type": "string",
+            "format": "line",
+            "minLength": "1",
+            "maxLength": "255",
+            "condition": "auth-sg",
+            "alias": "auth-sg-filter",
+            "description": "Specify LDAP search filter",
+            "src-name": "ldap-search-filter"
+        },
+        "auth-username-attribute": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "31",
+            "case-insensitive": true,
+            "description": "Specify attribute name of username for client SSL authorization (Specify attribute name)",
+            "src-name": "auth-username-attribute"
+        },
+        "non-ssl-bypass": {
+            "type": "dummy",
+            "description": "Bypass non-ssl traffic",
+            "format": "dummy",
+            "src-name": "non-ssl-bypass"
+        },
+        "non-ssl-bypass-service-group": {
+            "type": "string",
+            "format": "long-string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Service Group for Bypass non-ssl traffic (Service Group Name)",
+            "condition": "non-ssl-bypass",
+            "alias": "non-ssl-bypass-service-group",
+            "obj-lineage-full": "slb.service-group",
+            "$ref": "/axapi/v3/slb/service-group",
+            "src-name": "service-group"
+        }
+    }
+}

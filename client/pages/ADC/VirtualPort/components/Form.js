@@ -6,7 +6,7 @@ import { A10SubmitButtons } from 'components/Form/A10SubmitButtons';
 // import { widgetWrapper } from 'helpers/widgetWrapper';
 import { A10Field, A10Form, widgetWrapper } from 'a10-widget';
 
-import slbVirtualPortSchema from 'slb-virtual-service.json';
+import slbVirtualPortSchema from 'slb-virtual-server.json';
 
 class VirtualPort extends React.Component {
   static displayName = 'VirtualPort'

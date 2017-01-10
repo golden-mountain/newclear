@@ -1,0 +1,13 @@
+{
+    "obj-name": "perf",
+    "obj-help": "SLB performance stats",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-auto-create": true,
+    "obj-stats-oid": "390",
+    "obj-control-plane-counter-obj": true,
+    "obj-lineage-full": "slb.perf",
+    "axapi": "/axapi/v3/slb/perf",
+    "properties": {}
+}

@@ -1,0 +1,1041 @@
+{
+    "obj-name": "policy",
+    "obj-help": "Policy config",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "policy",
+    "obj-disp-after": "slb.service-group",
+    "obj-stats-oid": "2044",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.policy",
+    "axapi": "/axapi/v3/slb/template/policy/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Policy template name",
+            "src-name": "name"
+        },
+        "bw-list": {
+            "type": "dummy",
+            "description": "Blacklist/whitelist",
+            "format": "dummy",
+            "src-name": "bw-list"
+        },
+        "bw-list-name": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "bw-list",
+            "alias": "bw-list-name",
+            "description": "Specify a blacklist/whitelist name (Specify a blacklist/whitelist name)",
+            "src-name": "name"
+        },
+        "timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "127",
+            "default": "5",
+            "condition": "bw-list",
+            "description": "Define timeout value of PBSLB dynamic entry (Timeout value (minute, default is 5))",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "use-destination-ip": {
+            "type": "number",
+            "format": "flag",
+            "condition": "bw-list",
+            "description": "Use destination IP to match the policy",
+            "src-name": "use-destination-ip"
+        },
+        "over-limit": {
+            "type": "number",
+            "format": "flag",
+            "condition": "bw-list",
+            "description": "Specify operation in case over limit",
+            "src-name": "over-limit"
+        },
+        "over-limit-reset": {
+            "type": "number",
+            "format": "flag",
+            "description": "Reset the connection when it exceeds limit",
+            "alias": "over-limit-reset",
+            "src-name": "reset"
+        },
+        "over-limit-lockup": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "127",
+            "description": "Don't accept any new connection for certain time (Lockup duration (minute))",
+            "alias": "over-limit-lockup",
+            "format": "number",
+            "src-name": "lockup"
+        },
+        "over-limit-logging": {
+            "type": "number",
+            "format": "flag",
+            "description": "Log a message",
+            "alias": "over-limit-logging",
+            "src-name": "logging"
+        },
+        "interval": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "255",
+            "description": "Log interval (minute)",
+            "format": "number",
+            "src-name": "interval"
+        },
+        "bw-list-id": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "id": {
+                        "type": "number",
+                        "multi-field-key": true,
+                        "minimum": "0",
+                        "maximum": "1023",
+                        "condition": "bw-list",
+                        "maxItems": "1024",
+                        "description": "Specify id that maps to service group (The id number)",
+                        "format": "number",
+                        "src-name": "id"
+                    }
+                },
+                {
+                    "service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "condition": "id",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "description": "Specify a service group (Specify the service group name)",
+                        "src-name": "service-group"
+                    }
+                },
+                {
+                    "pbslb-logging": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "service-group",
+                        "description": "Configure PBSLB logging",
+                        "alias": "pbslb-logging",
+                        "src-name": "logging"
+                    }
+                },
+                {
+                    "pbslb-interval": {
+                        "type": "number",
+                        "default": "3",
+                        "minimum": "0",
+                        "maximum": "60",
+                        "condition": "pbslb-logging",
+                        "link-next-fwd": "fail",
+                        "description": "Specify logging interval in minutes",
+                        "alias": "pbslb-interval",
+                        "format": "number",
+                        "src-name": "interval"
+                    }
+                },
+                {
+                    "fail": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "pbslb-logging",
+                        "description": "Only log unsuccessful connections",
+                        "src-name": "fail"
+                    }
+                },
+                {
+                    "bw-list-action": {
+                        "type": "string",
+                        "condition": "id",
+                        "m-exclusion": "service-group",
+                        "enum": [
+                            "drop",
+                            "reset"
+                        ],
+                        "enumMap": [
+                            {
+                                "drop": "\"drop the packet"
+                            },
+                            {
+                                "reset": "\"Send reset back"
+                            }
+                        ],
+                        "description": "'drop': \"drop the packet;'reset': \"Send reset back;",
+                        "format": "enum",
+                        "src-name": "bw-list-action"
+                    }
+                },
+                {
+                    "logging-drp-rst": {
+                        "type": "number",
+                        "format": "flag",
+                        "condition": "bw-list-action",
+                        "alias": "logging-drp-rst",
+                        "description": "Configure PBSLB logging",
+                        "src-name": "logging"
+                    }
+                },
+                {
+                    "action-interval": {
+                        "type": "number",
+                        "default": "3",
+                        "alias": "action-interval",
+                        "minimum": "0",
+                        "maximum": "60",
+                        "condition": "logging-drp-rst",
+                        "description": "Specify logging interval in minute (default is 3)",
+                        "format": "number",
+                        "src-name": "interval"
+                    }
+                }
+            ],
+            "src-name": "bw-list-id"
+        },
+        "geo-location": {
+            "type": "dummy",
+            "plat-neg-list": "fireeye",
+            "description": "Geo-location Config",
+            "format": "dummy",
+            "src-name": "geo-location"
+        },
+        "overlap": {
+            "type": "number",
+            "format": "flag",
+            "condition": "geo-location",
+            "description": "Use overlap mode for geo-location to do longest match",
+            "src-name": "overlap"
+        },
+        "share": {
+            "type": "number",
+            "format": "flag",
+            "condition": "geo-location",
+            "description": "Share counters between virtual ports and virtual servers",
+            "src-name": "share"
+        },
+        "full-domain-tree": {
+            "type": "number",
+            "format": "flag",
+            "condition": "geo-location",
+            "description": "Share counters between geo-location and sub regions",
+            "src-name": "full-domain-tree"
+        },
+        "class-list": {
+            "obj-name": "class-list",
+            "obj-help": "Configure classification list",
+            "obj-lineage": "cmroot.slb.template.policy",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-lineage-full": "slb.template.policy.class-list",
+            "axapi": "/axapi/v3/slb/template/policy/{name}/class-list/{name}",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "format": "string-rlx",
+                    "object-key": true,
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "description": "Class list name or geo-location-class-list name",
+                    "src-name": "name"
+                },
+                "client-ip": {
+                    "type": "dummy",
+                    "description": "Set Client IP address, by default source IP address is used",
+                    "format": "dummy",
+                    "src-name": "client-ip"
+                },
+                "client-ip-l3-dest": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "client-ip",
+                    "description": "Use destination IP as client IP address",
+                    "alias": "client-ip-l3-dest",
+                    "src-name": "l3-dest"
+                },
+                "client-ip-l7-header": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "client-ip",
+                    "m-exclusion": "client-ip-l3-dest",
+                    "alias": "client-ip-l7-header",
+                    "description": "Use extract client IP address from L7 header",
+                    "src-name": "l7-header"
+                },
+                "header-name": {
+                    "type": "string",
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "condition": "client-ip-l7-header",
+                    "description": "Specify L7 header name",
+                    "format": "string",
+                    "src-name": "header-name"
+                },
+                "lid-list": {
+                    "obj-name": "lid",
+                    "obj-help": "Limit ID",
+                    "obj-lineage": "cmroot.slb.template.policy.class-list",
+                    "obj-occurences": "multi",
+                    "obj-json-suffix": "-list",
+                    "obj-indexing": "number",
+                    "obj-lineage-full": "slb.template.policy.class-list.lid",
+                    "axapi": "/axapi/v3/slb/template/policy/{name}/class-list/{name}/lid/{lidnum}",
+                    "properties": {
+                        "lidnum": {
+                            "type": "number",
+                            "object-key": true,
+                            "alias": "lidnum",
+                            "minimum": "1",
+                            "maximum": "31",
+                            "description": "Specify a limit ID",
+                            "format": "number",
+                            "src-name": "lid"
+                        },
+                        "conn-limit": {
+                            "type": "number",
+                            "minimum": "0",
+                            "maximum": "1048575",
+                            "description": "Connection limit (Connection limit)",
+                            "format": "number",
+                            "src-name": "conn-limit"
+                        },
+                        "conn-rate-limit": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "2147483647",
+                            "description": "Specify connection rate limit (Connection rate limit)",
+                            "format": "number",
+                            "src-name": "conn-rate-limit"
+                        },
+                        "conn-per": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "65535",
+                            "condition": "conn-rate-limit",
+                            "alias": "conn-per",
+                            "description": "Per (Specify interval in number of 100ms)",
+                            "format": "number",
+                            "src-name": "per"
+                        },
+                        "request-limit": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "1048575",
+                            "description": "Request limit (Specify request limit)",
+                            "format": "number",
+                            "src-name": "request-limit"
+                        },
+                        "request-rate-limit": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "4294967295",
+                            "description": "Request rate limit (Specify request rate limit)",
+                            "format": "number",
+                            "src-name": "request-rate-limit"
+                        },
+                        "request-per": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "65535",
+                            "condition": "request-rate-limit",
+                            "alias": "request-per",
+                            "description": "Per (Specify interval in number of 100ms)",
+                            "format": "number",
+                            "src-name": "per"
+                        },
+                        "bw-rate-limit": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "2147483647",
+                            "description": "Specify bandwidth rate limit (Bandwidth rate limit in bytes)",
+                            "format": "number",
+                            "src-name": "bw-rate-limit"
+                        },
+                        "bw-per": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "65535",
+                            "condition": "bw-rate-limit",
+                            "alias": "bw-per",
+                            "description": "Per (Specify interval in number of 100ms)",
+                            "format": "number",
+                            "src-name": "per"
+                        },
+                        "over-limit-action": {
+                            "type": "number",
+                            "format": "flag",
+                            "description": "Set action when exceeds limit",
+                            "src-name": "over-limit-action"
+                        },
+                        "action-value": {
+                            "type": "string",
+                            "condition": "over-limit-action",
+                            "enum": [
+                                "forward",
+                                "reset"
+                            ],
+                            "enumMap": [
+                                {
+                                    "forward": "\"Forward the traffic even it exceeds limit"
+                                },
+                                {
+                                    "reset": "\"Reset the connection when it exceeds limit"
+                                }
+                            ],
+                            "description": "'forward': \"Forward the traffic even it exceeds limit;'reset': \"Reset the connection when it exceeds limit;",
+                            "link-next-fwd": "lockout",
+                            "format": "enum",
+                            "src-name": "action-value"
+                        },
+                        "lockout": {
+                            "type": "number",
+                            "condition": "over-limit-action",
+                            "minimum": "1",
+                            "maximum": "1023",
+                            "disabled": "forward",
+                            "link-next-fwd": "log",
+                            "description": "Don't accept any new connection for certain time (Lockout duration in minutes)",
+                            "value-not-allowed-in-no": true,
+                            "format": "number",
+                            "src-name": "lockout"
+                        },
+                        "log": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "over-limit-action",
+                            "description": "Log a message",
+                            "src-name": "log"
+                        },
+                        "interval": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "255",
+                            "condition": "log",
+                            "description": "Specify log interval in minutes, by default system will log every over limit instance",
+                            "format": "number",
+                            "src-name": "interval"
+                        },
+                        "direct-action": {
+                            "type": "number",
+                            "format": "flag",
+                            "alias": "direct-action",
+                            "description": "Set action when match the lid",
+                            "src-name": "action"
+                        },
+                        "direct-service-group": {
+                            "type": "string",
+                            "format": "long-string-rlx",
+                            "minLength": "1",
+                            "maxLength": "127",
+                            "condition": "direct-action",
+                            "alias": "direct-service-group",
+                            "obj-lineage-full": "slb.service-group",
+                            "$ref": "/axapi/v3/slb/service-group",
+                            "description": "Specify a service group (Specify the service group name)",
+                            "src-name": "service-group"
+                        },
+                        "direct-pbslb-logging": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "direct-service-group",
+                            "description": "Configure PBSLB logging",
+                            "alias": "direct-pbslb-logging",
+                            "src-name": "logging"
+                        },
+                        "direct-pbslb-interval": {
+                            "type": "number",
+                            "default": "3",
+                            "minimum": "0",
+                            "maximum": "60",
+                            "condition": "direct-pbslb-logging",
+                            "link-next-fwd": "direct-fail",
+                            "description": "Specify logging interval in minutes",
+                            "alias": "direct-pbslb-interval",
+                            "format": "number",
+                            "src-name": "interval"
+                        },
+                        "direct-fail": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "direct-pbslb-logging",
+                            "description": "Only log unsuccessful connectionsi",
+                            "alias": "direct-fail",
+                            "src-name": "fail"
+                        },
+                        "direct-action-value": {
+                            "type": "string",
+                            "condition": "direct-action",
+                            "m-exclusion": "direct-service-group",
+                            "enum": [
+                                "drop",
+                                "reset"
+                            ],
+                            "enumMap": [
+                                {
+                                    "drop": "\"drop the packet"
+                                },
+                                {
+                                    "reset": "\"Send reset back"
+                                }
+                            ],
+                            "description": "'drop': \"drop the packet;'reset': \"Send reset back;",
+                            "format": "enum",
+                            "src-name": "direct-action-value"
+                        },
+                        "direct-logging-drp-rst": {
+                            "type": "number",
+                            "format": "flag",
+                            "condition": "direct-action-value",
+                            "alias": "direct-logging-drp-rst",
+                            "description": "Configure PBSLB logging",
+                            "src-name": "logging"
+                        },
+                        "direct-action-interval": {
+                            "type": "number",
+                            "default": "3",
+                            "alias": "direct-action-interval",
+                            "minimum": "0",
+                            "maximum": "60",
+                            "condition": "direct-logging-drp-rst",
+                            "description": "Specify logging interval in minute (default is 3)",
+                            "format": "number",
+                            "src-name": "interval"
+                        },
+                        "response-code-rate-limit": {
+                            "type": "array",
+                            "array-start": true,
+                            "array-multi": true,
+                            "description": "Server response code rate limit(only support SMTP now)",
+                            "maxItems": "5",
+                            "properties": [
+                                {
+                                    "code-range-start": {
+                                        "type": "number",
+                                        "condition": "response-code-rate-limit",
+                                        "multi-field-key": true,
+                                        "minimum": "100",
+                                        "maximum": "600",
+                                        "description": "server response code range start",
+                                        "format": "number",
+                                        "src-name": "code-range-start"
+                                    }
+                                },
+                                {
+                                    "code-range-end": {
+                                        "type": "number",
+                                        "condition": "code-range-start",
+                                        "minimum": "100",
+                                        "maximum": "600",
+                                        "description": "server response code range end",
+                                        "alias": "code-range-end",
+                                        "format": "number",
+                                        "src-name": "-"
+                                    }
+                                },
+                                {
+                                    "threshold": {
+                                        "type": "number",
+                                        "condition": "code-range-end",
+                                        "minimum": "1",
+                                        "maximum": "15",
+                                        "description": "the times of getting the response code",
+                                        "format": "number",
+                                        "src-name": "threshold"
+                                    }
+                                },
+                                {
+                                    "period": {
+                                        "type": "number",
+                                        "condition": "threshold",
+                                        "minimum": "1",
+                                        "maximum": "127",
+                                        "description": "seconds",
+                                        "alias": "period",
+                                        "format": "number",
+                                        "src-name": "per"
+                                    }
+                                }
+                            ],
+                            "src-name": "response-code-rate-limit"
+                        },
+                        "dns64": {
+                            "type": "object",
+                            "array-start": true,
+                            "description": "Apply DNS64",
+                            "feat-license": "cgnv6",
+                            "properties": {
+                                "disable": {
+                                    "type": "number",
+                                    "format": "flag",
+                                    "condition": "dns64",
+                                    "description": "Disable",
+                                    "src-name": "disable"
+                                },
+                                "exclusive-answer": {
+                                    "type": "number",
+                                    "format": "flag",
+                                    "condition": "dns64",
+                                    "description": "Exclusive Answer in DNS Response",
+                                    "src-name": "exclusive-answer"
+                                },
+                                "prefix": {
+                                    "type": "ipv6-address-plen",
+                                    "condition": "dns64",
+                                    "description": "IPv6 prefix",
+                                    "format": "ipv6-address-plen",
+                                    "src-name": "prefix"
+                                }
+                            },
+                            "src-name": "dns64"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "forward-policy": {
+            "obj-name": "forward-policy",
+            "obj-help": "Forward Policy commands",
+            "obj-lineage": "cmroot.slb.template.policy",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-module": true,
+            "obj-module-prompt": "forward-policy",
+            "obj-lineage-full": "slb.template.policy.forward-policy",
+            "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy",
+            "properties": {
+                "no-client-conn-reuse": {
+                    "type": "number",
+                    "format": "flag",
+                    "description": "Inspects only first request of a connection",
+                    "src-name": "no-client-conn-reuse"
+                },
+                "filtering": {
+                    "type": "array",
+                    "array-start": true,
+                    "array-multi": true,
+                    "properties": [
+                        {
+                            "ssli-url-filtering": {
+                                "type": "string",
+                                "maxItems": "4",
+                                "description": "'bypassed-sni-disable': \"Disable SNI filtering for bypassed URL's(enabled by default);'intercepted-sni-enable': \"Enable SNI filtering for intercepted URL's(disabled by default);'intercepted-http-disable': \"Disable HTTP(host/URL) filtering for intercepted URL's(enabled by default);'no-sni-allow': \"Allow connection if SNI filtering is enabled and SNI header is not present(Drop by default);",
+                                "enum": [
+                                    "bypassed-sni-disable",
+                                    "intercepted-sni-enable",
+                                    "intercepted-http-disable",
+                                    "no-sni-allow"
+                                ],
+                                "enumMap": [
+                                    {
+                                        "bypassed-sni-disable": "\"Disable SNI filtering for bypassed URL's(enabled by default)"
+                                    },
+                                    {
+                                        "intercepted-sni-enable": "\"Enable SNI filtering for intercepted URL's(disabled by default)"
+                                    },
+                                    {
+                                        "intercepted-http-disable": "\"Disable HTTP(host/URL) filtering for intercepted URL's(enabled by default)"
+                                    },
+                                    {
+                                        "no-sni-allow": "\"Allow connection if SNI filtering is enabled and SNI header is not present(Drop by default)"
+                                    }
+                                ],
+                                "format": "enum",
+                                "src-name": "ssli-url-filtering"
+                            }
+                        }
+                    ],
+                    "src-name": "filtering"
+                },
+                "action-list": {
+                    "obj-name": "action",
+                    "obj-help": "action list",
+                    "obj-lineage": "cmroot.slb.template.policy.forward-policy",
+                    "obj-occurences": "multi",
+                    "obj-json-suffix": "-list",
+                    "obj-indexing": "string",
+                    "obj-module-prompt": "action",
+                    "obj-stats-oid": "2048",
+                    "obj-module-dont-display-value-in-prompt": true,
+                    "obj-lineage-full": "slb.template.policy.forward-policy.action",
+                    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/action/{name}",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "object-key": true,
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "description": "Action policy name",
+                            "format": "string",
+                            "src-name": "name"
+                        },
+                        "action1": {
+                            "type": "string",
+                            "enum": [
+                                "forward-to-internet",
+                                "forward-to-service-group",
+                                "forward-to-proxy",
+                                "drop"
+                            ],
+                            "enumMap": [
+                                {
+                                    "forward-to-internet": "\"Forward request to Internet"
+                                },
+                                {
+                                    "forward-to-service-group": "\"Forward request to service group"
+                                },
+                                {
+                                    "forward-to-proxy": "\"Forward request to HTTP proxy server"
+                                },
+                                {
+                                    "drop": "\"Drop request"
+                                }
+                            ],
+                            "description": "'forward-to-internet': \"Forward request to Internet;'forward-to-service-group': \"Forward request to service group;'forward-to-proxy': \"Forward request to HTTP proxy server;'drop': \"Drop request;",
+                            "format": "enum",
+                            "src-name": "action1"
+                        },
+                        "fake-sg": {
+                            "type": "string",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "enabled": "forward-to-internet",
+                            "description": "service group to forward the packets to Internet",
+                            "format": "string",
+                            "src-name": "fake-sg"
+                        },
+                        "real-sg": {
+                            "type": "string",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "enabled": "forward-to-service-group/forward-to-proxy",
+                            "description": "service group to forward the packets",
+                            "format": "string",
+                            "src-name": "real-sg"
+                        },
+                        "forward-snat": {
+                            "type": "string",
+                            "format": "string-rlx",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "alias": "forward-snat",
+                            "disabled": "drop",
+                            "description": "Source NAT pool or pool group",
+                            "src-name": "snat"
+                        },
+                        "fall-back": {
+                            "type": "string",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "alias": "fall-back",
+                            "enabled": "forward-to-internet",
+                            "description": "Fallback service group for Internet",
+                            "format": "string",
+                            "src-name": "fallback"
+                        },
+                        "fall-back-snat": {
+                            "type": "string",
+                            "format": "string-rlx",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "alias": "fall-back-snat",
+                            "enabled": "forward-to-internet",
+                            "description": "Source NAT pool or pool group for fallback server",
+                            "src-name": "snat"
+                        },
+                        "proxy-chaining": {
+                            "type": "number",
+                            "format": "flag",
+                            "alias": "proxy-chaining",
+                            "disabled": "{action1 in (forward-to-proxy)}",
+                            "hide-help": true,
+                            "description": "Enable proxy chaining feature",
+                            "src-name": "proxy-chaining"
+                        },
+                        "log": {
+                            "type": "number",
+                            "format": "flag",
+                            "description": "enable logging",
+                            "src-name": "log"
+                        },
+                        "drop-message": {
+                            "type": "string",
+                            "format": "long-string-rlx",
+                            "minLength": "1",
+                            "maxLength": "1023",
+                            "description": "drop-message sent to the client as webpage(html tags are included and quotation marks are required for white spaces)",
+                            "src-name": "drop-message"
+                        },
+                        "drop-redirect-url": {
+                            "type": "string",
+                            "format": "long-string-rlx",
+                            "minLength": "1",
+                            "maxLength": "1023",
+                            "m-exclusion": "drop-message",
+                            "description": "Specify URL to which client request is redirected upon being dropped",
+                            "src-name": "drop-redirect-url"
+                        },
+                        "http-status-code": {
+                            "type": "string",
+                            "condition": "drop-redirect-url",
+                            "description": "'301': \"Moved permanently;'302': \"Found;",
+                            "enum": [
+                                "301",
+                                "302"
+                            ],
+                            "enumMap": [
+                                {
+                                    "301": "\"Moved permanently"
+                                },
+                                {
+                                    "302": "\"Found"
+                                }
+                            ],
+                            "default": "302",
+                            "format": "enum",
+                            "src-name": "http-status-code"
+                        }
+                    },
+                    "type": "object"
+                },
+                "source-list": {
+                    "obj-name": "source",
+                    "obj-help": "proxy source list",
+                    "obj-lineage": "cmroot.slb.template.policy.forward-policy",
+                    "obj-occurences": "multi",
+                    "obj-json-suffix": "-list",
+                    "obj-indexing": "string",
+                    "obj-module-prompt": "source",
+                    "obj-stats-oid": "2049",
+                    "obj-module-dont-display-value-in-prompt": true,
+                    "obj-lineage-full": "slb.template.policy.forward-policy.source",
+                    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "object-key": true,
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "description": "source destination match rule name",
+                            "format": "string",
+                            "src-name": "name"
+                        },
+                        "match-class-list": {
+                            "type": "string",
+                            "minLength": "1",
+                            "maxLength": "63",
+                            "description": "Class List Name",
+                            "format": "string",
+                            "src-name": "match-class-list"
+                        },
+                        "match-any": {
+                            "type": "number",
+                            "format": "flag",
+                            "description": "Match any source",
+                            "m-exclusion": "match-class-list",
+                            "src-name": "match-any"
+                        },
+                        "match-authorize-policy": {
+                            "type": "string",
+                            "obj-lineage-full": "aam.authorization.policy",
+                            "$ref": "/axapi/v3/aam/authorization/policy",
+                            "description": "Authorize-policy for user and group based policy",
+                            "format": "string",
+                            "src-name": "match-authorize-policy"
+                        },
+                        "priority": {
+                            "type": "number",
+                            "minimum": "1",
+                            "maximum": "1024",
+                            "description": "Priority of the source(higher the number higher the priority, default 0)",
+                            "format": "number",
+                            "src-name": "priority"
+                        },
+                        "destination": {
+                            "obj-name": "destination",
+                            "obj-help": "proxy destination match rule",
+                            "obj-lineage": "cmroot.slb.template.policy.forward-policy.source",
+                            "obj-occurences": "intermediate",
+                            "obj-module-prompt": "dest",
+                            "obj-module-dont-display-value-in-prompt": true,
+                            "obj-lineage-full": "slb.template.policy.forward-policy.source.destination",
+                            "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination",
+                            "properties": {
+                                "class-list-list": {
+                                    "obj-name": "class-list",
+                                    "obj-help": "Configure class-list for destination matching",
+                                    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+                                    "obj-occurences": "multi",
+                                    "obj-json-suffix": "-list",
+                                    "obj-order-by": "priority(priority)",
+                                    "obj-module-prompt": "clist",
+                                    "obj-stats-oid": "2045",
+                                    "obj-module-dont-display-value-in-prompt": true,
+                                    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.class-list",
+                                    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/class-list/{dest-class-list}",
+                                    "properties": {
+                                        "dest-class-list": {
+                                            "type": "string",
+                                            "alias": "dest-class-list",
+                                            "minLength": "1",
+                                            "maxLength": "63",
+                                            "object-key": true,
+                                            "description": "Destination Class List Name",
+                                            "format": "string",
+                                            "src-name": "name"
+                                        },
+                                        "action": {
+                                            "type": "string",
+                                            "minLength": "1",
+                                            "maxLength": "63",
+                                            "condition": "dest-class-list",
+                                            "description": "Action to be performed",
+                                            "format": "string",
+                                            "src-name": "action"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "condition": "action",
+                                            "enum": [
+                                                "host",
+                                                "url",
+                                                "ip"
+                                            ],
+                                            "enumMap": [
+                                                {
+                                                    "host": "\"Match hostname"
+                                                },
+                                                {
+                                                    "url": "\"Match URL"
+                                                },
+                                                {
+                                                    "ip": "\"Match destination IP address"
+                                                }
+                                            ],
+                                            "description": "'host': \"Match hostname;'url': \"Match URL;'ip': \"Match destination IP address;",
+                                            "format": "enum",
+                                            "src-name": "type"
+                                        },
+                                        "priority": {
+                                            "type": "number",
+                                            "minimum": "1",
+                                            "maximum": "1024",
+                                            "condition": "type",
+                                            "description": "Priority value of the action(higher the number higher the priority)",
+                                            "format": "number",
+                                            "src-name": "priority"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "web-category-list-list": {
+                                    "obj-name": "web-category-list",
+                                    "obj-help": "Configure web-category category-list for destination matching",
+                                    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+                                    "obj-occurences": "multi",
+                                    "obj-json-suffix": "-list",
+                                    "obj-indexing": "string",
+                                    "obj-module-prompt": "cat-list",
+                                    "obj-stats-oid": "2046",
+                                    "obj-module-dont-display-value-in-prompt": true,
+                                    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.web-category-list",
+                                    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/web-category-list/{web-category-list}",
+                                    "properties": {
+                                        "web-category-list": {
+                                            "type": "string",
+                                            "format": "string-rlx",
+                                            "alias": "web-category-list",
+                                            "minLength": "1",
+                                            "maxLength": "63",
+                                            "object-key": true,
+                                            "obj-lineage-full": "web-category.category-list",
+                                            "$ref": "/axapi/v3/web-category/category-list",
+                                            "description": "Destination Class List Name",
+                                            "src-name": "name"
+                                        },
+                                        "action": {
+                                            "type": "string",
+                                            "minLength": "1",
+                                            "maxLength": "63",
+                                            "condition": "web-category-list",
+                                            "description": "Action to be performed",
+                                            "format": "string",
+                                            "src-name": "action"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "condition": "action",
+                                            "enum": [
+                                                "host",
+                                                "url"
+                                            ],
+                                            "enumMap": [
+                                                {
+                                                    "host": "\"Match hostname"
+                                                },
+                                                {
+                                                    "url": "\"match URL"
+                                                }
+                                            ],
+                                            "description": "'host': \"Match hostname;'url': \"match URL;",
+                                            "format": "enum",
+                                            "src-name": "type"
+                                        },
+                                        "priority": {
+                                            "type": "number",
+                                            "minimum": "1",
+                                            "maximum": "1024",
+                                            "condition": "type",
+                                            "description": "Priority value of the action(higher the number higher the priority)",
+                                            "format": "number",
+                                            "src-name": "priority"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "any": {
+                                    "obj-name": "any",
+                                    "obj-help": "Default destination match rule",
+                                    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+                                    "obj-occurences": "single",
+                                    "obj-module-prompt": "any",
+                                    "obj-stats-oid": "2047",
+                                    "obj-module-dont-display-value-in-prompt": true,
+                                    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.any",
+                                    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/any",
+                                    "properties": {
+                                        "action": {
+                                            "type": "string",
+                                            "minLength": "1",
+                                            "maxLength": "63",
+                                            "mandatory-in-api": true,
+                                            "description": "Action to be performed",
+                                            "format": "string",
+                                            "src-name": "action"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+#welcome-container {
+  height: 100%;
+  .topnavbar-wrapper {
+    .dropdown {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+  }
+  main {
+    padding: 20px;
+    h2 {
+      color: #000;
+    }
+  }
+  .toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 20px 20px 20px;
+    > * {
+      min-width: 100px;
+    }
+  }
+}

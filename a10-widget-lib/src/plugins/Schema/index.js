@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 
-import createValidationFuncs from 'helpers/validations';
+import createValidationFuncs from '../../helpers/validations';
 
 export default class Schema {
 
@@ -88,7 +88,6 @@ export default class Schema {
     const field = this._getFieldName(fieldName);
     const fieldObj = get(this.objectFields, field);
     let validations = {};
-    // console.log(fieldObj, this.objectFields, field);
     if (fieldObj) {
       const validationFuncs = createValidationFuncs(fieldObj);
       Object.keys(fieldObj).forEach((key) => {

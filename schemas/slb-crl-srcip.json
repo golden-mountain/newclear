@@ -1,0 +1,12 @@
+{
+    "obj-name": "crl-srcip",
+    "obj-help": "Show connection rate limit statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "12",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.crl-srcip",
+    "axapi": "/axapi/v3/slb/crl-srcip",
+    "properties": {}
+}

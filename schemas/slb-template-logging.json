@@ -22,7 +22,7 @@
         },
         "format": {
             "type": "string",
-            "format": "string-rlx",
+            "format": "line",
             "minLength": "1",
             "maxLength": "250",
             "description": "Specfiy a format string for web logging (format string(less than 250 characters) for web logging)",
@@ -39,7 +39,7 @@
         },
         "service-group": {
             "type": "string",
-            "format": "string-rlx",
+            "format": "long-string-rlx",
             "minLength": "1",
             "maxLength": "127",
             "obj-lineage-full": "slb.service-group",
@@ -116,12 +116,12 @@
         },
         "pool": {
             "type": "string",
+            "format": "string-rlx",
             "condition": "source-nat",
             "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
             "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
             "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
             "example-default": "ip.nat.pool",
-            "format": "string",
             "src-name": "pool"
         },
         "auto": {

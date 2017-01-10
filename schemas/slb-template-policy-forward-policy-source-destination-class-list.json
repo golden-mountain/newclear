@@ -1,0 +1,66 @@
+{
+    "obj-name": "class-list",
+    "obj-help": "Configure class-list for destination matching",
+    "obj-lineage": "cmroot.slb.template.policy.forward-policy.source.destination",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-order-by": "priority(priority)",
+    "obj-module-prompt": "clist",
+    "obj-stats-oid": "2045",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.policy.forward-policy.source.destination.class-list",
+    "axapi": "/axapi/v3/slb/template/policy/{name}/forward-policy/source/{name}/destination/class-list/{dest-class-list}",
+    "properties": {
+        "dest-class-list": {
+            "type": "string",
+            "alias": "dest-class-list",
+            "minLength": "1",
+            "maxLength": "63",
+            "object-key": true,
+            "description": "Destination Class List Name",
+            "format": "string",
+            "src-name": "name"
+        },
+        "action": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "dest-class-list",
+            "description": "Action to be performed",
+            "format": "string",
+            "src-name": "action"
+        },
+        "type": {
+            "type": "string",
+            "condition": "action",
+            "enum": [
+                "host",
+                "url",
+                "ip"
+            ],
+            "enumMap": [
+                {
+                    "host": "\"Match hostname"
+                },
+                {
+                    "url": "\"Match URL"
+                },
+                {
+                    "ip": "\"Match destination IP address"
+                }
+            ],
+            "description": "'host': \"Match hostname;'url': \"Match URL;'ip': \"Match destination IP address;",
+            "format": "enum",
+            "src-name": "type"
+        },
+        "priority": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1024",
+            "condition": "type",
+            "description": "Priority value of the action(higher the number higher the priority)",
+            "format": "number",
+            "src-name": "priority"
+        }
+    }
+}

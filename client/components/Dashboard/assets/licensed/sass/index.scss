@@ -1,0 +1,75 @@
+
+.licensed-container {
+  max-width: 100%;
+  .icon-row {
+    display: flex;
+    > div {
+      user-select: none;
+      margin: 0 5px;
+    }
+    + div {
+      margin-top: 10px;
+    }
+  }
+  .icon-container {
+    position: relative;
+    // FIXME, remove this
+    .dummy-icon {
+      width: 100px;
+      height: 100px;
+      background-color: #bbc1cc;
+    }
+    .ok {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 60px;
+      height: 60px;
+    }
+  }
+  .title {
+    text-align: center;
+    padding: 5px 0;
+  }
+}
+
+$popover-licensed-arrow-color: #5BC0DE;
+@at-root {
+  #popover-licensed-content {
+    padding: 0;
+    .popover-content {
+      background-color: $popover-licensed-arrow-color;
+      color: #FFF;
+      border: 1px solid $popover-licensed-arrow-color;
+    }
+    &.top > .arrow {
+      border-top-color: $popover-licensed-arrow-color;
+      bottom: -10px;
+      &:after {
+        border-top-color: $popover-licensed-arrow-color;
+      }
+    }
+    &.right > .arrow {
+      border-right-color: $popover-licensed-arrow-color;
+      left: -10px;
+      &:after {
+        border-right-color: $popover-licensed-arrow-color;
+      }
+    }
+    &.bottom > .arrow {
+      border-bottom-color: $popover-licensed-arrow-color;
+      top: -10px;
+      &:after {
+        border-bottom-color: $popover-licensed-arrow-color;;
+      }
+    }
+
+    &.left > .arrow {
+      border-left-color: $popover-licensed-arrow-color;
+      right: -10px;
+      &:after {
+        border-left-color: $popover-licensed-arrow-color;;
+      }
+    }
+  }
+}

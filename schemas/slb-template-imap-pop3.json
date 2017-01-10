@@ -1,0 +1,54 @@
+{
+    "obj-name": "imap-pop3",
+    "obj-help": "IMAP",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "imap-pop3",
+    "obj-disp-after": "slb.service-group",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.imap-pop3",
+    "axapi": "/axapi/v3/slb/template/imap-pop3/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "IMAP-POP3 Template Name",
+            "src-name": "name"
+        },
+        "starttls": {
+            "type": "string",
+            "enum": [
+                "disabled",
+                "optional",
+                "enforced"
+            ],
+            "enumMap": [
+                {
+                    "disabled": "\"Disable STARTTLS"
+                },
+                {
+                    "optional": "\"STARTTLS is optional requirement"
+                },
+                {
+                    "enforced": "\"Must issue STARTTLS command before imap transaction"
+                }
+            ],
+            "description": "STARTTLS requirement 'disabled': \"Disable STARTTLS;'optional': \"STARTTLS is optional requirement;'enforced': \"Must issue STARTTLS command before imap transaction;",
+            "default": "disabled",
+            "not-allowed-in-no": true,
+            "format": "enum",
+            "src-name": "starttls"
+        },
+        "logindisabled": {
+            "type": "number",
+            "format": "flag",
+            "description": "Disable Login before STARTTLS.Works only for imap",
+            "src-name": "logindisabled"
+        }
+    }
+}

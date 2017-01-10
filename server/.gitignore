@@ -1,0 +1,11 @@
+node_modules
+static
+.module-cache
+*.log*
+coverage
+__nogit
+.idea
+.tmp
+builds
+.gulp-cache
+dist

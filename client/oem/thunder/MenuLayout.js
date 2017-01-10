@@ -14,7 +14,8 @@ export default class MenuLayout extends React.Component {
   icons = {
     'root-dev-tools': 'icon-wrench',
     'root-adc': 'icon-layers',
-    'root-dashboard': 'icon-speedometer'
+    'root-dashboard': 'icon-speedometer',
+    'root-security': 'icon-shield'
   }
 
   constructor(props, context) {

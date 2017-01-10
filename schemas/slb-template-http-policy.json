@@ -1,0 +1,211 @@
+{
+    "obj-name": "http-policy",
+    "obj-help": "http-policy template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "http-policy",
+    "obj-disp-after": "waf.template",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.http-policy",
+    "axapi": "/axapi/v3/slb/template/http-policy/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "http-policy template name",
+            "src-name": "name"
+        },
+        "cookie-name": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "name of cookie to match (Cookie Name)",
+            "src-name": "cookie-name"
+        },
+        "http-policy-match": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "type": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "enum": [
+                            "cookie",
+                            "host",
+                            "url"
+                        ],
+                        "enumMap": [
+                            {
+                                "cookie": "\"cookie value match"
+                            },
+                            {
+                                "host": "\"hostname match"
+                            },
+                            {
+                                "url": "\"URL match"
+                            }
+                        ],
+                        "description": "'cookie': \"cookie value match;'host': \"hostname match;'url': \"URL match;",
+                        "maxItems": "64",
+                        "format": "enum",
+                        "src-name": "type"
+                    }
+                },
+                {
+                    "match-type": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "enum": [
+                            "contains",
+                            "ends-with",
+                            "equals",
+                            "starts-with"
+                        ],
+                        "enumMap": [
+                            {
+                                "contains": "\"Select service group if URL string contains another string"
+                            },
+                            {
+                                "ends-with": "\"Select service group if URL string ends with another string"
+                            },
+                            {
+                                "equals": "\"Select service group if URL string equals another string"
+                            },
+                            {
+                                "starts-with": "\"Select service group if URL string starts with another string"
+                            }
+                        ],
+                        "description": "'contains': \"Select service group if URL string contains another string;'ends-with': \"Select service group if URL string ends with another string;'equals': \"Select service group if URL string equals another string;'starts-with': \"Select service group if URL string starts with another string;",
+                        "maxItems": "64",
+                        "format": "enum",
+                        "src-name": "match-type"
+                    }
+                },
+                {
+                    "match-string": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "multi-field-key": true,
+                        "description": "URL String",
+                        "maxItems": "64",
+                        "src-name": "match-string"
+                    }
+                },
+                {
+                    "service-group": {
+                        "type": "string",
+                        "format": "long-string",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "description": "Service Group to be used (Service Group Name)",
+                        "src-name": "service-group"
+                    }
+                },
+                {
+                    "template": {
+                        "type": "string",
+                        "plat-neg-list": "fireeye",
+                        "enum": [
+                            "waf"
+                        ],
+                        "enumMap": [
+                            {
+                                "waf": "waf"
+                            }
+                        ],
+                        "description": "WAF template to be used 'undefined': undefined; (WAF template to be used)",
+                        "format": "enum",
+                        "src-name": "template"
+                    }
+                },
+                {
+                    "template-name": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "plat-neg-list": "fireeye",
+                        "minLength": "1",
+                        "maxLength": "63",
+                        "description": "WAF template to be used (Template Name)",
+                        "obj-lineage-full": "waf.template",
+                        "$ref": "/axapi/v3/waf/template",
+                        "src-name": "template-name"
+                    }
+                }
+            ],
+            "src-name": "http-policy-match"
+        },
+        "geo-location-match": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "geo-location": {
+                        "type": "string",
+                        "multi-field-key": true,
+                        "maxItems": "64",
+                        "description": "Geolocation name",
+                        "format": "string",
+                        "src-name": "geo-location"
+                    }
+                },
+                {
+                    "geo-location-service-group": {
+                        "type": "string",
+                        "format": "long-string-rlx",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "obj-lineage-full": "slb.service-group",
+                        "$ref": "/axapi/v3/slb/service-group",
+                        "description": "Service Group to be used (Service Group Name)",
+                        "alias": "geo-location-service-group",
+                        "src-name": "service-group"
+                    }
+                },
+                {
+                    "geo-location-template": {
+                        "type": "string",
+                        "plat-neg-list": "fireeye",
+                        "enum": [
+                            "waf"
+                        ],
+                        "enumMap": [
+                            {
+                                "waf": "waf"
+                            }
+                        ],
+                        "description": "WAF template to be used 'undefined': undefined; (WAF template to be used)",
+                        "alias": "geo-location-template",
+                        "format": "enum",
+                        "src-name": "template"
+                    }
+                },
+                {
+                    "geo-location-template-name": {
+                        "type": "string",
+                        "format": "string-rlx",
+                        "plat-neg-list": "fireeye",
+                        "minLength": "1",
+                        "maxLength": "127",
+                        "description": "WAF template to be used (Template Name)",
+                        "obj-lineage-full": "waf.template",
+                        "$ref": "/axapi/v3/waf/template",
+                        "alias": "geo-location-template-name",
+                        "src-name": "template-name"
+                    }
+                }
+            ],
+            "src-name": "geo-location-match"
+        }
+    }
+}

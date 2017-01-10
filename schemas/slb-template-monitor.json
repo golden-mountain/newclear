@@ -1,0 +1,377 @@
+{
+    "obj-name": "monitor",
+    "obj-help": "Monitor template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "monitor",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.monitor",
+    "axapi": "/axapi/v3/slb/template/monitor/{id}",
+    "properties": {
+        "id": {
+            "type": "number",
+            "object-key": true,
+            "minimum": "1",
+            "maximum": "16",
+            "description": "Monitor template ID Number",
+            "format": "number",
+            "src-name": "id"
+        },
+        "action": {
+            "type": "dummy",
+            "description": "Actions to be performed when any of the monitor condition is met",
+            "format": "dummy",
+            "src-name": "action"
+        },
+        "clear-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "clear": {
+                        "type": "dummy",
+                        "maxItems": "16",
+                        "condition": "action",
+                        "description": "Clear or Reset Functions",
+                        "format": "dummy",
+                        "src-name": "clear"
+                    }
+                },
+                {
+                    "sessions": {
+                        "type": "string",
+                        "condition": "clear",
+                        "enum": [
+                            "all",
+                            "sequence"
+                        ],
+                        "enumMap": [
+                            {
+                                "all": "\"Clear all sessions"
+                            },
+                            {
+                                "sequence": "\"Sequence number"
+                            }
+                        ],
+                        "description": "Clear SLB Sessions 'all': \"Clear all sessions;'sequence': \"Sequence number;",
+                        "format": "enum",
+                        "src-name": "sessions"
+                    }
+                },
+                {
+                    "clear-all-sequence": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "disabled": "sequence",
+                        "multi-field-key": true,
+                        "condition": "sessions",
+                        "alias": "clear-all-sequence",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                },
+                {
+                    "clear-sequence": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "disabled": "all",
+                        "multi-field-key": true,
+                        "condition": "sessions",
+                        "alias": "clear-sequence",
+                        "description": "Specify the port physical port number",
+                        "format": "number",
+                        "src-name": "sequence-number"
+                    }
+                }
+            ],
+            "src-name": "clear-cfg"
+        },
+        "link-disable-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "link-disable": {
+                        "type": "dummy",
+                        "maxItems": "16",
+                        "condition": "action",
+                        "description": "Specift the interface(s) to be disabled",
+                        "format": "dummy",
+                        "src-name": "link-disable"
+                    }
+                },
+                {
+                    "diseth": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "link-disable",
+                        "alias": "diseth",
+                        "description": "Specify the physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "dis-sequence": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "diseth",
+                        "alias": "dis-sequence",
+                        "description": "Sequence number (Specify the physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                }
+            ],
+            "src-name": "link-disable-cfg"
+        },
+        "link-enable-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "link-enable": {
+                        "type": "dummy",
+                        "maxItems": "16",
+                        "condition": "action",
+                        "description": "Specify the interface(s) to be enabled",
+                        "format": "dummy",
+                        "src-name": "link-enable"
+                    }
+                },
+                {
+                    "enaeth": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "link-enable",
+                        "alias": "enaeth",
+                        "description": "Specify the physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "ena-sequence": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "enaeth",
+                        "alias": "ena-sequence",
+                        "description": "Sequence number (Specify the physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                }
+            ],
+            "src-name": "link-enable-cfg"
+        },
+        "monitor-relation": {
+            "type": "string",
+            "enum": [
+                "monitor-and",
+                "monitor-or"
+            ],
+            "enumMap": [
+                {
+                    "monitor-and": "\"Configures the monitors in current template to work with AND logic"
+                },
+                {
+                    "monitor-or": "\"Configures the monitors in current template to work with OR logic"
+                }
+            ],
+            "description": "'monitor-and': \"Configures the monitors in current template to work with AND logic;'monitor-or': \"Configures the monitors in current template to work with OR logic;",
+            "default": "monitor-and",
+            "format": "enum",
+            "src-name": "monitor-relation"
+        },
+        "monitor": {
+            "type": "dummy",
+            "description": "Events to monitor",
+            "format": "dummy",
+            "src-name": "monitor"
+        },
+        "link-up-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "link-up": {
+                        "type": "dummy",
+                        "maxItems": "16",
+                        "condition": "monitor",
+                        "description": "Specify the interface(s) to monitor for link-up event",
+                        "format": "dummy",
+                        "src-name": "link-up"
+                    }
+                },
+                {
+                    "linkup-ethernet1": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "link-up",
+                        "alias": "linkup-ethernet1",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-up-sequence1": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkup-ethernet1",
+                        "alias": "link-up-sequence1",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                },
+                {
+                    "linkup-ethernet2": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "linkup-ethernet1",
+                        "alias": "linkup-ethernet2",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-up-sequence2": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkup-ethernet2",
+                        "alias": "link-up-sequence2",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                },
+                {
+                    "linkup-ethernet3": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "linkup-ethernet2",
+                        "alias": "linkup-ethernet3",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-up-sequence3": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkup-ethernet3",
+                        "alias": "link-up-sequence3",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                }
+            ],
+            "src-name": "link-up-cfg"
+        },
+        "link-down-cfg": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "link-down": {
+                        "type": "dummy",
+                        "maxItems": "16",
+                        "condition": "monitor",
+                        "description": "Specify the interface(s) to monitor for link-down event",
+                        "format": "dummy",
+                        "src-name": "link-down"
+                    }
+                },
+                {
+                    "linkdown-ethernet1": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "link-down",
+                        "alias": "linkdown-ethernet1",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-down-sequence1": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkdown-ethernet1",
+                        "alias": "link-down-sequence1",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                },
+                {
+                    "linkdown-ethernet2": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "linkdown-ethernet1",
+                        "alias": "linkdown-ethernet2",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-down-sequence2": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkdown-ethernet2",
+                        "alias": "link-down-sequence2",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                },
+                {
+                    "linkdown-ethernet3": {
+                        "type": "number",
+                        "format": "interface",
+                        "condition": "linkdown-ethernet2",
+                        "alias": "linkdown-ethernet3",
+                        "description": "Specify the port physical port number (Ethernet interface number)",
+                        "src-name": "eth"
+                    }
+                },
+                {
+                    "link-down-sequence3": {
+                        "type": "number",
+                        "minimum": "1",
+                        "maximum": "16",
+                        "multi-field-key": true,
+                        "condition": "linkdown-ethernet3",
+                        "alias": "link-down-sequence3",
+                        "description": "Sequence number (Specify the port physical port number)",
+                        "format": "number",
+                        "src-name": "sequence"
+                    }
+                }
+            ],
+            "src-name": "link-down-cfg"
+        }
+    }
+}

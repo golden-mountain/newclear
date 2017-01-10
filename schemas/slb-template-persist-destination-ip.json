@@ -1,0 +1,90 @@
+{
+    "obj-name": "destination-ip",
+    "obj-help": "Destination IP persistence",
+    "obj-lineage": "cmroot.slb.template.persist",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "destination ip persist",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.persist.destination-ip",
+    "axapi": "/axapi/v3/slb/template/persist/destination-ip/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Destination IP persistence template name",
+            "src-name": "name"
+        },
+        "dont-honor-conn-rules": {
+            "type": "number",
+            "format": "flag",
+            "description": "Do not observe connection rate rules",
+            "src-name": "dont-honor-conn-rules"
+        },
+        "hash-persist": {
+            "type": "number",
+            "format": "flag",
+            "description": "Use hash value of destination IP address",
+            "src-name": "hash-persist"
+        },
+        "match-type": {
+            "type": "number",
+            "format": "flag",
+            "description": "Persistence type",
+            "src-name": "match-type"
+        },
+        "server": {
+            "type": "number",
+            "format": "flag",
+            "condition": "match-type",
+            "link-next-fwd": "scan-all-members",
+            "description": "Persist to the same server, default is port",
+            "src-name": "server"
+        },
+        "service-group": {
+            "type": "number",
+            "format": "flag",
+            "condition": "match-type",
+            "link-next-fwd": "scan-all-members",
+            "m-exclusion": "server",
+            "description": "Persist within the same service group",
+            "src-name": "service-group"
+        },
+        "scan-all-members": {
+            "type": "number",
+            "format": "flag",
+            "condition": "server",
+            "description": "Persist with SCAN of all members",
+            "src-name": "scan-all-members"
+        },
+        "timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2000",
+            "default": "5",
+            "description": "Persistence timeout (in minutes)",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "netmask": {
+            "type": "ipv4-netmask",
+            "default": "255.255.255.255",
+            "description": "IP subnet mask (IP subnet mask)",
+            "format": "ipv4-netmask",
+            "src-name": "netmask"
+        },
+        "netmask6": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "128",
+            "default": "128",
+            "description": "IPV6 subnet mask (IPv6 subnet mask)",
+            "format": "number",
+            "src-name": "netmask6"
+        }
+    }
+}

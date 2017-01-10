@@ -1,0 +1,23 @@
+{
+    "obj-name": "exception",
+    "obj-help": "Config the exception which will not be checked",
+    "obj-lineage": "cmroot.slb.ssl-expire-check",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-backend": "system",
+    "obj-head-node-options": "<operation; not-allowed-in-no>",
+    "obj-lineage-full": "slb.ssl-expire-check.exception",
+    "axapi": "/axapi/v3/slb/ssl-expire-check/exception",
+    "properties": {
+        "certificate-name": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "255",
+            "condition": "action",
+            "description": "The certificate name",
+            "disabled": "clean",
+            "format": "string",
+            "src-name": "certificate-name"
+        }
+    }
+}

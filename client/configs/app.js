@@ -6,6 +6,7 @@ var APP_CONFIGS =  {
   OEM: OEM,
   LAYOUT: OEM,
   THEME: 'default',
+  MODULE_NAME: '930',
   COMPONENT_PAGE_SIZE: 15
 };
 

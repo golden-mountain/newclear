@@ -1,0 +1,310 @@
+{
+    "obj-name": "server",
+    "obj-help": "Server template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "string",
+    "obj-module-prompt": "rserver",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.server",
+    "axapi": "/axapi/v3/slb/template/server/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Server template name",
+            "src-name": "name"
+        },
+        "conn-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "8000000",
+            "default": "8000000",
+            "description": "Connection limit (Connection limit)",
+            "format": "number",
+            "src-name": "conn-limit"
+        },
+        "resume": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "condition": "conn-limit",
+            "link-next-fwd": "conn-limit-no-logging",
+            "description": "Resume accepting new connection after connection number drops below threshold (Connection resume threshold)",
+            "format": "number",
+            "src-name": "resume"
+        },
+        "conn-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "conn-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Connection rate limit (Connection rate limit)",
+            "format": "number",
+            "src-name": "conn-rate-limit"
+        },
+        "rate-interval": {
+            "type": "string",
+            "alias": "rate-interval",
+            "condition": "conn-rate-limit",
+            "description": "'100ms': \"Use 100 ms as sampling interval;'second': \"Use 1 second as sampling interval;",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Use 100 ms as sampling interval"
+                },
+                {
+                    "second": "\"Use 1 second as sampling interval"
+                }
+            ],
+            "link-next-fwd": "conn-rate-limit-no-logging",
+            "default": "second",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "conn-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-rate-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "dns-query-interval": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1440",
+            "default": "10",
+            "description": "The interval to query DNS server for the hostname (DNS query interval (in minute, default is 10))",
+            "format": "number",
+            "src-name": "dns-query-interval"
+        },
+        "dynamic-server-prefix": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "3",
+            "description": "Prefix of dynamic server (Prefix of dynamic server (default is \"DRS\"))",
+            "default": "DRS",
+            "format": "string",
+            "src-name": "dynamic-server-prefix"
+        },
+        "extended-stats": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable extended statistics on real server",
+            "src-name": "extended-stats"
+        },
+        "log-selection-failure": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable real-time logging for server selection failure event",
+            "src-name": "log-selection-failure"
+        },
+        "health-check": {
+            "type": "string",
+            "description": "Health Check Monitor (Health monitor name)",
+            "minLength": "1",
+            "maxLength": "63",
+            "obj-lineage-full": "health.monitor",
+            "$ref": "/axapi/v3/health/monitor",
+            "format": "string",
+            "src-name": "health-check"
+        },
+        "health-check-disable": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "health-check",
+            "description": "Disable configured health check configuration",
+            "src-name": "health-check-disable"
+        },
+        "max-dynamic-server": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1023",
+            "description": "Maximum dynamic server number (Maximum dynamic server number (default is 255))",
+            "default": "255",
+            "format": "number",
+            "src-name": "max-dynamic-server"
+        },
+        "min-ttl-ratio": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "15",
+            "description": "Minimum TTL to DNS query interval ratio (Minimum TTL ratio (default is 2))",
+            "default": "2",
+            "format": "number",
+            "src-name": "min-ttl-ratio"
+        },
+        "weight": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000",
+            "description": "Weight for the Real Servers (Connection Weight)",
+            "format": "number",
+            "src-name": "weight"
+        },
+        "spoofing-cache": {
+            "type": "number",
+            "format": "flag",
+            "description": "Servers under the template are spoofing cache",
+            "src-name": "spoofing-cache"
+        },
+        "stats-data-action": {
+            "type": "string",
+            "enum": [
+                "stats-data-enable",
+                "stats-data-disable"
+            ],
+            "enumMap": [
+                {
+                    "stats-data-enable": "\"Enable statistical data collection for real server"
+                },
+                {
+                    "stats-data-disable": "\"Disable statistical data collection for real server"
+                }
+            ],
+            "description": "'stats-data-enable': \"Enable statistical data collection for real server;'stats-data-disable': \"Disable statistical data collection for real server;",
+            "not-allowed-in-no": true,
+            "default": "stats-data-enable",
+            "format": "enum",
+            "src-name": "stats-data-action"
+        },
+        "slow-start": {
+            "type": "number",
+            "format": "flag",
+            "description": "Slowly ramp up the connection number after server is up",
+            "src-name": "slow-start"
+        },
+        "initial-slow-start": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "4095",
+            "condition": "slow-start",
+            "link-next-fwd": "add",
+            "description": "Initial slow start connection limit (default 128) (Initial slow start connection limit)",
+            "default": "128",
+            "alias": "initial-slow-start",
+            "format": "number",
+            "src-name": "from"
+        },
+        "add": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "4095",
+            "condition": "slow-start",
+            "link-next-fwd": "every",
+            "description": "Slow start connection limit add by a number every interval (Add by this number every interval)",
+            "format": "number",
+            "src-name": "add"
+        },
+        "times": {
+            "type": "number",
+            "minimum": "2",
+            "maximum": "10",
+            "m-exclusion": "add",
+            "condition": "slow-start",
+            "link-next-fwd": "every",
+            "description": "Slow start connection limit multiply by a number every interval (default 2) (Multiply by this number every interval)",
+            "default": "2",
+            "format": "number",
+            "src-name": "times"
+        },
+        "every": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "condition": "slow-start",
+            "link-next-fwd": "till",
+            "description": "Slow start connection limit increment interval (default 10) (Slow start connection limit increment interval)",
+            "default": "10",
+            "format": "number",
+            "src-name": "every"
+        },
+        "till": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "condition": "slow-start",
+            "description": "Slow start ends when slow start connection limit reaches a number (default 4096) (Slow start ends when connection limit reaches this number)",
+            "default": "4096",
+            "format": "number",
+            "src-name": "till"
+        },
+        "bw-rate-limit-acct": {
+            "type": "string",
+            "description": "'to-server-only': \"Only account for traffic sent to server;'from-server-only': \"Only account for traffic received from server;'all': \"Account for all traffic sent to and received from server;",
+            "enum": [
+                "to-server-only",
+                "from-server-only",
+                "all"
+            ],
+            "enumMap": [
+                {
+                    "to-server-only": "\"Only account for traffic sent to server"
+                },
+                {
+                    "from-server-only": "\"Only account for traffic received from server"
+                },
+                {
+                    "all": "\"Account for all traffic sent to and received from server"
+                }
+            ],
+            "default": "all",
+            "format": "enum",
+            "src-name": "bw-rate-limit-acct"
+        },
+        "bw-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16777216",
+            "description": "Configure bandwidth rate limit on real server (Bandwidth rate limit in Kbps)",
+            "format": "number",
+            "src-name": "bw-rate-limit"
+        },
+        "bw-rate-limit-resume": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16777216",
+            "condition": "bw-rate-limit",
+            "link-next-fwd": "bw-rate-limit-duration",
+            "description": "Resume server selection after bandwidth drops below this threshold (in Kbps) (Bandwidth rate limit resume threshold (in Kbps))",
+            "alias": "bw-rate-limit-resume",
+            "format": "number",
+            "src-name": "resume"
+        },
+        "bw-rate-limit-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "250",
+            "condition": "bw-rate-limit-resume",
+            "link-next-fwd": "bw-rate-limit-no-logging",
+            "description": "Duration in seconds the observed rate needs to honor (Duration in seconds)",
+            "alias": "bw-rate-limit-duration",
+            "format": "number",
+            "src-name": "duration"
+        },
+        "bw-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "bw-rate-limit-duration",
+            "description": "Do not log bandwidth rate limit related state transitions",
+            "alias": "bw-rate-limit-no-logging",
+            "src-name": "no-logging"
+        }
+    }
+}

@@ -214,8 +214,10 @@ export const widgetWrapper = ReduxDataConnector => {
         const nextComInstanceData = nextProps.app.getIn(this.instancePath).toJS();
         // console.log(thisComInstanceData);
         const defaultCheckFields = [ 'data', 'activeData', 'visible', 'errorMsg', 'invalid', 'submitErrors', 'children' ];
-        const needUpdateFields = this.props.updateFields && Object.assign({}, this.props.updateFields, defaultCheckFields);
-        return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
+        const needUpdateFields = this.props.updateFields || defaultCheckFields;
+        return this.checkComponentNeedUpdate(needUpdateFields, 
+          { ...nextComInstanceData, children: nextProps.children }, 
+          { ...thisComInstanceData, children: this.props.children });
       }
 
       checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {

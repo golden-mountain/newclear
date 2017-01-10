@@ -1,0 +1,307 @@
+{
+    "obj-name": "tcp-proxy",
+    "obj-help": "TCP Proxy",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "tcp proxy",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.tcp-proxy",
+    "axapi": "/axapi/v3/slb/template/tcp-proxy/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "TCP Proxy Template Name",
+            "src-name": "name"
+        },
+        "ack-aggressiveness": {
+            "type": "string",
+            "enum": [
+                "low",
+                "medium",
+                "high"
+            ],
+            "enumMap": [
+                {
+                    "low": "\"Delayed ACK"
+                },
+                {
+                    "medium": "\"Delayed ACK, with ACK on each packet with PUSH flag"
+                },
+                {
+                    "high": "\"ACK on each packet"
+                }
+            ],
+            "description": "The level of aggressiveness when generating ACKs 'low': \"Delayed ACK;'medium': \"Delayed ACK, with ACK on each packet with PUSH flag;'high': \"ACK on each packet;",
+            "default": "low",
+            "format": "enum",
+            "src-name": "ack-aggressiveness"
+        },
+        "backend-wscale": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "14",
+            "description": "The TCP window scale used for the server side, default is off (number)",
+            "format": "number",
+            "src-name": "backend-wscale"
+        },
+        "dynamic-buffer-allocation": {
+            "type": "number",
+            "format": "flag",
+            "description": "Optimally adjust the transmit and receive buffer sizes of TCP proxy while keeping their sum constant",
+            "src-name": "dynamic-buffer-allocation"
+        },
+        "fin-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "default": "5",
+            "description": "FIN timeout (sec), default is 5 (number)",
+            "format": "number",
+            "src-name": "fin-timeout"
+        },
+        "force-delete-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "description": "The maximum time that a session can stay in the system before being deleted, default is off (number (second))",
+            "format": "number",
+            "src-name": "force-delete-timeout"
+        },
+        "force-delete-timeout-100ms": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "31",
+            "m-exclusion": "force-delete-timeout",
+            "link-next-fwd": "alive-if-active",
+            "description": "The maximum time that a session can stay in the system before being deleted, default is off (number in 100ms)",
+            "format": "number",
+            "src-name": "force-delete-timeout-100ms"
+        },
+        "alive-if-active": {
+            "type": "number",
+            "format": "flag",
+            "condition": "force-delete-timeout",
+            "description": "keep connection alive if active traffic",
+            "src-name": "alive-if-active"
+        },
+        "idle-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2097151",
+            "default": "600",
+            "description": "Idle Timeout (Interval of 60 seconds), default is 600 (idle timeout in second, default 600)",
+            "round-off": "(60,30,60)",
+            "format": "number",
+            "src-name": "idle-timeout"
+        },
+        "server-down-action": {
+            "type": "string",
+            "enum": [
+                "FIN",
+                "RST"
+            ],
+            "enumMap": [
+                {
+                    "FIN": "\"FIN Connection"
+                },
+                {
+                    "RST": "\"Reset Connection"
+                }
+            ],
+            "description": "Server down connection delete action 'FIN': \"FIN Connection;'RST': \"Reset Connection;",
+            "format": "enum",
+            "src-name": "server-down-action"
+        },
+        "half-open-idle-timeout": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "description": "TCP Half Open Idle Timeout (sec), default is off (number)",
+            "format": "number",
+            "src-name": "half-open-idle-timeout"
+        },
+        "half-close-idle-timeout": {
+            "type": "number",
+            "minimum": "60",
+            "maximum": "120",
+            "description": "TCP Half Close Idle Timeout (sec), default is off (number)",
+            "format": "number",
+            "src-name": "half-close-idle-timeout"
+        },
+        "init-cwnd": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "15",
+            "description": "The initial congestion control window size (packets), default is 10 (number)",
+            "default": "10",
+            "format": "number",
+            "src-name": "init-cwnd"
+        },
+        "initial-window-size": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "description": "Set the initial window size, default is off (number)",
+            "format": "number",
+            "src-name": "initial-window-size"
+        },
+        "keepalive-interval": {
+            "type": "number",
+            "minimum": "60",
+            "maximum": "12000",
+            "description": "Interval between keepalive probes (sec), default is off (number)",
+            "format": "number",
+            "src-name": "keepalive-interval"
+        },
+        "keepalive-probes": {
+            "type": "number",
+            "minimum": "2",
+            "maximum": "10",
+            "description": "Number of keepalive probes sent, default is off (number)",
+            "format": "number",
+            "src-name": "keepalive-probes"
+        },
+        "mss": {
+            "type": "number",
+            "minimum": "128",
+            "maximum": "1460",
+            "description": "Responding MSS to use if client MSS is large, default is off (number)",
+            "default": "1460",
+            "format": "number",
+            "src-name": "mss"
+        },
+        "nagle": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable Nagle Algorithm",
+            "src-name": "nagle"
+        },
+        "qos": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "description": "QOS level (number)",
+            "format": "number",
+            "src-name": "qos"
+        },
+        "receive-buffer": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2147483647",
+            "description": "TCP Receive Buffer (default 200k) (number)",
+            "default": "200000",
+            "format": "number",
+            "src-name": "receive-buffer"
+        },
+        "reno": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable Reno Congestion Control Algorithm",
+            "src-name": "reno"
+        },
+        "transmit-buffer": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2147483647",
+            "description": "TCP Transmit Buffer (default 200k) (number)",
+            "default": "200000",
+            "format": "number",
+            "src-name": "transmit-buffer"
+        },
+        "reset-fwd": {
+            "type": "number",
+            "format": "flag",
+            "description": "send reset to server if error happens",
+            "src-name": "reset-fwd"
+        },
+        "reset-rev": {
+            "type": "number",
+            "format": "flag",
+            "description": "send reset to client if error happens",
+            "src-name": "reset-rev"
+        },
+        "disable": {
+            "type": "number",
+            "format": "flag",
+            "condition": "reset-rev",
+            "description": "send reset to client when server is disabled",
+            "src-name": "disable"
+        },
+        "down": {
+            "type": "number",
+            "format": "flag",
+            "condition": "reset-rev",
+            "m-exclusion": "disable",
+            "description": "send reset to client when server is down",
+            "src-name": "down"
+        },
+        "del-session-on-server-down": {
+            "type": "number",
+            "format": "flag",
+            "description": "Delete session if the server/port goes down (either disabled/hm down)",
+            "src-name": "del-session-on-server-down"
+        },
+        "retransmit-retries": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "20",
+            "default": "5",
+            "description": "Number of Retries for Retransmit, default is 5 (number)",
+            "format": "number",
+            "src-name": "retransmit-retries"
+        },
+        "insert-client-ip": {
+            "type": "number",
+            "format": "flag",
+            "description": "Insert client ip into TCP option",
+            "default": "0",
+            "src-name": "insert-client-ip"
+        },
+        "syn-retries": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "20",
+            "default": "5",
+            "description": "SYN Retry Numbers, default is 5 (number)",
+            "format": "number",
+            "src-name": "syn-retries"
+        },
+        "timewait": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "default": "5",
+            "description": "Timewait Threshold (sec), default 5 (number)",
+            "format": "number",
+            "src-name": "timewait"
+        },
+        "disable-tcp-timestamps": {
+            "type": "number",
+            "format": "flag",
+            "hide-help": true,
+            "description": "disable TCP Timestamps Option",
+            "src-name": "disable-tcp-timestamps"
+        },
+        "disable-window-scale": {
+            "type": "number",
+            "format": "flag",
+            "hide-help": true,
+            "description": "disable TCP Window-Scale Option",
+            "src-name": "disable-window-scale"
+        },
+        "disable-sack": {
+            "type": "number",
+            "format": "flag",
+            "hide-help": true,
+            "description": "disable Selective Ack Option",
+            "src-name": "disable-sack"
+        }
+    }
+}

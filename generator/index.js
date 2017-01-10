@@ -1,58 +1,66 @@
 
 import fs from 'fs';
 import _ from 'lodash';
-// var exec = require('child_process').exec;
 import ConvertForm from './utils/convertForm';
-// import FormDocument from './utils/formDocument';
 
 import CONFIG from './config.js';
 
-const initFolder = (initPath, paths) => {
-  const exists = fs.existsSync(initPath);
-  if (!exists) {
-    // fs.rmdirSync(initPath);
-    fs.mkdirSync(initPath);
+class Starter {
+
+  constructor() {
+    this.files = [
+      'slb-template-logging.json',
+      'slb-template-virtual-server.json',
+      'slb-virtual-server.json',
+      'slb-virtual-service.json'
+    ];
   }
 
-  paths.map((path) => {
-    initPath += '/' + path;
-    if (!fs.existsSync(initPath)) {
+  initFolder(initPath, paths) {
+    const exists = fs.existsSync(initPath);
+    if (!exists) {
       fs.mkdirSync(initPath);
     }
-  });
 
-};
+    paths.map((path) => {
+      initPath += '/' + path;
+      if (!fs.existsSync(initPath)) {
+        fs.mkdirSync(initPath);
+      }
+    });
+  }
 
-const writeFile = (folderPath, content) => {
-  const filename = 'Form.js';
-  fs.writeFileSync(`${folderPath}/${filename}`, content);
-};
+  writeFile(folderPath, content, filename) {
+    fs.writeFileSync(`${folderPath}/${filename}`, content);
+  }
 
-const writeFrom = (convertForm) => {
-  const content = convertForm.render();
-  const folders = convertForm.getFullPath();
-  initFolder(CONFIG.templatePath, folders);
-  const fullPaht = _.join(folders, '/');
-  writeFile(CONFIG.templatePath + fullPaht, content);
-};
+  writeFrom(convertForm) {
+    const folders = convertForm.getFullPath();
 
-const files = [
-  'slb-template-logging.json',
-  'slb-template-virtual-server.json',
-  'slb-virtual-server.json',
-  'slb-virtual-service.json'
-];
+    let jsxContent = convertForm.toJson();
+    jsxContent = JSON.stringify(jsxContent, null, 4);
+    this.initFolder(CONFIG.jsxSchemaPath, folders);
+    const jsxSchemaFullPath = _.join(folders, '/');
+    this.writeFile(CONFIG.jsxSchemaPath + jsxSchemaFullPath, jsxContent, 'jsx.json');
 
-(() => {
-  files.map((file) => {
-    let sc = require(CONFIG.schemaPath + file);
-    const name = file.replace('.json', '');
-    let cf = new ConvertForm(name, sc);
-    // initFolder(CONFIG.templatePath);
-    writeFrom(cf);
-  });
+    folders.push('components');
 
+    const content = convertForm.render();
+    this.initFolder(CONFIG.templatePath, folders);
+    const templateFullPath = _.join(folders, '/');
+    this.writeFile(CONFIG.templatePath + templateFullPath, content, 'Form.js');
+  }
 
-  // let doc = new FormDocument(sa);
-  // console.log(doc.toDoc());
-})();
+  begin() {
+    this.files.map((file) => {
+      let sc = require(CONFIG.schemaPath + file);
+      const name = file.replace('.json', '');
+      let cf = new ConvertForm(name, sc);
+      this.writeFrom(cf);
+    });
+  }
+
+}
+
+const starter = new Starter();
+starter.begin();

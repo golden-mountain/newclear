@@ -1,0 +1,12 @@
+{
+    "obj-name": "health-check-summary",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-head-node-options": "<hide-help; operation>",
+    "obj-auto-create": true,
+    "obj-stats-oid": "315",
+    "obj-lineage-full": "slb.health-check-summary",
+    "axapi": "/axapi/v3/slb/health-check-summary",
+    "properties": {}
+}

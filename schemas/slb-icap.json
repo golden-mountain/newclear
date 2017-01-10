@@ -1,0 +1,13 @@
+{
+    "obj-name": "icap",
+    "obj-help": "Show ICAP Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "388",
+    "obj-auto-create": true,
+    "obj-head-node-options": "<plat-neg-list",
+    "obj-lineage-full": "slb.icap",
+    "axapi": "/axapi/v3/slb/icap",
+    "properties": {}
+}

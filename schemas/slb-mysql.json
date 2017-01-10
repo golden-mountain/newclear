@@ -1,0 +1,12 @@
+{
+    "obj-name": "mysql",
+    "obj-help": "Show mysql Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "10",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.mysql",
+    "axapi": "/axapi/v3/slb/mysql",
+    "properties": {}
+}

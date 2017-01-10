@@ -1,0 +1,12 @@
+{
+    "obj-name": "health-gateway",
+    "obj-help": "Show gateway health-check statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "396",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.health-gateway",
+    "axapi": "/axapi/v3/slb/health-gateway",
+    "properties": {}
+}

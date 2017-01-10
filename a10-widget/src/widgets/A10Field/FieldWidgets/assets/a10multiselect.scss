@@ -1,0 +1,24 @@
+.multi-select {
+  .selector {
+    position: absolute;
+    z-index: 5;
+    background-color: #FFFFFF;
+    ul {
+      padding: 0;
+      li {
+        padding: 5px;
+        border: 1px solid #EEEEEE;
+        list-style-type: none;
+        cursor: pointer;
+        &:hover {
+          background-color: #5BC0DE;
+        }
+      }
+    }
+  }
+  .react-tagsinput {
+    > * {
+      width: 100%;
+    }
+  }
+}

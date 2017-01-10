@@ -1,0 +1,21 @@
+{
+    "obj-name": "svm-source-nat",
+    "obj-help": "Configure SVM Source-NAT Pool",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.svm-source-nat",
+    "axapi": "/axapi/v3/slb/svm-source-nat",
+    "properties": {
+        "pool": {
+            "type": "string",
+            "format": "string-rlx",
+            "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
+            "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
+            "description": "Specify NAT pool or pool group (NAT Pool or Pool Group)",
+            "example-default": "ip.nat.pool",
+            "src-name": "pool"
+        }
+    }
+}

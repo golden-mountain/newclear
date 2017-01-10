@@ -1,0 +1,69 @@
+{
+    "obj-name": "player-id-list",
+    "obj-help": "Player id records config",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-head-node-options": "<hide-help; operation>",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.player-id-list",
+    "axapi": "/axapi/v3/slb/player-id-list",
+    "properties": {
+        "player-record": {
+            "type": "array",
+            "array-start": true,
+            "array-multi": true,
+            "properties": [
+                {
+                    "player-id": {
+                        "type": "number",
+                        "description": "64/32 bit player id based on config",
+                        "format": "number",
+                        "src-name": "player-id"
+                    }
+                },
+                {
+                    "game-server-ipv4": {
+                        "type": "ipv4-address",
+                        "condition": "player-id",
+                        "description": "Specify IP address",
+                        "format": "ipv4-address",
+                        "src-name": "game-server-ipv4"
+                    }
+                },
+                {
+                    "game-server-ipv6": {
+                        "type": "ipv6-address",
+                        "condition": "player-id",
+                        "description": "Specify IPv6 address",
+                        "format": "ipv6-address",
+                        "src-name": "game-server-ipv6"
+                    }
+                },
+                {
+                    "game-server-port-v4": {
+                        "type": "number",
+                        "condition": "game-server-ipv4",
+                        "minimum": "0",
+                        "maximum": "65534",
+                        "description": "Port",
+                        "format": "number",
+                        "src-name": "game-server-port-v4"
+                    }
+                },
+                {
+                    "game-server-port-v6": {
+                        "type": "number",
+                        "condition": "game-server-ipv6",
+                        "minimum": "0",
+                        "maximum": "65534",
+                        "description": "Port",
+                        "format": "number",
+                        "src-name": "game-server-port-v6"
+                    }
+                }
+            ],
+            "src-name": "player-record"
+        }
+    }
+}

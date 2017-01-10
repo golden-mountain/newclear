@@ -1,0 +1,12 @@
+{
+    "obj-name": "mssql",
+    "obj-help": "Show mssql Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "11",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.mssql",
+    "axapi": "/axapi/v3/slb/mssql",
+    "properties": {}
+}

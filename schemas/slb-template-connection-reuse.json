@@ -1,0 +1,65 @@
+{
+    "obj-name": "connection-reuse",
+    "obj-help": "Connection Reuse",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "conn reuse",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.connection-reuse",
+    "axapi": "/axapi/v3/slb/template/connection-reuse/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "Connection Reuse Template Name",
+            "src-name": "name"
+        },
+        "limit-per-server": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "65535",
+            "default": "1000",
+            "description": "Max Server Connections allowed (Connections per Server Port (default 1000))",
+            "format": "number",
+            "src-name": "limit-per-server"
+        },
+        "timeout": {
+            "type": "number",
+            "minimum": "60",
+            "maximum": "3600",
+            "default": "2400",
+            "description": "Timeout in seconds. Multiple of 60 (def 2400) (Timeout in seconds. Multiple of 60 (def 2400))",
+            "format": "number",
+            "src-name": "timeout"
+        },
+        "keep-alive-conn": {
+            "type": "number",
+            "format": "flag",
+            "description": "Keep a number of server connections open",
+            "src-name": "keep-alive-conn"
+        },
+        "preopen": {
+            "type": "number",
+            "format": "flag",
+            "condition": "keep-alive-conn",
+            "link-next-fwd": "num-conn-per-port",
+            "description": "Preopen server connection",
+            "src-name": "preopen"
+        },
+        "num-conn-per-port": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1024",
+            "condition": "keep-alive-conn",
+            "description": "Connections per Server Port (default 100)",
+            "default": "100",
+            "format": "number",
+            "src-name": "num-conn-per-port"
+        }
+    }
+}

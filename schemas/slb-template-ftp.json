@@ -1,0 +1,55 @@
+{
+    "obj-name": "ftp",
+    "obj-help": "FTP template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "ftp template",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.ftp",
+    "axapi": "/axapi/v3/slb/template/ftp/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "FTP template name",
+            "src-name": "name"
+        },
+        "active-mode-port": {
+            "type": "number",
+            "format": "flag",
+            "description": "Non-Standard FTP Active mode port",
+            "src-name": "active-mode-port"
+        },
+        "active-mode-port-val": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65534",
+            "condition": "active-mode-port",
+            "description": "Non-Standard FTP Active mode port",
+            "format": "number",
+            "src-name": "active-mode-port-val"
+        },
+        "to": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65534",
+            "condition": "active-mode-port-val",
+            "description": "End range of FTP Active mode port (End range of FTP Active mode port)",
+            "format": "number",
+            "src-name": "to"
+        },
+        "any": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "active-mode-port-val",
+            "condition": "active-mode-port",
+            "description": "Allow any FTP Active mode port",
+            "src-name": "any"
+        }
+    }
+}

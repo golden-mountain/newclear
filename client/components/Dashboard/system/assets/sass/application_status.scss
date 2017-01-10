@@ -1,0 +1,38 @@
+
+.application-status-container {
+  .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF;
+
+    &-success {
+      color: #00CC00;
+    }
+    &-warming {
+      color: #F0AD7D;
+    }
+    &-error {
+      color: #D43F3A;
+    }
+
+    > div:first-child {
+      width: 30px;
+      text-align: center;
+    }
+    > div:nth-child(2) {
+      flex-grow: 2;   
+      .title {
+        width: 100%;
+      }
+      .description {
+        width: 100%;
+        color: #949494;
+      }
+    }
+    > div:last-child {
+      width: 20px;
+      text-align: center;
+    }
+  }
+}

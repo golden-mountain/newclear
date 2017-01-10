@@ -1,0 +1,14 @@
+{
+    "obj-name": "ssl-forward-proxy-cert",
+    "obj-help": "Show hashed certificates",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-head-node-options": "<hide-help; operation>",
+    "obj-auto-create": true,
+    "obj-backend": "system",
+    "obj-stats-oid": "401",
+    "obj-lineage-full": "slb.ssl-forward-proxy-cert",
+    "axapi": "/axapi/v3/slb/ssl-forward-proxy-cert",
+    "properties": {}
+}

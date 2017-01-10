@@ -1,0 +1,20 @@
+{
+    "obj-name": "reset",
+    "obj-help": "Reset",
+    "obj-lineage": "cmroot.slb.service-group",
+    "obj-head-node-options": "<operation; not-allowed-in-no>",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-vcs-device-spec": true,
+    "obj-lineage-full": "slb.service-group.reset",
+    "axapi": "/axapi/v3/slb/service-group/{name}/reset",
+    "properties": {
+        "auto-switch": {
+            "type": "number",
+            "format": "flag",
+            "description": "Reset auto stateless state",
+            "src-name": "auto-switch"
+        }
+    }
+}

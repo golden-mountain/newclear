@@ -1,0 +1,13 @@
+{
+    "obj-name": "ssl-stats",
+    "obj-help": "SSL Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-head-node-options": "<hide-help; operation>",
+    "obj-auto-create": true,
+    "obj-stats-oid": "320",
+    "obj-lineage-full": "slb.ssl-stats",
+    "axapi": "/axapi/v3/slb/ssl-stats",
+    "properties": {}
+}

@@ -1,0 +1,22 @@
+
+.system-summary {
+  margin: 10px;
+  table {
+    width: 100%;
+    font-size: 14px;
+    tr, td {
+      border: 1px solid #e4eaec;
+    } 
+    td {
+      color: #555555;
+      padding: 5px;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis; 
+      &:first-child { 
+        width: 35%;
+        text-align: right; 
+      }
+    }
+  }
+}

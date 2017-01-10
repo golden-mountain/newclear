@@ -1,0 +1,12 @@
+{
+    "obj-name": "ftp-ctl",
+    "obj-help": "Show FTP Statistics",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "17",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.ftp-ctl",
+    "axapi": "/axapi/v3/slb/ftp-ctl",
+    "properties": {}
+}

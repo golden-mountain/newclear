@@ -2,11 +2,12 @@ import React from 'react';
 // import { Col, Row } from 'react-bootstrap';
 
 import LoginForm from './components/Form';
-import PageBase from 'helpers/PageBase';
-import pageWrapper from 'helpers/pageWrapper';
+// import PageBase from 'helpers/PageBase';
+// import pageWrapper from 'helpers/pageWrapper';
 
+class LoginPage extends React.Component {
 
-class LoginPage extends PageBase {
+  static displayName = 'loginPage'
 
   render() {
     // console.log(this);
@@ -17,4 +18,4 @@ class LoginPage extends PageBase {
 
 }
 
-export default pageWrapper(LoginPage);
+export default LoginPage;

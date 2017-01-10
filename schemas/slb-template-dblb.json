@@ -1,0 +1,76 @@
+{
+    "obj-name": "dblb",
+    "obj-help": "DBLB template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "dblb",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.dblb",
+    "axapi": "/axapi/v3/slb/template/dblb/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "description": "DBLB template name",
+            "src-name": "name"
+        },
+        "class-list": {
+            "type": "string",
+            "minLength": "1",
+            "maxLength": "63",
+            "description": "Specify user/password string class list (Class list name)",
+            "format": "string",
+            "src-name": "class-list"
+        },
+        "server-version": {
+            "type": "string",
+            "enum": [
+                "MSSQL2008",
+                "MSSQL2012",
+                "MySQL"
+            ],
+            "enumMap": [
+                {
+                    "MSSQL2008": "\"MSSQL server 2008 or 2008 R2"
+                },
+                {
+                    "MSSQL2012": "\"MSSQL server 2012"
+                },
+                {
+                    "MySQL": "\"MySQL server (any version)"
+                }
+            ],
+            "description": "Specify server version 'MSSQL2008': \"MSSQL server 2008 or 2008 R2;'MSSQL2012': \"MSSQL server 2012;'MySQL': \"MySQL server (any version);",
+            "format": "enum",
+            "src-name": "server-version"
+        },
+        "calc-sha1": {
+            "obj-name": "calc-sha1",
+            "obj-help": "Calculate sha1 value of a cleartext password",
+            "obj-lineage": "cmroot.slb.template.dblb",
+            "obj-head-node-options": "<operation>",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-module-dont-display-value-in-prompt": true,
+            "obj-vcs-device-spec": true,
+            "obj-lineage-full": "slb.template.dblb.calc-sha1",
+            "axapi": "/axapi/v3/slb/template/dblb/{name}/calc-sha1",
+            "properties": {
+                "sha1-value": {
+                    "type": "string",
+                    "minLength": "1",
+                    "maxLength": "63",
+                    "description": "Cleartext password",
+                    "format": "string",
+                    "src-name": "sha1-value"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

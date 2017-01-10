@@ -5,10 +5,11 @@ const OEM = configApp.OEM;
 const StandardPageLayout = require('oem/' + OEM + '/PageLayout').default;
 
 import VirtualPortForm from './components/Form';
-import PageBase from 'helpers/PageBase';
-import pageWrapper from 'helpers/pageWrapper';
+// import PageBase from 'helpers/PageBase';
+// import pageWrapper from 'helpers/pageWrapper';
+import { widgetWrapper } from 'a10-widget';
 
-class VirtualPortEdit extends PageBase {
+class VirtualPortEdit extends React.Component {
 
   render() {
 
@@ -20,4 +21,4 @@ class VirtualPortEdit extends PageBase {
   }
 }
 
-export default pageWrapper(VirtualPortEdit);
+export default widgetWrapper()(VirtualPortEdit);

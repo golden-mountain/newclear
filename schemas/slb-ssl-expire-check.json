@@ -1,0 +1,75 @@
+{
+    "obj-name": "ssl-expire-check",
+    "obj-help": "SSL certificate expiration check",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-backend": "system",
+    "obj-lineage-full": "slb.ssl-expire-check",
+    "axapi": "/axapi/v3/slb/ssl-expire-check",
+    "properties": {
+        "ssl-expire-email-address": {
+            "type": "string",
+            "format": "email-addr",
+            "minLength": "1",
+            "maxLength": "63",
+            "alias": "ssl-expire-email-address",
+            "description": "Config Email address for certificate expiration check (Email address for certificate expiration check)",
+            "src-name": "email-address"
+        },
+        "expire-address1": {
+            "type": "string",
+            "format": "email-addr",
+            "minLength": "1",
+            "maxLength": "63",
+            "condition": "ssl-expire-email-address",
+            "link-next-fwd": "before",
+            "description": "Email address for certificate expiration check",
+            "src-name": "expire-address1"
+        },
+        "before": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "condition": "ssl-expire-email-address",
+            "description": "The number of days in advance notice before expiration, default is 5 (The number of days in advance notice before expiration, default is 5)",
+            "default": "5",
+            "format": "number",
+            "src-name": "before"
+        },
+        "interval-days": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "5",
+            "condition": "before",
+            "description": "The interval of days notice after expiration, default is 2 (The interval of days notice after expiration, default is 2)",
+            "alias": "interval-days",
+            "default": "2",
+            "format": "number",
+            "src-name": "interval"
+        },
+        "exception": {
+            "obj-name": "exception",
+            "obj-help": "Config the exception which will not be checked",
+            "obj-lineage": "cmroot.slb.ssl-expire-check",
+            "obj-occurences": "single",
+            "obj-indexing": "none",
+            "obj-backend": "system",
+            "obj-head-node-options": "<operation; not-allowed-in-no>",
+            "obj-lineage-full": "slb.ssl-expire-check.exception",
+            "axapi": "/axapi/v3/slb/ssl-expire-check/exception",
+            "properties": {
+                "certificate-name": {
+                    "type": "string",
+                    "minLength": "1",
+                    "maxLength": "255",
+                    "condition": "action",
+                    "description": "The certificate name",
+                    "disabled": "clean",
+                    "format": "string",
+                    "src-name": "certificate-name"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

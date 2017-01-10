@@ -1,0 +1,12 @@
+{
+    "obj-name": "ssl-forward-proxy",
+    "obj-help": "SSL forward proxy stats info",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "string",
+    "obj-stats-oid": "499",
+    "obj-auto-create": true,
+    "obj-lineage-full": "slb.ssl-forward-proxy",
+    "axapi": "/axapi/v3/slb/ssl-forward-proxy",
+    "properties": {}
+}

@@ -1,0 +1,21 @@
+{
+    "obj-name": "transparent-acl-template",
+    "obj-help": "ACL setting for transparent sessions",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-lineage-full": "slb.transparent-acl-template",
+    "axapi": "/axapi/v3/slb/transparent-acl-template",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "minLength": "1",
+            "maxLength": "127",
+            "obj-lineage-full": "slb.template.tcp",
+            "$ref": "/axapi/v3/slb/template/tcp",
+            "description": "Specify template name",
+            "src-name": "name"
+        }
+    }
+}

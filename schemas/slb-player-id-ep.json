@@ -1,0 +1,14 @@
+{
+    "obj-name": "player-id-ep",
+    "obj-help": "Player-id endpoint",
+    "obj-lineage": "cmroot.slb",
+    "obj-occurences": "single",
+    "obj-indexing": "none",
+    "obj-head-node-options": "<hide-help;>",
+    "obj-module": true,
+    "obj-auto-create": true,
+    "obj-stats-oid": "509",
+    "obj-lineage-full": "slb.player-id-ep",
+    "axapi": "/axapi/v3/slb/player-id-ep",
+    "properties": {}
+}

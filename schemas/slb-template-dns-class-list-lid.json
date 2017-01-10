@@ -1,0 +1,149 @@
+{
+    "obj-name": "lid",
+    "obj-help": "Limit ID",
+    "obj-lineage": "cmroot.slb.template.dns.class-list",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "number",
+    "obj-lineage-full": "slb.template.dns.class-list.lid",
+    "axapi": "/axapi/v3/slb/template/dns/{name}/class-list/{name}/lid/{lidnum}",
+    "properties": {
+        "lidnum": {
+            "type": "number",
+            "object-key": true,
+            "minimum": "1",
+            "maximum": "31",
+            "alias": "lidnum",
+            "description": "Specify a limit ID",
+            "format": "number",
+            "src-name": "lid"
+        },
+        "conn-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "2147483647",
+            "description": "Connection rate limit (Connection rate limit)",
+            "format": "number",
+            "src-name": "conn-rate-limit"
+        },
+        "per": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "condition": "conn-rate-limit",
+            "description": "Per (Number of 100ms)",
+            "format": "number",
+            "src-name": "per"
+        },
+        "over-limit-action": {
+            "type": "number",
+            "format": "flag",
+            "description": "Action when exceeds limit",
+            "src-name": "over-limit-action"
+        },
+        "action-value": {
+            "type": "string",
+            "condition": "over-limit-action",
+            "enum": [
+                "dns-cache-disable",
+                "dns-cache-enable",
+                "forward"
+            ],
+            "enumMap": [
+                {
+                    "dns-cache-disable": "\"Disable DNS cache when it exceeds limit"
+                },
+                {
+                    "dns-cache-enable": "\"Enable DNS cache when it exceeds limit"
+                },
+                {
+                    "forward": "\"Forward the traffic even it exceeds limit"
+                }
+            ],
+            "description": "'dns-cache-disable': \"Disable DNS cache when it exceeds limit;'dns-cache-enable': \"Enable DNS cache when it exceeds limit;'forward': \"Forward the traffic even it exceeds limit;",
+            "link-next-fwd": "lockout",
+            "format": "enum",
+            "src-name": "action-value"
+        },
+        "lockout": {
+            "type": "number",
+            "condition": "over-limit-action",
+            "minimum": "1",
+            "maximum": "1023",
+            "disabled": "forward",
+            "link-next-fwd": "log",
+            "description": "Don't accept any new connection for certain time (Lockout duration in minutes)",
+            "format": "number",
+            "src-name": "lockout"
+        },
+        "log": {
+            "type": "number",
+            "format": "flag",
+            "condition": "over-limit-action",
+            "description": "Log a message",
+            "src-name": "log"
+        },
+        "log-interval": {
+            "type": "number",
+            "condition": "log",
+            "minimum": "1",
+            "maximum": "255",
+            "description": "Log interval (minute, by default system will log every over limit instance)",
+            "format": "number",
+            "src-name": "log-interval"
+        },
+        "dns": {
+            "type": "object",
+            "description": "DNS cache option",
+            "array-start": true,
+            "properties": {
+                "cache-action": {
+                    "type": "string",
+                    "enum": [
+                        "cache-disable",
+                        "cache-enable"
+                    ],
+                    "enumMap": [
+                        {
+                            "cache-disable": "\"Disable dns cache"
+                        },
+                        {
+                            "cache-enable": "\"Enable dns cache"
+                        }
+                    ],
+                    "description": "'cache-disable': \"Disable dns cache;'cache-enable': \"Enable dns cache;",
+                    "condition": "dns",
+                    "default": "cache-disable",
+                    "format": "enum",
+                    "src-name": "cache-action"
+                },
+                "ttl": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "65535",
+                    "condition": "dns",
+                    "description": "TTL for cache entry (TTL in seconds)",
+                    "format": "number",
+                    "src-name": "ttl"
+                },
+                "weight": {
+                    "type": "number",
+                    "minimum": "1",
+                    "maximum": "7",
+                    "condition": "dns",
+                    "description": "Weight for cache entry (Weight)",
+                    "format": "number",
+                    "src-name": "weight"
+                },
+                "honor-server-response-ttl": {
+                    "type": "number",
+                    "format": "flag",
+                    "condition": "dns",
+                    "description": "Honor the server reponse TTL",
+                    "src-name": "honor-server-response-ttl"
+                }
+            },
+            "src-name": "dns"
+        }
+    }
+}

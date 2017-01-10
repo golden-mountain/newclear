@@ -1,0 +1,393 @@
+{
+    "obj-name": "port",
+    "obj-help": "Port template",
+    "obj-lineage": "cmroot.slb.template",
+    "obj-occurences": "multi",
+    "obj-json-suffix": "-list",
+    "obj-indexing": "none",
+    "obj-module-prompt": "rport",
+    "obj-module-dont-display-value-in-prompt": true,
+    "obj-lineage-full": "slb.template.port",
+    "axapi": "/axapi/v3/slb/template/port/{name}",
+    "properties": {
+        "name": {
+            "type": "string",
+            "format": "string-rlx",
+            "object-key": true,
+            "minLength": "1",
+            "maxLength": "127",
+            "default": "default",
+            "description": "Port template name",
+            "src-name": "name"
+        },
+        "conn-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "8000000",
+            "default": "8000000",
+            "description": "Connection limit (Connection limit)",
+            "format": "number",
+            "src-name": "conn-limit"
+        },
+        "resume": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "condition": "conn-limit",
+            "link-next-fwd": "conn-limit-no-logging",
+            "description": "Resume accepting new connection after connection number drops below threshold (Connection resume threshold)",
+            "format": "number",
+            "src-name": "resume"
+        },
+        "conn-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "conn-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Connection rate limit (Connection rate limit)",
+            "format": "number",
+            "src-name": "conn-rate-limit"
+        },
+        "rate-interval": {
+            "type": "string",
+            "alias": "rate-interval",
+            "condition": "conn-rate-limit",
+            "description": "'100ms': \"Use 100 ms as sampling interval;'second': \"Use 1 second as sampling interval;",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Use 100 ms as sampling interval"
+                },
+                {
+                    "second": "\"Use 1 second as sampling interval"
+                }
+            ],
+            "link-next-fwd": "conn-rate-limit-no-logging",
+            "default": "second",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "conn-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "conn-rate-limit",
+            "description": "Do not log connection over limit event",
+            "alias": "conn-rate-limit-no-logging",
+            "src-name": "no-logging"
+        },
+        "request-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1048575",
+            "description": "Request rate limit (Request rate limit)",
+            "format": "number",
+            "src-name": "request-rate-limit"
+        },
+        "request-rate-interval": {
+            "type": "string",
+            "alias": "request-rate-interval",
+            "condition": "request-rate-limit",
+            "description": "'100ms': \"Use 100 ms as sampling interval;'second': \"Use 1 second as sampling interval;",
+            "enum": [
+                "100ms",
+                "second"
+            ],
+            "enumMap": [
+                {
+                    "100ms": "\"Use 100 ms as sampling interval"
+                },
+                {
+                    "second": "\"Use 1 second as sampling interval"
+                }
+            ],
+            "link-next-fwd": "reset",
+            "default": "second",
+            "format": "enum",
+            "src-name": "per"
+        },
+        "reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "request-rate-limit",
+            "link-next-fwd": "request-rate-no-logging",
+            "description": "Send client reset when connection rate over limit",
+            "src-name": "reset"
+        },
+        "request-rate-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "request-rate-limit",
+            "alias": "request-rate-no-logging",
+            "description": "Do not log connection over limit event",
+            "src-name": "no-logging"
+        },
+        "dest-nat": {
+            "type": "number",
+            "format": "flag",
+            "description": "Destination NAT",
+            "src-name": "dest-nat"
+        },
+        "down-grace-period": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "86400",
+            "description": "Port down grace period (Down grace period)",
+            "format": "number",
+            "src-name": "down-grace-period"
+        },
+        "del-session-on-server-down": {
+            "type": "number",
+            "format": "flag",
+            "description": "Delete session if the server/port goes down (either disabled/hm down)",
+            "src-name": "del-session-on-server-down"
+        },
+        "dscp": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "63",
+            "description": "Differentiated Services Code Point (DSCP to Real Server IP Mapping Value)",
+            "format": "number",
+            "src-name": "dscp"
+        },
+        "dynamic-member-priority": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16",
+            "description": "Set dynamic member's priority (Initial priority (default is 16))",
+            "default": "16",
+            "format": "number",
+            "src-name": "dynamic-member-priority"
+        },
+        "decrement": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "7",
+            "condition": "dynamic-member-priority",
+            "description": "Decrease after every round of DNS query (default is 0)",
+            "default": "0",
+            "format": "number",
+            "src-name": "decrement"
+        },
+        "extended-stats": {
+            "type": "number",
+            "format": "flag",
+            "description": "Enable extended statistics on real server port",
+            "src-name": "extended-stats"
+        },
+        "no-ssl": {
+            "type": "number",
+            "format": "flag",
+            "description": "No SSL",
+            "src-name": "no-ssl"
+        },
+        "stats-data-action": {
+            "type": "string",
+            "enum": [
+                "stats-data-enable",
+                "stats-data-disable"
+            ],
+            "enumMap": [
+                {
+                    "stats-data-enable": "\"Enable statistical data collection for real server port"
+                },
+                {
+                    "stats-data-disable": "\"Disable statistical data collection for real server port"
+                }
+            ],
+            "description": "'stats-data-enable': \"Enable statistical data collection for real server port;'stats-data-disable': \"Disable statistical data collection for real server port;",
+            "not-allowed-in-no": true,
+            "default": "stats-data-enable",
+            "format": "enum",
+            "src-name": "stats-data-action"
+        },
+        "health-check": {
+            "type": "string",
+            "description": "Health Check Monitor (Health monitor name)",
+            "minLength": "1",
+            "maxLength": "63",
+            "obj-lineage-full": "health.monitor",
+            "$ref": "/axapi/v3/health/monitor",
+            "format": "string",
+            "src-name": "health-check"
+        },
+        "health-check-disable": {
+            "type": "number",
+            "format": "flag",
+            "m-exclusion": "health-check",
+            "description": "Disable configured health check configuration",
+            "src-name": "health-check-disable"
+        },
+        "inband-health-check": {
+            "type": "number",
+            "format": "flag",
+            "description": "Use inband traffic to detect port's health status",
+            "src-name": "inband-health-check"
+        },
+        "retry": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "7",
+            "condition": "inband-health-check",
+            "link-next-fwd": "reassign",
+            "description": "Maximum retry times before reassign this connection to another server/port (default is 2) (The maximum retry number)",
+            "default": "2",
+            "format": "number",
+            "src-name": "retry"
+        },
+        "reassign": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "255",
+            "condition": "inband-health-check",
+            "link-next-fwd": "down-timer",
+            "description": "Maximum reassign times before declear the server/port down (default is 25) (The maximum reassign number)",
+            "default": "25",
+            "format": "number",
+            "src-name": "reassign"
+        },
+        "down-timer": {
+            "type": "number",
+            "minimum": "0",
+            "maximum": "255",
+            "condition": "inband-health-check",
+            "link-next-fwd": "resel-on-reset",
+            "description": "The timer to bring the marked down server/port to up (default is 0, never bring up) (The timer to bring up server (in second, default is 0))",
+            "default": "0",
+            "format": "number",
+            "src-name": "down-timer"
+        },
+        "resel-on-reset": {
+            "type": "number",
+            "format": "flag",
+            "condition": "inband-health-check",
+            "description": "When receiving reset from server, do the server/port reselection (default is 0, don't do reselection)",
+            "src-name": "resel-on-reset"
+        },
+        "source-nat": {
+            "type": "string",
+            "format": "string-rlx",
+            "description": "Source NAT (IP NAT Pool or pool group name)",
+            "obj-lineage-full": "ip.nat.pool, ipv6.nat.pool, ip.nat.pool-group, ipv6.nat.pool-group",
+            "$ref": "/axapi/v3/ip/nat/pool, ipv6/nat/pool, ip/nat/pool-group, ipv6/nat/pool-group",
+            "src-name": "source-nat"
+        },
+        "weight": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "1000",
+            "description": "Weight (port weight)",
+            "default": "1",
+            "format": "number",
+            "src-name": "weight"
+        },
+        "slow-start": {
+            "type": "number",
+            "format": "flag",
+            "description": "Slowly ramp up the connection number after port is up",
+            "src-name": "slow-start"
+        },
+        "initial-slow-start": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "4095",
+            "condition": "slow-start",
+            "link-next-fwd": "add",
+            "description": "Initial slow start connection limit (default 128) (Initial slow start connection limit)",
+            "alias": "initial-slow-start",
+            "default": "128",
+            "format": "number",
+            "src-name": "from"
+        },
+        "add": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "4095",
+            "condition": "slow-start",
+            "link-next-fwd": "every",
+            "description": "Slow start connection limit add by a number every interval (Add by this number every interval)",
+            "format": "number",
+            "src-name": "add"
+        },
+        "times": {
+            "type": "number",
+            "minimum": "2",
+            "maximum": "10",
+            "condition": "slow-start",
+            "m-exclusion": "add",
+            "link-next-fwd": "every",
+            "description": "Slow start connection limit multiply by a number every interval (default 2) (Multiply by this number every interval)",
+            "default": "2",
+            "format": "number",
+            "src-name": "times"
+        },
+        "every": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "60",
+            "condition": "slow-start",
+            "link-next-fwd": "till",
+            "description": "Slow start connection limit increment interval (default 10) (Slow start connection limit increment interval)",
+            "default": "10",
+            "format": "number",
+            "src-name": "every"
+        },
+        "till": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "65535",
+            "condition": "slow-start",
+            "description": "Slow start ends when slow start connection limit reaches a number (default 4096) (Slow start ends when connection limit reaches this number)",
+            "default": "4096",
+            "format": "number",
+            "src-name": "till"
+        },
+        "bw-rate-limit": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16777216",
+            "description": "Configure bandwidth rate limit on real server port (Bandwidth rate limit in Kbps)",
+            "format": "number",
+            "src-name": "bw-rate-limit"
+        },
+        "bw-rate-limit-resume": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "16777216",
+            "condition": "bw-rate-limit",
+            "link-next-fwd": "bw-rate-limit-duration",
+            "description": "Resume server selection after bandwidth drops below this threshold (in Kbps) (Bandwidth rate limit resume threshold (in Kbps))",
+            "alias": "bw-rate-limit-resume",
+            "format": "number",
+            "src-name": "resume"
+        },
+        "bw-rate-limit-duration": {
+            "type": "number",
+            "minimum": "1",
+            "maximum": "250",
+            "condition": "bw-rate-limit-resume",
+            "link-next-fwd": "bw-rate-limit-no-logging",
+            "description": "Duration in seconds the observed rate needs to honor (Duration in seconds)",
+            "alias": "bw-rate-limit-duration",
+            "format": "number",
+            "src-name": "duration"
+        },
+        "bw-rate-limit-no-logging": {
+            "type": "number",
+            "format": "flag",
+            "condition": "bw-rate-limit-duration",
+            "description": "Do not log bandwidth rate limit related state transitions",
+            "alias": "bw-rate-limit-no-logging",
+            "src-name": "no-logging"
+        }
+    }
+}
