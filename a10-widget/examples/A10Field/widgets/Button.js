@@ -2,7 +2,6 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import { Button } from 'react-bootstrap';
 
-
 export default widgetWrapper()(Button, {
   meta: {
     widget: {

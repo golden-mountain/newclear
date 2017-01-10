@@ -1,7 +1,7 @@
 import { GridView } from '../../../src/widgets/A10GridView';
 
 export default {
-  iconClassName: 'fa fa-user',
+  iconClassName: 'fa fa-th',
   type: 'basic',
   name: 'gridview33',
   schema: {

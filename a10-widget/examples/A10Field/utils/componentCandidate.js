@@ -34,22 +34,18 @@ export default function (componentCandidate) {
       iconClassName: PropTypes.string,
       name: PropTypes.string,
       component: PropTypes.string,
-      isContainer: PropTypes.bool
+      isContainer: PropTypes.bool,
+      style: PropTypes.object
     }
 
     render() {
       const {
         connectDragSource,
         iconClassName,
-        name
+        name, 
+        style
       } = this.props;
-      const style = {
-        width: '33%',
-        display: 'inline-block',
-        textAlign: 'center',
-        marginBottom: 10,
-        cursor: 'move'
-      };
+
       return connectDragSource(
         <div style={style}>
           <i className={iconClassName} />
