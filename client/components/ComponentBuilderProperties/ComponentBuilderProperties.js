@@ -29,11 +29,10 @@ export default class ComponentBuilderProperties extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.componentProps) {
-      if (!this.props.componentProp || this.props.componentProps.componentId !== nextProps.componentProps.componentId) {
+      if (!this.props.componentProp || this.props.componentProps._componentId !== nextProps.componentProps._componentId) {
         this.state = {};
       }
       this.setState(this.getStateFromProps(nextProps));
-
     }
   }
 
@@ -89,7 +88,7 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   updateComponent = _.debounce(() =>{
-    this.props.updateComponent(this.props.componentProps.componentId, Object.assign({}, this.state, {children: null}));
+    this.props.updateComponent(this.props.componentProps._componentId, Object.assign({}, this.state));
   }, 100)
 
   getGroupComponentProperties() {
@@ -184,7 +183,7 @@ export default class ComponentBuilderProperties extends Component {
             //   </Col>
             // </FormGroup>
           }
-          <PanelGroup accordion >
+          <PanelGroup accordion defaultActiveKey="basic">
             {
               Object.keys(groupComponentProperties).map((key) => {
                 return (

@@ -1,16 +1,14 @@
 import React from 'react';
-import { Col, Row, Tabs, Tab } from 'react-bootstrap';
+import { Col as BootstrapCol, Row as BootstrapRow, Tabs, Tab } from 'react-bootstrap';
 import Panel from 'react-bootstrap/lib/Panel';
-import { Button as ReactButton } from 'react-bootstrap';
+import { Button as BootstrapButton } from 'react-bootstrap';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/github.css';
-// test components loading
-import ContainerWidget from './components/ContainerWidget';
-import NotEditableCom from './components/NotEditableCom';
-import EditableCom from './components/EditableCom';
-import FieldCheckbox from './components/FieldCheckbox';
-import Button from './components/Button';
-import FieldGroup from './components/FieldGroup';
+import PanelGroup from 'react-bootstrap/lib/PanelGroup';
+import _ from 'lodash';
+
+import allLayouts from './layouts';
+import allComponents from './components';
 
 import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
@@ -20,18 +18,9 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import editableUtils from '../../../generator/Editable/editableUtils';
 import componentCandidate from '../../../generator/Editable/componentCandidate';
 
-const allComponents = {
-  ContainerWidget,
-  NotEditableCom,
-  EditableCom,
-  FieldCheckbox,
-  Button,
-  FieldGroup
-};
 
 editableUtils.registerComponents(allComponents);
 const ComponentCandidate = componentCandidate(allComponents);
-
 const urlParams = {
   'name': 'vs2',
   'port-number': 80,
@@ -77,33 +66,14 @@ const noSchemaData = {
 
 
 const reactSchemaSource = {
-  componentId: 'root',
-  component: 'ContainerWidget',
+  _componentId: 'root',
+  component: 'div',
   meta: containerSchema,
-  componentChildren: [
+  children: [
     {
-      componentId: 'a',
-      component: 'NotEditableCom',
-      meta: metaWithEndpoint
-    },
-    {
-      componentId: 'b',
-      component: 'EditableCom',
-      meta: metaWithSchema,
-      title: 'Port'
-    },
-    {
-      componentId: 'c',
-      component: 'EditableCom',
-      meta: noSchemaData,
-      title: 'IP Address',
-      validation: { 'ipv6-address': () => 'error IPv6' }
-    },
-    {
-      componentId: 'd',
-      component: 'EditableCom',
-      meta: objectSchema,
-      title: 'Netmask'
+      _componentId: 'a',
+      component: 'Button',
+      children: 'Hello'
     }
   ]
 };
@@ -124,17 +94,16 @@ export default class Sandbox extends React.Component {
   }
   
   startToEditComponent(args) {
-    console.log('startToEditComponent');
     const { componentMeta, componentProps } = args; 
     this.setState({
-      editingComponentId: componentProps.componentId,
+      editingComponentId: componentProps._componentId,
       editingComponentProps: componentProps,
       editingComponentMeta: componentMeta
     });
   }
 
-  deleteComponent(componentId)  {
-    const newSchema = editableUtils.deleteComponent(this.state.reactSchema, componentId);
+  deleteComponent(_componentId)  {
+    const newSchema = editableUtils.deleteComponent(this.state.reactSchema, _componentId);
     this.setState({ reactSchema: newSchema });
   }
 
@@ -143,8 +112,8 @@ export default class Sandbox extends React.Component {
     this.setState({ reactSchema: newSchema });
   }
 
-  updateComponent(componentId, component) {
-    const newSchema = editableUtils.updateComponent(this.state.reactSchema, componentId, component);
+  updateComponent(_componentId, component) {
+    const newSchema = editableUtils.updateComponent(this.state.reactSchema, _componentId, component);
     this.setState({ 
       reactSchema: newSchema,
       editingComponentProps: component
@@ -153,6 +122,16 @@ export default class Sandbox extends React.Component {
 
   downloadJsxFile = ()=> {
     window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
+  }
+
+  toggleEditMode = ()=> {
+    this.setState({ editMode: !this.state.editMode });
+  }
+
+  chooseLayout = (schema)=>{
+    this.setState({
+      reactSchema: schema
+    });
   }
 
   render() {
@@ -171,63 +150,115 @@ export default class Sandbox extends React.Component {
       .filter(item=>item.meta)
       .map(item=> item.meta.widget);
 
+    const groupedWidgets = _.groupBy(Widgets, widget => widget.type);
+    // const groupLayout = _.groupBy(Object.values(allLayouts), layout)
     return (
-      <Row>
-        <Col xs={4}>
+      <BootstrapRow>
+        <BootstrapCol xs={4}>
           <Panel>
-            <Tabs>
+            <BootstrapButton active={editMode} onClick={this.toggleEditMode}>
+              {editMode ? (
+                <span><i className="fa fa-eye" />&nbsp;View</span> 
+              ) : (
+                <span>
+                  <i className="fa fa-pencil" />&nbsp;Edit
+                </span> 
+              )}
+            </BootstrapButton>
+            <br />
+            <br />
+            <br />
+            <Tabs id="sandbox-controller-panel">
               <Tab eventKey={1} title="Components">
-                {
-                  Widgets.map((item, index)=>{
-                    return (
-                      <ComponentCandidate
-                        key={index}
-                        name={item.name}
-                        component={item.component}
-                        iconClassName={item.iconClassName}
-                        isContainer={item.isContainer === true}
-                      />
-                    );
-                  })
-                }
+                <PanelGroup accordion defaultActiveKey="basic">
+                  {
+                    Object.keys(groupedWidgets).map(key=>{
+                      return (
+                        <Panel header={key} eventKey={key} key={key}>
+                          {
+                            groupedWidgets[key].map((item, index) => {
+                              return (
+                                <ComponentCandidate
+                                  key={index}
+                                  name={item.name}
+                                  component={item.component}
+                                  iconClassName={item.iconClassName}
+                                  isContainer={item.isContainer === true}
+                                />
+                              );
+                            })
+                          }
+                        </Panel>
+                      );
+                    })
+
+                  }
+                </PanelGroup>
               </Tab>
-              <Tab eventKey={2} title="JSX">
+              <Tab eventKey={2} title="Layout">
+                <PanelGroup accordion defaultActiveKey="basic">
+                  <Panel header="basic" eventKey="basic" key="basic">
+                    {
+                      Object.values(allLayouts).map((item, index)=>{
+                        const style = {
+                          width: '33%',
+                          display: 'inline-block',
+                          textAlign: 'center',
+                          cursor: 'pointer'
+                        };
+                        return (
+                          <span 
+                            key={index} 
+                            style={style} onClick={this.chooseLayout.bind(this, item.schema)}>
+                            <i className={item.iconClassName} />
+                            <br />
+                            {item.name}
+                          </span>
+                        );
+                      })
+                    }
+                  </Panel>
+                </PanelGroup>
+              </Tab>
+              <Tab eventKey={3} title="JSX">
                 <Highlight
                   className="javascript"
                   style={{ width: '100%', height: 'auto', minHeight: 300 }}
                 >
                   { editableUtils.generateReactCodeFromSchema(reactSchema) }
                 </Highlight>
-                <ReactButton
+                <BootstrapButton
                   onClick={::this.downloadJsxFile}
                 >
                   Download
-                </ReactButton>
+                </BootstrapButton>
               </Tab>
             </Tabs>
           </Panel>
          
-        </Col>
-        <Col xs={5}>
-          <div>
-          {
-            editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
-              startToEditComponent: this.startToEditComponent.bind(this),
-              deleteComponent: this.deleteComponent.bind(this),
-              moveComponent: this.moveComponent.bind(this)
-            })
-          }
-          </div>
-        </Col>
-        <Col xs={3}>
+        </BootstrapCol>
+        <BootstrapCol xs={5}>
+          <Panel header="Edit">
+          
+            {
+              editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
+                startToEditComponent: this.startToEditComponent.bind(this),
+                deleteComponent: this.deleteComponent.bind(this),
+                moveComponent: this.moveComponent.bind(this)
+              })
+            }
+          
+          </Panel>
+        </BootstrapCol>
+        <BootstrapCol xs={3}>
           <ComponentBuilderProperties
             editingComponentId={editingComponentId}
             componentProps={editingComponentProps}
             componentMeta={editingComponentMeta}
             updateComponent={this.updateComponent.bind(this)}
           />
-        </Col>
-      </Row>
+        </BootstrapCol>
+      </BootstrapRow>
     );
   }
 }
