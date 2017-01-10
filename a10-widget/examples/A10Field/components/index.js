@@ -7,6 +7,7 @@ import FieldGroup from './FieldGroup';
 import Row from './Row';
 import Col from './Col';
 import Panel from './Panel';
+import A10TagInput from './TagInput';
 
 const allComponents = {
   ContainerWidget,
@@ -17,7 +18,8 @@ const allComponents = {
   FieldGroup,
   Row,
   Col,
-  Panel
+  Panel,
+  A10TagInput
 };
 
 export default allComponents;

@@ -11,7 +11,7 @@ export const widgetWrapper = ReduxDataConnector => {
   // const uniqueId = (prefix='') => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
-  return WrappedComponent => {
+  return (WrappedComponent, members={} ) => {
 
     const displayName = `Widget${WrappedComponent.displayName}`;
     // console.log(uniqueId(displayName));
@@ -197,14 +197,14 @@ export const widgetWrapper = ReduxDataConnector => {
         return this.executePluginMethod('onBeforeUpdate', nextProps, nextState) || true;
       }
 
-      shouldComponentUpdate(nextProps, nextState) {
-        let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
-        if (result) {
-          result = this.checkWidgetDataUpdate(nextProps);
-        }
-        // console.log(result, this.instancePath);
-        return result;
-      }
+      // shouldComponentUpdate(nextProps, nextState) {
+      //   let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+      //   if (result) {
+      //     result = this.checkWidgetDataUpdate(nextProps);
+      //   }
+      //   // console.log(result, this.instancePath);
+      //   return result;
+      // }
 
       checkWidgetDataUpdate(nextProps) {
         if (!nextProps || !nextProps.app) {
@@ -293,9 +293,9 @@ export const widgetWrapper = ReduxDataConnector => {
           return result;
         };
       }
-      return connect(conn)(Widget);
+      return Object.assign(connect(conn)(Widget), members);
     } else {
-      return connect()(Widget);
+      return Object.assign(connect()(Widget), members);
     }
     // return ConnnectedWidget;
   };
