@@ -16,6 +16,7 @@ import MultiOptionsEdit from './properties/MultiOptionsEdit';
 
 export default class ComponentBuilderProperties extends Component {
   static propTypes = {
+    editingComponentId: PropTypes.string,
     componentProps: PropTypes.object,
     componentMeta: PropTypes.object,
     updateComponent: PropTypes.func,
@@ -155,6 +156,7 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   render() {
+    const { editingComponentId } = this.props;
     const PanelHeader = (
       <span>
         <i className="fa fa-gear" />&nbsp;Properties
@@ -166,7 +168,7 @@ export default class ComponentBuilderProperties extends Component {
 
     const groupComponentProperties = this.getGroupComponentProperties();
 
-    return (
+    return editingComponentId && (
       <Panel className="panel panel-success" header={PanelHeader}>
         <Form horizontal>
           {

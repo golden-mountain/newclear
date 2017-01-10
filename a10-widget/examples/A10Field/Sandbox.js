@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col as BootstrapCol, Row as BootstrapRow, Tabs, Tab } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Grid, Col as BootstrapCol, Row as BootstrapRow, Tabs, Tab } from 'react-bootstrap';
 import Panel from 'react-bootstrap/lib/Panel';
 import { Button as BootstrapButton } from 'react-bootstrap';
 import Highlight from 'react-highlight';
@@ -88,8 +88,7 @@ export default class Sandbox extends React.Component {
       reactSchema: reactSchemaSource,
       editingComponentId: null,
       componentProps: null,
-      componentMeta: null,
-      editMode: true
+      componentMeta: null
     };
   }
   
@@ -112,7 +111,7 @@ export default class Sandbox extends React.Component {
     this.setState({ reactSchema: newSchema });
   }
 
-  updateComponent(_componentId, component) {
+  updateComponent = (_componentId, component) => {
     const newSchema = editableUtils.updateComponent(this.state.reactSchema, _componentId, component);
     this.setState({ 
       reactSchema: newSchema,
@@ -120,12 +119,12 @@ export default class Sandbox extends React.Component {
     });
   }
 
-  downloadJsxFile = ()=> {
-    window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
+  stopEditingComponent = () => {
+    this.setState({ editingComponentId: null });
   }
 
-  toggleEditMode = ()=> {
-    this.setState({ editMode: !this.state.editMode });
+  downloadJsxFile = ()=> {
+    window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
   }
 
   chooseLayout = (schema)=>{
@@ -140,7 +139,6 @@ export default class Sandbox extends React.Component {
     } = this.state;
 
     const {
-      editMode,
       editingComponentId,
       editingComponentProps,
       editingComponentMeta
@@ -153,112 +151,125 @@ export default class Sandbox extends React.Component {
     const groupedWidgets = _.groupBy(Widgets, widget => widget.type);
     // const groupLayout = _.groupBy(Object.values(allLayouts), layout)
     return (
-      <BootstrapRow>
-        <BootstrapCol xs={4}>
-          <Panel>
-            <BootstrapButton active={editMode} onClick={this.toggleEditMode}>
-              {editMode ? (
-                <span><i className="fa fa-eye" />&nbsp;View</span> 
-              ) : (
-                <span>
-                  <i className="fa fa-pencil" />&nbsp;Edit
-                </span> 
-              )}
-            </BootstrapButton>
-            <br />
-            <br />
-            <br />
-            <Tabs id="sandbox-controller-panel">
-              <Tab eventKey={1} title="Components">
-                <PanelGroup accordion defaultActiveKey="basic">
-                  {
-                    Object.keys(groupedWidgets).map(key=>{
-                      return (
-                        <Panel header={key} eventKey={key} key={key}>
-                          {
-                            groupedWidgets[key].map((item, index) => {
-                              return (
-                                <ComponentCandidate
-                                  key={index}
-                                  name={item.name}
-                                  component={item.component}
-                                  iconClassName={item.iconClassName}
-                                  isContainer={item.isContainer === true}
-                                />
-                              );
-                            })
-                          }
-                        </Panel>
-                      );
-                    })
-
-                  }
-                </PanelGroup>
-              </Tab>
-              <Tab eventKey={2} title="Layout">
-                <PanelGroup accordion defaultActiveKey="basic">
-                  <Panel header="basic" eventKey="basic" key="basic">
+      <div>
+        <Navbar staticTop={true} fluid={true}>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">A10 UI generator</a>
+            </Navbar.Brand>
+          </Navbar.Header>
+        </Navbar>
+        <Grid fluid={true}>
+          <BootstrapRow>
+            <BootstrapCol xs={3}>
+              <Tabs id="sandbox-controller-panel">
+                <Tab eventKey={1} title="Widgets">
+                  <PanelGroup accordion defaultActiveKey="basic">
                     {
-                      Object.values(allLayouts).map((item, index)=>{
-                        const style = {
-                          width: '33%',
-                          display: 'inline-block',
-                          textAlign: 'center',
-                          cursor: 'pointer'
-                        };
+                      Object.keys(groupedWidgets).map(key=>{
                         return (
-                          <span 
-                            key={index} 
-                            style={style} onClick={this.chooseLayout.bind(this, item.schema)}>
-                            <i className={item.iconClassName} />
-                            <br />
-                            {item.name}
-                          </span>
+                          <Panel header={key} eventKey={key} key={key}>
+                            {
+                              groupedWidgets[key].map((item, index) => {
+                                return (
+                                  <ComponentCandidate
+                                    key={index}
+                                    name={item.name}
+                                    component={item.component}
+                                    iconClassName={item.iconClassName}
+                                    isContainer={item.isContainer === true}
+                                  />
+                                );
+                              })
+                            }
+                          </Panel>
                         );
+                      })
+
+                    }
+                  </PanelGroup>
+                </Tab>
+                <Tab eventKey={2} title="Layout">
+                  <PanelGroup accordion defaultActiveKey="basic">
+                    <Panel header="basic" eventKey="basic" key="basic">
+                      {
+                        Object.values(allLayouts).map((item, index)=>{
+                          const style = {
+                            width: '33%',
+                            display: 'inline-block',
+                            textAlign: 'center',
+                            cursor: 'pointer'
+                          };
+                          return (
+                            <span 
+                              key={index} 
+                              style={style} onClick={this.chooseLayout.bind(this, item.schema)}>
+                              <i className={item.iconClassName} />
+                              <br />
+                              {item.name}
+                            </span>
+                          );
+                        })
+                      }
+                    </Panel>
+                  </PanelGroup>
+                </Tab>
+                <Tab eventKey={3} title="Schema">
+                
+                </Tab>
+              </Tabs>
+            </BootstrapCol>
+            <BootstrapCol xs={5}>
+              <Tabs id="sandbox-main-area">
+                <Tab eventKey={1} title={<span><i className="fa fa-pencil" />&nbsp;Edit</span>}>
+                  <Panel>
+                    {
+                      editableUtils.jsonToComponent(reactSchema, true, { editingComponentId }, {
+                        startToEditComponent: this.startToEditComponent.bind(this),
+                        deleteComponent: this.deleteComponent.bind(this),
+                        moveComponent: this.moveComponent.bind(this)
                       })
                     }
                   </Panel>
-                </PanelGroup>
-              </Tab>
-              <Tab eventKey={3} title="JSX">
-                <Highlight
-                  className="javascript"
-                  style={{ width: '100%', height: 'auto', minHeight: 300 }}
-                >
-                  { editableUtils.generateReactCodeFromSchema(reactSchema) }
-                </Highlight>
-                <BootstrapButton
-                  onClick={::this.downloadJsxFile}
-                >
-                  Download
-                </BootstrapButton>
-              </Tab>
-            </Tabs>
-          </Panel>
-         
-        </BootstrapCol>
-        <BootstrapCol xs={5}>
-          <Panel header="Edit">
-          
-            {
-              editableUtils.jsonToComponent(reactSchema, editMode, { editingComponentId }, {
-                startToEditComponent: this.startToEditComponent.bind(this),
-                deleteComponent: this.deleteComponent.bind(this),
-                moveComponent: this.moveComponent.bind(this)
-              })
-            }
-          
-          </Panel>
-        </BootstrapCol>
-        <BootstrapCol xs={3}>
-          <ComponentBuilderProperties
-            editingComponentId={editingComponentId}
-            componentProps={editingComponentProps}
-            componentMeta={editingComponentMeta}
-            updateComponent={this.updateComponent.bind(this)}
-          />
-        </BootstrapCol>
-      </BootstrapRow>
+                </Tab>
+                <Tab eventKey={2} title={<span><i className="fa fa-eye" />&nbsp;Preview</span>}>
+                  <Panel>
+                    {
+                      editableUtils.jsonToComponent(reactSchema, false, { editingComponentId }, {
+                        startToEditComponent: this.startToEditComponent.bind(this),
+                        deleteComponent: this.deleteComponent.bind(this),
+                        moveComponent: this.moveComponent.bind(this)
+                      })
+                    }
+                  </Panel>
+                </Tab>
+                <Tab eventKey={3} title={<span><i className="fa fa-code" />&nbsp;Code</span>}>
+                  <Highlight
+                    className="javascript"
+                    style={{ width: '100%', height: 'auto', minHeight: 300 }}
+                  >
+                    { editableUtils.generateReactCodeFromSchema(reactSchema) }
+                  </Highlight>
+                  <BootstrapButton
+                    onClick={::this.downloadJsxFile}
+                  >
+                    Download
+                  </BootstrapButton>
+                </Tab>
+              </Tabs> 
+            </BootstrapCol>
+            <BootstrapCol xs={4}>
+              <ComponentBuilderProperties
+                editingComponentId={editingComponentId}
+                componentProps={editingComponentProps}
+                componentMeta={editingComponentMeta}
+                updateComponent={this.updateComponent}
+                stopEditingComponent={this.stopEditingComponent}
+              />
+            </BootstrapCol>
+          </BootstrapRow>
+        </Grid>
+      </div>
     );
   }
 }
