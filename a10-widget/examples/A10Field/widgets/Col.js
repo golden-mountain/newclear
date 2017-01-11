@@ -6,7 +6,7 @@ export default widgetWrapper()(Col, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
-      type: 'basic',
+      type: 'Bootstrap Container',
       name: 'Col',
       component: 'Col',
       display: 'block',

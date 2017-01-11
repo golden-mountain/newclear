@@ -6,7 +6,7 @@ export default widgetWrapper()(ButtonGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-folder',
-      type: 'layout',
+      type: 'Bootstrap Container',
       name: 'ButtonGroup',
       component: 'ButtonGroup',
       display: 'inline-block',

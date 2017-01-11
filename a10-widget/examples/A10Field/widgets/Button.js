@@ -6,7 +6,7 @@ export default widgetWrapper()(Button, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
-      type: 'basic',
+      type: 'Bootstrap',
       name: 'Button',
       component: 'Button',
       display: 'inline-block',

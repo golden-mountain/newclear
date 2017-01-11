@@ -6,7 +6,7 @@ export default widgetWrapper()(ButtonToolbar, {
   meta: {
     widget: {
       iconClassName: 'fa fa-folder',
-      type: 'layout',
+      type: 'Bootstrap Container',
       name: 'ButtonToolbar',
       component: 'ButtonToolbar',
       display: 'block',
