@@ -22,7 +22,7 @@ export default (name, options = [33, 33, 33]) => {
     schema: {
       _componentId: 'root',
       component: GridView,
-      children: child
+      schemaChildren: child
     }
   };
 };

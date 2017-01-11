@@ -7,7 +7,7 @@ export default {
   schema: {
     _componentId: 'root',
     component: GridView,
-    children: [
+    schemaChildren: [
       {
         _componentId: '1',
         component: 'div',

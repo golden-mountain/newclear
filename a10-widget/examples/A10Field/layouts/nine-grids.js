@@ -5,11 +5,11 @@ export default {
   schema: {
     _componentId: 'root',
     component: 'div',
-    children: [
+    schemaChildren: [
       {
         _componentId: 'row1',
         component: 'Row',
-        children: [
+        schemaChildren: [
           {
             _componentId: 'col11',
             component: 'Col',
@@ -33,7 +33,7 @@ export default {
       {
         _componentId: 'row2',
         component: 'Row',
-        children: [
+        schemaChildren: [
           {
             _componentId: 'col21',
             component: 'Col',
@@ -57,7 +57,7 @@ export default {
       {
         _componentId: 'row3',
         component: 'Row',
-        children: [
+        schemaChildren: [
           {
             _componentId: 'col31',
             component: 'Col',

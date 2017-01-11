@@ -68,7 +68,7 @@ const reactSchemaSource = {
   componentId: 'root',
   component: 'ContainerWidget',
   meta: containerSchema,
-  componentChildren: [
+  schemaChildren: [
     {
       componentId: 'a',
       component: 'NotEditableCom',

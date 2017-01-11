@@ -9,11 +9,11 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import allLayouts from './layouts';
 import allWidgets from './widgets';
 
-import ComponentBuilderProperties from '../../../client/components/ComponentBuilderProperties/ComponentBuilderProperties';
+import ComponentBuilderProperties from './components/ComponentBuilderProperties/ComponentBuilderProperties';
 // import slbVirtualServerSchema from 'schemas/slb-virtual-server.json';
 
-import LeftPanel from './Components/LeftPanel';
-import MainPanel from './Components/MainPanel';
+import LeftPanel from './components/LeftPanel';
+import MainPanel from './components/MainPanel'; 
 import editableUtils from './utils/editableUtils';
 
 const urlParams = {
@@ -64,11 +64,11 @@ const reactSchemaSource = {
   _componentId: 'root',
   component: 'div',
   meta: containerSchema,
-  children: [
+  schemaChildren: [
     {
       _componentId: 'a',
       component: 'Button',
-      children: 'Hello'
+      schemaChildren: 'Hello'
     }
   ]
 };

@@ -26,7 +26,7 @@ _cachedWrappedComponents = {};
 
 const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   const {
-    componentChildren,
+    schemaChildren,
     component
   } = obj;
 
@@ -46,10 +46,10 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
     }
     reactComponent = _cachedWrappedComponents[component];
   }
-  const reactComponentChildren = !componentChildren || typeof componentChildren === 'string' ? [ 
-    componentChildren 
+  const reactComponentChildren = !schemaChildren || typeof schemaChildren === 'string' ? [ 
+    schemaChildren 
   ] : (
-    (componentChildren || []).map(item => jsonToComponent(item, enableWrap, props, actions))
+    (schemaChildren || []).map(item => jsonToComponent(item, enableWrap, props, actions))
   );
   
   return React.createElement
@@ -62,8 +62,8 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
 const deleteComponent = (schema, componentId) => {
   return {
     ...schema,
-    componentChildren: !schema.componentChildren || typeof schema.componentChildren === 'string' ? schema.componentChildren :
-      schema.componentChildren.filter(item => item.componentId !== componentId)
+    schemaChildren: !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
+      schema.schemaChildren.filter(item => item.componentId !== componentId)
       .map(item => {
         return deleteComponent(item, componentId);
       })
@@ -73,8 +73,8 @@ const deleteComponent = (schema, componentId) => {
 const updateComponent = (schema, componentId, component) => {
   return {
     ...schema,
-    componentChildren: !schema.componentChildren || typeof schema.componentChildren === 'string' ? schema.componentChildren :
-      schema.componentChildren
+    schemaChildren: !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
+      schema.schemaChildren
       .map(item => {
         if ( item.componentId === componentId) {
           Object.assign(item, component);
@@ -88,14 +88,14 @@ const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPositio
   if (isNew && !dragComponent.componentId) {
     dragComponent.componentId = _.uniqueId();
   }
-  const modifiedChildren = !schema.componentChildren || typeof schema.componentChildren === 'string' ? schema.componentChildren :
-    schema.componentChildren.filter(item => item.componentId !== dragComponent.componentId)
+  const modifiedChildren = !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
+    schema.schemaChildren.filter(item => item.componentId !== dragComponent.componentId)
     .map(item => moveComponent(item, dragComponent, dropComponentId, isNew, newPosition))
     .reduce((prev, current) => {
       if (current.componentId === dropComponentId) {
         if (newPosition === 'inside') {
-          current.componentChildren = current.componentChildren || [];
-          current.componentChildren = [ ...current.componentChildren, dragComponent ];
+          current.schemaChildren = current.schemaChildren || [];
+          current.schemaChildren = [ ...current.schemaChildren, dragComponent ];
         } else {
           return newPosition === 'before' ? [ ...prev, dragComponent, current ] : [ ...prev, current, dragComponent ];
         }
@@ -106,7 +106,7 @@ const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPositio
     }, []);
   return {
     ...schema,
-    componentChildren: modifiedChildren
+    schemaChildren: modifiedChildren
   };
 };
 

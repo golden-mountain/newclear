@@ -5,13 +5,13 @@ export default {
   schema: {
     _componentId: 'root',
     component: 'div',
-    children: [
+    schemaChildren: [
       {
         _componentId: 'a',
         component: 'Panel',
         header: 'Login',
         _isContainer: true,
-        children: [
+        schemaChildren: [
           {
             _componentId: 'b',
             label: 'User',
@@ -27,12 +27,12 @@ export default {
             _componentId: 'd',
             component: 'Button',
             bsStyle: 'primary',
-            children: 'Log in'
+            schemaChildren: 'Log in'
           },
           {
             _componentId: 'e',
             component: 'Button',
-            children: 'Cancel'
+            schemaChildren: 'Cancel'
           }
         ]
       }

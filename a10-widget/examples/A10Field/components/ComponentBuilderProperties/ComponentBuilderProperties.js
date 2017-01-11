@@ -156,7 +156,10 @@ export default class ComponentBuilderProperties extends Component {
   }
 
   render() {
-    const { editingComponentId } = this.props;
+    const { 
+      editingComponentId,
+      componentMeta
+    } = this.props;
     const PanelHeader = (
       <span>
         <i className="fa fa-gear" />&nbsp;Properties
@@ -170,6 +173,7 @@ export default class ComponentBuilderProperties extends Component {
 
     return editingComponentId && (
       <Panel className="panel panel-success" header={PanelHeader}>
+        <label>{componentMeta.widget.name}</label>
         <Form horizontal>
           {
             // <FormGroup>
