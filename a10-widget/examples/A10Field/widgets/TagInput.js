@@ -3,7 +3,21 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import { A10TagInput } from '../../../src/widgets/A10Field/FieldWidgets';
 
-export default widgetWrapper([ 'app' ])(A10TagInput, {
+function MyA10TagInput({ ...props }) {
+  let a10TagInputProps = {};
+  Object.keys(A10TagInput.propTypes).forEach((key)=>{
+    a10TagInputProps[key] = props[key];
+  });
+  return (
+    <div style={ { position: 'relative' } }>
+      {props.children}
+      <A10TagInput {...a10TagInputProps}/>
+    </div>
+  );
+}
+
+
+export default widgetWrapper([ 'app' ])(MyA10TagInput, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

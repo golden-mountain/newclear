@@ -36,8 +36,9 @@ export default function editableComponent({
       const clientOffset = monitor.getClientOffset();
       const dropClientY = clientOffset.y - dropBoundingRect.top;
       let newPosition = 'before';
-
-      if (props._isContainer) {
+      if (props._isRoot) {
+        newPosition = 'inside';
+      } else if (props._isContainer) {
         if (dropClientY >= dropMiddleY * 0.5 && dropClientY <= dropMiddleY * 1.5) {
           newPosition = 'inside';
         } else if (dropClientY > dropMiddleY * 1.5) {
@@ -68,6 +69,7 @@ export default function editableComponent({
       static propTypes = {
         _isContainer: PropTypes.bool,
         _componentId: PropTypes.string,
+        _isRoot: PropTypes.bool,
         editingComponentId: PropTypes.string,
         connectDragSource: PropTypes.func,
         connectDropTarget: PropTypes.func,
@@ -103,6 +105,7 @@ export default function editableComponent({
         const {
           _componentId,
           _isContainer,
+          _isRoot,
           connectDragSource,
           connectDropTarget,
           editingComponentId,
@@ -112,7 +115,7 @@ export default function editableComponent({
         const isActive = _componentId === editingComponentId;
         return (
           <WrappedComponent {...this.props}
-            style={ { position: 'relative', margin: '10px 0' } }
+            style={ { position: 'relative', margin: '8px 8px' } }
             ref={instance => {
               const domNode = findDOMNode(instance);
               connectDragSource(domNode);
@@ -120,14 +123,24 @@ export default function editableComponent({
               return domNode;
             }
           }>
-            <div className={ isActive ? 'editable-component-active' : 'editable-component-normal'}>
-              <div className="editable-component-toolbar">
-                <i className="fa fa-cog" onClick={::this.editProperties}/>
-                <i className="fa fa-trash" onClick={::this.deleteComponent}/>
-              </div>
+            <div className={`${isActive ? 'editable-component-active' : 'editable-component-normal'} ${_isContainer || _isRoot ? 'editable-component-container' : ''}`}>
+              {
+                !_isRoot && (
+                  <div className="editable-component-toolbar">
+                    <i className="fa fa-cog" onClick={::this.editProperties}/>
+                    <i className="fa fa-trash" onClick={::this.deleteComponent}/>
+                  </div>
+                )
+              }
             </div>
-            { !children && <div className={ _isContainer ? 'editable-component-container-spacing' : ''} /> }
-            {children}
+            {
+              _isContainer || _isRoot ? (
+                <div style={{ padding: 8 }}>
+                  { children }
+                </div>
+              ) : ( children )
+            }
+            <div className={ _isContainer || _isRoot ? 'editable-component-container-spacing' : ''} />
           </WrappedComponent>
         );
       }

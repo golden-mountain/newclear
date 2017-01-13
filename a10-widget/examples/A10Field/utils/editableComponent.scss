@@ -8,6 +8,8 @@
   bottom: -5px;
 
   // padding-top: 30px;
+  border-width: 2px;
+  border-style:dashed;
   display: inline-block;
   &:hover {
     .editable-component-toolbar {
@@ -23,6 +25,7 @@
   top: 0;
   right: 0;
   z-index: 9999;
+  font-size: 16px;
   i {
     margin-left: 10px;
     cursor: pointer;
@@ -32,23 +35,28 @@
 .editable-component-normal {
   @include editableComponentWrapper;
   z-index: 9999;
-  border: 1px dashed #ddd;
+  border-color: rgba(0, 0, 0, .5);
   &:hover {
-    border: 1px dashed #888;
-
+    border-color: rgba(0, 0, 0, 1);
+  }
+  &.editable-component-container {
+    border-color: rgba(0, 100, 0, .5);
+    &:hover {
+      border-color: rgba(0, 100, 0, 1);
+    }
   }
 }
 
 .editable-component-active {
   @include editableComponentWrapper;
-  border: 1px solid darkblue;
+  border-style: solid;
   &:hover {
-    border: 1px solid darkblue;
+    border-style: solid;
   }
 }
 
 .editable-component-container-spacing {
-  min-height: 50px;
+  min-height: 100px;
   min-width: 100px;
   overflow: hidden;
   padding: 10px;

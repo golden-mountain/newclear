@@ -39,7 +39,7 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
       console.error(`component ${component} is not found, use editableUtils.registerComponents to register component`);
     }
   }
-  if (enableWrap && obj._componentId !== 'root') {
+  if (enableWrap) {
     if (!_cachedWrappedComponents[component]) {
       const { meta = {} } = reactComponent;
       _cachedWrappedComponents[component] = editableComponent(actions)(reactComponent, meta);
@@ -88,6 +88,13 @@ const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPositio
   if (isNew && !dragComponent._componentId) {
     dragComponent._componentId = _.uniqueId();
   }
+  if (dropComponentId === 'root') {
+    let schemaChildren = schema.schemaChildren || [];
+    return {
+      ...schema,
+      schemaChildren: [ ...schemaChildren, dragComponent ]
+    };
+  }
   const modifiedChildren = !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
     schema.schemaChildren.filter(item => item._componentId !== dragComponent._componentId)
     .map(item => moveComponent(item, dragComponent, dropComponentId, isNew, newPosition))
@@ -115,6 +122,7 @@ const toJSX = (schema, indent = 0) =>{
     _isNew: null,
     _isContainer: null,
     _componentId: null,
+    _isRoot: null,
     component: null,
     children: null,
     editingComponentId: null,
@@ -165,7 +173,7 @@ const DemoPage = React.createClass({
 
 });
 
-export default DemoPage;`;
+export default DemoPage;`.replace(/RootWidget/g, 'div');
 };
 
 const generateReactCodeFromSchema = (schema) => generateReactCode(toJSX(schema));

@@ -17,7 +17,8 @@ export default function (componentCandidate) {
       const item = Object.assign({
         component: props.component,
         _isNew: true,
-        _isContainer: props.isContainer
+        _isContainer: props.isContainer,
+        _isRoot: props.isRoot
       }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});
       return item;
     }

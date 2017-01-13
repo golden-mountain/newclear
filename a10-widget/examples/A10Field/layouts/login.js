@@ -4,6 +4,7 @@ export default {
   name: 'login',
   schema: {
     _componentId: 'root',
+    _isRoot: true,
     component: 'div',
     schemaChildren: [
       {

@@ -6,6 +6,7 @@ export default {
   name: 'gridview33',
   schema: {
     _componentId: 'root',
+    _isRoot: true,
     component: GridView,
     schemaChildren: [
       {

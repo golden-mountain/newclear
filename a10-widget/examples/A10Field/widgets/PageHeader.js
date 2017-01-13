@@ -1,11 +1,11 @@
 import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
-import { PageHeader } from 'react-bootstrap';
+import PageHeader from 'react-bootstrap/lib/PageHeader';
 
 export default widgetWrapper()(PageHeader, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-header',
       type: 'Bootstrap',
       name: 'PageHeader',
       component: 'PageHeader',

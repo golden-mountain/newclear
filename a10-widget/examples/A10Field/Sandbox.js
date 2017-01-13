@@ -62,8 +62,8 @@ const noSchemaData = {
 
 const reactSchemaSource = {
   _componentId: 'root',
-  component: 'div',
-  meta: containerSchema,
+  component: 'RootWidget',
+  _isRoot: true,
   schemaChildren: [
     {
       _componentId: 'a',

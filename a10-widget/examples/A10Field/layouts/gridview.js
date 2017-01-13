@@ -21,8 +21,10 @@ export default (name, options = [33, 33, 33]) => {
     name: name,
     schema: {
       _componentId: 'root',
+      _isRoot: true,
       component: GridView,
       schemaChildren: child
     }
   };
 };
+

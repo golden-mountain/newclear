@@ -32,6 +32,7 @@ export default class LeftPanel extends Component {
 
     const widgetList = Object.values(widgets)
       .filter(item=>item.meta)
+      .filter(item=> !item.meta.widget.hideFromCandidates)
       .map(item=> item.meta.widget);
     const groupedWidgets = _.groupBy(widgetList, widget => widget.type);
     const ComponentCandidate = this.ComponentCandidate;
@@ -39,7 +40,9 @@ export default class LeftPanel extends Component {
       width: '33%',
       display: 'inline-block',
       textAlign: 'center',
-      marginBottom: 10
+      marginBottom: 10,
+      cursor: 'pointer'
+
     };
     const dragableTileStyle = Object.assign({ cursor: 'move' }, tileStyle);
 
