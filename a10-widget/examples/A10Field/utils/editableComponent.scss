@@ -6,7 +6,6 @@
   right: -5px;
   left: -5px;
   bottom: -5px;
-
   // padding-top: 30px;
   border-width: 2px;
   border-style:dashed;
@@ -24,7 +23,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 99;
   font-size: 16px;
   i {
     margin-left: 10px;
@@ -34,7 +33,6 @@
 
 .editable-component-normal {
   @include editableComponentWrapper;
-  z-index: 9999;
   border-color: rgba(0, 0, 0, .5);
   &:hover {
     border-color: rgba(0, 0, 0, 1);
