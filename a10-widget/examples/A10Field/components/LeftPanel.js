@@ -15,7 +15,8 @@ export default class LeftPanel extends Component {
   static propTypes = {
     layouts: PropTypes.object.isRequired,
     widgets: PropTypes.object.isRequired,
-    onLayoutChange: PropTypes.func
+    onLayoutChange: PropTypes.func,
+    addComponentByClicking: PropTypes.func
   };
 
   constructor(props) {
@@ -27,7 +28,8 @@ export default class LeftPanel extends Component {
     const {
       widgets,
       layouts,
-      onLayoutChange
+      onLayoutChange,
+      addComponentByClicking
     } = this.props;
 
     const widgetList = Object.values(widgets)
@@ -74,6 +76,7 @@ export default class LeftPanel extends Component {
                             component={item.component}
                             iconClassName={item.iconClassName}
                             isContainer={item.isContainer === true}
+                            addComponentByClicking={addComponentByClicking}
                           />
                         );
                       })

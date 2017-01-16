@@ -40,7 +40,10 @@ export default widgetWrapper()(FieldGroup, {
       label: 'basic',
       help: 'basic',
       type: 'basic',
-      bsClass: 'advanced'
+      bsClass: 'advanced',
+      componentClass: 'basic',
+      id: 'basic',
+      inputRef: 'ignore'
     }
   }
 });

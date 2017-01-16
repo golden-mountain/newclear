@@ -23,12 +23,14 @@ export default widgetWrapper()(Button, {
       active: 'basic',
       disabled: 'advanced',
       block: 'basic',
-      onClick: 'event',
+      onClick: 'Event',
       type: 'basic',
       bsStyle: 'advanced',
       bsSize: 'advanced',
       bsClass: 'advanced',
-      schemaChildren: 'basic'
+      href: 'basic',
+      componentClass: 'ignore',
+      schemaChildren: 'ignore'
     }
   }
 });

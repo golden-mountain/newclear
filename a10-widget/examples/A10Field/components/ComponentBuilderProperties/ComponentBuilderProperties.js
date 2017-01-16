@@ -155,6 +155,10 @@ export default class ComponentBuilderProperties extends Component {
     return <FormControl type="text" value={value} onChange={this.onInputChange.bind(this, propTypeName)}/>;
   }
 
+  capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   render() {
     const { 
       editingComponentId,
@@ -191,28 +195,31 @@ export default class ComponentBuilderProperties extends Component {
           }
           <PanelGroup accordion defaultActiveKey="basic">
             {
-              Object.keys(groupComponentProperties).map((key) => {
-                return (
-                  <Panel header={key} eventKey={key} key={key}>
-                    {
-                      groupComponentProperties[key].map((property, index)=>{
-                        return (
-                          <FormGroup key={index}>
-                            <Col sm={4}>
-                              {property.prop}
-                            </Col>
-                            <Col sm={8}>
-                              {
-                                this.renderInput(property.prop, property.type, this.state[property.prop])
-                              }
-                            </Col>
-                          </FormGroup>
-                        );
-                      })
-                    }
-                  </Panel>
-                );
-              })
+              Object.keys(groupComponentProperties)
+                .filter(key=>key !== 'ignore')
+                .map((key) => {
+                  return (
+                    <Panel header={this.capitalizeFirstLetter(key)} eventKey={key} key={key}>
+                      {
+                        groupComponentProperties[key].map((property, index)=>{
+                          return (
+                            <FormGroup key={index}>
+                              <Col sm={4}>
+                                {property.prop}
+                              </Col>
+                              <Col sm={8}>
+                                {
+                                  this.renderInput(property.prop, property.type, this.state[property.prop])
+                                }
+                              </Col>
+                            </FormGroup>
+                          );
+                        })
+                      }
+                    </Panel>
+                  );
+                }
+              )
             }
           </PanelGroup>
 

@@ -129,6 +129,18 @@ export default class Sandbox extends React.Component {
     });
   }
 
+  addComponentByClicking = (dragComponent) => {
+    const {
+      editingComponentId,
+      editingComponentMeta
+    } = this.state;
+    if (editingComponentId && editingComponentMeta.widget.isContainer) {
+      this.moveComponent(dragComponent, editingComponentId, true, 'inside');
+    } else {
+      this.moveComponent(dragComponent, 'root', true, 'inside');
+    }
+  }
+
   render() {
     const {
       reactSchema,
@@ -158,6 +170,7 @@ export default class Sandbox extends React.Component {
                 widgets={allWidgets}
                 layouts={allLayouts}
                 onLayoutChange={this.onLayoutChange}
+                addComponentByClicking={this.addComponentByClicking}
               />
             </BootstrapCol>
             <BootstrapCol xs={5}>

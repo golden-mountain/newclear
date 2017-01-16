@@ -18,6 +18,11 @@ export default widgetWrapper()(Radio, {
     propTypes: Object.assign({
     }, Radio.propTypes),
     propGroups: {
+      inline: 'basic',
+      disabled: 'basic',
+      validationState: 'advanced',
+      inputRef: 'ignore',
+      bsClass: 'basic'
     }
   }
 });

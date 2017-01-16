@@ -20,6 +20,10 @@ export default widgetWrapper()(ControlLabel, {
       schemaChildren: React.PropTypes.string
     }, ControlLabel.propTypes),
     propGroups: {
+      schemaChildren: 'basic',
+      htmlFor: 'basic',
+      srOnly: 'basic',
+      bsClass: 'basic'
     }
   }
 });

@@ -20,15 +20,8 @@ export default widgetWrapper()(PageHeader, {
       schemaChildren: React.PropTypes.string
     }, PageHeader.propTypes),
     propGroups: {
-      // active: 'basic',
-      // disabled: 'advanced',
-      // block: 'basic',
-      // onClick: 'event',
-      // type: 'basic',
-      // bsStyle: 'advanced',
-      // bsSize: 'advanced',
-      // bsClass: 'advanced',
-      // schemaChildren: 'basic'
+      schemaChildren: 'basic',
+      bsClass: 'basic'
     }
   }
 });

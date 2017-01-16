@@ -41,7 +41,8 @@ export default widgetWrapper()(CustomizedDropdownButton, {
       bsSize: 'basic',
       open: 'basic',
       bsClass: 'basic',
-      noCaret: 'basic'
+      noCaret: 'basic',
+      children: 'ignore'
     }
   }
 });

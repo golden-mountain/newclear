@@ -18,6 +18,11 @@ export default widgetWrapper()(Checkbox, {
     propTypes: Object.assign({
     }, Checkbox.propTypes),
     propGroups: {
+      inline: 'basic',
+      disabled: 'basic',
+      validationState: 'advanced',
+      inputRef: 'ignore',
+      bsClass: 'basic'
     }
   }
 });

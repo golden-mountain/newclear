@@ -32,11 +32,16 @@ export default function (componentCandidate) {
   class ComponentCandidate extends Component {
     static propTypes = {
       connectDragSource: PropTypes.func,
+      addComponentByClicking: PropTypes.func,
       iconClassName: PropTypes.string,
       name: PropTypes.string,
       component: PropTypes.string,
       isContainer: PropTypes.bool,
       style: PropTypes.object
+    }
+
+    onClick = () => {
+      this.props.addComponentByClicking(componentSource.beginDrag(this.props));
     }
 
     render() {
@@ -48,7 +53,7 @@ export default function (componentCandidate) {
       } = this.props;
 
       return connectDragSource(
-        <div style={style}>
+        <div style={style} onClick={this.onClick}>
           <i className={iconClassName} />
           <br />{name}
         </div>
