@@ -1,41 +1,69 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+// import { BootstrapTable } from 'react-bootstrap-table';  // in ECMAScript 6
 import { widgetWrapper } from 'widgetWrapper';
-import FieldGroup from './source/FieldGroup';
+import { FormGroup, ControlLabel, Col, Checkbox } from 'react-bootstrap';
 
-function MyFieldGroup({ ...props }) {
-  return (
-    <div style={ { position: 'relative', minHeight: 40 } }>
-      {props.children}
-      <FieldGroup {...props}/>
-    </div>
-  );
+class FieldCheckbox extends React.Component {
+  static displayName = 'EditableCom'
+
+  change(event) {
+    // console.log(event.target.checked);
+    this.props.modelHold(event.target.checked);
+  }
+
+  save() {
+    this.props.modelSave();
+    const invalid = this.props.modelGetDataInvalid();
+    console.log('After saving, invalid:::', invalid);
+  }
+
+  render() {
+    // console.log(this.props);
+    const { label, value, checked, required, children } = this.props; // eslint-disable-line
+    return (
+      <div style={{ position: 'relative', minHeight: 40 }}>
+        { children }
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={2}>
+            { label }
+            { required && <span style={{ color: 'red' }}>&nbsp;*</span> }
+          </Col>
+          <Col sm={10}>
+            <Checkbox style={{marginTop: 0}} onChange={::this.change} checked={this.props.activeData}  />
+          </Col>
+        </FormGroup>
+      </div>
+    );
+  }
 }
 
-export default widgetWrapper([ 'app' ])(MyFieldGroup, {
+export default widgetWrapper([ 'app' ])(FieldCheckbox, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-square-o',
+      iconClassName: 'fa fa-check-square-o',
       type: 'Field',
       name: 'FieldCheckbox',
       component: 'FieldCheckbox',
       description: ''
     },
     defaultProps: {
-      label: 'label',
-      required: false,
-      type: 'checkbox',
-      pattern: null,
-      typeMismatchErrorMessage: 'Validation failed!',
-      requiredErrorMessage: 'This field is required'
+      label: 'My label',
+      required: true
     },
-    propTypes: FieldGroup.propTypes,
+    propTypes: {
+      label: PropTypes.string,
+      required: PropTypes.bool
+    },
     propGroups: {
       label: 'basic',
-      required: 'basic',
-      type: 'basic',
-      pattern: 'advanced',
-      typeMismatchErrorMessage: 'basic',
-      requiredErrorMessage: 'basic'
+      required: 'basic'
+    },
+    propValidations: {
+      label: [ 'ipv6-address' ]
+    },
+    propDescriptions: {
+      label: 'Just label',
+      required: 'just required'
     }
   }
 });

@@ -1,4 +1,5 @@
 import blank from './blank';
+import virtualServer from './virtualServer';
 import form from './form';
 import nineGrids from './nine-grids';
 import login from './login';
@@ -13,5 +14,6 @@ export default {
   login,
   gridview33,
   gridview22,
-  gridview13
+  gridview13,
+  virtualServer
 };

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { Navbar, Grid, Col as BootstrapCol, Row as BootstrapRow } from 'react-bootstrap';
+import { Navbar, Grid, Col, Row, Button } from 'react-bootstrap';
 
 import 'highlight.js/styles/github.css';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -78,7 +78,9 @@ export default class Sandbox extends React.Component {
       reactSchema: reactSchemaSource,
       editingComponentId: null,
       componentProps: null,
-      componentMeta: null
+      componentMeta: null,
+      minimizeLeftPanel: false,
+      showRightPanel: false
     };
   }
   
@@ -87,7 +89,8 @@ export default class Sandbox extends React.Component {
     this.setState({
       editingComponentId: componentProps._componentId,
       editingComponentProps: componentProps,
-      editingComponentMeta: componentMeta
+      editingComponentMeta: componentMeta,
+      showRightPanel: true
     });
   }
 
@@ -110,7 +113,10 @@ export default class Sandbox extends React.Component {
   }
 
   stopEditingComponent = () => {
-    this.setState({ editingComponentId: null });
+    this.setState({ 
+      editingComponentId: null,
+      showRightPanel: false
+    });
   }
 
   downloadJsxFile = ()=> {
@@ -135,12 +141,20 @@ export default class Sandbox extends React.Component {
     }
   }
 
+  toggleLeftPanel = () =>{
+    this.setState({
+      minimizeLeftPanel: !this.state.minimizeLeftPanel
+    });
+  }
+
   render() {
     const {
       reactSchema,
       editingComponentId,
       editingComponentProps,
-      editingComponentMeta
+      editingComponentMeta,
+      minimizeLeftPanel,
+      showRightPanel
     } = this.state;
 
     const Header = () => {
@@ -158,16 +172,24 @@ export default class Sandbox extends React.Component {
       <div>
         <Header />
         <Grid fluid={true}>
-          <BootstrapRow>
-            <BootstrapCol xs={3}>
-              <LeftPanel 
-                widgets={allWidgets}
-                layouts={allLayouts}
-                onLayoutChange={this.onLayoutChange}
-                addComponentByClicking={this.addComponentByClicking}
-              />
-            </BootstrapCol>
-            <BootstrapCol xs={5}>
+          <Row>
+            <Col xs={minimizeLeftPanel ? 1 : 3}>
+              <Button onClick={this.toggleLeftPanel}>
+                <i className={`fa fa-arrow-${minimizeLeftPanel ? 'right' : 'left'}`} />
+              </Button>
+              {
+                minimizeLeftPanel ? null : (
+                  <LeftPanel 
+                    widgets={allWidgets}
+                    layouts={allLayouts}
+                    onLayoutChange={this.onLayoutChange}
+                    addComponentByClicking={this.addComponentByClicking}
+                  />
+                ) 
+              }
+
+            </Col>
+            <Col xs={5 + ( showRightPanel ? 0 : 4 ) + (minimizeLeftPanel ? 2 : 0)}>
               <MainPanel 
                 editingComponentId={editingComponentId}
                 schema={reactSchema}
@@ -176,8 +198,8 @@ export default class Sandbox extends React.Component {
                 moveComponent={this.moveComponent}
                 downloadJsxFile={this.downloadJsxFile}
               />
-            </BootstrapCol>
-            <BootstrapCol xs={4}>
+            </Col>
+            <Col xs={showRightPanel ? 4 : 0}>
               <ComponentBuilderProperties
                 editingComponentId={editingComponentId}
                 componentProps={editingComponentProps}
@@ -185,8 +207,8 @@ export default class Sandbox extends React.Component {
                 updateComponent={this.updateComponent}
                 stopEditingComponent={this.stopEditingComponent}
               />
-            </BootstrapCol>
-          </BootstrapRow>
+            </Col>
+          </Row>
         </Grid>
       </div>
     );
