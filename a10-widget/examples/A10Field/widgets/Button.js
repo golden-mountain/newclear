@@ -13,12 +13,12 @@ export default widgetWrapper()(Button, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, Button.defaultProps, {
       schemaChildren: 'My Button'
-    }, Button.defaultProps),
-    propTypes: Object.assign({
+    }),
+    propTypes: Object.assign({}, Button.propTypes, {
       schemaChildren: React.PropTypes.string
-    }, Button.propTypes),
+    }),
     propGroups: {
       active: 'basic',
       disabled: 'advanced',
@@ -29,8 +29,8 @@ export default widgetWrapper()(Button, {
       bsSize: 'advanced',
       bsClass: 'advanced',
       href: 'basic',
-      componentClass: 'ignore',
-      schemaChildren: 'ignore'
+      componentClass: 'advanced',
+      schemaChildren: 'basic'
     }
   }
 });

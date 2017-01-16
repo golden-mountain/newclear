@@ -13,10 +13,8 @@ export default widgetWrapper()(FormGroup, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
-    }, FormGroup.defaultProps),
-    propTypes: Object.assign({
-    }, FormGroup.propTypes),
+    defaultProps: Object.assign({}, FormGroup.defaultProps),
+    propTypes: Object.assign({}, FormGroup.propTypes),
     propGroups: {
     }
   }

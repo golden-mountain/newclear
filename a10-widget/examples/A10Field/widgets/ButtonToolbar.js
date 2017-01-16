@@ -16,6 +16,8 @@ export default widgetWrapper()(ButtonToolbar, {
     defaultProps:  ButtonToolbar.defaultProps,
     propTypes: ButtonToolbar.propTypes,
     propGroups: {
+      bsSize: 'basic',
+      bsClass: 'basic'
     }
   }
 });

@@ -13,10 +13,8 @@ export default widgetWrapper()(Radio, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
-    }, Radio.defaultProps),
-    propTypes: Object.assign({
-    }, Radio.propTypes),
+    defaultProps: Object.assign({}, Radio.defaultProps),
+    propTypes: Object.assign({}, Radio.propTypes),
     propGroups: {
       inline: 'basic',
       disabled: 'basic',

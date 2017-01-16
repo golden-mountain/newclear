@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { Navbar, Grid, Col as BootstrapCol, Row as BootstrapRow } from 'react-bootstrap';
 

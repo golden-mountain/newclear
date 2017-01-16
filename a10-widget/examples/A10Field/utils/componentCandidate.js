@@ -20,6 +20,8 @@ export default function (componentCandidate) {
         _isContainer: props.isContainer,
         _isRoot: props.isRoot
       }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});
+      console.log('beginDrag');
+      console.log(item);
       return item;
     }
   };

@@ -13,12 +13,12 @@ export default widgetWrapper()(ControlLabel, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, ControlLabel.defaultProps, {
       schemaChildren: 'My ControlLabel'
-    }, ControlLabel.defaultProps),
-    propTypes: Object.assign({
+    }),
+    propTypes: Object.assign({}, ControlLabel.propTypes, {
       schemaChildren: React.PropTypes.string
-    }, ControlLabel.propTypes),
+    }),
     propGroups: {
       schemaChildren: 'basic',
       htmlFor: 'basic',

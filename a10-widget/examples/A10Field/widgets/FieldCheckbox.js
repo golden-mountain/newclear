@@ -19,8 +19,10 @@ class FieldCheckbox extends React.Component {
 
   render() {
     // console.log(this.props);
-    const { title, value, checked } = this.props; // eslint-disable-line
+    const { title, value, checked, children } = this.props; // eslint-disable-line
     return (
+      <div style={{ position: 'relative' }}>
+        { children }
         <FormGroup>
           <Col componentClass={ControlLabel} sm={2}>
             {title || 'Empty Title'}
@@ -29,6 +31,7 @@ class FieldCheckbox extends React.Component {
             <Checkbox onChange={::this.change} checked={this.props.activeData}  />
           </Col>
         </FormGroup>
+      </div>
     );
   }
 }
@@ -38,8 +41,8 @@ export default widgetWrapper([ 'app' ])(FieldCheckbox, {
     widget: {
       iconClassName: 'fa fa-square-o',
       type: 'basic',
-      name: 'ContainerWidget',
-      component: 'ContainerWidget',
+      name: 'FieldCheckbox',
+      component: 'FieldCheckbox',
       description: ''
     },
     defaultProps: {

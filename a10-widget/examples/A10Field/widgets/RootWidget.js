@@ -14,6 +14,7 @@ export default widgetWrapper()(RootWidget, {
     widget: {
       name: 'RootWidget',
       component: 'RootWidget',
+      isContainer: true,
       hideFromCandidates: true,
       description: '',
     }

@@ -13,10 +13,8 @@ export default widgetWrapper()(Checkbox, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
-    }, Checkbox.defaultProps),
-    propTypes: Object.assign({
-    }, Checkbox.propTypes),
+    defaultProps: Object.assign({}, Checkbox.defaultProps),
+    propTypes: Object.assign({}, Checkbox.propTypes),
     propGroups: {
       inline: 'basic',
       disabled: 'basic',

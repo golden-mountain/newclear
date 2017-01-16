@@ -28,12 +28,12 @@ export default widgetWrapper([ 'app' ])(MyA10TagInput, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, A10TagInput.defaultProps, {
       values: [ 'Test1', 'Test2' ]
-    }, A10TagInput.defaultProps),
-    propTypes: Object.assign({
+    }),
+    propTypes: Object.assign({}, A10TagInput.propTypes, {
       children: React.PropTypes.string
-    }, A10TagInput.propTypes),
+    }),
     propGroups: {
       active: 'basic',
       disabled: 'advanced',

@@ -28,14 +28,14 @@ export default widgetWrapper()(FieldGroup, {
       component: 'FieldGroup',
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, FormControl.defaultProps, {
       label: 'Label',
       help: 'Help'
-    }, FormControl.defaultProps),
-    propTypes: Object.assign({
+    }),
+    propTypes: Object.assign({}, FormControl.propTypes, {
       label: React.PropTypes.string,
       help: React.PropTypes.string
-    }, FormControl.propTypes),
+    }),
     propGroups: {
       label: 'basic',
       help: 'basic',

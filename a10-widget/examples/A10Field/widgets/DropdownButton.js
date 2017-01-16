@@ -30,11 +30,10 @@ export default widgetWrapper()(CustomizedDropdownButton, {
       component: 'DropdownButton',
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, DropdownButton.defaultProps, {
       title: 'my dropdown button'
-    }, DropdownButton.defaultProps),
-    propTypes: Object.assign({
-    }, DropdownButton.propTypes),
+    }),
+    propTypes: Object.assign({}, DropdownButton.propTypes),
     propGroups: {
       title: 'basic',
       bsStyle: 'basic',

@@ -24,9 +24,9 @@ export default widgetWrapper()(FormControl, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, ReactFormControl.defaultProps, {
       type: 'text'
-    }, ReactFormControl.defaultProps),
+    }),
     propTypes: Object.assign({}, ReactFormControl.propTypes),
     propGroups: {
     }

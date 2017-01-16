@@ -19,7 +19,7 @@ export default widgetWrapper()(ButtonGroup, {
       vertical: 'basic',
       justified: 'basic',
       block: 'basic',
-      bsClass: 'advanced',
+      bsClass: 'advanced'
     }
   }
 });

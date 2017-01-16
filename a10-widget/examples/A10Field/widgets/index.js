@@ -3,6 +3,7 @@ import RootWidget from './RootWidget';
 import NotEditableCom from './NotEditableCom';
 // import EditableCom from './EditableCom';
 import FieldCheckbox from './FieldCheckbox';
+import Form from './Form';
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 import ButtonToolbar from './ButtonToolbar';
@@ -17,15 +18,15 @@ import FormControl from './FormControl';
 import FormGroup from './FormGroup';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
-import A10TagInput from './TagInput'; 
-
+import A10TagInput from './A10TagInput'; 
 
 const allWidgets = {
-  RootWidget,
   // ContainerWidget,
-  NotEditableCom,
   // EditableCom,
+  RootWidget,
+  NotEditableCom,
   FieldCheckbox,
+  // Bootstrap
   Button,
   ButtonGroup,
   ButtonToolbar,
@@ -34,9 +35,10 @@ const allWidgets = {
   Row,
   Col,
   Panel,
-  A10TagInput,
   DropdownButton,
   ControlLabel,
+  Form,
+  A10TagInput,
   FormControl,
   FormGroup,
   Checkbox,

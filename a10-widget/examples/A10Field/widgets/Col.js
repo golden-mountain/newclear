@@ -13,7 +13,12 @@ export default widgetWrapper()(Col, {
       isContainer: true,
       description: ''
     },
-    defaultProps: Object.assign({}, Col.defaultProps),
+    defaultProps: Object.assign({}, Col.defaultProps, {
+      xs: 6,
+      sm: 6,
+      md: 6,
+      lg: 6,
+    }),
     propTypes: Object.assign({}, Col.propTypes),
     propGroups: {
       xs: 'basic',

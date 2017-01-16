@@ -13,12 +13,12 @@ export default widgetWrapper()(PageHeader, {
       isContainer: false,
       description: ''
     },
-    defaultProps: Object.assign({
+    defaultProps: Object.assign({}, PageHeader.defaultProps, {
       schemaChildren: 'My PageHeader'
-    }, PageHeader.defaultProps),
-    propTypes: Object.assign({
+    }),
+    propTypes: Object.assign({}, PageHeader.propTypes, {
       schemaChildren: React.PropTypes.string
-    }, PageHeader.propTypes),
+    }),
     propGroups: {
       schemaChildren: 'basic',
       bsClass: 'basic'
