@@ -19,6 +19,7 @@ import FormGroup from './FormGroup';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
 import A10TagInput from './A10TagInput'; 
+import FieldIp from './FieldIp'; 
 
 const allWidgets = {
   // ContainerWidget,
@@ -42,7 +43,8 @@ const allWidgets = {
   FormControl,
   FormGroup,
   Checkbox,
-  Radio
+  Radio,
+  FieldIp
 };
 
 export default allWidgets;

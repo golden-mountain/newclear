@@ -1,49 +1,42 @@
 import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
-import { FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import FieldGroup from './source/FieldGroup';
 
-function FieldGroup({ id, label, help, ...props }) {
-  let formControlProps = {};
-  Object.keys(FormControl.propTypes).forEach((key)=>{
-    formControlProps[key] = props[key];
-  });
+
+function MyFieldGroup({ ...props }) {
   return (
-    <div style={ { position: 'relative' } }>
+    <div style={ { position: 'relative', minHeight: 40 } }>
       {props.children}
-      <FormGroup controlId={id}>
-        <ControlLabel>{label}</ControlLabel>
-        <FormControl {...formControlProps} />
-        {help && <HelpBlock>{help}</HelpBlock>}
-      </FormGroup>
+      <FieldGroup {...props}/>
     </div>
   );
 }
 
-export default widgetWrapper()(FieldGroup, {
+export default widgetWrapper()(MyFieldGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-square-o',
-      type: 'basic',
+      type: 'Field',
       name: 'FieldGroup',
       component: 'FieldGroup',
       description: ''
     },
-    defaultProps: Object.assign({}, FormControl.defaultProps, {
-      label: 'Label',
-      help: 'Help'
-    }),
-    propTypes: Object.assign({}, FormControl.propTypes, {
-      label: React.PropTypes.string,
-      help: React.PropTypes.string
-    }),
+    defaultProps: {
+      label: 'label',
+      required: false,
+      type: 'text',
+      pattern: null,
+      typeMismatchErrorMessage: 'Validation failed!',
+      requiredErrorMessage: 'This field is required'
+    },
+    propTypes: FieldGroup.propTypes,
     propGroups: {
       label: 'basic',
-      help: 'basic',
+      required: 'basic',
       type: 'basic',
-      bsClass: 'advanced',
-      componentClass: 'basic',
-      id: 'basic',
-      inputRef: 'ignore'
+      pattern: 'advanced',
+      typeMismatchErrorMessage: 'basic',
+      requiredErrorMessage: 'basic'
     }
   }
 });

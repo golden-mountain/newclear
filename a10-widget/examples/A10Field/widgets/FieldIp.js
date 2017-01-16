@@ -2,6 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import FieldGroup from './source/FieldGroup';
 
+
 function MyFieldGroup({ ...props }) {
   return (
     <div style={ { position: 'relative', minHeight: 40 } }>
@@ -11,20 +12,20 @@ function MyFieldGroup({ ...props }) {
   );
 }
 
-export default widgetWrapper([ 'app' ])(MyFieldGroup, {
+export default widgetWrapper()(MyFieldGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-square-o',
       type: 'Field',
-      name: 'FieldCheckbox',
-      component: 'FieldCheckbox',
+      name: 'FieldIp',
+      component: 'FieldIp',
       description: ''
     },
     defaultProps: {
-      label: 'label',
+      label: 'IP v4 Address',
       required: false,
-      type: 'checkbox',
-      pattern: null,
+      type: 'text',
+      pattern: '((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}$',
       typeMismatchErrorMessage: 'Validation failed!',
       requiredErrorMessage: 'This field is required'
     },

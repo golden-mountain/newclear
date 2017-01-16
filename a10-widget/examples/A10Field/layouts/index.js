@@ -1,4 +1,5 @@
 import blank from './blank';
+import form from './form';
 import nineGrids from './nine-grids';
 import login from './login';
 import gridview33 from './gridview33';
@@ -7,6 +8,7 @@ import gridview13 from './gridview13';
 
 export default {
   blank,
+  form,
   nineGrids,
   login,
   gridview33,

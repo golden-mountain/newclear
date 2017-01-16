@@ -64,14 +64,7 @@ const noSchemaData = {
 const reactSchemaSource = {
   _componentId: 'root',
   component: 'RootWidget',
-  _isRoot: true,
-  schemaChildren: [
-    {
-      _componentId: 'a',
-      component: 'Button',
-      schemaChildren: 'Hello'
-    }
-  ]
+  _isRoot: true
 };
 
 

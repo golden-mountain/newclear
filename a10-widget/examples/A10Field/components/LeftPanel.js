@@ -61,7 +61,7 @@ export default class LeftPanel extends Component {
               </InputGroup.Addon>
             </InputGroup>
           </FormGroup>
-          <PanelGroup accordion defaultActiveKey="basic">
+          <PanelGroup accordion defaultActiveKey="Field">
             {
               Object.keys(groupedWidgets).map(key=>{
                 return (

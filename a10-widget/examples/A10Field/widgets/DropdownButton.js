@@ -25,7 +25,7 @@ export default widgetWrapper()(CustomizedDropdownButton, {
   meta: {
     widget: {
       iconClassName: 'fa fa-caret-square-o-down',
-      type: 'basic',
+      type: 'Field',
       name: 'DropdownButton',
       component: 'DropdownButton',
       description: ''

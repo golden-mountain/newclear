@@ -21,7 +21,7 @@ export default widgetWrapper([ 'app' ])(MyA10TagInput, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
-      type: 'basic',
+      type: 'Field',
       name: 'A10TagInput',
       component: 'A10TagInput',
       display: 'inline-block',
