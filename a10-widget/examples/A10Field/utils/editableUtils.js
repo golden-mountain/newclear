@@ -161,22 +161,20 @@ const toJSX = (schema, indent = 0) =>{
   }\n${indention}</${schema.component}>`;
 };
 
-const generateReactCode = (jsx) => {
+const generateReactCode = (name='Demo', jsx) => {
   return `import React from 'react';
 
-const DemoPage = React.createClass({
+export default class ${name} extends React.Component {
 
   render() {
     return (${jsx.split('\n').join('\n      ')}
-    );
   }
+}`.replace(/RootWidget/g, 'div');
 
-});
 
-export default DemoPage;`.replace(/RootWidget/g, 'div');
 };
 
-const generateReactCodeFromSchema = (schema) => generateReactCode(toJSX(schema));
+const generateReactCodeFromSchema = (name, schema) => generateReactCode(name, toJSX(schema));
 
 
 export default {

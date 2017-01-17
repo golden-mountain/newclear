@@ -1,11 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
 import { Navbar, Grid, Col, Row, Button } from 'react-bootstrap';
 
 import 'highlight.js/styles/github.css';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext as dragDropContext } from 'react-dnd'; 
-
+import { saveAs } from 'file-saver';
 
 import allLayouts from './layouts';
 import allWidgets from './widgets';
@@ -119,8 +118,9 @@ export default class Sandbox extends React.Component {
     });
   }
 
-  downloadJsxFile = ()=> {
-    window.open('data:application/txt,' + encodeURIComponent(this.props.reactSchema), '_self');
+  downloadFile = (filename, content)=> {
+    var blob = new Blob([ content ], { type: 'text/javascript;charset=utf-8' });
+    saveAs(blob, `${filename}.js`);
   }
 
   onLayoutChange = (schema)=>{
@@ -196,7 +196,7 @@ export default class Sandbox extends React.Component {
                 startToEditComponent={this.startToEditComponent}
                 deleteComponent={this.deleteComponent}
                 moveComponent={this.moveComponent}
-                downloadJsxFile={this.downloadJsxFile}
+                downloadFile={this.downloadFile}
               />
             </Col>
             <Col xs={showRightPanel ? 4 : 0}>

@@ -8,6 +8,8 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import Col from 'react-bootstrap/lib/Col';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
 import editableUtils from '../utils/editableUtils';
 
@@ -18,7 +20,7 @@ export default class MainPanel extends React.Component {
     startToEditComponent: PropTypes.func,
     deleteComponent: PropTypes.func,
     moveComponent: PropTypes.func,
-    downloadJsxFile: PropTypes.func
+    downloadFile: PropTypes.func
   };
 
   constructor(props) {
@@ -48,14 +50,40 @@ export default class MainPanel extends React.Component {
     });
   }
 
+  generateSchemaCode = () => {
+    const { schema } = this.props;
+    const {
+      icon,
+      type,
+      name
+    } = this.state;
+    return 'export default ' + JSON.stringify({
+      iconClassName: `fa ${icon}`,
+      type,
+      name,
+      schema
+    }, null, 2).replace(/\"([^(\")"]+)\":/g,'$1:');
+  }
+
+  downloadJsxFile = () => {
+    const { schema, downloadFile } = this.props;
+    const { name } = this.state;
+    downloadFile(name, editableUtils.generateReactCodeFromSchema(name, schema));
+  }
+
+  downloadSchemaFile = () => {
+    const { downloadFile } = this.props;
+    const { name } = this.state;
+    downloadFile(`${name}-schema`, this.generateSchemaCode());
+  }
+
   render() {
     const { 
       editingComponentId,
       schema,
       startToEditComponent,
       deleteComponent,
-      moveComponent,
-      downloadJsxFile
+      moveComponent
     } = this.props;
 
     const {
@@ -87,60 +115,77 @@ export default class MainPanel extends React.Component {
             className="javascript"
             style={{ width: '100%', height: 'auto', minHeight: 300 }}
           >
-            { editableUtils.generateReactCodeFromSchema(schema) }
+            { editableUtils.generateReactCodeFromSchema(name, schema) }
           </Highlight>
           <ButtonToolbar className="pull-right">
             <Button bsStyle="primary" >
               <i className="fa fa-save"/>&nbsp;Save
             </Button>
-            <Button onClick={downloadJsxFile} >
-              <i className="fa fa-share-square-o"/>&nbsp;Export
+            <Button onClick={this.downloadJsxFile} >
+              <i className="fa fa-download"/>&nbsp;Download
             </Button>
           </ButtonToolbar>
         </Tab>
         <Tab eventKey={4} title={<span><i className="fa fa-codepen" />&nbsp;Schema</span>}>
-          <Panel>
-            <Form>
-              <h3> Layout Properties </h3>
-              <FormGroup>
-                <FormControl 
-                  type="text" 
-                  onChange={this.onIconChange}
-                  value={icon}
-                  placeholder="icon" 
-                />
-              </FormGroup>
-              <FormGroup>
-                <FormControl 
-                  type="text" 
-                  onChange={this.onTypeChange}
-                  value={type}
-                  placeholder="type" 
-                />
-              </FormGroup>
-              <FormGroup>
-                <FormControl 
-                  type="text" 
-                  onChange={this.onNameChange}
-                  value={name}
-                  placeholder="name" 
-                />
-              </FormGroup>
-            </Form>
-          </Panel>
           <Highlight
             className="javascript"
             style={{ width: '100%', height: 'auto', minHeight: 300 }}
           >
-            {
-             'export default ' + JSON.stringify({
-               iconClassName: `fa ${icon}`,
-               type,
-               name,
-               schema
-             }, null, 2).replace(/\"([^(\")"]+)\":/g,"$1:")
-           }
+            { this.generateSchemaCode() }
           </Highlight>
+          <ButtonToolbar className="pull-right">
+            <Button bsStyle="primary" >
+              <i className="fa fa-save"/>&nbsp;Save
+            </Button>
+            <Button onClick={this.downloadSchemaFile} >
+              <i className="fa fa-download"/>&nbsp;Download
+            </Button>
+          </ButtonToolbar>
+        </Tab>
+        <Tab eventKey={5} title={<span><i className="fa fa-gear" />&nbsp;Properties</span>}>
+          <Panel>
+            <Form horizontal>
+              <FormGroup>
+                <Col componentClass={ControlLabel} sm={2}>
+                  Type
+                </Col>
+                <Col sm={10}>
+                  <FormControl 
+                    type="text" 
+                    onChange={this.onTypeChange}
+                    value={type}
+                    placeholder="type" 
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col componentClass={ControlLabel} sm={2}>
+                  Name
+                </Col>
+                <Col sm={10}>
+                  <FormControl 
+                    type="text" 
+                    onChange={this.onNameChange}
+                    value={name}
+                    placeholder="name" 
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col componentClass={ControlLabel} sm={2}>
+                  Icon
+                </Col>
+                <Col sm={10}>
+                  <FormControl 
+                    type="text" 
+                    onChange={this.onIconChange}
+                    value={icon}
+                    placeholder="icon" 
+                  />
+                </Col>
+              </FormGroup>
+            </Form>
+          </Panel>
         </Tab>
       </Tabs> 
     );
