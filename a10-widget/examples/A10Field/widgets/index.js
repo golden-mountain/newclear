@@ -19,6 +19,8 @@ import FormGroup from './FormGroup';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
 import A10TagInput from './A10TagInput'; 
+import A10MultiSelect from './A10MultiSelect'; 
+import MySlider from './MySlider';
 import FieldIp from './FieldIp'; 
 
 const allWidgets = {
@@ -40,6 +42,8 @@ const allWidgets = {
   ControlLabel,
   Form,
   A10TagInput,
+  A10MultiSelect,
+  MySlider,
   FormControl,
   FormGroup,
   Checkbox,
