@@ -31,7 +31,7 @@ class MySlider extends Component {
 export default widgetWrapper([ 'app' ])(MySlider, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-sliders',
       type: 'Field',
       name: 'Slider',
       component: 'MySlider',

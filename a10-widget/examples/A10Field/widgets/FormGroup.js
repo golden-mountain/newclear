@@ -5,7 +5,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 export default widgetWrapper()(FormGroup, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-wpforms',
       type: 'Bootstrap',
       name: 'FormGroup',
       component: 'FormGroup',

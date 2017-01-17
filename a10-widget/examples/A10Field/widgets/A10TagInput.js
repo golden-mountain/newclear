@@ -20,7 +20,7 @@ function MyA10TagInput({ ...props }) {
 export default widgetWrapper([ 'app' ])(MyA10TagInput, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-tag',
       type: 'Field',
       name: 'A10TagInput',
       component: 'A10TagInput',

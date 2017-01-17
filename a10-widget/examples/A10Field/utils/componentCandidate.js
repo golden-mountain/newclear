@@ -20,8 +20,6 @@ export default function (componentCandidate) {
         _isContainer: props.isContainer,
         _isRoot: props.isRoot
       }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});
-      console.log('beginDrag');
-      console.log(item);
       return item;
     }
   };
@@ -54,10 +52,19 @@ export default function (componentCandidate) {
         style
       } = this.props;
 
+      const ellipsisStyle = {
+        width: '100%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+      };
       return connectDragSource(
-        <div style={style} onClick={this.onClick}>
+        <div 
+          title={name}
+          style={style} 
+          onClick={this.onClick}>
           <i className={iconClassName} />
-          <br />{name}
+          <div style={ellipsisStyle}>{name}</div>
         </div>
 
       );

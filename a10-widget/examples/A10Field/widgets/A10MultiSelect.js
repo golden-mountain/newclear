@@ -20,7 +20,7 @@ function MyA10MultiSelect({ ...props }) {
 export default widgetWrapper([ 'app' ])(MyA10MultiSelect, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-tags',
       type: 'Field',
       name: 'A10MultiSelect',
       component: 'A10MultiSelect',

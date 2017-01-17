@@ -16,7 +16,7 @@ function FormControl({ ...props }) {
 export default widgetWrapper()(FormControl, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-wpforms',
       type: 'Bootstrap',
       name: 'FormControl',
       component: 'FormControl',

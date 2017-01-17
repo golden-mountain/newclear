@@ -15,7 +15,7 @@ function MyFieldGroup({ ...props }) {
 export default widgetWrapper()(MyFieldGroup, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-square-o',
+      iconClassName: 'fa fa-object-group',
       type: 'Field',
       name: 'FieldGroup',
       component: 'FieldGroup',
