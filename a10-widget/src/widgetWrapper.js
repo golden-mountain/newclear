@@ -197,14 +197,14 @@ export const widgetWrapper = ReduxDataConnector => {
         return this.executePluginMethod('onBeforeUpdate', nextProps, nextState) || true;
       }
 
-      // shouldComponentUpdate(nextProps, nextState) {
-      //   let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
-      //   if (result) {
-      //     result = this.checkWidgetDataUpdate(nextProps);
-      //   }
-      //   // console.log(result, this.instancePath);
-      //   return result;
-      // }
+      shouldComponentUpdate(nextProps, nextState) {
+        let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
+        if (result) {
+          result = this.checkWidgetDataUpdate(nextProps);
+        }
+        // console.log(result, this.instancePath);
+        return result;
+      }
 
       checkWidgetDataUpdate(nextProps) {
         if (!nextProps || !nextProps.app) {
@@ -271,7 +271,7 @@ export const widgetWrapper = ReduxDataConnector => {
         // console.log(this.context.props);
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
-        return (this.visible ? <WrappedComponent  {...newProps} /> : null);
+        return (this.visible ? <WrappedComponent {...newProps} /> : null);
       }
     }
 
@@ -293,9 +293,9 @@ export const widgetWrapper = ReduxDataConnector => {
           return result;
         };
       }
-      return Object.assign(connect(conn)(Widget), members);
+      return Object.assign(connect(conn, null, null, { withRef: true })(Widget), members);
     } else {
-      return Object.assign(connect()(Widget), members);
+      return Object.assign(connect(null, null, null, { withRef: true })(Widget), members);
     }
     // return ConnnectedWidget;
   };

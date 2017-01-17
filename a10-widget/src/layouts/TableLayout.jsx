@@ -13,7 +13,7 @@ class TableLayout extends Component {
     // console.log(tableOptions);
 
     if (!tds.length) {
-      tds = <tr><td cols={ths.length}>Loading...</td></tr>;
+      tds = <tr><td colSpan={ths.length}>Loading...</td></tr>;
     }
 
     return (

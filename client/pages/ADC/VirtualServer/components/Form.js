@@ -20,6 +20,10 @@ class VirtualServerForm extends React.Component {
   static displayName = 'VirtualServerForm'
 
 
+  test = () => {
+    console.log(this.refs.test.refs.wrappedInstance.model.getValue());
+  }
+
   render() {
 
     const tplVirtualServerPopupInfo = {
@@ -90,13 +94,12 @@ class VirtualServerForm extends React.Component {
     // const onIpInitialize = (data) => {
     //
     // };
-
     return (
       <A10Form schema={slbVirtualServerSchema} redirect={{ path: 'list' }} horizontal>
         <Row>
           <Col xs={12} md={12} lg={6}>
             <Panel header={<h4>Basic Field</h4>} collapsible defaultExpanded>
-              <A10Field name="virtual-server.name" label="Name" />
+              <A10Field ref="test" name="virtual-server.name" label="Name" />
               <A10Field name="x.virtual-server.wildcard" label="Wildcard" value={false}>
                 <Checkbox value={true} />
               </A10Field>
@@ -154,17 +157,15 @@ class VirtualServerForm extends React.Component {
 
           <Col xs={12} md={12} lg={6}>
             <Panel collapsible defaultExpanded header={<h4>Virtual Ports</h4>}>
-              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo} >
-                <A10Field layout={false} name="port-number"  title="Port Number" />
-                <A10Field layout={false} name="range"  conditional={{ 'port-number': 91 }} title="Port Range" />
-
+              <A10MultiField name="virtual-server.port-list" popupInfo={popupInfo}>
+                <A10Field layout={false} name="port-number" title="Port Number" searchable={true} primary={true} />
+                <A10Field layout={false} name="range" title="Port Range" />
                 <A10Field layout={false} name="protocol" title="Protocol" >
-                  <FormControl componentClass="select">
-                    <option value="tcp" selected>tcp</option>
+                  <FormControl componentClass="select" defaultValue="tcp">
+                    <option value="tcp">tcp</option>
                     <option value="udp">udp</option>
                   </FormControl>
                 </A10Field>
-
               </A10MultiField>
             </Panel>
           </Col>
