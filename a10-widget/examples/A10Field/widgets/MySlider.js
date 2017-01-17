@@ -6,13 +6,13 @@ import 'rc-slider/assets/index.css';
 
 class MySlider extends Component {
 
-  static displayName = 'Slider'
+  static displayName = 'Slider';
 
   static propTypes = {
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
     defaultValue: PropTypes.number
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -21,7 +21,6 @@ class MySlider extends Component {
   render() {
     return (
       <div style={ { position: 'relative' } }>
-        {this.props.children}
         <Slider {...this.props} />      
       </div>
     );
@@ -42,19 +41,13 @@ export default widgetWrapper([ 'app' ])(MySlider, {
     },
     defaultProps: Object.assign({}, MySlider.defaultProps, {
       min: 0,
-      max: 100
+      max: 50,
     }),
     propTypes: MySlider.propTypes,
     propGroups: {
-      active: 'basic',
-      disabled: 'advanced',
-      block: 'basic',
-      onClick: 'event',
-      type: 'basic',
-      bsStyle: 'advanced',
-      bsSize: 'advanced',
-      bsClass: 'advanced',
-      children: 'basic'
+      min: 'basic',
+      max: 'basic',
+      defaultValue: 'basic'
     }
   }
 });

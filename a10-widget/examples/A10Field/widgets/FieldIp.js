@@ -5,7 +5,7 @@ import FieldGroup from './source/FieldGroup';
 
 function MyFieldGroup({ ...props }) {
   return (
-    <div style={ { position: 'relative', minHeight: 40 } }>
+    <div style={ { position: 'relative' } }>
       {props.children}
       <FieldGroup {...props}/>
     </div>
