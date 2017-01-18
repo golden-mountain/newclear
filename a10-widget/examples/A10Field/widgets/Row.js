@@ -8,7 +8,7 @@ function MyRow({ ...props }) {
     validProps[key] = props[key];
   });
   return (
-    <Row {...validProps} style={ { position: 'relative', margin: 0 } }>
+    <Row {...validProps} className="editable-component-wrapper">
       {props.children}
     </Row>
   );

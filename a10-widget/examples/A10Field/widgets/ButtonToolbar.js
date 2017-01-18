@@ -8,7 +8,7 @@ function MyButtonToolbar({ ...props }) {
     validProps[key] = props[key];
   });
   return (
-    <ButtonToolbar {...validProps} style={{ position: 'relative' }}>
+    <ButtonToolbar {...validProps} className="editable-component-wrapper">
       {props.children}
     </ButtonToolbar>
   );

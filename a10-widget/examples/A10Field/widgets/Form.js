@@ -8,7 +8,7 @@ function MyForm({ ...props }) {
     validProps[key] = props[key];
   });
   return (
-    <Form {...validProps} style={ { position: 'relative', margin: 0 } }>
+    <Form {...validProps} className="editable-component-wrapper">
       {props.children}
     </Form>
   );

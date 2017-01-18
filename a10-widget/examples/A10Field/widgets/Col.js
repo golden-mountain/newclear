@@ -8,7 +8,7 @@ function MyCol({ ...props }) {
     validProps[key] = props[key];
   });
   return (
-    <Col {...validProps} style={{ position: 'relative' }}>
+    <Col {...validProps} className="editable-component-wrapper">
       {props.children}
     </Col>
   );

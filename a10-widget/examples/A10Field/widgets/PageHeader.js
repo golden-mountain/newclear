@@ -8,7 +8,7 @@ function MyPageHeader({ ...props }) {
     myProps[key] = props[key];
   });
   return (
-    <PageHeader {...myProps} style={{ position: 'relative' }}>
+    <PageHeader {...myProps} className="editable-component-wrapper">
       {props.children}
     </PageHeader>
   );

@@ -8,7 +8,7 @@ function MyPanel({ ...props }) {
     validProps[key] = props[key];
   });
   return (
-    <Panel {...validProps} style={ { position: 'relative', margin: 0 } }>
+    <Panel {...validProps} className="editable-component-wrapper">
       {props.children}
     </Panel>
   );
