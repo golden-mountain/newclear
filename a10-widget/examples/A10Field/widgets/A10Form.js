@@ -11,7 +11,6 @@ function MyA10Form({ ...props }) {
   });
   return (
     <div className="editable-component-wrapper">
-      {props.children}
       <A10Form {...newProps}>
         {props.children}
       </A10Form>
