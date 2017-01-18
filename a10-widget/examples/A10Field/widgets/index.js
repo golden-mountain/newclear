@@ -22,6 +22,11 @@ import A10TagInput from './A10TagInput';
 import A10MultiSelect from './A10MultiSelect'; 
 import MySlider from './MySlider';
 import FieldIp from './FieldIp'; 
+import A10Form from './A10Form';
+import A10Field from './A10Field';
+import A10MultiField from './A10MultiField';
+import A10SubmitButtons from './A10SubmitButtons';
+
 
 const allWidgets = {
   // ContainerWidget,
@@ -44,6 +49,10 @@ const allWidgets = {
   A10TagInput,
   A10MultiSelect,
   MySlider,
+  A10Form,
+  A10Field,
+  A10MultiField,
+  A10SubmitButtons,
   FormControl,
   FormGroup,
   Checkbox,
