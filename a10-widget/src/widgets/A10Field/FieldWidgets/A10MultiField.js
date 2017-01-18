@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 // import { FieldArray } from 'redux-form/immutable'; // imported Field
 import { Button, Table, Row, Col, InputGroup, FormControl, Pagination } from 'react-bootstrap';
 // import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -8,8 +9,27 @@ import { widgetWrapper } from '../../../widgetWrapper';
 import { A10Button } from './A10Button';
 // import { A10SchemaField } from 'components/Form/A10Field';
 
+import './assets/a10multifield.scss';
+
 class TableFields extends Component {
   static displayName = 'TableFields'
+
+  static propTypes = {
+    kids: PropTypes.array.isRequired,
+    popupInfo: PropTypes.object,
+    errorMsg: PropTypes.string,
+    primaryKey: PropTypes.any
+  }
+
+  constructor(props) {
+    super(props);
+    this.displayLimit = 10;
+    this.state = {
+      data: [],
+      currentPage:1,
+      keyword: null 
+    };
+  }
 
   _changeKidsConditional(prefix, conditional) {
     if (!isObject(conditional)) return conditional;
@@ -35,39 +55,148 @@ class TableFields extends Component {
     });
   }
 
-  _inlineCreate(fields, kids) {
-    return () => {
-      let newFields = fields;
+  _inlineCreate(data, kids) {
+    return () => {      
       let proto = {};
       kids.forEach((kid) => {
         const name = kid.props.name;
         proto[name] = '';
       });
-      newFields.push(proto);
-      // console.log(newFields);
-      return newFields;
+
+      this.setState({
+        data: [ proto, ...data ],
+        currentPage: 1
+      });
     };
   }
 
-  render() {
-    const { fields=[], errorMsg, popupInfo, kids } = this.props;
+  _changePage = pageNumber => {
+    this.setState({ currentPage: pageNumber });
+  }
 
-    // console.log('popup info:', popupInfo);
+  _renderItem(kids, data, index) {
+    const { primaryKey } = this.props;
+
+    const items = [];
+    for (let i = 0; i < kids.length; i++) {
+      const child = kids[i];
+      let { name, conditional } = child.props;
+      const value = data[name] + '';
+
+      if (primaryKey) {
+        const prefix = data[primaryKey];
+        if (name.length) name = `${prefix}.${name}`;
+        conditional = this._changeKidsConditional(prefix, conditional);
+      } 
+
+      items.push((
+        <td key={`${Date.now()}-${i}`}> 
+          { 
+            React.cloneElement(child, {
+              name,
+              conditional,
+              value
+            }) 
+          } 
+        </td>
+      ));
+    }
+   
+    return <tr key={index}>{items}</tr>;
+  }
+
+  _renderItemRow(items) {
+    const { kids } = this.props;
+    const { currentPage } = this.state;
+    const startPos = (currentPage - 1) * this.displayLimit;
+
+    const rows = [];
+    for (let i = startPos; rows.length < this.displayLimit && i < items.length; i++) {
+      const item = this._renderItem(kids, items[i], i);
+      rows.push(item);
+    }
+    return rows;
+  }
+
+  _renderPagination(data) {
+    const totalPage = Math.ceil(data.length / this.displayLimit);
+
+    if (totalPage === 0) return null;
+    return (
+      <Col lg={ 12 } className="text-right">
+        <Pagination prev next items={totalPage} 
+          maxButtons={3} 
+          onSelect={this._changePage} 
+          activePage={this.state.currentPage}
+          bsSize="small" />
+      </Col>
+    );
+  }
+
+  _updateFilter = () => {
+    const { kids, activeData } = this.props;
+    const data = activeData ? activeData.toJS() : [];
+    const keyword = ReactDOM.findDOMNode(this.refs.search).value;
+
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let hasSearch = false;
+      for (let j = 0; j < kids.length; j++) {
+        const child = kids[j];
+        const { searchable, name } = child.props;
+        const value = data[i][name] + '';
+        if (searchable) hasSearch = true;
+        if (searchable && value.indexOf(keyword) >= 0) {
+          newData.push(data[i]);
+          break;
+        }
+      }
+      if (!hasSearch) newData.push(data[i]);
+    }
+
+    this.setState({ 
+      keyword, 
+      currentPage: 1, 
+      data: newData 
+    });
+  }
+
+  _setDisplayData() {
+    const { activeData } = this.props;
+    this.setState({
+      data: activeData ? activeData.toJS() : []
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeData !== this.props.activeData) {
+      this._setDisplayData();
+    }
+  }
+
+  componentDidMount() {
+    this._setDisplayData();
+  }
+
+  render() {
+    const { errorMsg, popupInfo, kids } = this.props;
+    const { data } = this.state;
+
     return (
       <div>
         <Row>
           <Col md={6} >
             <div>
               <InputGroup>
-                <FormControl type="text" placeholder="Keywords" />
+                <FormControl ref="search" type="text" placeholder="Keywords" />
                 <InputGroup.Button>
-                  <Button bsStyle="default">Search</Button>
+                  <Button bsStyle="default" onClick={this._updateFilter}>Search</Button>
                 </InputGroup.Button>
               </InputGroup>
             </div>
           </Col>
           <Col md={6} className="text-right">
-            <Button onClick={this._inlineCreate(fields, kids)} bsStyle="primary">
+            <Button onClick={this._inlineCreate(data, kids)} bsStyle="primary">
               <span className="fa fa-plus" aria-hidden="true"></span> New
             </Button>
 
@@ -79,22 +208,14 @@ class TableFields extends Component {
 
         <Row>
           <Col md={12}>
-            <Table responsive striped hover>
+            <Table responsive striped hover className="port-list-container">
               <thead>
                 <tr>
                   { this._extractTitles(kids) }
                 </tr>
               </thead>
               <tbody>
-                {
-                  fields.map((port, index) => {
-                    // console.log('port:', port, index);
-                    return (
-                      <tr key={index} >
-                        { kids.map(::this._mapKidsToCol(port)) }
-                      </tr>);
-                  })
-                }
+                { this._renderItemRow(data) }
               </tbody>
             </Table>
           </Col>
@@ -102,9 +223,7 @@ class TableFields extends Component {
 
         <div className="panel-footer">
           <Row>
-            <Col lg={ 12 } className="text-right">
-              <Pagination prev next items={3} maxButtons={3} bsSize="small" />
-            </Col>
+            { this._renderPagination(data) }
           </Row>
         </div>
       </div>
@@ -117,23 +236,48 @@ class TableFields extends Component {
 class _A10MultiField extends Component {
   static displayName = 'A10MultiField'
 
+  static propTypes = {
+    children: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
+    listComponent: PropTypes.element
+  }
+
+  static defaultPropTypes = {
+    children: []
+  }
+
   constructor(props, context) {
     super(props, context);
   }
 
   render() {
-    let { component, name, children, ...rest } = this.props;
-    // console.log('rest.............', this.props);
-    // TODO: schema need used for cleaning data
+    let { listComponent, name, children, ...rest } = this.props;
 
-    if (!component) {
-      component = TableFields;
+    // clean data and find the primary key
+    let primaryKey = null;
+    const startPos = name.indexOf('.');
+    let data = this.props.modelGetSchema().properties;
+    let dataAttrName = startPos != -1 ? name.substring(startPos + 1, name.length) : name;
+    if (data && data.hasOwnProperty(dataAttrName))
+      data = data[dataAttrName];
+
+    const schema = data ? data.properties : {};
+    const kids = [];
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      const { name, primary } = child.props;
+      if (!primaryKey && primary) primaryKey = name;
+      if (schema[name]) kids.push(child);
+    }
+
+    if (!listComponent) {
+      listComponent = TableFields;
     }
 
     return (
-      <TableFields kids={children} name={name} { ...rest } />
+      <TableFields kids={kids} name={name} primaryKey={primaryKey} { ...rest } />
     );
   }
 }
 
-export const A10MultiField = widgetWrapper()(_A10MultiField);
+export const A10MultiField = widgetWrapper([ 'app' ])(_A10MultiField);

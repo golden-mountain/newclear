@@ -1,0 +1,76 @@
+@mixin editableComponentWrapper {
+  padding: 10px;
+  overflow: overlay;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  left: -5px;
+  bottom: -5px;
+  // padding-top: 30px;
+  background-color: rgba(200, 230, 255, .8);
+  border-width: 2px;
+  border-style:dashed;
+  min-height: 30px;
+  display: inline-block;
+  &:hover {
+    .editable-component-toolbar {
+      display: inline-block;
+    }
+  }
+}
+
+.editable-component-wrapper {
+  position: relative;
+  min-height: 40px;
+  margin: 15px 0;
+}
+
+.editable-component-toolbar {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  font-size: 16px;
+  i {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
+
+.editable-component-normal {
+  @include editableComponentWrapper;
+  border-color: rgba(0, 0, 0, .5);
+  &:hover {
+    border-color: rgba(0, 0, 0, 1);
+  }
+  &.editable-component-container {
+    border-color: rgba(0, 100, 0, .5);
+    &:hover {
+      border-color: rgba(0, 100, 0, 1);
+    }
+  }
+}
+
+.editable-component-active {
+  @include editableComponentWrapper;
+  border-style: solid;
+  .editable-component-toolbar {
+    display: inline-block;
+  }
+  &:hover {
+    border-style: solid;
+  }
+}
+
+.editable-component-container-spacing {
+  min-height: 100px;
+  min-width: 100px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.editable-component-root {
+  background-color: white;
+  overflow: hidden;
+}

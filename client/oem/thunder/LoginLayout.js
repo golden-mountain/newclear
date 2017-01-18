@@ -1,20 +1,18 @@
 import React, { PropTypes } from 'react';
-// import { Glyphicon } from 'react-bootstrap';
-import Footer from './jsx/Layout/Footer';
-import logoLarger from './img/logo-larger.png';
-import OEMConfig from './Config';
+import { Glyphicon } from 'react-bootstrap';
+import logoLarger from './img/logo2.png';
 
-import Bezel from 'components/Dashboard/Bezel';
-import BaseInfo from 'components/Dashboard/BaseInfo';
-import Licensed from 'components/Dashboard/Licensed';
+import LangDropdown from '../../components/Dropdown/lang';
+import { Widgets } from '../../components/Dashboard';
 
-import './sass/bootstrap.scss';
-import './sass/layouts/login/footer.scss';
+import './sass/app.scss';
 import './sass/layouts/login/login.scss';
 
 // import { Grid, Row, Col, Panel, Button } from 'react-bootstrap';
 
 class Login extends React.Component {
+
+  static displayName = 'loginLayout'
 
   static contextTypes = {
     appConfig: PropTypes.shape({
@@ -30,79 +28,57 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // FIXME
-    fetch('/axapi/v3/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: '{"credentials":{"username":"admin","password":"a10"}}'
-    }).then(res => {
-      return res.json();
-    }).then(data => {
-      this.setState({ auth: `A10 ${data.authresponse.signature}` });
-    }).catch(err => {
-      console.log(err);
-    });
-  }
-
   render() {
-    const { appConfig: { MODULE_NAME } } = this.context;
-    // FIXME, should use anthor way
-    const bezelUrl = require(`./img/bezel_templates/${MODULE_NAME}.svg`);
+    const { 
+      appConfig: { MODULE_NAME }
+    } = this.context;
+    // const { comSetComponentState, getData } = this.props;
+    
+    const { BaseInfo, Licensed } = Widgets;
+    const bezelImgUrl = require(`./img/bezel/${MODULE_NAME}.svg`);
 
     return (
       <div id="login-layout">
-        <div className="row">
-          <div className="col-md-5 left">
-            <div className="block-center mt-xl wd-xl">
-              { /* START panel */ }
-              <div className="panel panel-dark panel-flat">
-                <div className="panel-heading text-center">
-                  <a href="#">
-                    <img src={logoLarger} alt="Image" style={{ height: '52px' }} className="block-center img-rounded" />
-                  </a>
+        <header className="row text-right">
+          <div className="col-md-12">
+            <LangDropdown />
+          </div>
+        </header>
+        <main className="row">
+          <div className="col-md-6 left">
+            <div className="block-center">
+              <div className="panel panel-dark login-form-container">
+                <div className="login-title-container">
+                  <div className="image-container">
+                    <a href="#">
+                      <img src={logoLarger} alt="Image" style={{ height: '52px' }} className="block-center img-rounded" />
+                    </a>
+                  </div>
+                  <div className="text-container">
+                    <div>
+                      <Glyphicon glyph="bookmark" />
+                      <span>Thunder {MODULE_NAME}</span>
+                    </div>
+                    <div>
+                      SIGN IN Thunder series
+                    </div>
+                  </div>
                 </div>
-                <div className="panel-body">
-                  <p className="text-center pv">SIGN IN TO CONTINUE.</p>
-                  { this.props.children }
-                </div>
+                { this.props.children }
               </div>
             </div>
           </div>
-          <div className="col-md-7 right">
-            <div className="front-bezel-container">
-              <label>
-                {
-                  // <Glyphicon glyph='bookmark' />
-                }
-                <span className="glyphicon glyphicon-bookmark"/>
-                Thunder 3030s
-              </label>
-              <Bezel
-                auth={this.state.auth}
-                url={bezelUrl}
-                logo={OEMConfig.logo}
-                logoPos={OEMConfig.logoPosMapping[MODULE_NAME]}
-                portPos={OEMConfig.portPosMapping[MODULE_NAME]}
-              />
+          <div className="col-md-6 right">
+            <div>
+              <img src={bezelImgUrl} />
             </div>
-            <div className="baseinfo-container">
-              <label>Basic Info</label>
-              <BaseInfo />
-            </div>
-            <div className="licensed-container">
-              <label>Licensed</label>
-              <Licensed />
-            </div>
+            <BaseInfo />
+            <Licensed />
           </div>
-        </div>
-        { /* END panel */ }
-        <div className="p-lg text-right footer">
-          <hr/>
-          <Footer />
-        </div>
+        </main>
+        <footer className="p-lg text-right footer">
+          <span>&copy; 2016 - A10Networks</span>
+        </footer>
       </div>
     );
   }

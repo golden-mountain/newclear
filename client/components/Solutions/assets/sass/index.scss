@@ -1,0 +1,25 @@
+
+.solution-choose-board {
+  margin-top: 40px;
+  h5 {
+    color: #7ED4F1;
+  }
+  .application-container {
+    border: 1px solid #CCCCCC;
+    padding: 20px;
+    .row {
+      margin-bottom: 50px;
+      .col-md-4 {
+        .sub-title {
+          font-size: 15px;
+          color: #7ED4F1;
+        }
+        .solution-row {
+          button {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}

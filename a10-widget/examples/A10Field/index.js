@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
-
-import {  Code, Markdown } from 'redux-form-website-template';
 import { createWidgetStore } from 'WidgetExport';
-
 
 const store = createWidgetStore('app');
 
@@ -13,27 +9,10 @@ const dest = document.getElementById('content');
 
 let render = () => {
   const Sandbox = require('./Sandbox').default;
-  const readme = require('./Readme.md');
-  const raw = require('!!raw-loader!./Sandbox');
-
   ReactDOM.render(
     <Provider store={store}>
       <main>
-        <Row>
-
-          <Markdown content={readme}/>
-
-          <Col xs={7}>  <Sandbox /></Col>
-
-          <Col xs={5}>
-            <h2>Code</h2>
-
-            <h4>Sandbox.js</h4>
-
-            <Code source={raw}/>
-          </Col>
-
-        </Row>
+        <Sandbox />
       </main>
     </Provider>,
     dest

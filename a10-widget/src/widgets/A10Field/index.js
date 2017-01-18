@@ -20,6 +20,14 @@ class A10Field extends React.Component {
     cm: PropTypes.object
   }
 
+  static propTypes = {
+    schema: PropTypes.object.isRequired,
+    redirect: PropTypes.object.isRequired,
+    horizontal: PropTypes.bool,
+    description: PropTypes.string,
+    widgetProps: PropTypes.object
+  }
+
   constructor(props, context) {
     super(props, context);
     this.autoField = new AutoField(this.props.modelGetFieldProps(), this.props.modelGetSchema() );

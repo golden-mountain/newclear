@@ -13,6 +13,12 @@ class A10Form extends Component {
     ballKicker: PropTypes.object
   }
 
+  static propTypes = {
+    schema: PropTypes.object.isRequired,
+    redirect: PropTypes.object.isRequired,
+    horizontal: PropTypes.bool
+  }
+
   // static componentId = uniqueId('A10Form-')
   onSubmit(event) {
     event.preventDefault();

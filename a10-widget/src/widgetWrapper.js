@@ -11,7 +11,7 @@ export const widgetWrapper = ReduxDataConnector => {
   // const uniqueId = (prefix='') => {
   //   return prefix + new Date().getTime() + Math.round(Math.random()*10000);
   // };
-  return WrappedComponent => {
+  return (WrappedComponent, members={} ) => {
 
     const displayName = `Widget${WrappedComponent.displayName}`;
     // console.log(uniqueId(displayName));
@@ -215,7 +215,9 @@ export const widgetWrapper = ReduxDataConnector => {
         // console.log(thisComInstanceData);
         const defaultCheckFields = [ 'data', 'activeData', 'visible', 'errorMsg', 'invalid', 'submitErrors', 'children' ];
         const needUpdateFields = this.props.updateFields || defaultCheckFields;
-        return this.checkComponentNeedUpdate(needUpdateFields, nextComInstanceData, thisComInstanceData);
+        return this.checkComponentNeedUpdate(needUpdateFields, 
+          { ...nextComInstanceData, children: nextProps.children }, 
+          { ...thisComInstanceData, children: this.props.children });
       }
 
       checkComponentNeedUpdate(needUpdateFields, nextProps, thisProps) {
@@ -269,7 +271,7 @@ export const widgetWrapper = ReduxDataConnector => {
         // console.log(this.context.props);
         const newProps = this.getNewProps();
         // console.log('widgetProps',  this.componentId, this.visible);
-        return (this.visible ? <WrappedComponent  {...newProps} /> : null);
+        return (this.visible ? <WrappedComponent {...newProps} /> : null);
       }
     }
 
@@ -291,9 +293,9 @@ export const widgetWrapper = ReduxDataConnector => {
           return result;
         };
       }
-      return connect(conn)(Widget);
+      return Object.assign(connect(conn, null, null, { withRef: true })(Widget), members);
     } else {
-      return connect()(Widget);
+      return Object.assign(connect(null, null, null, { withRef: true })(Widget), members);
     }
     // return ConnnectedWidget;
   };

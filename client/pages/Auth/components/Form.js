@@ -51,19 +51,21 @@ class LoginForm extends React.Component {
     const { modal } = this.props;
 
     return (
-      <A10Form action='/axapi/v3/auth' redirect={this.isFirstLogin() ? '/welcome' : '/'} modal={modal} bsClass="mb-lg">
-        <A10Field name="credentials.username" initial="admin" validation={{ required }} layout={false}>
-          <FormControl id="username" type="text" placeholder="Enter Username" autoComplete="off" required="required" className="form-control" />
-          <span className="fa fa-envelope form-control-feedback text-muted"></span>
-        </A10Field>
-        <A10Field name="credentials.password" initial="a10" validation={{ required }} layout={false} >
-          <FormControl id="password" type="password" placeholder="Password" required="required" className="form-control" />
-          <span className="fa fa-lock form-control-feedback text-muted"></span>
-        </A10Field>
+      <div>
+        <A10Form action='/axapi/v3/auth' redirect={this.isFirstLogin() ? '/welcome' : '/'} modal={modal} bsClass="mb-lg">
+          <A10Field name="credentials.username" initial="admin" validation={{ required }} layout={false}>
+            <FormControl id="username" type="text" placeholder="Enter Username" autoComplete="off" required="required" className="form-control" />
+            <span className="fa fa-envelope form-control-feedback text-muted"></span>
+          </A10Field>
+          <A10Field name="credentials.password" initial="a10" validation={{ required }} layout={false} >
+            <FormControl id="password" type="password" placeholder="Password" required="required" className="form-control" />
+            <span className="fa fa-lock form-control-feedback text-muted"></span>
+          </A10Field>
 
-        <button type="submit" className="btn btn-block btn-primary mt-lg">Login</button>
+          <button type="submit" className="btn btn-block btn-primary mt-lg">Login</button>
 
-      </A10Form>
+        </A10Form>
+      </div>
     );
   }
 }

@@ -1,0 +1,10 @@
+svg.area-chart {
+  min-height: 250px;
+  .axis {
+    line, path {
+      fill: none;
+      stroke: #CCD3DE;
+      shape-rendering: crispEdges;
+    }
+  }
+}

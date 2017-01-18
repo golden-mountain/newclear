@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, FormGroup, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 // import { setLastPageVisible } from '';
-import { HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from 'configs/messages';
+import { HIDE_COMPONENT_MODAL, REDIRECT_ROUTE } from '../../configs/messages';
 
 export class A10SubmitButtons extends Component {
   buttons = {

@@ -11,6 +11,8 @@ registerWidgetPlugins([ SchemaPlugin ]);
 
 class Root extends Component {
 
+  static displayName = 'Root'
+
   static childContextTypes = {
     appConfig: PropTypes.object
   }
@@ -28,7 +30,7 @@ class Root extends Component {
 
   render() {
     return (
-      <Provider store={this.store} key="provider">
+      <Provider store={this.store} dispatch={this.store.dispatch} key="provider">
         <RootRouter />
       </Provider>
     );

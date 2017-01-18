@@ -1,0 +1,11 @@
+
+@import './info_card';
+
+.disk-info {
+  > .text-container {
+    background-color: #2970CA !important;
+  }
+  > .chart-container {
+    background-color: #5D9CEC !important;
+  }
+}
