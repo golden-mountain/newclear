@@ -122,9 +122,12 @@ export default function editableComponent({
               return domNode;
             }
           }>
-            <div className={
-              `${isActive ? 'editable-component-active' : 'editable-component-normal'} ${_isContainer || _isRoot ? 'editable-component-container' : ''} ${_isRoot ? 'editable-component-root' : ''}`
-            }>
+            <div 
+              onClick={::this.editProperties}
+              className={
+                `${isActive ? 'editable-component-active' : 'editable-component-normal'} ${_isContainer || _isRoot ? 'editable-component-container' : ''} ${_isRoot ? 'editable-component-root' : ''}`
+              }
+            >
               {
                 !_isRoot && (
                   <div className="editable-component-toolbar">

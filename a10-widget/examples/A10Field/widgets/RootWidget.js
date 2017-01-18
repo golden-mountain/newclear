@@ -3,7 +3,7 @@ import { widgetWrapper } from 'widgetWrapper';
 
 function RootWidget({ children }) {
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{position: 'relative', minHeight: 300, paddingBottom: 50}}>
       {children}
     </div>
   );

@@ -55,6 +55,9 @@
 .editable-component-active {
   @include editableComponentWrapper;
   border-style: solid;
+  .editable-component-toolbar {
+    display: inline-block;
+  }
   &:hover {
     border-style: solid;
   }
@@ -69,4 +72,5 @@
 
 .editable-component-root {
   background-color: white;
+  overflow: hidden;
 }

@@ -38,6 +38,8 @@ export default widgetWrapper()(MyCol, {
       sm: 'basic',
       md: 'basic',
       lg: 'basic',
+      componentClass: 'advanced',
+      bsClass: 'advanced',
       xsHidden: 'basic',
       smHidden: 'basic',
       mdHidden: 'basic',
