@@ -20,8 +20,8 @@ class MySlider extends Component {
 
   render() {
     return (
-      <div style={ { position: 'relative' } }>
-        <Slider {...this.props} />      
+      <div className="editable-component-wrapper">
+        <Slider {...this.props} style={{margin: 0}} />      
       </div>
     );
   }
@@ -41,7 +41,7 @@ export default widgetWrapper([ 'app' ])(MySlider, {
     },
     defaultProps: Object.assign({}, MySlider.defaultProps, {
       min: 0,
-      max: 50,
+      max: 50
     }),
     propTypes: MySlider.propTypes,
     propGroups: {

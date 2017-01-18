@@ -9,7 +9,7 @@ function MyA10TagInput({ ...props }) {
     a10TagInputProps[key] = props[key];
   });
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <A10TagInput {...a10TagInputProps}/>
     </div>

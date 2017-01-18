@@ -6,7 +6,7 @@ function FormControl({ ...props }) {
   var newProps = Object.assign({}, props);
   delete newProps.children;
   return (
-    <div style={{ position: 'relative' }}>
+    <div className="editable-component-wrapper">
       { props.children }
       <ReactFormControl {...newProps}/>
     </div>

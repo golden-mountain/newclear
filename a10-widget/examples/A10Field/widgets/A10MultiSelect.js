@@ -9,7 +9,7 @@ function MyA10MultiSelect({ ...props }) {
     a10MultiSelectProps[key] = props[key];
   });
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <A10MultiSelect {...a10MultiSelectProps}/>
     </div>

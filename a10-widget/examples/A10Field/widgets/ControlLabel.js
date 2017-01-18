@@ -1,8 +1,22 @@
 import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
-import { ControlLabel } from 'react-bootstrap';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-export default widgetWrapper()(ControlLabel, {
+function MyControlLabel({ ...props }) {
+  let checkboxProps = {};
+  Object.keys(ControlLabel.propTypes).forEach((key)=>{
+    checkboxProps[key] = props[key];
+  });
+  return (
+    <div className="editable-component-wrapper">
+      {props.children}
+      <ControlLabel {...checkboxProps}/>
+    </div>
+  );
+}
+
+
+export default widgetWrapper()(MyControlLabel, {
   meta: {
     widget: {
       iconClassName: 'fa fa-font',

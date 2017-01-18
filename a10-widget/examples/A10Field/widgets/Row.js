@@ -15,6 +15,9 @@ export default widgetWrapper()(Row, {
     },
     defaultProps: Object.assign({}, Row.defaultProps),
     propTypes: Object.assign({}, Row.propTypes),
-    propGroups: {}
+    propGroups: {
+      componentClass: 'basic',
+      bsClass: 'basic'
+    }
   }
 });

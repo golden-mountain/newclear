@@ -2,7 +2,20 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Checkbox from 'react-bootstrap/lib/Checkbox';
 
-export default widgetWrapper()(Checkbox, {
+function MyCheckbox({ ...props }) {
+  let checkboxProps = {};
+  Object.keys(Checkbox.propTypes).forEach((key)=>{
+    checkboxProps[key] = props[key];
+  });
+  return (
+    <div className="editable-component-wrapper">
+      {props.children}
+      <Checkbox {...checkboxProps}/>
+    </div>
+  );
+}
+
+export default widgetWrapper()(MyCheckbox, {
   meta: {
     widget: {
       iconClassName: 'fa fa-check-square-o',

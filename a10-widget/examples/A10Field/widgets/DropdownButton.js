@@ -8,7 +8,7 @@ function CustomizedDropdownButton({ ...props }) {
     dropdownButtonProps[key] = props[key];
   });
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <DropdownButton {...dropdownButtonProps}>
         <MenuItem eventKey="1">Action</MenuItem>

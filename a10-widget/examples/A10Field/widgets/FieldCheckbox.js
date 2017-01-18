@@ -21,7 +21,7 @@ class FieldCheckbox extends React.Component {
     // console.log(this.props);
     const { label, value, checked, required, children } = this.props; // eslint-disable-line
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={ { position: 'relative', minHeight: 40 } }>
         { children }
         <FormGroup>
           <Col componentClass={ControlLabel} sm={2}>

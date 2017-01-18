@@ -5,7 +5,7 @@ import FieldGroup from './source/FieldGroup';
 
 function MyFieldGroup({ ...props }) {
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <FieldGroup {...props}/>
     </div>
