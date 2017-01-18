@@ -96,7 +96,7 @@ export default class ComponentBuilderProperties extends Component {
     const {
       componentMeta = {}
     } = this.props;
-    const groupComponentProperties = (componentMeta.propTypes ? Object.keys(componentMeta.propTypes).map((key)=>{
+    const groupComponentProperties = (componentMeta && componentMeta.propTypes ? Object.keys(componentMeta.propTypes).map((key)=>{
       return {
         prop: key,
         type: componentMeta.propTypes[key],

@@ -99,7 +99,8 @@ export default class Sandbox extends React.Component {
       reactSchema: newSchema,
       editingComponentId: null,
       editingComponentProps: null,
-      editingComponentMeta: null
+      editingComponentMeta: null,
+      showRightPanel: false
     });
   }
 
