@@ -6,11 +6,11 @@ export default widgetWrapper()(FormGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-wpforms',
-      type: 'Bootstrap',
+      type: 'Bootstrap Container',
       name: 'FormGroup',
       component: 'FormGroup',
       display: 'block',
-      isContainer: false,
+      isContainer: true,
       description: ''
     },
     defaultProps: Object.assign({}, FormGroup.defaultProps),
