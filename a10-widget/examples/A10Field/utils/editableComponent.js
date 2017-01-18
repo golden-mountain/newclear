@@ -115,7 +115,6 @@ export default function editableComponent({
         const isActive = _componentId === editingComponentId;
         return (
           <WrappedComponent {...this.props}
-            style={ { position: 'relative', margin: '8px 8px' } }
             ref={instance => {
               const domNode = findDOMNode(instance);
               connectDragSource(domNode);

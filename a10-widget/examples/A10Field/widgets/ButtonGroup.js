@@ -2,7 +2,19 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 
-export default widgetWrapper()(ButtonGroup, {
+function MyButtonGroup({ ...props }) {
+  let validProps = {};
+  Object.keys(ButtonGroup.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <ButtonGroup {...validProps} style={{ position: 'relative' }}>
+      {props.children}
+    </ButtonGroup>
+  );
+}
+
+export default widgetWrapper()(MyButtonGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-folder',

@@ -2,7 +2,19 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
 
-export default widgetWrapper()(PageHeader, {
+function MyPageHeader({ ...props }) {
+  let myProps = {};
+  Object.keys(PageHeader.propTypes).forEach((key)=>{
+    myProps[key] = props[key];
+  });
+  return (
+    <PageHeader {...myProps} style={{ position: 'relative' }}>
+      {props.children}
+    </PageHeader>
+  );
+}
+
+export default widgetWrapper()(MyPageHeader, {
   meta: {
     widget: {
       iconClassName: 'fa fa-header',

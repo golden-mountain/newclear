@@ -2,7 +2,19 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Button from 'react-bootstrap/lib/Button';
 
-export default widgetWrapper()(Button, {
+function MyButton({ ...props }) {
+  let validProps = {};
+  Object.keys(Button.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <Button {...validProps} style={{ position: 'relative' }}>
+      {props.children}
+    </Button>
+  );
+}
+
+export default widgetWrapper()(MyButton, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

@@ -95,7 +95,12 @@ export default class Sandbox extends React.Component {
 
   deleteComponent = (_componentId) => {
     const newSchema = editableUtils.deleteComponent(this.state.reactSchema, _componentId);
-    this.setState({ reactSchema: newSchema });
+    this.setState({ 
+      reactSchema: newSchema,
+      editingComponentId: null,
+      editingComponentProps: null,
+      editingComponentMeta: null
+    });
   }
 
   moveComponent = (dragComponent, dropComponentId, isNew, newPosition) => {

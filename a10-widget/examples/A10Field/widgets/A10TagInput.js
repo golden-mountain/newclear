@@ -4,14 +4,14 @@ import { widgetWrapper } from 'widgetWrapper';
 import { A10TagInput } from '../../../src/widgets/A10Field/FieldWidgets';
 
 function MyA10TagInput({ ...props }) {
-  let a10TagInputProps = {};
+  let validProps = {};
   Object.keys(A10TagInput.propTypes).forEach((key)=>{
-    a10TagInputProps[key] = props[key];
+    validProps[key] = props[key];
   });
   return (
     <div className="editable-component-wrapper">
       {props.children}
-      <A10TagInput {...a10TagInputProps}/>
+      <A10TagInput {...validProps}/>
     </div>
   );
 }

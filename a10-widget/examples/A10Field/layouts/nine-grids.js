@@ -4,7 +4,7 @@ export default {
   name: 'nine-grid',
   schema: {
     _componentId: 'root',
-    component: 'div',
+    component: 'RootWidget',
     schemaChildren: [
       {
         _componentId: 'row1',

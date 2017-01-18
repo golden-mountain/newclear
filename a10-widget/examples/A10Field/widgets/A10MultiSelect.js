@@ -4,14 +4,14 @@ import { widgetWrapper } from 'widgetWrapper';
 import { A10MultiSelect } from '../../../src/widgets/A10Field/FieldWidgets';
 
 function MyA10MultiSelect({ ...props }) {
-  let a10MultiSelectProps = {};
+  let validProps = {};
   Object.keys(A10MultiSelect.propTypes).forEach((key)=>{
-    a10MultiSelectProps[key] = props[key];
+    validProps[key] = props[key];
   });
   return (
     <div className="editable-component-wrapper">
       {props.children}
-      <A10MultiSelect {...a10MultiSelectProps}/>
+      <A10MultiSelect {...validProps}/>
     </div>
   );
 }

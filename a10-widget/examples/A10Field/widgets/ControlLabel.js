@@ -3,14 +3,14 @@ import { widgetWrapper } from 'widgetWrapper';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
 function MyControlLabel({ ...props }) {
-  let checkboxProps = {};
+  let validProps = {};
   Object.keys(ControlLabel.propTypes).forEach((key)=>{
-    checkboxProps[key] = props[key];
+    validProps[key] = props[key];
   });
   return (
     <div className="editable-component-wrapper">
       {props.children}
-      <ControlLabel {...checkboxProps}/>
+      <ControlLabel {...validProps}/>
     </div>
   );
 }

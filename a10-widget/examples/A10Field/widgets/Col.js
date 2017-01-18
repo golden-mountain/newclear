@@ -2,7 +2,20 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Col from 'react-bootstrap/lib/Col';
 
-export default widgetWrapper()(Col, {
+function MyCol({ ...props }) {
+  let validProps = {};
+  Object.keys(Col.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <Col {...validProps} style={{ position: 'relative' }}>
+      {props.children}
+    </Col>
+  );
+}
+
+
+export default widgetWrapper()(MyCol, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

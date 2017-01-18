@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/lib/Col';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
 import editableUtils from '../utils/editableUtils';
+import './MainPanel.scss';
 
 export default class MainPanel extends React.Component {
   static propTypes = {
@@ -111,12 +112,14 @@ export default class MainPanel extends React.Component {
           </Panel>
         </Tab>
         <Tab eventKey={3} title={<span><i className="fa fa-code" />&nbsp;Code</span>}>
+
           <Highlight
+            style={{ maxHeight: 400, overflowY: 'scroll' }}
             className="javascript"
-            style={{ width: '100%', height: 'auto', minHeight: 300 }}
           >
             { editableUtils.generateReactCodeFromSchema(name, schema) }
           </Highlight>
+
           <ButtonToolbar className="pull-right">
             <Button bsStyle="primary" >
               <i className="fa fa-save"/>&nbsp;Save
@@ -129,7 +132,6 @@ export default class MainPanel extends React.Component {
         <Tab eventKey={4} title={<span><i className="fa fa-codepen" />&nbsp;Schema</span>}>
           <Highlight
             className="javascript"
-            style={{ width: '100%', height: 'auto', minHeight: 300 }}
           >
             { this.generateSchemaCode() }
           </Highlight>

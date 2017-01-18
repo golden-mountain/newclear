@@ -2,7 +2,20 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Panel from 'react-bootstrap/lib/Panel';
 
-export default widgetWrapper()(Panel, {
+function MyPanel({ ...props }) {
+  let validProps = {};
+  Object.keys(Panel.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <Panel {...validProps} style={ { position: 'relative', margin: 0 } }>
+      {props.children}
+    </Panel>
+  );
+}
+
+
+export default widgetWrapper()(MyPanel, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

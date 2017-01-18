@@ -2,7 +2,20 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Row from 'react-bootstrap/lib/Row';
 
-export default widgetWrapper()(Row, {
+function MyRow({ ...props }) {
+  let validProps = {};
+  Object.keys(Row.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <Row {...validProps} style={ { position: 'relative', margin: 0 } }>
+      {props.children}
+    </Row>
+  );
+}
+
+
+export default widgetWrapper()(MyRow, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

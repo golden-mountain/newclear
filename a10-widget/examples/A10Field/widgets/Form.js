@@ -2,7 +2,20 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Form from 'react-bootstrap/lib/Form';
 
-export default widgetWrapper()(Form, {
+function MyForm({ ...props }) {
+  let validProps = {};
+  Object.keys(Form.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <Form {...validProps} style={ { position: 'relative', margin: 0 } }>
+      {props.children}
+    </Form>
+  );
+}
+
+
+export default widgetWrapper()(MyForm, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

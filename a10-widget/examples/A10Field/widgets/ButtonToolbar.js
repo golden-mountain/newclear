@@ -2,7 +2,19 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
-export default widgetWrapper()(ButtonToolbar, {
+function MyButtonToolbar({ ...props }) {
+  let validProps = {};
+  Object.keys(ButtonToolbar.propTypes).forEach((key)=>{
+    validProps[key] = props[key];
+  });
+  return (
+    <ButtonToolbar {...validProps} style={{ position: 'relative' }}>
+      {props.children}
+    </ButtonToolbar>
+  );
+}
+
+export default widgetWrapper()(MyButtonToolbar, {
   meta: {
     widget: {
       iconClassName: 'fa fa-folder',

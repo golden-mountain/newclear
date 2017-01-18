@@ -5,7 +5,7 @@ export default {
   schema: {
     _componentId: 'root',
     _isRoot: true,
-    component: 'div',
+    component: 'RootWidget',
     schemaChildren: [
       {
         _componentId: 'a',
