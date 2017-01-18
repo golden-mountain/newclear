@@ -21,11 +21,11 @@ class A10Field extends React.Component {
   }
 
   static propTypes = {
-    schema: PropTypes.object.isRequired,
-    redirect: PropTypes.object.isRequired,
-    horizontal: PropTypes.bool,
-    description: PropTypes.string,
-    widgetProps: PropTypes.object
+    name: PropTypes.object.isRequired,
+    label: PropTypes.object.isRequired,
+    value: PropTypes.bool,
+    conditional: PropTypes.object,
+    layout: PropTypes.element
   }
 
   constructor(props, context) {
