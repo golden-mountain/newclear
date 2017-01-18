@@ -28,22 +28,23 @@ export default widgetWrapper()(MyA10Field, {
     },
     defaultProps: {
       name: 'A10Field',
-      label: 'A10Field'
+      label: 'A10Field',
+      schema: {},
+      redirect: {}
     },
     propTypes: Object.assign({}, A10Field.propTypes, {
-      schema: PropTypes.object.isRequired,
-      redirect: PropTypes.object.isRequired,
-      horizontal: PropTypes.bool,
-      description: PropTypes.string,
-      widgetProps: PropTypes.object
+      name: PropTypes.object.isRequired,
+      label: PropTypes.object.isRequired,
+      value: PropTypes.bool,
+      conditional: PropTypes.object,
+      layout: PropTypes.element
     }),
     propGroups: {
-      schema: 'basic',
-      redirect: 'basic',
-      horizontal: 'basic',
-      description: 'basic',
-      widgetProps: 'basic',
-      store: 'ignore'
+      name: 'basic',
+      label: 'basic',
+      value: 'basic',
+      conditional: 'basic',
+      layout: 'basic'
     }
   }
 });
