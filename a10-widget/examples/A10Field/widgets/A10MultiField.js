@@ -61,7 +61,7 @@ function MyA10MultiField({ ...props }) {
     newProps[key] = props[key];
   });
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <A10MultiField {...newProps} name={props.objName}>
         {props.fields}

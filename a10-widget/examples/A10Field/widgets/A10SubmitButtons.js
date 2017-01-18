@@ -6,7 +6,7 @@ import { A10SubmitButtons } from '../../../../client/components/Form/A10SubmitBu
 function MyA10SubmitButtons({ ...props }) {
   let newProps = {};
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <A10SubmitButtons {...newProps} />
     </div>

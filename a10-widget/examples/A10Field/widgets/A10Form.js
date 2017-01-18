@@ -10,7 +10,7 @@ function MyA10Form({ ...props }) {
     newProps[key] = props[key];
   });
   return (
-    <div style={ { position: 'relative' } }>
+    <div className="editable-component-wrapper">
       {props.children}
       <A10Form {...newProps}>
         {props.children}
@@ -22,7 +22,7 @@ function MyA10Form({ ...props }) {
 export default widgetWrapper()(MyA10Form, {
   meta: {
     widget: {
-      iconClassName: 'fa fa-rocket',
+      iconClassName: 'fa fa-wpforms',
       type: 'Field',
       name: 'A10Form',
       component: 'A10Form',
