@@ -239,7 +239,11 @@ class _A10MultiField extends Component {
   static propTypes = {
     children: PropTypes.array.isRequired,
     name: PropTypes.string.isRequired,
-    component: PropTypes.element
+    listComponent: PropTypes.element
+  }
+
+  static defaultPropTypes = {
+    children: []
   }
 
   constructor(props, context) {
@@ -247,12 +251,17 @@ class _A10MultiField extends Component {
   }
 
   render() {
-    let { component, name, children, ...rest } = this.props;
+    let { listComponent, name, children, ...rest } = this.props;
 
     // clean data and find the primary key
     let primaryKey = null;
     const startPos = name.indexOf('.');
-    const schema = this.props.modelGetSchema().properties[startPos != -1 ? name.substring(startPos + 1, name.length) : name].properties;
+    let data = this.props.modelGetSchema().properties;
+    let dataAttrName = startPos != -1 ? name.substring(startPos + 1, name.length) : name;
+    if (data && data.hasOwnProperty(dataAttrName))
+      data = data[dataAttrName];
+
+    const schema = data ? data.properties : {};
     const kids = [];
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
@@ -260,8 +269,9 @@ class _A10MultiField extends Component {
       if (!primaryKey && primary) primaryKey = name;
       if (schema[name]) kids.push(child);
     }
-    if (!component) {
-      component = TableFields;
+
+    if (!listComponent) {
+      listComponent = TableFields;
     }
 
     return (
