@@ -50,7 +50,7 @@ export default function editableComponent({
         }
       }
 
-      moveComponent(Object.assign({}, item, { _isNew: false }), props._componentId, item._isNew, newPosition);
+      moveComponent(Object.assign({}, item, { _isNew: false, children: null }), props._componentId, item._isNew, newPosition);
     }
   };
 
