@@ -3,17 +3,7 @@ import A10Field from '../../../src/widgets/A10Field';
 
 import { widgetWrapper } from 'widgetWrapper';
 
-function MyA10Field({ ...props }) {
-  var newProps = Object.assign({}, props, { children: null });
-  return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <A10Field {...newProps} />
-    </div>
-  );
-}
-
-export default widgetWrapper()(MyA10Field, {
+export default widgetWrapper()(A10Field, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

@@ -2,20 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Panel from 'react-bootstrap/lib/Panel';
 
-function MyPanel({ ...props }) {
-  let validProps = {};
-  Object.keys(Panel.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <Panel {...validProps} className="editable-component-wrapper">
-      {props.children}
-    </Panel>
-  );
-}
-
-
-export default widgetWrapper()(MyPanel, {
+export default widgetWrapper()(Panel, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
@@ -24,7 +11,8 @@ export default widgetWrapper()(MyPanel, {
       component: 'Panel',
       display: 'block',
       isContainer: true,
-      description: ''
+      description: '',
+      isWrapperItself: true
     },
     defaultProps: Object.assign({}, Panel.defaultProps),
     propTypes: Object.assign({}, Panel.propTypes),

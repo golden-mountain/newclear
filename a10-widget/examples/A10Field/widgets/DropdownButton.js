@@ -3,21 +3,14 @@ import { widgetWrapper } from 'widgetWrapper';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 function CustomizedDropdownButton({ ...props }) {
-  let dropdownButtonProps = {};
-  Object.keys(DropdownButton.propTypes).forEach((key)=>{
-    dropdownButtonProps[key] = props[key];
-  });
   return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <DropdownButton {...dropdownButtonProps}>
-        <MenuItem eventKey="1">Action</MenuItem>
-        <MenuItem eventKey="2">Another action</MenuItem>
-        <MenuItem eventKey="3" active>Active Item</MenuItem>
-        <MenuItem divider />
-        <MenuItem eventKey="4">Separated link</MenuItem>
-      </DropdownButton>
-    </div>
+    <DropdownButton {...props}>
+      <MenuItem eventKey="1">Action</MenuItem>
+      <MenuItem eventKey="2">Another action</MenuItem>
+      <MenuItem eventKey="3" active>Active Item</MenuItem>
+      <MenuItem divider />
+      <MenuItem eventKey="4">Separated link</MenuItem>
+    </DropdownButton>
   );
 }
 

@@ -21,18 +21,15 @@ class FieldCheckbox extends React.Component {
     // console.log(this.props);
     const { label, value, checked, required, children } = this.props; // eslint-disable-line
     return (
-      <div style={ { position: 'relative', minHeight: 40 } }>
-        { children }
-        <FormGroup>
-          <Col componentClass={ControlLabel} sm={2}>
-            { label }
-            { required && <span style={{ color: 'red' }}>&nbsp;*</span> }
-          </Col>
-          <Col sm={10}>
-            <Checkbox style={{marginTop: 0}} onChange={::this.change} checked={this.props.activeData}  />
-          </Col>
-        </FormGroup>
-      </div>
+      <FormGroup>
+        <Col componentClass={ControlLabel} sm={2}>
+          { label }
+          { required && <span style={{ color: 'red' }}>&nbsp;*</span> }
+        </Col>
+        <Col sm={10}>
+          <Checkbox style={{marginTop: 0}} onChange={::this.change} checked={this.props.activeData}  />
+        </Col>
+      </FormGroup>
     );
   }
 }

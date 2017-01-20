@@ -4,21 +4,7 @@ import A10Form from '../../../src/widgets/A10Form';
 // import slbVirtualServerSchema from '../../../../schemas/slb-virtual-server.json';
 import { widgetWrapper } from 'widgetWrapper';
 
-function MyA10Form({ ...props }) {
-  let newProps = {};
-  Object.keys(A10Form.propTypes).forEach((key)=>{
-    newProps[key] = props[key];
-  });
-  return (
-    <div className="editable-component-wrapper">
-      <A10Form {...newProps}>
-        {props.children}
-      </A10Form>
-    </div>
-  );
-}
-
-export default widgetWrapper()(MyA10Form, {
+export default widgetWrapper()(A10Form, {
   meta: {
     widget: {
       iconClassName: 'fa fa-wpforms',

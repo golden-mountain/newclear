@@ -3,7 +3,7 @@ import { widgetWrapper } from 'widgetWrapper';
 
 function RootWidget({ children }) {
   return (
-    <div style={{position: 'relative', minHeight: 300, paddingBottom: 50}}>
+    <div style={{ position: 'relative' }}>
       {children}
     </div>
   );
@@ -17,6 +17,7 @@ export default widgetWrapper()(RootWidget, {
       isContainer: true,
       hideFromCandidates: true,
       description: '',
+      isWrapperItself: true
     }
   }
 });

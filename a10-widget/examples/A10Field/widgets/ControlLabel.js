@@ -2,21 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-function MyControlLabel({ ...props }) {
-  let validProps = {};
-  Object.keys(ControlLabel.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <ControlLabel {...validProps}/>
-    </div>
-  );
-}
-
-
-export default widgetWrapper()(MyControlLabel, {
+export default widgetWrapper()(ControlLabel, {
   meta: {
     widget: {
       iconClassName: 'fa fa-font',

@@ -2,21 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Radio from 'react-bootstrap/lib/Radio';
 
-function MyRadio({ ...props }) {
-  let checkboxProps = {};
-  Object.keys(Radio.propTypes).forEach((key)=>{
-    checkboxProps[key] = props[key];
-  });
-  return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <Radio {...checkboxProps}/>
-    </div>
-  );
-}
-
-
-export default widgetWrapper()(MyRadio, {
+export default widgetWrapper()(Radio, {
   meta: {
     widget: {
       iconClassName: 'fa fa-dot-circle-o',

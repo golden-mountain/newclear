@@ -20,15 +20,13 @@ class MySlider extends Component {
 
   render() {
     return (
-      <div className="editable-component-wrapper">
-        <Slider {...this.props} style={{margin: 0}} />      
-      </div>
+      <Slider {...this.props} style={{ margin: 0 }} />      
     );
   }
 
 }
 
-export default widgetWrapper([ 'app' ])(MySlider, {
+export default widgetWrapper([ 'app' ])(Slider, {
   meta: {
     widget: {
       iconClassName: 'fa fa-sliders',

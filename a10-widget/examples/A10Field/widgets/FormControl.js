@@ -2,18 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import ReactFormControl from 'react-bootstrap/lib/FormControl';
 
-function FormControl({ ...props }) {
-  var newProps = Object.assign({}, props);
-  delete newProps.children;
-  return (
-    <div className="editable-component-wrapper">
-      { props.children }
-      <ReactFormControl {...newProps}/>
-    </div>
-  );
-}
-
-export default widgetWrapper()(FormControl, {
+export default widgetWrapper()(ReactFormControl, {
   meta: {
     widget: {
       iconClassName: 'fa fa-wpforms',

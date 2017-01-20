@@ -2,20 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Form from 'react-bootstrap/lib/Form';
 
-function MyForm({ ...props }) {
-  let validProps = {};
-  Object.keys(Form.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <Form {...validProps} className="editable-component-wrapper">
-      {props.children}
-    </Form>
-  );
-}
-
-
-export default widgetWrapper()(MyForm, {
+export default widgetWrapper()(Form, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',

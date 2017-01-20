@@ -2,20 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 
-function MyFormGroup({ ...props }) {
-  let validProps = {};
-  Object.keys(FormGroup.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <FormGroup {...validProps} style={ { position: 'relative', margin: 0 } }>
-      {props.children}
-    </FormGroup>
-  );
-}
-
-
-export default widgetWrapper()(MyFormGroup, {
+export default widgetWrapper()(FormGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-wpforms',
@@ -24,7 +11,8 @@ export default widgetWrapper()(MyFormGroup, {
       component: 'FormGroup',
       display: 'block',
       isContainer: true,
-      description: ''
+      description: '',
+      isWrapperItself: true
     },
     defaultProps: Object.assign({}, FormGroup.defaultProps),
     propTypes: Object.assign({}, FormGroup.propTypes),

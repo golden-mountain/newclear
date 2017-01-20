@@ -2,20 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Row from 'react-bootstrap/lib/Row';
 
-function MyRow({ ...props }) {
-  let validProps = {};
-  Object.keys(Row.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <Row {...validProps} className="editable-component-wrapper">
-      {props.children}
-    </Row>
-  );
-}
-
-
-export default widgetWrapper()(MyRow, {
+export default widgetWrapper()(Row, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
@@ -24,7 +11,8 @@ export default widgetWrapper()(MyRow, {
       component: 'Row',
       display: 'block',
       isContainer: true,
-      description: ''
+      description: '',
+      isWrapperItself: true
     },
     defaultProps: Object.assign({}, Row.defaultProps),
     propTypes: Object.assign({}, Row.propTypes),

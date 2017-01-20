@@ -3,21 +3,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import { A10TagInput } from '../../../src/widgets/A10Field/FieldWidgets';
 
-function MyA10TagInput({ ...props }) {
-  let validProps = {};
-  Object.keys(A10TagInput.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <A10TagInput {...validProps}/>
-    </div>
-  );
-}
-
-
-export default widgetWrapper([ 'app' ])(MyA10TagInput, {
+export default widgetWrapper([ 'app' ])(A10TagInput, {
   meta: {
     widget: {
       iconClassName: 'fa fa-tag',

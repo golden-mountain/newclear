@@ -2,20 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Col from 'react-bootstrap/lib/Col';
 
-function MyCol({ ...props }) {
-  let validProps = {};
-  Object.keys(Col.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <Col {...validProps} className="editable-component-wrapper">
-      {props.children}
-    </Col>
-  );
-}
-
-
-export default widgetWrapper()(MyCol, {
+export default widgetWrapper()(Col, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
@@ -24,7 +11,8 @@ export default widgetWrapper()(MyCol, {
       component: 'Col',
       display: 'block',
       isContainer: true,
-      description: ''
+      description: '',
+      isWrapperItself: true
     },
     defaultProps: Object.assign({}, Col.defaultProps, {
       xs: 6,

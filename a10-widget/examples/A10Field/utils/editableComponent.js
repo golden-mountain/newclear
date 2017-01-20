@@ -76,12 +76,12 @@ export default function editableComponent({
         children: PropTypes.node
       };
 
-      deleteComponent(event) {
+      deleteComponent = (event) => {
         event.stopPropagation();
         deleteComponent(this.props._componentId);
       }
 
-      editProperties(event) {
+      editProperties = (event) => {
         event.stopPropagation();
         startToEditComponent({
           componentMeta: meta,
@@ -89,64 +89,84 @@ export default function editableComponent({
         });
       }
 
-      renderTitle() {
-        return (
-          <div >
-            _componentId: {this.props._componentId}
-            <div className="pull-right">
-              <i className="fa fa-cog" style={ { cursor: 'pointer' } } onClick={::this.editProperties}/>
-              &nbsp;&nbsp;&nbsp;
-              <i className="fa fa-trash text-alert" style={ { cursor: 'pointer' } } onClick={::this.deleteComponent}/>
-            </div>
+      getRefOfWrappedComponent = (instance) => {
+        const {
+          connectDragSource,
+          connectDropTarget
+        } = this.props;
+        const domNode = findDOMNode(instance);
+        connectDragSource(domNode);
+        connectDropTarget(domNode);
+        return domNode;
+      }
+
+      renderToolbar = () => {
+        const { _isRoot } = this.props;
+        return !_isRoot && (
+          <div className="editable-component-toolbar">
+            <i className="fa fa-cog" onClick={this.editProperties}/>
+            <i className="fa fa-trash" onClick={this.deleteComponent}/>
           </div>
         );
       }
+
+      renderChildren = () => {
+        const {
+          _isRoot,
+          _isContainer,
+          children
+        } = this.props;
+        return _isContainer || _isRoot ? (
+          <div style={{ padding: 8 }}> { children }  </div>
+        ) : ( children );
+      }
+
       render() {
         const {
           _componentId,
           _isContainer,
           _isRoot,
-          connectDragSource,
-          connectDropTarget,
-          editingComponentId,
-          children
+          editingComponentId
         } = this.props;
-
         const isActive = _componentId === editingComponentId;
-        return (
-          <WrappedComponent {...this.props}
-            ref={instance => {
-              const domNode = findDOMNode(instance);
-              connectDragSource(domNode);
-              connectDropTarget(domNode);
-              return domNode;
-            }
-          }>
-            <div 
-              onClick={::this.editProperties}
-              className={
-                `${isActive ? 'editable-component-active' : 'editable-component-normal'} ${_isContainer || _isRoot ? 'editable-component-container' : ''} ${_isRoot ? 'editable-component-root' : ''}`
-              }
-            >
-              {
-                !_isRoot && (
-                  <div className="editable-component-toolbar">
-                    <i className="fa fa-cog" onClick={::this.editProperties}/>
-                    <i className="fa fa-trash" onClick={::this.deleteComponent}/>
-                  </div>
-                )
-              }
+        let componentClassName = '';
+        componentClassName += isActive ? 'editable-component-active ' : 'editable-component-normal ';
+        componentClassName += _isContainer || _isRoot ? 'editable-component-container ' : '';
+        componentClassName += _isRoot ? 'editable-component-root ' : '';
+        const propsWithouChildren = Object.assign({}, this.props, { children: null });
+        if (meta.widget.isWrapperItself) {
+          return (
+            <WrappedComponent 
+              {...propsWithouChildren} 
+              ref={this.getRefOfWrappedComponent} 
+              className="editable-component-wrapper"
+            > 
+              <div 
+                onClick={this.editProperties}
+                className={componentClassName}
+              >
+                { this.renderToolbar() }
+              </div>
+              { this.renderChildren() }
+              <div className={ _isContainer || _isRoot ? 'editable-component-container-spacing' : ''} />
+            </WrappedComponent>
+          );
+        } else {
+          return (
+            <div className="editable-component-wrapper" ref={this.getRefOfWrappedComponent}>
+              <WrappedComponent {...propsWithouChildren}  />
+              <div 
+                onClick={this.editProperties}
+                className={componentClassName}
+              >
+                { this.renderToolbar() }
+              </div>
+              { this.renderChildren() }
+              <div className={ _isContainer || _isRoot ? 'editable-component-container-spacing' : ''} />
             </div>
-            {
-              _isContainer || _isRoot ? (
-                <div style={{ padding: 8 }}>
-                  { children }
-                </div>
-              ) : ( children )
-            }
-            <div className={ _isContainer || _isRoot ? 'editable-component-container-spacing' : ''} />
-          </WrappedComponent>
-        );
+          );
+        }
+
       }
     }
     return Wrap;

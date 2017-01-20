@@ -2,17 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import FieldGroup from './source/FieldGroup';
 
-
-function MyFieldGroup({ ...props }) {
-  return (
-    <div className="editable-component-wrapper">
-      {props.children}
-      <FieldGroup {...props}/>
-    </div>
-  );
-}
-
-export default widgetWrapper()(MyFieldGroup, {
+export default widgetWrapper()(FieldGroup, {
   meta: {
     widget: {
       iconClassName: 'fa fa-globe',

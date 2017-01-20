@@ -2,19 +2,7 @@ import React from 'react';
 import { widgetWrapper } from 'widgetWrapper';
 import Button from 'react-bootstrap/lib/Button';
 
-function MyButton({ ...props }) {
-  let validProps = {};
-  Object.keys(Button.propTypes).forEach((key)=>{
-    validProps[key] = props[key];
-  });
-  return (
-    <Button {...validProps} className="editable-component-wrapper">
-      {props.children}
-    </Button>
-  );
-}
-
-export default widgetWrapper()(MyButton, {
+export default widgetWrapper()(Button, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
@@ -23,7 +11,8 @@ export default widgetWrapper()(MyButton, {
       component: 'Button',
       display: 'inline-block',
       isContainer: false,
-      description: ''
+      description: '',
+      isWrapperItself: true
     },
     defaultProps: Object.assign({}, Button.defaultProps, {
       schemaChildren: 'My Button'
