@@ -63,7 +63,12 @@ export default class MainPanel extends React.Component {
       type,
       name,
       schema
-    }, null, 2).replace(/\"([^(\")"]+)\":/g,'$1:');
+    }, (key, value) => {
+      if (key[0] === '_') {
+        return undefined;
+      }
+      return value;
+    }, 2).replace(/\"([^(\")"]+)\":/g,'$1:');
   }
 
   downloadJsxFile = () => {
@@ -92,6 +97,7 @@ export default class MainPanel extends React.Component {
       type,
       name
     } = this.state;
+
 
     return (
       <Tabs id="sandbox-main-area">

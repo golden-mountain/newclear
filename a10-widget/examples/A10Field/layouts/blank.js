@@ -3,9 +3,7 @@ export default {
   type: 'basic',
   name: 'blank',
   schema: {
-    _componentId: 'root',
     component: 'RootWidget',
-    _isRoot: true,
     schemaChildren: [
     ]
   }

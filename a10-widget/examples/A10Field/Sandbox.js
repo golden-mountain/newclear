@@ -131,7 +131,7 @@ export default class Sandbox extends React.Component {
 
   onLayoutChange = (schema)=>{
     this.setState({
-      reactSchema: schema
+      reactSchema: editableUtils.loadSchema(schema)
     });
   }
 

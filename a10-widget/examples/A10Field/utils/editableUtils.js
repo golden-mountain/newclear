@@ -24,6 +24,24 @@ const registerComponents = (componentsDict) => {
 let _cachedWrappedComponents;
 _cachedWrappedComponents = {};
 
+const loadSchema = (schema, notRoot = false) => {
+
+  schema._componentId = schema._componentId ||  (!notRoot ? '_root' : _.uniqueId());
+  if(!notRoot) {
+    schema._isRoot = true;
+  }
+  if (schema._isContainer || registeredComponents[schema.component] && registeredComponents[schema.component].meta.widget.isContainer) {
+    schema._isContainer = true;
+  }
+
+  return {
+    ...schema,
+    schemaChildren: !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
+      schema.schemaChildren
+      .map(item => loadSchema(item, true))
+  };
+};
+
 const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   const {
     schemaChildren,
@@ -178,6 +196,7 @@ const generateReactCodeFromSchema = (name, schema) => generateReactCode(name, to
 
 
 export default {
+  loadSchema,
   registerComponents,
   jsonToComponent,
   moveComponent,
