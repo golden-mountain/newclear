@@ -52,19 +52,14 @@ export default function (componentCandidate) {
         style
       } = this.props;
 
-      const ellipsisStyle = {
-        width: '100%',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'
-      };
       return connectDragSource(
         <div 
           title={name}
           style={style} 
           onClick={this.onClick}>
           <i className={iconClassName} />
-          <div style={ellipsisStyle}>{name}</div>
+          <br/>
+          <span>{name}</span>
         </div>
 
       );

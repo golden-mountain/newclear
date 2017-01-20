@@ -76,7 +76,10 @@ export default class LeftPanel extends Component {
       display: 'inline-block',
       textAlign: 'center',
       marginBottom: 10,
-      cursor: 'pointer'
+      cursor: 'pointer',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
 
     };
     const dragableTileStyle = Object.assign({ cursor: 'move' }, tileStyle);
@@ -222,6 +225,7 @@ export default class LeftPanel extends Component {
                     <span
                       key={index}
                       style={tileStyle}
+                      title={item.name}
                       onClick={onLayoutChange.bind(this, item.schema)}
                     >
                       <i className={item.iconClassName} />
