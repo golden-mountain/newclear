@@ -7,12 +7,12 @@
   left: -5px;
   bottom: -5px;
   // padding-top: 30px;
-  background-color: rgba(200, 230, 255, .8);
   border-width: 2px;
   border-style:dashed;
   min-height: 30px;
   display: inline-block;
   &:hover {
+    background-color: rgba(200, 230, 255, .8);
     .editable-component-toolbar {
       display: inline-block;
     }
@@ -55,6 +55,7 @@
 .editable-component-active {
   @include editableComponentWrapper;
   border-style: solid;
+  background-color: rgba(200, 230, 255, .8);
   .editable-component-toolbar {
     display: inline-block;
   }
@@ -64,8 +65,8 @@
 }
 
 .editable-component-container-spacing {
-  min-height: 100px;
-  min-width: 100px;
+  min-height: 50px;
+  min-width: 300px;
   overflow: hidden;
   padding: 10px;
 }
