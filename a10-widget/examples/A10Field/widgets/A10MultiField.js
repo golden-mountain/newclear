@@ -4,10 +4,7 @@ import { A10MultiField } from '../../../src/widgets/A10Field/FieldWidgets';
 import { Col, Row, Panel, FormControl, Checkbox } from 'react-bootstrap';
 import { A10SubmitButtons } from '../../../../client/components/Form/A10SubmitButtons';
 
-// import slbVirtualServerSchema from '../../../../schemas/slb-virtual-server.json';
-import { A10Field, A10Form, widgetWrapper } from 'widgetWrapper';
-
-import slbVirtualPortSchema from '../../../../schemas/slb-virtual-server.json';
+import { A10Field, A10Form, widgetWrapper } from '../../../src/index';
 
 class VirtualPort extends React.Component {
   static displayName = 'VirtualPort'
@@ -18,7 +15,7 @@ class VirtualPort extends React.Component {
     // console.log(this.props);
     const urlKeys = { 'name': 'vs2' };
     return (
-      <A10Form schema={ slbVirtualPortSchema } urlKeys={urlKeys} horizontal>
+      <A10Form schema={'slb-virtual-server'} urlKeys={urlKeys} horizontal>
         <Row>
           <Col xs={12}>
             <Panel header={<h4>Basic Field</h4>}>
@@ -63,7 +60,7 @@ function MyA10MultiField({ ...props }) {
   return (
     <div className="editable-component-wrapper">
       {props.children}
-      <A10MultiField {...newProps} name={props.objName}>
+      <A10MultiField {...newProps} name={props.objName} popupInfo={props.popupInfo}>
         {props.fields}
       </A10MultiField>
     </div>
@@ -82,7 +79,16 @@ export default widgetWrapper()(MyA10MultiField, {
       description: ''
     },
     defaultProps: {
-      fields: [],
+      fields: [
+        <A10Field key="1" layout={false} name="port-number" title="Port Number" searchable={true} primary={true} />,
+        <A10Field key="2" layout={false} name="range" title="Port Range" />,
+        (<A10Field key="3" layout={false} name="protocol" title="Protocol" >
+          <FormControl componentClass="select" defaultValue="tcp">
+            <option value="tcp">tcp</option>
+            <option value="udp">udp</option>
+          </FormControl>
+        </A10Field>)
+      ],
       objName: 'virtual-server.port-list',
       popupInfo: {
         componentClass: MyVirtualPort,

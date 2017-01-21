@@ -261,21 +261,21 @@ class _A10MultiField extends Component {
     if (data && data.hasOwnProperty(dataAttrName))
       data = data[dataAttrName];
 
-    const schema = data ? data.properties : {};
-    const kids = [];
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      const { name, primary } = child.props;
-      if (!primaryKey && primary) primaryKey = name;
-      if (schema[name]) kids.push(child);
-    }
+    // const schema = data ? data.properties : {};
+    // const kids = [];
+    // for (let i = 0; i < children.length; i++) {
+    //   const child = children[i];
+    //   const { name, primary } = child.props;
+    //   if (!primaryKey && primary) primaryKey = name;
+    //   if (schema[name]) kids.push(child);
+    // }
 
     if (!listComponent) {
       listComponent = TableFields;
     }
 
     return (
-      <TableFields kids={kids} name={name} primaryKey={primaryKey} { ...rest } />
+      <TableFields kids={children} name={name} primaryKey={primaryKey} { ...rest } />
     );
   }
 }

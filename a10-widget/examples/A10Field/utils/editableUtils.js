@@ -73,7 +73,7 @@ const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   return React.createElement
     .apply(this, [ 
       reactComponent, 
-      Object.assign({}, obj, props, { key: obj._componentId }), ...reactComponentChildren 
+      Object.assign({}, obj, props, { key: obj._componentId, isComponentEditor: true }), ...reactComponentChildren 
     ]);
 };
 

@@ -21,11 +21,20 @@ class A10Field extends React.Component {
   }
 
   static propTypes = {
-    name: PropTypes.object.isRequired,
-    label: PropTypes.object.isRequired,
-    value: PropTypes.bool,
-    conditional: PropTypes.object,
-    layout: PropTypes.element
+    name: PropTypes.string,
+    label: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool
+    ]),
+    conditional: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool
+    ]),
+    layout: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.bool
+    ])
   }
 
   constructor(props, context) {

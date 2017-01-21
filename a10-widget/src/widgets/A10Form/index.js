@@ -14,8 +14,11 @@ class A10Form extends Component {
   }
 
   static propTypes = {
-    schema: PropTypes.object.isRequired,
-    redirect: PropTypes.object.isRequired,
+    schema: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string
+    ]).isRequired,
+    redirect: PropTypes.object,
     horizontal: PropTypes.bool
   }
 

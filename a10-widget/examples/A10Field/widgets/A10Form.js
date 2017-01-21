@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import A10Form from '../../../src/widgets/A10Form';
 
-// import slbVirtualServerSchema from '../../../../schemas/slb-virtual-server.json';
 import { widgetWrapper } from 'widgetWrapper';
 
 export default widgetWrapper()(A10Form, {
@@ -16,12 +15,12 @@ export default widgetWrapper()(A10Form, {
       description: ''
     },
     defaultProps: {
-      schema: {},
+      schema: 'slb-virtual-server',
       redirect: { path: 'list' }, 
       horizontal: true
     },
     propTypes: Object.assign({}, A10Form.propTypes, {
-      schema: PropTypes.object.isRequired,
+      schema: PropTypes.string.isRequired,
       redirect: PropTypes.object.isRequired,
       horizontal: PropTypes.bool
     }),

@@ -51,7 +51,8 @@ export const widgetWrapper = ReduxDataConnector => {
         const componentMeta = {
           meta: {
             endpoint:action,
-            schema, name, value, loadInitial,
+            schema: typeof schema === 'string' ? require(`../../schemas/${schema}.json`) : schema, 
+            name, value, loadInitial,
             conditional, validation, urlParams, invalid, ...meta
           }
         };
@@ -198,6 +199,7 @@ export const widgetWrapper = ReduxDataConnector => {
       }
 
       shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.isComponentEditor && (this.props !== nextProps || this.state !== nextState)) return true;
         let result = this.executePluginMethod('onShouldUpdate', nextProps, nextState) || true;
         if (result) {
           result = this.checkWidgetDataUpdate(nextProps);
