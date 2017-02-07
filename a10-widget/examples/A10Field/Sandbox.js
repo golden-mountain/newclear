@@ -206,7 +206,7 @@ export default class Sandbox extends React.Component {
                 downloadFile={this.downloadFile}
               />
             </Col>
-            <Draggable>
+            <Draggable handle=".panel-heading">
               <Col xs={showRightPanel ? 4 : 0}>
                 <ComponentBuilderProperties
                   editingComponentId={editingComponentId}

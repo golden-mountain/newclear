@@ -163,9 +163,6 @@ export default class ComponentBuilderProperties extends Component {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  onMouseDown = (event) => {
-    event.stopPropagation();
-  }
 
   render() {
     const { 
@@ -173,7 +170,7 @@ export default class ComponentBuilderProperties extends Component {
       componentMeta
     } = this.props;
     const PanelHeader = (
-      <span>
+      <span style={{cursor: 'move'}}>
         <i className="fa fa-gear" />&nbsp;Properties
         <i className="fa fa-times pull-right"
           style={{ cursor: 'pointer' }}
@@ -184,8 +181,8 @@ export default class ComponentBuilderProperties extends Component {
     const groupComponentProperties = this.getGroupComponentProperties();
 
     return editingComponentId && (
-      <Panel bsStyle="success" header={PanelHeader} >
-        <div onMouseDown={this.onMouseDown} style={{ maxHeight: 500, overflowY: 'auto' }}>
+      <Panel bsStyle="success" header={PanelHeader}>
+        <div style={{ maxHeight: 500, overflowY: 'auto' }}>
           <label>{componentMeta.widget.name}</label>
           <Form horizontal>
             {
@@ -231,7 +228,6 @@ export default class ComponentBuilderProperties extends Component {
                 )
               }
             </PanelGroup>
-
           </Form>
         </div>
       </Panel>
