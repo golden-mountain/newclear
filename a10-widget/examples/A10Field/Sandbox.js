@@ -4,6 +4,7 @@ import { Navbar, Grid, Col, Row, Button } from 'react-bootstrap';
 import 'highlight.js/styles/github.css';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext as dragDropContext } from 'react-dnd'; 
+import Draggable from 'react-draggable';
 import { saveAs } from 'file-saver';
 
 import allLayouts from './layouts';
@@ -195,7 +196,7 @@ export default class Sandbox extends React.Component {
               }
 
             </Col>
-            <Col xs={5 + ( showRightPanel ? 0 : 4 ) + (minimizeLeftPanel ? 2 : 0)}>
+            <Col xs={9 + (minimizeLeftPanel ? 2 : 0)}>
               <MainPanel 
                 editingComponentId={editingComponentId}
                 schema={reactSchema}
@@ -205,15 +206,17 @@ export default class Sandbox extends React.Component {
                 downloadFile={this.downloadFile}
               />
             </Col>
-            <Col xs={showRightPanel ? 4 : 0}>
-              <ComponentBuilderProperties
-                editingComponentId={editingComponentId}
-                componentProps={editingComponentProps}
-                componentMeta={editingComponentMeta}
-                updateComponent={this.updateComponent}
-                stopEditingComponent={this.stopEditingComponent}
-              />
-            </Col>
+            <Draggable>
+              <Col xs={showRightPanel ? 4 : 0}>
+                <ComponentBuilderProperties
+                  editingComponentId={editingComponentId}
+                  componentProps={editingComponentProps}
+                  componentMeta={editingComponentMeta}
+                  updateComponent={this.updateComponent}
+                  stopEditingComponent={this.stopEditingComponent}
+                />
+              </Col>
+            </Draggable>
           </Row>
         </Grid>
       </div>

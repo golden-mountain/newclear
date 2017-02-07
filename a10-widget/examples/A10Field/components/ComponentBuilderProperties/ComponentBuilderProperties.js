@@ -163,6 +163,10 @@ export default class ComponentBuilderProperties extends Component {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  onMouseDown = (event) => {
+    event.stopPropagation();
+  }
+
   render() {
     const { 
       editingComponentId,
@@ -180,54 +184,56 @@ export default class ComponentBuilderProperties extends Component {
     const groupComponentProperties = this.getGroupComponentProperties();
 
     return editingComponentId && (
-      <Panel className="panel panel-success" header={PanelHeader}>
-        <label>{componentMeta.widget.name}</label>
-        <Form horizontal>
-          {
-            // <FormGroup>
-            //   <Col sm={4}>
-            //     Text
-            //   </Col>
-            //   <Col sm={8}>
-            //     <FormControl
-            //       type="text"
-            //       disabled={typeof this.state.componentChildren === 'object'}
-            //       value={this.state.componentChildren}
-            //       onChange={this.onInputChange.bind(this, 'componentChildren')}/>
-            //   </Col>
-            // </FormGroup>
-          }
-          <PanelGroup accordion defaultActiveKey="basic">
+      <Panel bsStyle="success" header={PanelHeader} >
+        <div onMouseDown={this.onMouseDown} style={{ maxHeight: 500, overflowY: 'auto' }}>
+          <label>{componentMeta.widget.name}</label>
+          <Form horizontal>
             {
-              Object.keys(groupComponentProperties)
-                .filter(key=>key !== 'ignore')
-                .map((key) => {
-                  return (
-                    <Panel header={this.capitalizeFirstLetter(key)} eventKey={key} key={key}>
-                      {
-                        groupComponentProperties[key].map((property, index)=>{
-                          return (
-                            <FormGroup key={index}>
-                              <Col sm={4}>
-                                {property.prop}
-                              </Col>
-                              <Col sm={8}>
-                                {
-                                  this.renderInput(property.prop, property.type, this.state[property.prop])
-                                }
-                              </Col>
-                            </FormGroup>
-                          );
-                        })
-                      }
-                    </Panel>
-                  );
-                }
-              )
+              // <FormGroup>
+              //   <Col sm={4}>
+              //     Text
+              //   </Col>
+              //   <Col sm={8}>
+              //     <FormControl
+              //       type="text"
+              //       disabled={typeof this.state.componentChildren === 'object'}
+              //       value={this.state.componentChildren}
+              //       onChange={this.onInputChange.bind(this, 'componentChildren')}/>
+              //   </Col>
+              // </FormGroup>
             }
-          </PanelGroup>
+            <PanelGroup accordion defaultActiveKey="basic">
+              {
+                Object.keys(groupComponentProperties)
+                  .filter(key=>key !== 'ignore')
+                  .map((key) => {
+                    return (
+                      <Panel header={this.capitalizeFirstLetter(key)} eventKey={key} key={key}>
+                        {
+                          groupComponentProperties[key].map((property, index)=>{
+                            return (
+                              <FormGroup key={index}>
+                                <Col sm={4}>
+                                  {property.prop}
+                                </Col>
+                                <Col sm={8}>
+                                  {
+                                    this.renderInput(property.prop, property.type, this.state[property.prop])
+                                  }
+                                </Col>
+                              </FormGroup>
+                            );
+                          })
+                        }
+                      </Panel>
+                    );
+                  }
+                )
+              }
+            </PanelGroup>
 
-        </Form>
+          </Form>
+        </div>
       </Panel>
     );
   }
