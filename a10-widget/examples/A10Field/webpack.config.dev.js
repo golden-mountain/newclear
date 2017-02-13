@@ -22,7 +22,7 @@ module.exports = {
     // new webpack.optimize.OccurenceOrderPlugin(),
     new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({ filename: 'style.css',  allChunks: true }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production')

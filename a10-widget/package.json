@@ -112,7 +112,7 @@
     "style-loader": "^0.13.0",
     "underscore-template-loader": "^0.7.3",
     "url-loader": "^0.5.7",
-    "webpack": "^2.1.0-beta",
+    "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-dev-server": "^2.1.0-beta",
     "webpack-hot-middleware": "^2.13.2",
