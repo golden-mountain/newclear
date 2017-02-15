@@ -168,6 +168,9 @@ export default class Sandbox extends React.Component {
       return (
         <Navbar staticTop={true} fluid={true}>
           <Navbar.Header>
+            <Button onClick={this.toggleLeftPanel} style={{ margin: 8 }} className="pull-left">
+              <i className={`fa fa-arrow-${minimizeLeftPanel ? 'right' : 'left'}`} />
+            </Button>
             <Navbar.Brand>
               <a href="#">A10 UI generator</a> 
             </Navbar.Brand>
@@ -180,10 +183,7 @@ export default class Sandbox extends React.Component {
         <Header />
         <Grid fluid={true}>
           <Row>
-            <Col xs={minimizeLeftPanel ? 1 : 3}>
-              <Button onClick={this.toggleLeftPanel}>
-                <i className={`fa fa-arrow-${minimizeLeftPanel ? 'right' : 'left'}`} />
-              </Button>
+            <Col xs={minimizeLeftPanel ? 0 : 3}>
               {
                 minimizeLeftPanel ? null : (
                   <LeftPanel 
@@ -196,7 +196,7 @@ export default class Sandbox extends React.Component {
               }
 
             </Col>
-            <Col xs={9 + (minimizeLeftPanel ? 2 : 0)}>
+            <Col xs={9 + (minimizeLeftPanel ? 3 : 0)}>
               <MainPanel 
                 editingComponentId={editingComponentId}
                 schema={reactSchema}
@@ -207,7 +207,7 @@ export default class Sandbox extends React.Component {
               />
             </Col>
             <Draggable handle=".panel-heading">
-              <Col xs={showRightPanel ? 4 : 0}>
+              <Col xs={showRightPanel ? 4 : 0} style={{ position: 'absolute', right: 20 }}>
                 <ComponentBuilderProperties
                   editingComponentId={editingComponentId}
                   componentProps={editingComponentProps}

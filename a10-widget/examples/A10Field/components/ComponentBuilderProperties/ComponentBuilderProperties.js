@@ -170,7 +170,7 @@ export default class ComponentBuilderProperties extends Component {
       componentMeta
     } = this.props;
     const PanelHeader = (
-      <span style={{cursor: 'move'}}>
+      <span style={{ cursor: 'move' }}>
         <i className="fa fa-gear" />&nbsp;Properties
         <i className="fa fa-times pull-right"
           style={{ cursor: 'pointer' }}
@@ -179,9 +179,10 @@ export default class ComponentBuilderProperties extends Component {
     );
 
     const groupComponentProperties = this.getGroupComponentProperties();
+    const transparentBgStyle = { background: 'rgba(255,255,255,.7)' };
 
     return editingComponentId && (
-      <Panel bsStyle="success" header={PanelHeader}>
+      <Panel bsStyle="success" header={PanelHeader} style={transparentBgStyle}>
         <div style={{ maxHeight: 500, overflowY: 'auto' }}>
           <label>{componentMeta.widget.name}</label>
           <Form horizontal>
@@ -205,7 +206,7 @@ export default class ComponentBuilderProperties extends Component {
                   .filter(key=>key !== 'ignore')
                   .map((key) => {
                     return (
-                      <Panel header={this.capitalizeFirstLetter(key)} eventKey={key} key={key}>
+                      <Panel header={this.capitalizeFirstLetter(key)} eventKey={key} key={key} style={transparentBgStyle}>
                         {
                           groupComponentProperties[key].map((property, index)=>{
                             return (
