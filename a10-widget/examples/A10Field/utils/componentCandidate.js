@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource as dragSource } from 'react-dnd';
 import DndTypes from './DndTypes';
-
+import _ from 'lodash';
 
 import './componentCandidate.css';
 
@@ -9,14 +9,14 @@ export default function (componentCandidate) {
 
   const componentSource = {
     isDragging(props, monitor) {
-      return monitor.getItem().id === props.id;
+      return monitor.getItem()._componentId === props._componentId;
     },
 
     beginDrag(props/* , monitor, component */) {
       const componentModule = componentCandidate[props.component];
       const item = Object.assign({
         component: props.component,
-        _isNew: true,
+        _componentId: _.uniqueId(),
         _isContainer: props.isContainer,
         _isRoot: props.isRoot
       }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});

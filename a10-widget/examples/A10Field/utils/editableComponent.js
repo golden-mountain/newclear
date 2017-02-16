@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
+import _ from 'lodash';
 import {
   DragSource as dragSource,
   DropTarget as dropTarget
@@ -15,42 +16,56 @@ export default function editableComponent({
 }) {
   const componentSource = {
     isDragging(props, monitor) {
-      return monitor.getItem().id === props.id;
+      return monitor.getItem()._componentId === props._componentId;
     },
     beginDrag(props/* , monitor, component */) {
       const item = props;
       return item;
     }
   };
+
+  const handleHoverAndDrop = ({ props, monitor, component, item, clientOffset }) => {
+    const dropBoundingRect = findDOMNode(component).getBoundingClientRect();
+    const dropMiddleX = (dropBoundingRect.right - dropBoundingRect.left) / 2;
+    const dropClientX = clientOffset.x - dropBoundingRect.left;
+
+    const dropMiddleY = (dropBoundingRect.bottom - dropBoundingRect.top) / 2;
+    const dropClientY = clientOffset.y - dropBoundingRect.top;
+    let newPosition = 'before';
+    if (props._isRoot) {
+      newPosition = 'inside';
+    } else if (props._isContainer) {
+      if ((dropClientY >= dropMiddleY * 0.5 && dropClientY <= dropMiddleY * 1.5) ||
+        (dropClientX >= dropMiddleX * 0.5 && dropClientX <= dropMiddleX * 1.5)
+      ) {
+        newPosition = 'inside';
+      } else if (dropClientY > dropMiddleY * 1.5 || dropClientX > dropMiddleX * 1.5) {
+        newPosition = 'after';
+      }
+    } else {
+      if (dropClientY > dropMiddleY || dropClientX > dropMiddleX) {
+        newPosition = 'after';
+      }
+    }
+    moveComponent(Object.assign({}, item, { children: null }), props._componentId, newPosition);
+  };
+
   const componentTarget = {
-    drop(props, monitor, component ) {
+    hover(props, monitor, component) {
       const item = monitor.getItem();
-      if (monitor.didDrop()) {
+      if (!monitor.isOver({ shallow: true }) ) {
         return;
       }
       if (props._componentId === item._componentId) {
         return;
       }
-      const dropBoundingRect = findDOMNode(component).getBoundingClientRect();
-      const dropMiddleY = (dropBoundingRect.bottom - dropBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const dropClientY = clientOffset.y - dropBoundingRect.top;
-      let newPosition = 'before';
-      if (props._isRoot) {
-        newPosition = 'inside';
-      } else if (props._isContainer) {
-        if (dropClientY >= dropMiddleY * 0.5 && dropClientY <= dropMiddleY * 1.5) {
-          newPosition = 'inside';
-        } else if (dropClientY > dropMiddleY * 1.5) {
-          newPosition = 'after';
-        }
-      } else {
-        if (dropClientY > dropMiddleY) {
-          newPosition = 'after';
-        }
-      }
-
-      moveComponent(Object.assign({}, item, { _isNew: false, children: null }), props._componentId, item._isNew, newPosition);
+      handleHoverAndDrop({
+        props, 
+        monitor, 
+        component,
+        item,
+        clientOffset: monitor.getClientOffset()
+      });
     }
   };
 
@@ -62,8 +77,8 @@ export default function editableComponent({
     }))
     @dropTarget(DndTypes.COMPONENT, componentTarget, (connect, monitor) => ({
       connectDropTarget: connect.dropTarget(),
-
     }))
+
     /* eslint-enable */
     class Wrap extends Component {
       static propTypes = {
@@ -123,6 +138,7 @@ export default function editableComponent({
 
       render() {
         const {
+          isDragging,
           _componentId,
           _isContainer,
           _isRoot,
@@ -130,7 +146,7 @@ export default function editableComponent({
         } = this.props;
         const isActive = _componentId === editingComponentId;
         let componentClassName = '';
-        componentClassName += isActive ? 'editable-component-active ' : 'editable-component-normal ';
+        componentClassName += ( isActive || isDragging ) ? 'editable-component-active ' : 'editable-component-normal ';
         componentClassName += _isContainer || _isRoot ? 'editable-component-container ' : '';
         componentClassName += _isRoot ? 'editable-component-root ' : '';
         const propsWithouChildren = Object.assign({}, this.props, { children: null });
@@ -138,6 +154,7 @@ export default function editableComponent({
           return (
             <WrappedComponent 
               {...propsWithouChildren} 
+              style={isDragging? { opacity: .7 } : { opacity: 1 }}
               ref={this.getRefOfWrappedComponent} 
               className="editable-component-wrapper"
             > 
@@ -153,7 +170,7 @@ export default function editableComponent({
           );
         } else {
           return (
-            <div className="editable-component-wrapper" ref={this.getRefOfWrappedComponent}>
+            <div className="editable-component-wrapper" ref={this.getRefOfWrappedComponent} style={isDragging? { opacity: .7 } : { opacity: 1 }}>
               <WrappedComponent {...propsWithouChildren}  />
               <div 
                 onClick={this.editProperties}

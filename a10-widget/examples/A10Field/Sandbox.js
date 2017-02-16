@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navbar, Grid, Col, Row, Button } from 'react-bootstrap';
+import _ from 'lodash';
 
 import 'highlight.js/styles/github.css';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -105,10 +106,10 @@ export default class Sandbox extends React.Component {
     });
   }
 
-  moveComponent = (dragComponent, dropComponentId, isNew, newPosition) => {
-    const newSchema = editableUtils.moveComponent(this.state.reactSchema, dragComponent, dropComponentId, isNew, newPosition);
+  moveComponent = _.throttle((dragComponent, dropComponentId, newPosition) => {
+    const newSchema = editableUtils.moveComponent(this.state.reactSchema, dragComponent, dropComponentId, newPosition);
     this.setState({ reactSchema: newSchema });
-  }
+  }, 100)
 
   updateComponent = (_componentId, component) => {
     const newSchema = editableUtils.updateComponent(this.state.reactSchema, _componentId, component);

@@ -102,12 +102,12 @@ const updateComponent = (schema, _componentId, component) => {
   };
 };
 
-const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPosition) => {
-  if (isNew && !dragComponent._componentId) {
-    dragComponent._componentId = _.uniqueId();
-  }
+const moveComponent = (schema, dragComponent, dropComponentId, newPosition) => {
   if (dropComponentId === 'root') {
     let schemaChildren = schema.schemaChildren || [];
+    if ( schemaChildren.map((item)=>item._componentId).includes(dragComponent._componentId)) {
+      return schema;
+    }
     return {
       ...schema,
       schemaChildren: [ ...schemaChildren, dragComponent ]
@@ -115,12 +115,16 @@ const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPositio
   }
   const modifiedChildren = !schema.schemaChildren || typeof schema.schemaChildren === 'string' ? schema.schemaChildren :
     schema.schemaChildren.filter(item => item._componentId !== dragComponent._componentId)
-    .map(item => moveComponent(item, dragComponent, dropComponentId, isNew, newPosition))
+    .map(item => moveComponent(item, dragComponent, dropComponentId, newPosition))
     .reduce((prev, current) => {
       if (current._componentId === dropComponentId) {
         if (newPosition === 'inside') {
           current.schemaChildren = current.schemaChildren || [];
-          current.schemaChildren = [ ...current.schemaChildren, dragComponent ];
+          if ( current.schemaChildren.map((item)=>item._componentId).includes(dragComponent._componentId)) {
+             // else
+          } else {
+            current.schemaChildren = [ ...current.schemaChildren, dragComponent ];
+          }
         } else {
           return newPosition === 'before' ? [ ...prev, dragComponent, current ] : [ ...prev, current, dragComponent ];
         }
@@ -137,7 +141,6 @@ const moveComponent = (schema, dragComponent, dropComponentId, isNew, newPositio
 
 const toJSX = (schema, indent = 0) =>{
   const props = Object.assign({}, schema, {
-    _isNew: null,
     _isContainer: null,
     _componentId: null,
     _isRoot: null,
