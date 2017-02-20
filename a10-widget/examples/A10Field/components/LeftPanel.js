@@ -46,14 +46,13 @@ export default class LeftPanel extends Component {
   }
 
   onSchemaSelect = (event) => {
-    const {
-      layout,
-      candidates
-    }= atenSchema.getSchema(event.target.value);
-    this.setState({
-      schemaLayouts: [ layout ],
-      schemaWidgets: candidates
-    });
+    atenSchema.getSchema(event.target.value)
+      .then(({ layout, candidates }) => {
+        this.setState({
+          schemaLayouts: [ layout ],
+          schemaWidgets: candidates
+        });
+      });
   }
 
   clearSearchingLayoutName = () => {
