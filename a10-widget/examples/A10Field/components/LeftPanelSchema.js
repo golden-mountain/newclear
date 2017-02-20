@@ -5,6 +5,8 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Panel from 'react-bootstrap/lib/Panel';
 import PanelGroup from 'react-bootstrap/lib/PanelGroup';
 
+import allSchemas from '../../../../schemas/all-schemas.json';
+
 export default class LeftPanelSchema extends React.Component {
   static propTypes = {
     tileStyle: React.PropTypes.object,
@@ -40,11 +42,16 @@ export default class LeftPanelSchema extends React.Component {
       <div>
         <FormGroup>
           <InputGroup>
-            <FormControl 
-              type="text" 
-              placeholder="Search axapi"
-              onChange={onSchemaSelect}
-            />
+            <FormControl componentClass="select" placeholder="select" onChange={onSchemaSelect}>
+              <option value="">select</option>
+              {
+                allSchemas.map((item)=>{
+                  return (
+                    <option value={item} key={item}>{item}</option>
+                  );
+                })
+              }
+            </FormControl>
             <InputGroup.Addon>
               <i className="fa fa-search" />
             </InputGroup.Addon>
