@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import _ from 'lodash';
 import {
   DragSource as dragSource,
   DropTarget as dropTarget
@@ -85,6 +84,7 @@ export default function editableComponent({
         _isContainer: PropTypes.bool,
         _componentId: PropTypes.string,
         _isRoot: PropTypes.bool,
+        _path: PropTypes.array,
         editingComponentId: PropTypes.string,
         connectDragSource: PropTypes.func,
         connectDropTarget: PropTypes.func,
@@ -100,7 +100,8 @@ export default function editableComponent({
         event.stopPropagation();
         startToEditComponent({
           componentMeta: meta,
-          componentProps: this.props
+          componentProps: this.props,
+          path: this.props._path
         });
       }
 

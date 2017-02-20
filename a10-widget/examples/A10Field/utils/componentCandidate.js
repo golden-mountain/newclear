@@ -13,13 +13,14 @@ export default function (componentCandidate) {
     },
 
     beginDrag(props/* , monitor, component */) {
-      const componentModule = componentCandidate[props.component];
+      const { meta } = componentCandidate[props.component];
       const item = Object.assign({
         component: props.component,
         _componentId: _.uniqueId(),
-        _isContainer: props.isContainer,
-        _isRoot: props.isRoot
-      }, componentModule.meta.defaultProps ? { ...componentModule.meta.defaultProps } : {});
+        _isContainer: meta.widget.isContainer
+      }, meta.defaultProps ? { ...meta.defaultProps } : {}, 
+        props.meta && props.meta.defaultProps ? { ...props.meta.defaultProps } : {}
+      );
       return item;
     }
   };
@@ -33,10 +34,7 @@ export default function (componentCandidate) {
     static propTypes = {
       connectDragSource: PropTypes.func,
       addComponentByClicking: PropTypes.func,
-      iconClassName: PropTypes.string,
-      name: PropTypes.string,
       component: PropTypes.string,
-      isContainer: PropTypes.bool,
       style: PropTypes.object
     }
 
@@ -45,23 +43,30 @@ export default function (componentCandidate) {
     }
 
     render() {
+      const componentModule = componentCandidate[this.props.component];
       const {
         connectDragSource,
-        iconClassName,
-        name, 
         style
       } = this.props;
 
+      const {
+        meta: {
+          widget: {
+            name,
+            iconClassName
+          }
+        }
+      } = componentModule;
+
       return connectDragSource(
         <div 
-          title={name}
+          title={name }
           style={style} 
           onClick={this.onClick}>
           <i className={iconClassName} />
           <br/>
           <span>{name}</span>
         </div>
-
       );
     }
   }

@@ -81,16 +81,18 @@ export default class Sandbox extends React.Component {
       componentProps: null,
       componentMeta: null,
       minimizeLeftPanel: false,
-      showRightPanel: false
+      showRightPanel: false,
+      editingPath: null
     };
   }
   
   startToEditComponent = (args) => {
-    const { componentMeta, componentProps } = args; 
+    const { componentMeta, componentProps, path } = args; 
     this.setState({
       editingComponentId: componentProps._componentId,
       editingComponentProps: componentProps,
       editingComponentMeta: componentMeta,
+      editingPath: path,
       showRightPanel: true
     });
   }
@@ -102,6 +104,7 @@ export default class Sandbox extends React.Component {
       editingComponentId: null,
       editingComponentProps: null,
       editingComponentMeta: null,
+      editingPath: null,
       showRightPanel: false
     });
   }
@@ -161,6 +164,7 @@ export default class Sandbox extends React.Component {
       editingComponentId,
       editingComponentProps,
       editingComponentMeta,
+      editingPath,
       minimizeLeftPanel,
       showRightPanel
     } = this.state;
@@ -198,9 +202,10 @@ export default class Sandbox extends React.Component {
 
             </Col>
             <Col xs={9 + (minimizeLeftPanel ? 3 : 0)}>
-              <MainPanel 
+              <MainPanel
                 editingComponentId={editingComponentId}
                 schema={reactSchema}
+                editingPath={editingPath}
                 startToEditComponent={this.startToEditComponent}
                 deleteComponent={this.deleteComponent}
                 moveComponent={this.moveComponent}

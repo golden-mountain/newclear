@@ -41,6 +41,20 @@ const loadSchema = (schema, notRoot = false) => {
       .map(item => loadSchema(item, true))
   };
 };
+const appendPath = (obj, _path = []) => {
+  const {
+    _componentId,
+    component,
+    schemaChildren
+  } = obj;
+  obj._path = [ ..._path, { _componentId, component } ];
+  if (typeof schemaChildren !== 'string') {
+    obj.schemaChildren = (schemaChildren || []).map((item) => {
+      return appendPath(Object.assign({}, item), obj._path);
+    });
+  } 
+  return Object.assign({}, obj);
+};
 
 const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   const {
@@ -199,6 +213,7 @@ const generateReactCodeFromSchema = (name, schema) => generateReactCode(name, to
 
 
 export default {
+  appendPath,
   loadSchema,
   registerComponents,
   jsonToComponent,
