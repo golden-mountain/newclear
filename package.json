@@ -13,7 +13,8 @@
     "build": "better-npm-run build",
     "test": "better-npm-run test",
     "test:watch": "better-npm-run test:watch",
-    "uigen": "better-npm-run uigen"
+    "uigen": "better-npm-run uigen",
+    "uigen-test": "better-npm-run uigen-test"
   },
   "license": "MIT",
   "betterScripts": {
@@ -49,7 +50,10 @@
       }
     },
     "uigen": {
-      "command": "babel-node generator/index.js"
+      "command": "babel-node generator/run.js"
+    },
+    "uigen-test": {
+      "command": "babel-node generator/test.js"
     }
   },
   "devDependencies": {

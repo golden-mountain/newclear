@@ -13,6 +13,7 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
 import editableUtils from '../utils/editableUtils';
 import './MainPanel.scss';
+import ComponentPath from './ComponentPath';
 
 export default class MainPanel extends React.Component {
   static propTypes = {
@@ -21,7 +22,8 @@ export default class MainPanel extends React.Component {
     startToEditComponent: PropTypes.func,
     deleteComponent: PropTypes.func,
     moveComponent: PropTypes.func,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    editingPath: PropTypes.array
   };
 
   constructor(props) {
@@ -89,7 +91,8 @@ export default class MainPanel extends React.Component {
       schema,
       startToEditComponent,
       deleteComponent,
-      moveComponent
+      moveComponent,
+      editingPath
     } = this.props;
 
     const {
@@ -98,19 +101,21 @@ export default class MainPanel extends React.Component {
       name
     } = this.state;
 
+    const schemaWithPath = editableUtils.appendPath(Object.assign({}, schema));
 
     return (
       <Tabs id="sandbox-main-area">
         <Tab eventKey={1} title={<span><i className="fa fa-pencil" />&nbsp;Edit</span>}>
           <Panel>
             {
-              editableUtils.jsonToComponent(schema, true, { editingComponentId }, {
+              editableUtils.jsonToComponent(schemaWithPath, true, { editingComponentId }, {
                 startToEditComponent,
                 deleteComponent,
                 moveComponent
               })
             }
           </Panel>
+          <ComponentPath path={editingPath} />
         </Tab>
         <Tab eventKey={2} title={<span><i className="fa fa-eye" />&nbsp;Preview</span>}>
           <Panel>

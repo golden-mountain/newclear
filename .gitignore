@@ -8,3 +8,4 @@ __nogit
 .idea
 .tmp
 builds
+*.lock

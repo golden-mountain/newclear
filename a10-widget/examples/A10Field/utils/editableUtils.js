@@ -41,6 +41,20 @@ const loadSchema = (schema, notRoot = false) => {
       .map(item => loadSchema(item, true))
   };
 };
+const appendPath = (obj, _path = []) => {
+  const {
+    _componentId,
+    component,
+    schemaChildren
+  } = obj;
+  obj._path = [ ..._path, { _componentId, component } ];
+  if (typeof schemaChildren !== 'string') {
+    obj.schemaChildren = (schemaChildren || []).map((item) => {
+      return appendPath(Object.assign({}, item), obj._path);
+    });
+  } 
+  return Object.assign({}, obj);
+};
 
 const jsonToComponent = (obj, enableWrap = false, props = {}, actions = {}) => {
   const {
@@ -182,8 +196,23 @@ const toJSX = (schema, indent = 0) =>{
   }\n${indention}</${schema.component}>`;
 };
 
-const generateReactCode = (name='Demo', jsx) => {
+const getAllComponents = (schema) => {
+  return typeof schema.schemaChildren === 'string' ? [] :(
+    schema.schemaChildren || []
+  ).map((item) => [ item.component, ...getAllComponents(item) ] )
+  .reduce((accu, current)=> [ ...accu, ...current ], [])
+  .sort()
+  .filter((item, pos, ary) => !pos || item != ary[pos - 1]);
+};
+
+const generateReactCode = (name='Demo', schema) => {
+  const jsx = toJSX(schema);
+  const importAllComponents = getAllComponents(schema)
+    .map((item=> `import ${item} from '../widgets/${item}';`))
+    .join('\n');
+    
   return `import React from 'react';
+${importAllComponents}
 
 export default class ${name} extends React.Component {
 
@@ -195,10 +224,11 @@ export default class ${name} extends React.Component {
 
 };
 
-const generateReactCodeFromSchema = (name, schema) => generateReactCode(name, toJSX(schema));
+const generateReactCodeFromSchema = (name, schema) => generateReactCode(name, schema);
 
 
 export default {
+  appendPath,
   loadSchema,
   registerComponents,
   jsonToComponent,

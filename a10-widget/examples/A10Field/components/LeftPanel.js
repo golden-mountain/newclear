@@ -1,15 +1,12 @@
 import React, { PropTypes, Component } from 'react';
-import _ from 'lodash';
-import fuzzy from 'fuzzy';
-import Panel from 'react-bootstrap/lib/Panel';
-import PanelGroup from 'react-bootstrap/lib/PanelGroup';
 import Tabs from 'react-bootstrap/lib/Tabs';
 import Tab from 'react-bootstrap/lib/Tab';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import InputGroup from 'react-bootstrap/lib/InputGroup';
-import FormControl from 'react-bootstrap/lib/FormControl';
 
 import componentCandidate from '../utils/componentCandidate';
+import atenSchema from '../utils/atenSchema';
+import LeftPanelWidgets from './LeftPanelWidgets';
+import LeftPanelLayouts from './LeftPanelLayouts';
+import LeftPanelSchema from './LeftPanelSchema';
 
 export default class LeftPanel extends Component {
   static propTypes = {
@@ -23,8 +20,11 @@ export default class LeftPanel extends Component {
     super(props);
     this.ComponentCandidate = componentCandidate(props.widgets);
     this.state = {
+      selectedSchema: '',
       searchingWidgetName: '',
-      searchingLayoutName: ''
+      searchingLayoutName: '',
+      schemaLayouts: [],
+      schemaWidgets: []
     };
   }
 
@@ -46,12 +46,22 @@ export default class LeftPanel extends Component {
     });
   }
 
+  onSchemaSelect = (result) => {
+    atenSchema.getSchema(result ? result.value : '')
+      .then(({ layout, candidates }) => {
+        this.setState({
+          selectedSchema: result.value,
+          schemaLayouts: [ layout ],
+          schemaWidgets: candidates
+        });
+      });
+  }
+
   clearSearchingLayoutName = () => {
     this.setState({
       searchingLayoutName: ''
     });
   }
-
 
   render() {
     const {
@@ -61,15 +71,13 @@ export default class LeftPanel extends Component {
       addComponentByClicking
     } = this.props;
     const {
+      selectedSchema,
       searchingWidgetName,
-      searchingLayoutName
+      searchingLayoutName,
+      schemaWidgets,
+      schemaLayouts
     } = this.state;
 
-    const widgetList = Object.values(widgets)
-      .filter(item=>item.meta)
-      .filter(item=> !item.meta.widget.hideFromCandidates)
-      .map(item=> item.meta.widget);
-    const groupedWidgets = _.groupBy(widgetList, widget => widget.type);
     const ComponentCandidate = this.ComponentCandidate;
     const tileStyle = {
       width: '33%',
@@ -82,172 +90,40 @@ export default class LeftPanel extends Component {
       whiteSpace: 'nowrap'
 
     };
-    const dragableTileStyle = Object.assign({ cursor: 'move' }, tileStyle);
-
+    
     return (
       <Tabs id="sandbox-controller-panel">
         <br />
-        
         <Tab eventKey={1} title="Widgets">
-          <FormGroup>
-            <InputGroup>
-              <FormControl 
-                type="text" 
-                placeholder="Search widgets"
-                value={searchingWidgetName}
-                onChange={this.onSearchingWidgetNameChange} />
-              <InputGroup.Addon>
-                <i className="fa fa-search" />
-              </InputGroup.Addon>
-            </InputGroup>
-          </FormGroup>
-          {
-            searchingWidgetName && (
-              <Panel header={
-                <div>
-                  <span>Search Result</span>
-                  <i className="fa fa-close pull-right" style={{ cursor: 'pointer' }} onClick={this.clearSearchingWidgetName}/>
-                </div>
-              }>
-                {
-                  fuzzy.filter(searchingWidgetName, widgetList, {
-                    pre: '<strong style="color: blue;">',
-                    post: '</strong>',
-                    extract: item => item.name
-                  })
-                  .map(item=> Object.assign({}, item.original, {
-                    name: (
-                      <span dangerouslySetInnerHTML={{ __html: item.string }}/>
-                    )
-                  }))
-                  .map((item, index) => {
-                    return (
-                      <ComponentCandidate
-                        style={dragableTileStyle}
-                        key={index}
-                        name={item.name}
-                        component={item.component}
-                        iconClassName={item.iconClassName}
-                        isContainer={item.isContainer === true}
-                        addComponentByClicking={addComponentByClicking}
-                      />
-                    );
-                  })
-                }
-              </Panel>
-            )
-          }
-        
-
-          <PanelGroup accordion defaultActiveKey="Field">
-            {
-              Object.keys(groupedWidgets).map(key=>{
-                return (
-                  <Panel header={key} eventKey={key} key={key}>
-                    {
-                      groupedWidgets[key].map((item, index) => {
-                        return (
-                          <ComponentCandidate
-                            style={dragableTileStyle}
-                            key={index}
-                            name={item.name}
-                            component={item.component}
-                            iconClassName={item.iconClassName}
-                            isContainer={item.isContainer === true}
-                            addComponentByClicking={addComponentByClicking}
-                          />
-                        );
-                      })
-                    }
-                  </Panel>
-                );
-              })
-            }
-          </PanelGroup>
+          <LeftPanelWidgets 
+            tileStyle={tileStyle}
+            searchingWidgetName={searchingWidgetName}
+            widgets={widgets}
+            addComponentByClicking={addComponentByClicking}
+            ComponentCandidate={ComponentCandidate}
+          />
         </Tab>
 
         <Tab eventKey={2} title="Layouts">
-          <FormGroup>
-            <InputGroup>
-              <FormControl 
-                type="text" 
-                placeholder="Search layouts"
-                value={searchingLayoutName}
-                onChange={this.onSearchingLayoutName}
-              />
-              <InputGroup.Addon>
-                <i className="fa fa-search" />
-              </InputGroup.Addon>
-            </InputGroup>
-          </FormGroup>
-          {
-            searchingLayoutName && (
-              <Panel header={
-                <div>
-                  <span>Search Result</span>
-                  <i className="fa fa-close pull-right" style={{ cursor: 'pointer' }} onClick={this.clearSearchingLayoutName}/>
-                </div>
-              }>
-                {
-                  fuzzy.filter(searchingLayoutName, Object.values(layouts), {
-                    pre: '<strong style="color: blue;">',
-                    post: '</strong>',
-                    extract: item => item.name
-                  })
-                  .map(item=> Object.assign({}, item.original, {
-                    name: (
-                      <span dangerouslySetInnerHTML={{ __html: item.string }}/>
-                    )
-                  }))
-                  .map((item, index) => {
-                    return (
-                      <span
-                        key={index}
-                        style={tileStyle}
-                        onClick={onLayoutChange.bind(this, item.schema)}
-                      >
-                        <i className={item.iconClassName} />
-                        <br />
-                        {item.name}
-                      </span>
-                    );
-                  })
-                }
-              </Panel>
-            )
-          }
-          
-          <PanelGroup accordion defaultActiveKey="basic">
-            <Panel header="basic" eventKey="basic" key="basic">
-              {
-                Object.values(layouts).map((item, index)=>{
-                  return (
-                    <span
-                      key={index}
-                      style={tileStyle}
-                      title={item.name}
-                      onClick={onLayoutChange.bind(this, item.schema)}
-                    >
-                      <i className={item.iconClassName} />
-                      <br />
-                      {item.name}
-                    </span>
-                  );
-                })
-              }
-            </Panel>
-          </PanelGroup>
+          <LeftPanelLayouts
+            tileStyle={tileStyle}
+            searchingLayoutName={searchingLayoutName}
+            layouts={layouts}
+            onLayoutChange={onLayoutChange}
+          />
         </Tab>
 
         <Tab eventKey={3} title="Schema">
-          <FormGroup>
-            <InputGroup>
-              <FormControl type="text" placeholder="Search axapi"/>
-              <InputGroup.Addon>
-                <i className="fa fa-search" />
-              </InputGroup.Addon>
-            </InputGroup>
-          </FormGroup>
+          <LeftPanelSchema 
+            tileStyle={tileStyle}
+            selectedSchema={selectedSchema}
+            schemaWidgets={schemaWidgets}
+            schemaLayouts={schemaLayouts}
+            onSchemaSelect={this.onSchemaSelect}
+            ComponentCandidate={ComponentCandidate}
+            addComponentByClicking={addComponentByClicking}
+            onLayoutChange={onLayoutChange}
+          />
         </Tab>
       </Tabs>
     );
