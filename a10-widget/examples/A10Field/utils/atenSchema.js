@@ -2,7 +2,7 @@
 import SchemaAnalysis from '../../../../generator/utils/SchemaAnalysis';
 
 const getSchema = (name) => {
-  console.log(`get schmea of ${name}`);
+  console.log(`get schema of ${name}`);
   return new Promise((resolve, reject) => {
     if (!name) {
       resolve({});
