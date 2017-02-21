@@ -4,6 +4,9 @@ import SchemaAnalysis from '../../../../generator/utils/SchemaAnalysis';
 const getSchema = (name) => {
   console.log(`get schmea of ${name}`);
   return new Promise((resolve, reject) => {
+    if (!name) {
+      resolve({});
+    }
     System.import(`../../../../schemas/${name}.json`).then(module => {
       const sa = new SchemaAnalysis(name, module);
       console.log(module);
@@ -30,7 +33,7 @@ const getSchema = (name) => {
       });
     }).catch(err => {
       console.error('Chunk loading failed');
-      console.error(err);
+      reject(err);
     });
   });
 };

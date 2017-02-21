@@ -20,6 +20,7 @@ export default class LeftPanel extends Component {
     super(props);
     this.ComponentCandidate = componentCandidate(props.widgets);
     this.state = {
+      selectedSchema: '',
       searchingWidgetName: '',
       searchingLayoutName: '',
       schemaLayouts: [],
@@ -45,10 +46,11 @@ export default class LeftPanel extends Component {
     });
   }
 
-  onSchemaSelect = (event) => {
-    atenSchema.getSchema(event.target.value)
+  onSchemaSelect = (result) => {
+    atenSchema.getSchema(result ? result.value : '')
       .then(({ layout, candidates }) => {
         this.setState({
+          selectedSchema: result.value,
           schemaLayouts: [ layout ],
           schemaWidgets: candidates
         });
@@ -69,6 +71,7 @@ export default class LeftPanel extends Component {
       addComponentByClicking
     } = this.props;
     const {
+      selectedSchema,
       searchingWidgetName,
       searchingLayoutName,
       schemaWidgets,
@@ -93,26 +96,27 @@ export default class LeftPanel extends Component {
         <br />
         <Tab eventKey={1} title="Widgets">
           <LeftPanelWidgets 
+            tileStyle={tileStyle}
             searchingWidgetName={searchingWidgetName}
             widgets={widgets}
             addComponentByClicking={addComponentByClicking}
-            tileStyle={tileStyle}
             ComponentCandidate={ComponentCandidate}
           />
         </Tab>
 
         <Tab eventKey={2} title="Layouts">
           <LeftPanelLayouts
+            tileStyle={tileStyle}
             searchingLayoutName={searchingLayoutName}
             layouts={layouts}
             onLayoutChange={onLayoutChange}
-            tileStyle={tileStyle}
           />
         </Tab>
 
         <Tab eventKey={3} title="Schema">
           <LeftPanelSchema 
             tileStyle={tileStyle}
+            selectedSchema={selectedSchema}
             schemaWidgets={schemaWidgets}
             schemaLayouts={schemaLayouts}
             onSchemaSelect={this.onSchemaSelect}

@@ -1,14 +1,14 @@
 import React from 'react';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
-import InputGroup from 'react-bootstrap/lib/InputGroup';
-import FormControl from 'react-bootstrap/lib/FormControl';
 import Panel from 'react-bootstrap/lib/Panel';
 import PanelGroup from 'react-bootstrap/lib/PanelGroup';
+import Select from 'react-select';
 
 import allSchemas from '../../../../schemas/all-schemas.json';
 
 export default class LeftPanelSchema extends React.Component {
   static propTypes = {
+    selectedSchema: React.PropTypes.string,
     tileStyle: React.PropTypes.object,
     schemaWidgets: React.PropTypes.array,
     schemaLayouts: React.PropTypes.array,
@@ -29,6 +29,7 @@ export default class LeftPanelSchema extends React.Component {
 
   render() {
     const {
+      selectedSchema,
       tileStyle,
       schemaWidgets,
       schemaLayouts,
@@ -41,21 +42,12 @@ export default class LeftPanelSchema extends React.Component {
     return (
       <div>
         <FormGroup>
-          <InputGroup>
-            <FormControl componentClass="select" placeholder="select" onChange={onSchemaSelect}>
-              <option value="">select</option>
-              {
-                allSchemas.map((item)=>{
-                  return (
-                    <option value={item} key={item}>{item}</option>
-                  );
-                })
-              }
-            </FormControl>
-            <InputGroup.Addon>
-              <i className="fa fa-search" />
-            </InputGroup.Addon>
-          </InputGroup>
+          <Select
+            name="form-field-name"
+            value={selectedSchema}
+            options={allSchemas.map((item)=>{return { value: item, label: item }; })}
+            onChange={onSchemaSelect}
+          />
         </FormGroup>
         <PanelGroup accordion defaultActiveKey="Layout">
           <Panel header="Layout" eventKey="Layout" key="Layout">

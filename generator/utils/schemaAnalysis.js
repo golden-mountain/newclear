@@ -30,7 +30,7 @@ class SchemaAnalysis {
     this.mapping = {
       iconClassName: 'fa fa-th',
       type: 'basic',
-      name: 'newLayout',
+      name: this.filename,
       schema: {
         component: 'RootWidget'
       }

@@ -157,7 +157,7 @@
     "react-redux": "^4.4.5",
     "react-router": "^4.0.0-alpha.4",
     "react-router-redux": "^4.0.5",
-    "react-select": "^1.0.0-rc.2",
+    "react-select": "^1.0.0-rc.3",
     "react-tagsinput": "^3.14.0",
     "react-transform-catch-errors": "^1.0.2",
     "react-virtualized-select": "^2.0.0",
