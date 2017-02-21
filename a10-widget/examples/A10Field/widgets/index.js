@@ -23,10 +23,10 @@ import A10MultiSelect from './A10MultiSelect';
 import MySlider from './MySlider';
 import FieldIp from './FieldIp'; 
 import A10Form from './A10Form';
-import A10Field from './A10Field';
+import { A10Input, A10Checkbox, A10Radio, A10Textarea, A10Select } from './A10Field';
 import A10MultiField from './A10MultiField';
 import A10SubmitButtons from './A10SubmitButtons';
-
+import A10Table from './A10Table';
 
 const allWidgets = {
   // ContainerWidget,
@@ -50,14 +50,19 @@ const allWidgets = {
   A10MultiSelect,
   MySlider,
   A10Form,
-  A10Field,
+  A10Input,
+  A10Checkbox,
+  A10Radio,
+  A10Textarea,
+  A10Select,
   A10MultiField,
   A10SubmitButtons,
   FormControl,
   FormGroup,
   Checkbox,
   Radio,
-  FieldIp
+  FieldIp,
+  A10Table
 };
 
 export default allWidgets;

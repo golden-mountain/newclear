@@ -55,7 +55,7 @@ class _A10Table extends React.Component {
 
   componentWillMount() {
     // console.log(this.props.instancePath);
-    if (this.props.loadOnInitial) {
+    if (this.props.loadOnInitial && !this.props.isComponentEditor) {
       this.refreshTable(this.state.activePage);
     }
     this.props.catchBall(UPDATE_TARGET_DATA, (from, to, params) => { //eslint-disable-line
@@ -116,6 +116,7 @@ class _A10Table extends React.Component {
 
     let ths = [], tds = [];
     ths = children.map((child, key) => {
+      if (!child || !child.props) return null;
       let { children } = child.props;
       if (child.props.checkbox) {
         children = (

@@ -26,6 +26,8 @@ export default widgetWrapper()(MyA10SubmitButtons, {
     },
     defaultProps: {},
     propTypes: Object.assign({}, A10SubmitButtons.propTypes, {}),
-    propGroups: {}
+    propGroups: {
+      store: 'ignore'
+    }
   }
 });

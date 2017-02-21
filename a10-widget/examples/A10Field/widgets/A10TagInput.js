@@ -21,10 +21,11 @@ export default widgetWrapper([ 'app' ])(A10TagInput, {
       children: React.PropTypes.string
     }),
     propGroups: {
+      store: 'ignore',
       active: 'basic',
       disabled: 'advanced',
       block: 'basic',
-      onClick: 'event',
+      onClick: 'basic',
       type: 'basic',
       bsStyle: 'advanced',
       bsSize: 'advanced',

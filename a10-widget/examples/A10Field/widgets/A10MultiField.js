@@ -119,6 +119,7 @@ export default widgetWrapper()(MyA10MultiField, {
       objName: PropTypes.string.isRequired
     }),
     propGroups: {
+      store: 'ignore',
       fields: 'basic',
       objName: 'basic'
     }

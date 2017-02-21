@@ -12,9 +12,9 @@ class TableLayout extends Component {
     let { tableAttrs, actions, pagination, tableOptions, ths, tds, newTd } = this.props;
     // console.log(tableOptions);
 
-    if (!tds.length) {
-      tds = <tr><td colSpan={ths.length}>Loading...</td></tr>;
-    }
+    // if (!tds.length) {
+    //   tds = <tr><td colSpan={ths.length}>Loading...</td></tr>;
+    // }
 
     return (
       <div>
