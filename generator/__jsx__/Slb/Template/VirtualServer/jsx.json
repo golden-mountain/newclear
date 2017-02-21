@@ -1,69 +1,105 @@
-[
-    {
-        "name": "virtual-server.name",
-        "label": "Name",
-        "value": "default"
-    },
-    {
-        "name": "virtual-server.conn-limit",
-        "label": "Conn Limit",
-        "value": "8000000"
-    },
-    {
-        "name": "virtual-server.conn-limit-reset",
-        "label": "Conn Limit Reset"
-    },
-    {
-        "name": "virtual-server.conn-limit-no-logging",
-        "label": "Conn Limit No Logging"
-    },
-    {
-        "name": "virtual-server.conn-rate-limit",
-        "label": "Conn Rate Limit"
-    },
-    {
-        "name": "virtual-server.rate-interval",
-        "label": "Rate Interval",
-        "value": "second",
-        "options": {
-            "100ms": "Use 100 ms as sampling interval",
-            "second": "Use 1 second as sampling interval"
-        }
-    },
-    {
-        "name": "virtual-server.conn-rate-limit-reset",
-        "label": "Conn Rate Limit Reset"
-    },
-    {
-        "name": "virtual-server.conn-rate-limit-no-logging",
-        "label": "Conn Rate Limit No Logging"
-    },
-    {
-        "name": "virtual-server.icmp-rate-limit",
-        "label": "Icmp Rate Limit"
-    },
-    {
-        "name": "virtual-server.icmp-lockup",
-        "label": "Icmp Lockup"
-    },
-    {
-        "name": "virtual-server.icmp-lockup-period",
-        "label": "Icmp Lockup Period"
-    },
-    {
-        "name": "virtual-server.icmpv6-rate-limit",
-        "label": "Icmpv 6 Rate Limit"
-    },
-    {
-        "name": "virtual-server.icmpv6-lockup",
-        "label": "Icmpv 6 Lockup"
-    },
-    {
-        "name": "virtual-server.icmpv6-lockup-period",
-        "label": "Icmpv 6 Lockup Period"
-    },
-    {
-        "name": "virtual-server.subnet-gratuitous-arp",
-        "label": "Subnet Gratuitous Arp"
-    }
-]
+{
+  "iconClassName": "fa fa-th",
+  "type": "basic",
+  "name": "newLayout",
+  "schema": {
+    "component": "RootWidget",
+    "schemaChildren": [
+      {
+        "component": "A10Form",
+        "name": "SlbTemplateVirtualServerForm",
+        "schema": "slb-template-virtual-server",
+        "horizontal": true,
+        "schemaChildren": [
+          {
+            "component": "A10Field",
+            "name": "virtual-server.name",
+            "label": "Name"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-limit",
+            "label": "Conn Limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-limit-reset",
+            "label": "Conn Limit Reset",
+            "conditional": "conn-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-limit-no-logging",
+            "label": "Conn Limit No Logging",
+            "conditional": "conn-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-rate-limit",
+            "label": "Conn Rate Limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.rate-interval",
+            "label": "Rate Interval",
+            "conditional": "conn-rate-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-rate-limit-reset",
+            "label": "Conn Rate Limit Reset",
+            "conditional": "conn-rate-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.conn-rate-limit-no-logging",
+            "label": "Conn Rate Limit No Logging",
+            "conditional": "conn-rate-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmp-rate-limit",
+            "label": "Icmp Rate Limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmp-lockup",
+            "label": "Icmp Lockup",
+            "conditional": "icmp-rate-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmp-lockup-period",
+            "label": "Icmp Lockup Period",
+            "conditional": "icmp-lockup"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmpv6-rate-limit",
+            "label": "Icmpv 6 Rate Limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmpv6-lockup",
+            "label": "Icmpv 6 Lockup",
+            "conditional": "icmpv6-rate-limit"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.icmpv6-lockup-period",
+            "label": "Icmpv 6 Lockup Period",
+            "conditional": "icmpv6-lockup"
+          },
+          {
+            "component": "A10Field",
+            "name": "virtual-server.subnet-gratuitous-arp",
+            "label": "Subnet Gratuitous Arp"
+          },
+          {
+            "component": "A10SubmitButtons"
+          }
+        ]
+      }
+    ]
+  }
+}

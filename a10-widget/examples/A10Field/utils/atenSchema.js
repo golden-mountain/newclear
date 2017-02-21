@@ -1,41 +1,15 @@
+
+import SchemaAnalysis from '../../../../generator/utils/SchemaAnalysis';
+
 const getSchema = (name) => {
   console.log(`get schmea of ${name}`);
   return new Promise((resolve, reject) => {
     System.import(`../../../../schemas/${name}.json`).then(module => {
+      const sa = new SchemaAnalysis(name, module);
       console.log(module);
       resolve({
         schema: module,
-        layout: {
-          iconClassName: 'fa fa-list-alt',
-          type: 'basic',
-          name: 'form',
-          schema: {
-            component: 'RootWidget',
-            schemaChildren: [
-              {
-                component: 'Form',
-                horizontal: true,
-                schemaChildren: [
-                  {
-                    component: 'ButtonToolbar',
-                    bsStyle: 'primary',
-                    schemaChildren: [
-                      {
-                        component: 'Button',
-                        bsStyle: 'primary',
-                        schemaChildren: 'Save'
-                      },
-                      {
-                        component: 'Button',
-                        schemaChildren: 'Cancel'
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        },
+        layout: sa.getMapping(),
         candidates: [
           {
             name: 'button',
@@ -45,7 +19,7 @@ const getSchema = (name) => {
             }
           },
           {
-            name: 'ip-address', // for displaying 
+            name: 'ip-address', // for displaying
             component: 'A10Field',
             defaultProps: {
               name: 'ip-address',

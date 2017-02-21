@@ -1,14 +1,74 @@
 
+import _ from 'lodash';
+
 import ConvertField from './convertField';
+import ConvertForm from './ConvertForm';
+import ConvertSubmitButton from './ConvertSubmitButton';
 
 
 class SchemaAnalysis {
 
-  constructor(schemaName, schema) {
-    this.schemaName = schemaName;
+  constructor(filename, schema) {
+    this.filename = filename;
     this.schema = schema;
     this.options = {};
     this.fields = [];
+    this.form;
+    this.submitButton;
+
+    this.init();
+    this.initMapping();
+  }
+
+  init() {
+    this.setFields();
+    this.submitButton = new ConvertSubmitButton(this);
+    this.form = new ConvertForm(this, this.filename);
+  }
+
+  initMapping() {
+    this.mapping = {
+      iconClassName: 'fa fa-th',
+      type: 'basic',
+      name: 'newLayout',
+      schema: {
+        component: 'RootWidget'
+      }
+    };
+  }
+
+  getFieldMapping() {
+    return this.fields.map(field => {
+      return field.getMapping();
+    });
+  }
+
+  getSubmitButtonMapping() {
+    return this.submitButton.getMapping();
+  }
+
+  getMapping() {
+    const mapping = this.form.getMapping();
+    this.mapping.schema.schemaChildren = [ mapping ];
+    return this.mapping;
+  }
+
+  renderFields() {
+    return this.fields.map(field => {
+      return field.render().replace(/\n/g, '\n  ');
+    });
+  }
+
+  renderSubmitButton() {
+    return this.submitButton.render().replace(/\n/g, '\n  ');
+  }
+
+  render() {
+    // return this.form.render();
+    return `
+
+export default widgetWrapper()(VirtualServerForm);
+`;
   }
 
   getName() {
@@ -17,6 +77,16 @@ class SchemaAnalysis {
 
   getFullName() {
     return this.schema['obj-lineage-full'];
+  }
+
+  getFullPath() {
+    const fullName = this.getFullName();
+    let names = fullName.split('.');
+    let folders = names.map((name) => {
+      return _.upperFirst(_.camelCase(name));
+    });
+    // folders.push('components');
+    return folders;
   }
 
   getSchemaName() {
@@ -58,18 +128,17 @@ class SchemaAnalysis {
     return propup;
   }
 
-  render() {
-    return this.fields.map((field) => {
-      return field.template();
-    });
-  }
+  // render() {
+  //   return this.fields.map((field) => {
+  //     return field.template();
+  //   });
+  // }
 
   toJson() {
     return this.fields.map(field => {
       return field.toJson();
     });
   }
-
 }
 
 export default SchemaAnalysis;
