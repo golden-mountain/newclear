@@ -4,29 +4,31 @@ import { Col, Row, Panel, Radio, Checkbox, FormControl } from 'react-bootstrap';
 
 import { widgetWrapper } from 'widgetWrapper';
 
-function MyA10Input({ ...props }) {
+
+function MyA10Textarea({ ...props }) {
+  const fieldProps = { ...props };
   return (
-    <A10Field {...props}/>
+    <A10Field {...fieldProps}>
+      <textarea />
+    </A10Field>
   );
 }
 
-export default widgetWrapper(['app'])(MyA10Input, {
+export const A10Textarea = widgetWrapper(['app'])(MyA10Textarea, {
   meta: {
     widget: {
       iconClassName: 'fa fa-rocket',
       type: 'Field',
-      name: 'A10Field',
-      component: 'A10Field',
+      name: 'A10Textarea',
+      component: 'A10Textarea',
       display: 'inline-block',
       isContainer: false,
       description: ''
     },
     defaultProps: {
-      name: 'A10Field',
-      label: 'A10Field',
-      type: 'input',
-      value: '',
-      conditional: null
+      name: 'A10Textarea',
+      label: 'A10Textarea',
+      type: 'input'
     },
     propTypes: Object.assign({}, A10Field.propTypes, {
       name: PropTypes.object.isRequired,
