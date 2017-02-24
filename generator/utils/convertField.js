@@ -10,6 +10,9 @@ class ConvertField {
     this.schemaAnalysis = schemaAnalysis;
     this.domain = domain;
     this.name = name;
+    if (options.condition && options.condition.indexOf(domain) === -1) {
+      options.condition = `${domain}.${options.condition}`;
+    }
     this.options = options;
 
     // console.log('sssssssssssssssssssssssssssssssssssssssssssssss');
@@ -35,9 +38,9 @@ class ConvertField {
 
   render() {
     return `<${this.mapping.component}
-  name="${this.mapping.name}"
-  label="${this.mapping.label}"
-/>`;
+      name="${this.domain}-${this.mapping.name}"
+      label="${this.mapping.label}"
+    />`;
   }
 
   // jsonToAttribute(attributes) {
